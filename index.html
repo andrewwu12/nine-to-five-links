@@ -286,6 +286,44 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   80% { transform: translate(3px, -2px); }
 }
 
+/* The workshop's controls, over the canvas */
+.ws { position: absolute; inset: 0; pointer-events: none; z-index: 7; }
+.ws > * { pointer-events: auto; }
+.ws-top { position: absolute; top: 10px; left: 12px; right: 12px; display: flex; align-items: center; gap: 10px; pointer-events: none; }
+.ws-top > * { pointer-events: auto; }
+.ws-title { display: flex; align-items: center; gap: 10px; background: var(--paper); color: var(--ink); border-radius: 12px; padding: 6px 10px 6px 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, .28); min-width: 0; }
+.ws-title b { font: 900 18px/1 var(--display); text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+.ws-tabs { display: flex; gap: 4px; }
+.ws-tab { min-width: 34px; height: 34px; border: 1.5px solid var(--line); border-radius: 9px; background: #fff; font: 700 15px var(--body); color: var(--ink); cursor: pointer; }
+.ws-tab.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.ws-tab.add { border-style: dashed; color: var(--ink-2); }
+.ws-status { margin-left: auto; padding: 8px 12px; border-radius: 999px; background: var(--paper); color: var(--ink); font: 700 13px var(--body); box-shadow: 0 8px 24px rgba(0, 0, 0, .28); white-space: nowrap; }
+.ws-status.ok { background: #35d07f; color: #062414; }
+.ws-status.bad { background: #ffb1a8; color: #3d0a05; }
+.ws-bar { position: absolute; top: 62px; left: 12px; right: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; pointer-events: none; }
+.ws-bar > * { pointer-events: auto; }
+.ws-field { display: flex; align-items: center; gap: 6px; background: var(--paper); color: var(--ink); border-radius: 10px; padding: 4px 6px 4px 10px; font: 600 12px var(--mono); text-transform: uppercase; }
+.ws-field select { height: 30px; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; font: 500 14px var(--body); color: var(--ink); }
+.ws-budget { background: var(--paper); color: var(--ink); border-radius: 10px; padding: 8px 10px; font: 600 12px var(--mono); }
+.ws-budget.bad { background: #ffb1a8; }
+.ws-people { display: flex; gap: 4px; }
+.ws-bar .btn { min-height: 38px; }
+.ws-issues { position: absolute; top: 108px; left: 12px; right: 12px; margin: 0; padding: 8px 12px; border-radius: 10px; background: rgba(15, 20, 28, .82); color: var(--on-floor); font: 500 13px/1.4 var(--body); }
+.ws-sel { position: absolute; left: 50%; bottom: 150px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; background: var(--paper); color: var(--ink); border-radius: 12px; padding: 6px 6px 6px 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, .3); white-space: nowrap; }
+.ws-sel .btn { min-height: 36px; }
+.ws-palette { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 12px 12px; background: linear-gradient(to top, rgba(15, 20, 28, .92), rgba(15, 20, 28, .75)); }
+.ws-hint { margin: 0 0 6px; color: var(--on-floor-2); font: 500 12px var(--body); }
+.ws-cats { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; }
+.ws-cat { flex: none; height: 30px; padding: 0 12px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, .12); color: var(--on-floor); font: 700 13px var(--body); cursor: pointer; }
+.ws-cat.on { background: var(--hi); color: var(--hi-ink); }
+.ws-items { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.ws-item { flex: none; display: grid; gap: 1px; justify-items: start; min-width: 104px; padding: 8px 12px; border: 1.5px solid transparent; border-radius: 10px; background: var(--paper); color: var(--ink); cursor: pointer; text-align: left; }
+.ws-item b { font: 700 14px var(--body); }
+.ws-item small { font: 600 11px var(--mono); color: var(--ink-2); }
+.ws-item.on { border-color: var(--hi); box-shadow: 0 0 0 2px var(--hi); background: var(--hi-soft); }
+.ws-item:disabled { opacity: .45; cursor: default; }
+@media (max-width: 620px) { .ws-title b { display: none; } .ws-bar { top: 58px; } .ws-issues { top: 150px; } }
+
 /* The campus map's controls, over the canvas */
 .map-ui { position: absolute; inset: 0; pointer-events: none; z-index: 7; }
 .map-ui > * { pointer-events: auto; }
@@ -380,6 +418,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       <button class="btn btn-floor" id="cardBtn" type="button">Scorecard</button>
       <button class="btn btn-floor" id="menuBtn" type="button">Menu</button>
       <button class="btn btn-floor" id="tauntBtn" type="button" aria-haspopup="menu" aria-expanded="false">Heckle</button>
+      <button class="btn btn-floor" id="wsReturnBtn" type="button" hidden>Back to workshop</button>
     </div>
     <p class="hint" id="hint">Drag on the course to aim. Hold Swing, let go, then hit as the needle crosses the green zone. Arrows and Space work too.</p>
     <button class="btn btn-floor" id="soundBtn" type="button" aria-pressed="true">Sound on</button>
@@ -388,6 +427,32 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   <div class="toast" id="toast" role="status" aria-live="polite">
     <div class="toast-big" id="toastBig"></div>
     <div class="toast-small" id="toastSmall"></div>
+  </div>
+  <div class="ws" id="wsUi" hidden>
+    <div class="ws-top" id="wsTop">
+      <button class="btn btn-paper" id="wsBack" type="button">Done</button>
+      <div class="ws-title"><b>The Workshop</b><div class="ws-tabs" id="wsTabs" role="group" aria-label="Holes"></div></div>
+      <div class="ws-status" id="wsStatus" role="status"></div>
+    </div>
+    <div class="ws-bar" id="wsBar">
+      <label class="ws-field"><span>Shape</span><select id="wsShape"></select></label>
+      <label class="ws-field"><span>Look</span><select id="wsStyle"><option value="office">Office</option><option value="factory">Factory</option></select></label>
+      <div class="ws-budget" id="wsBudget"></div>
+      <div class="ws-people" id="wsPeople" aria-label="Also building"></div>
+      <button class="btn btn-paper" id="wsRemoveHole" type="button">Remove hole</button>
+      <button class="btn btn-hi" id="wsTest" type="button">Test drive</button>
+    </div>
+    <p class="ws-issues" id="wsIssues" hidden></p>
+    <div class="ws-sel" id="wsSel" hidden>
+      <b id="wsSelName"></b>
+      <button class="btn btn-paper" id="wsRotate" type="button">Rotate</button>
+      <button class="btn btn-danger" id="wsDelete" type="button">Remove</button>
+    </div>
+    <div class="ws-palette" id="wsPalette">
+      <p class="ws-hint" id="wsHint"></p>
+      <div class="ws-cats" id="wsCats" role="group" aria-label="Kinds of pieces"></div>
+      <div class="ws-items" id="wsItems"></div>
+    </div>
   </div>
   <div class="map-ui" id="mapUi" hidden>
     <div class="map-top">
@@ -470,6 +535,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
           <div class="pass-actions">
             <button class="btn btn-hi btn-big" id="startBtn" type="button">Tee off</button>
             <button class="btn btn-paper" id="exploreBtn" type="button">Explore the campus</button>
+            <button class="btn btn-paper" id="buildBtn" type="button">Build a course</button>
             <button class="btn btn-paper" id="helpBtn" type="button">How to play</button>
           </div>
         </div>
@@ -501,6 +567,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         <p class="note" id="clubNote"></p>
         <div class="row wrap">
           <button class="btn btn-hi btn-big" id="teeOffBtn" type="button">Tee off together</button>
+          <button class="btn btn-paper" id="wsClubBtn" type="button">Build holes together</button>
           <button class="btn btn-paper" id="leaveBtn" type="button">Leave room</button>
         </div>
       </div>
@@ -611,6 +678,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         <dd>Head Office runs the day shift, 9 AM to 5 PM. The Factory Floor runs second shift, 3 PM to 11 PM, with forklifts, conveyor lines, robot arms, oil spills and a loading dock to fall off. It gets darker as the shift goes on.</dd>
         <dt>The campus</dt>
         <dd>Press Explore the campus on the setup card, or Campus map in the menu, to see both buildings on one map. Drag to look around and pinch or scroll to zoom. Coworkers walk the halls, traffic runs down the street, and the sun follows your clock; tap the clock for a time-lapse. Tap any hole to practice it on its own. Between holes in a round, the camera flies you to the next one.</dd>
+        <dt>The workshop</dt>
+        <dd>Build your own holes with Build a course on the setup card, or build them together from an online room's clubhouse, where everyone edits the same holes live and sees each other's cursors. Pick a shape, then place walls, bumpers, rugs, ramps, conveyors, spills, movers and props. Each hole has a 60-point budget, limits on hazards, movers and props, and a clear space around the tee and the cup. A test bot plays every design; once it finishes, the hole is playable and gets its par, and The Workshop appears as a building you can play.</dd>
         <dt>Knock things over</dt>
         <dd>Cones, cup pyramids, boxes, chairs, bins, water jugs and oil drums all move when you hit them. Hit a box, crate or water jug hard enough and it breaks. A burst jug or a tipped oil drum leaves the floor slippery.</dd>
         <dt>Course</dt>
@@ -1246,13 +1315,13 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       segs.push({ ax: a[0], ay: a[1], bx: b[0], by: b[1], e });
     }
   }
-  function buildHole(idx, variant) {
-    const def = HOLES[idx];
+  function buildHole(idx, variant, defIn) {
+    const def = defIn || HOLES[idx];
     const M = !!(variant && variant.mirror) && !def.noMirror;
     const mx = x => (M ? BOX_W - x : x);
     const mpt = p => [mx(p[0]), p[1]];
     const mpoly = pts => { const r = pts.map(mpt); if (M) r.reverse(); return r; };
-    const h = { idx, def, name: PH.rage ? def.rageName : def.name, tip: PH.rage ? def.rageTip : def.tip, par: def.par, mirror: M, t: 0, theme: COURSE.theme };
+    const h = { idx, def, name: PH.rage ? def.rageName : def.name, tip: PH.rage ? def.rageTip : def.tip, par: def.par, mirror: M, t: 0, theme: def.theme || COURSE.theme };
     h.course = def.course.map(mpoly);
     h.tee = mpt(def.tee);
     h.cup = mpt(def.pins[(variant ? variant.pin : 0) % def.pins.length]);
@@ -1320,7 +1389,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     });
     h.props = buildProps(def, mpt);
     // Night shift: how dark the hole is, and where the work lights are. The tee and the cup always get one.
-    h.dark = (COURSE.dark && COURSE.dark[idx]) || 0;
+    h.dark = (!defIn && COURSE.dark && COURSE.dark[idx]) || 0;
     h.lamps = (def.lamps || []).map(([x, y, r]) => [mx(x), y, r]).concat([[h.tee[0], h.tee[1], 120], [h.cup[0], h.cup[1], 130]]);
     h.segs = [];
     for (const poly of h.course) pushSegs(h.segs, poly, PH.wallE);
@@ -1337,7 +1406,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const th = (lerp(160, 20, idx / 8) * Math.PI) / 180;
     const len = 0.78 + (0.5 * Math.abs(idx - 4)) / 4;
     h.shadow = [Math.cos(th) * 6.5 * len, Math.sin(th) * 6.5 * len + 2];
-    const tc = COURSE.tints[idx] || [0, 0, 0, 0];
+    const tc = (!defIn && COURSE.tints[idx]) || [0, 0, 0, 0];
     h.tint = tc[3] > 0 ? `rgba(${tc[0]},${tc[1]},${tc[2]},${tc[3]})` : null;
     // The green: a gentle tilt that bends every putt, and a speed shown on the swing meter like a stimp reading.
     const tilt = (variant && variant.tilt ? variant.tilt : 0) * PH.slope, ta = variant && variant.tiltA ? variant.tiltA : 0;
@@ -3190,7 +3259,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   // The course behind the setup card: the last hole of whichever building is picked.
   function showBackdrop(courseId) {
     setMode(false);
-    setCourse(courseId);
+    setCourse(COURSES[courseId] && COURSES[courseId].holes.length ? courseId : 'office');
     loadHole(HOLES.length - 1, variantsFor('day:' + todayKey()));
     G.ball = newBall(G.hole.tee[0], G.hole.tee[1], COLORS[0]);
   }
@@ -3214,6 +3283,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (!bot.hidden) bm = r.bottom - bot.getBoundingClientRect().top + 6;
     const sw = $('swingBtn');
     if (!sw.hidden) bm = Math.max(bm, r.bottom - sw.getBoundingClientRect().top + 60);
+    if (!$('wsUi').hidden) {
+      t = Math.max(...['wsTop', 'wsBar', 'wsIssues'].map(id => ($(id).hidden ? 0 : $(id).getBoundingClientRect().bottom - r.top + 8)));
+      bm = r.bottom - Math.min(...['wsSel', 'wsPalette'].map(id => ($(id).hidden ? r.bottom : $(id).getBoundingClientRect().top))) + 8;
+    }
     return { top: t, bottom: bm };
   }
   function screenVecToWorld(dx, dy) {
@@ -4279,6 +4352,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function render() {
     const g = ctx;
     if (G.screen === 'map') { Campus.render(g); return; }
+    if (G.screen === 'build') { renderPlay(g); Workshop.drawOverlay(g); return; }
     if (Campus.flight && !Campus.flight.landed) { Campus.render(g, Campus.flight.cam); return; }
     renderPlay(g);
     if (Campus.flight) Campus.renderFade(g);
@@ -4464,6 +4538,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     Swing.update(dt);
     Party.update(dt);
     if (G.screen === 'map' || Campus.flight) Campus.update(dt);
+    Workshop.tick();
     if (G.screen === 'map' && Math.floor(G.clock) !== Math.floor(G.clock - dt)) Campus.syncClock();
     syncSwingBtn();
     if (canAim() && !G.idleSaid && G.clock - (G.aimSince || 0) > 25) { G.idleSaid = true; Taunts.say('idle'); }
@@ -5127,7 +5202,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       this.cam = { x: CAMPUS.w / 2, y: CAMPUS.h / 2, z: fitZ, rot: 0 };
       // Swoop in toward the building you were looking at.
       const target = from === 'play' ? this.holes.find(w => w.course === COURSE.id && w.idx === G.holeIdx) : null;
-      const s = target ? target.slot : { cx: CAMPUS.bld[store.get('building', 'office')].x + BLD_W / 2, cy: CAMPUS.bld[store.get('building', 'office')].y + BLD_H / 2 };
+      const bld = CAMPUS.bld[store.get('building', 'office')] || CAMPUS.bld.office;
+      const s = target ? target.slot : { cx: bld.x + BLD_W / 2, cy: bld.y + BLD_H / 2 };
       this.goal = { from: { ...this.cam }, to: { x: s.cx, y: s.cy, z: target ? 0.5 : Math.max(fitZ * 1.6, 0.16), rot: 0 }, t: 0, dur: 2.2 };
       this.syncClock();
     },
@@ -5199,6 +5275,649 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       g.globalAlpha = clamp(1 - (f.t - 0.86) / 0.14, 0, 1);
       g.drawImage(this.fcanvas, 0, 0);
       g.globalAlpha = 1;
+    },
+  };
+
+  // ---------------------------------------------------------------------------
+  // The workshop: build your own holes, alone or with everyone in an online room at once. A budget and a
+  // few rules keep holes fair, and a test bot has to finish a hole before anyone can play it.
+  // ---------------------------------------------------------------------------
+  const WS_BUDGET = 60, WS_KEEP = 90, WS_HOLE_IDS = ['H1', 'H2', 'H3'];
+  const WS_MAX = { pieces: 30, Movers: 3, Hazards: 4, Props: 14 };
+  const WS_SHAPES = {
+    room: { name: 'Big room', pts: chamferRect(80, 90, 840, 420, 50), tee: [150, 300], cup: [850, 300] },
+    hall: { name: 'Hallway', pts: chamferRect(80, 190, 840, 220, 40), tee: [150, 300], cup: [850, 300] },
+    ell: { name: 'L-bend', pts: [[80, 330], [700, 330], [700, 80], [920, 80], [920, 520], [80, 520]], tee: [150, 425], cup: [810, 150] },
+    zed: { name: 'Zigzag', pts: [[80, 80], [520, 80], [520, 250], [920, 250], [920, 520], [480, 520], [480, 350], [80, 350]], tee: [150, 215], cup: [850, 450] },
+    loop: { name: 'Hairpin', pts: [[80, 80], [920, 80], [920, 520], [80, 520], [80, 380], [760, 380], [760, 220], [80, 220]], tee: [150, 450], cup: [150, 150] },
+  };
+  // Quarter turns about (x, y).
+  const wsTurn = (pts, x, y, r) => pts.map(([px, py]) => { let dx = px, dy = py; for (let i = 0; i < (r & 3); i++) [dx, dy] = [-dy, dx]; return [x + dx, y + dy]; });
+  const wsBox = (w, h) => [[-w / 2, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2, h / 2]];
+  const wsDir = r => [[1, 0], [0, 1], [-1, 0], [0, -1]][r & 3];
+  // A lumpy puddle shape that's the same for everyone, seeded by the piece's id.
+  function wsBlob(p, rx, ry) {
+    const rnd = mulberry32(hashStr(p.i)), pts = [];
+    for (let k = 0; k < 9; k++) { const a = (k / 9) * TAU, s = 0.78 + rnd() * 0.36; pts.push([Math.cos(a) * rx * s, Math.sin(a) * ry * s]); }
+    return wsTurn(smoothClosed(pts), p.x, p.y, p.r);
+  }
+  const wsProp = (kind, cost) => ({ cat: 'Props', cost, make: p => ({ props: [{ kind, x: p.x, y: p.y }] }) });
+  const PIECES = {
+    wall: { name: 'Short wall', cat: 'Walls', cost: 4, make: p => ({ blocks: [{ pts: wsTurn(wsBox(120, 22), p.x, p.y, p.r) }] }) },
+    longwall: { name: 'Long wall', cat: 'Walls', cost: 7, make: p => ({ blocks: [{ pts: wsTurn(wsBox(240, 22), p.x, p.y, p.r) }] }) },
+    cabinet: { name: 'Filing cabinet', cat: 'Walls', cost: 5, make: p => ({ blocks: [{ pts: wsTurn(wsBox(58, 42), p.x, p.y, p.r), kind: 'cabinet' }] }) },
+    couch: { name: 'Couch', cat: 'Walls', cost: 8, make: p => ({ blocks: [{ pts: wsTurn(chamferRect(-80, -30, 160, 60, 12), p.x, p.y, p.r), kind: 'couch' }] }) },
+    pallet: { name: 'Pallet', cat: 'Walls', cost: 5, make: p => ({ blocks: [{ pts: wsTurn(wsBox(70, 70), p.x, p.y, p.r), kind: 'pallet' }] }) },
+    rack: { name: 'Pallet rack', cat: 'Walls', cost: 9, make: p => ({ blocks: [{ pts: wsTurn(wsBox(280, 40), p.x, p.y, p.r), kind: 'rack' }] }) },
+    planter: { name: 'Planter', cat: 'Bumpers', cost: 3, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 17, kind: 'planter' }] }) },
+    pillar: { name: 'Steel pillar', cat: 'Bumpers', cost: 3, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 18, kind: 'pillar' }] }) },
+    beanbag: { name: 'Beanbag', cat: 'Bumpers', cost: 4, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 28, kind: 'beanbag', e: 0.16, tint: ['#7c4ddb', '#f08a24', '#2f8f6a', '#e8453a'][p.r & 3] }] }) },
+    table: { name: 'Round table', cat: 'Bumpers', cost: 8, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 58, kind: 'table', e: 0.78 }] }) },
+    rug: { name: 'Shag rug', cat: 'Floors', cost: 6, make: p => ({ zones: [{ type: 'rough', style: 'rug', pts: wsTurn(ellipse(0, 0, 150, 90, 40), p.x, p.y, p.r), mul: 2.7 }] }) },
+    oil: { name: 'Oil slick', cat: 'Floors', cost: 6, make: p => ({ zones: [{ type: 'slick', style: 'oil', mul: 0.12, pts: wsBlob(p, 95, 70) }] }) },
+    ramp: { name: 'Ramp', cat: 'Floors', cost: 8, make: p => { const [dx, dy] = wsDir(p.r); return { zones: [{ type: 'slope', pts: wsTurn(wsBox(150, 150), p.x, p.y, 0), ax: dx * 330, ay: dy * 330 }] }; } },
+    conveyor: { name: 'Conveyor', cat: 'Floors', cost: 9, make: (p, style) => { const [dx, dy] = wsDir(p.r); return { zones: [{ type: 'conveyor', skin: style === 'factory' ? 'rollers' : undefined, pts: wsTurn(wsBox(240, 56), p.x, p.y, p.r), dir: [dx, dy], accel: 700, max: 380 }] }; } },
+    bowl: { name: 'Bowl', cat: 'Floors', cost: 6, make: p => ({ zones: [{ type: 'funnel', x: p.x, y: p.y, r: 80, strength: 260 }] }) },
+    coffee: { name: 'Coffee spill', cat: 'Hazards', cost: 10, make: p => ({ zones: [{ type: 'water', style: 'coffee', pts: wsBlob(p, 75, 48) }] }) },
+    pit: { name: 'Service pit', cat: 'Hazards', cost: 12, make: p => ({ zones: [{ type: 'water', style: 'pit', pts: wsTurn(wsBox(60, 100), p.x, p.y, p.r) }] }) },
+    shredder: { name: 'Shredder', cat: 'Hazards', cost: 12, make: p => ({ zones: [{ type: 'water', style: 'shredder', pts: wsTurn(wsBox(64, 64), p.x, p.y, 0) }] }) },
+    spinner: { name: 'Clock hand', cat: 'Movers', cost: 14, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 12, kind: 'hub' }], movers: [{ type: 'spinner', kind: 'minute', x: p.x, y: p.y, len: 105, w: 9, speed: p.r & 1 ? -1.1 : 1.1, a0: (p.r * Math.PI) / 2 }] }) },
+    robot: { name: 'Robot arm', cat: 'Movers', cost: 14, make: p => ({ movers: [{ type: 'spinner', kind: 'robot', x: p.x, y: p.y, len: 115, w: 14, speed: 1.5, a0: (p.r * Math.PI) / 2, amp: 0.9 }] }) },
+    cart: { name: 'Mail cart', cat: 'Movers', cost: 12, make: p => { const [dx, dy] = wsDir(p.r); return { movers: [{ type: 'slider', kind: 'cart', a: [p.x - dx * 100, p.y - dy * 100], b: [p.x + dx * 100, p.y + dy * 100], w: dx ? 48 : 34, h: dx ? 34 : 48, period: 2.8, phase: 0 }] }; } },
+    forklift: { name: 'Forklift', cat: 'Movers', cost: 14, make: p => { const [dx, dy] = wsDir(p.r); return { movers: [{ type: 'slider', kind: 'forklift', a: [p.x - dx * 150, p.y - dy * 150], b: [p.x + dx * 150, p.y + dy * 150], w: dx ? 64 : 38, h: dx ? 38 : 64, period: 3.4, phase: 0 }] }; } },
+    cone: { name: 'Cone', ...wsProp('cone', 1) },
+    cups: { name: 'Cup pyramid', ...wsProp('cups', 2) },
+    box: { name: 'Box', ...wsProp('box', 1) },
+    chair: { name: 'Office chair', ...wsProp('chair', 2) },
+    jug: { name: 'Water jug', ...wsProp('jug', 2) },
+    barrel: { name: 'Oil drum', ...wsProp('barrel', 2) },
+    crate: { name: 'Crate', ...wsProp('crate', 2) },
+  };
+  const WS_CATS = ['Walls', 'Bumpers', 'Floors', 'Hazards', 'Movers', 'Props'];
+  COURSES.workshop = { id: 'workshop', name: 'The Workshop', shift: 'Holes your team built', holes: [], tints: [], lastLabel: 'Done', title: 'Nine-to-Five Links', theme: 'office' };
+
+  // How far a point is from anything a piece puts on the course (0 if it's on top of it).
+  function segDist(x, y, ax, ay, bx, by) {
+    const abx = bx - ax, aby = by - ay, l2 = abx * abx + aby * aby;
+    const t = l2 ? clamp(((x - ax) * abx + (y - ay) * aby) / l2, 0, 1) : 0;
+    return Math.hypot(x - (ax + abx * t), y - (ay + aby * t));
+  }
+  function polyDist(x, y, pts) {
+    if (pointInPoly(x, y, pts)) return 0;
+    let d = Infinity;
+    for (let i = 0; i < pts.length; i++) { const a = pts[i], b = pts[(i + 1) % pts.length]; d = Math.min(d, segDist(x, y, a[0], a[1], b[0], b[1])); }
+    return d;
+  }
+  function partsDist(parts, x, y) {
+    let d = Infinity;
+    for (const b of parts.blocks || []) d = Math.min(d, polyDist(x, y, b.pts));
+    for (const c of parts.bumpers || []) d = Math.min(d, Math.max(0, Math.hypot(x - c.x, y - c.y) - c.r));
+    for (const z of parts.zones || []) d = Math.min(d, z.pts ? polyDist(x, y, z.pts) : Math.max(0, Math.hypot(x - z.x, y - z.y) - z.r));
+    for (const m of parts.movers || []) {
+      if (m.type === 'spinner') d = Math.min(d, Math.max(0, Math.hypot(x - m.x, y - m.y) - m.len - m.w));
+      else d = Math.min(d, Math.max(0, segDist(x, y, m.a[0], m.a[1], m.b[0], m.b[1]) - Math.max(m.w, m.h) / 2));
+    }
+    for (const q of parts.props || []) d = Math.min(d, Math.max(0, Math.hypot(x - q.x, y - q.y) - (q.kind === 'cups' ? 14 : (PROP_TYPES[q.kind] || { r: 10 }).r)));
+    return d;
+  }
+  // Walking distance to the cup over a grid, around walls, blocks, bumpers and hazards.
+  function distanceField(h) {
+    const C = 10, [fx0, fy0, fx1, fy1] = h.frame, W = Math.ceil((fx1 - fx0) / C), H = Math.ceil((fy1 - fy0) / C);
+    const free = new Uint8Array(W * H), dist = new Float64Array(W * H).fill(Infinity), R = BALL_R - 1;
+    for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+      const x = fx0 + (i + 0.5) * C, y = fy0 + (j + 0.5) * C;
+      if (!h.course.some(p => pointInPoly(x, y, p)) || h.blocks.some(b => pointInPoly(x, y, b.pts))) continue;
+      if (h.segs.some(s => segDist(x, y, s.ax, s.ay, s.bx, s.by) < R) || h.bumpers.some(c => Math.hypot(x - c.x, y - c.y) < c.r + R)) continue;
+      if (h.hazards.some(z => pointInPoly(x, y, z.pts))) continue;
+      free[j * W + i] = 1;
+    }
+    const cell = (x, y) => { const i = Math.floor((x - fx0) / C), j = Math.floor((y - fy0) / C); return i >= 0 && j >= 0 && i < W && j < H ? j * W + i : -1; };
+    const start = cell(h.cup[0], h.cup[1]);
+    if (start >= 0) {
+      dist[start] = 0;
+      const heap = [[0, start]];
+      const push = e => { heap.push(e); let k = heap.length - 1; while (k > 0) { const p = (k - 1) >> 1; if (heap[p][0] <= heap[k][0]) break; [heap[p], heap[k]] = [heap[k], heap[p]]; k = p; } };
+      const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let k = 0; for (;;) { const l = 2 * k + 1, r = l + 1; let m = k; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === k) break; [heap[m], heap[k]] = [heap[k], heap[m]]; k = m; } } return top; };
+      while (heap.length) {
+        const [d, c] = pop();
+        if (d > dist[c]) continue;
+        const i = c % W, j = (c / W) | 0;
+        for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) {
+          if (!di && !dj) continue;
+          const ni = i + di, nj = j + dj;
+          if (ni < 0 || nj < 0 || ni >= W || nj >= H) continue;
+          const n = nj * W + ni, nd = d + (di && dj ? 1.414 : 1) * C;
+          if (free[n] && nd < dist[n]) { dist[n] = nd; push([nd, n]); }
+        }
+      }
+    }
+    return {
+      at(x, y) {
+        const c = cell(x, y);
+        if (c < 0) return 1e6;
+        let best = dist[c];
+        if (!Number.isFinite(best)) for (let dj = -2; dj <= 2; dj++) for (let di = -2; di <= 2; di++) { const n = c + dj * W + di; if (n >= 0 && n < dist.length && dist[n] + 20 < best) best = dist[n] + 20; }
+        return Number.isFinite(best) ? best : 1e6;
+      },
+      // A free spot about halfway along, for Rage mode's Roomba.
+      middle(total) {
+        let best = -1, bd = Infinity;
+        for (let k = 0; k < dist.length; k++) if (free[k] && Number.isFinite(dist[k]) && Math.abs(dist[k] - total / 2) < bd) { bd = Math.abs(dist[k] - total / 2); best = k; }
+        return best < 0 ? null : [fx0 + ((best % W) + 0.5) * C, fy0 + (((best / W) | 0) + 0.5) * C];
+      },
+    };
+  }
+  // The test bot. It plays the hole the way a decent player would, with a little error on every shot, and
+  // runs a few shots per frame so building never stalls. The error is seeded by the design, so everyone in
+  // a room gets the same verdict.
+  function* botRun(def, seed) {
+    const rnd = mulberry32(seed), gauss = () => { let u = 0; for (let i = 0; i < 6; i++) u += rnd(); return (u - 3) / 1.22; };
+    const dt = PHYS_DT;
+    const fresh = t0 => {
+      const h = buildHole(0, null, def);
+      h.t = Math.max(0, t0 - 2 * dt);
+      for (const m of h.movers) if (m.type === 'doors') m.timer = h.t;
+      updateMovers(h, dt, null); updateMovers(h, dt, null);
+      return h;
+    };
+    const normal = fn => { const saved = PH; PH = MODES.normal; try { return fn(); } finally { PH = saved; } };
+    const h0 = normal(() => fresh(0)), field = distanceField(h0);
+    const togo = d => (d < 20 ? 1 : 1 + Math.min(2.5, d / 480));
+    const sim = (pos, t0, a, pw) => normal(() => {
+      const h = fresh(t0), sp = shotSpeed(pw);
+      const b = { x: pos[0], y: pos[1], vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, state: 'rolling', slowT: 0, rollT: 0, sinkT: 0, splashT: 0, minCup: Infinity, hits: 0, trail: [] };
+      for (let i = 0; i < 240 * 12; i++) {
+        const out = { hits: [] };
+        updateMovers(h, dt, b); stepProps(h, dt, b, out); stepBall(h, b, dt, out);
+        if (out.sink) return { sunk: true, t: h.t };
+        if (out.splash || out.oob) return { back: true, end: pos, t: h.t };
+        if (out.rest || b.state === 'rest') return { end: [b.x, b.y], t: h.t };
+      }
+      return { end: [b.x, b.y], t: h.t };
+    });
+    const value = r => (r.sunk ? 0 : (r.back ? 1 : 0) + togo(field.at(r.end[0], r.end[1])));
+    let pos = h0.tee.slice(), t = 0;
+    const waits = h0.movers.length ? [0, 1.1] : [0];
+    for (let n = 1; n <= 8; n++) {
+      yield { stroke: n };
+      const cands = [];
+      for (const w of waits) for (let ai = 0; ai < 32; ai++) for (const pw of [0.1, 0.22, 0.35, 0.5, 0.65, 0.8, 1]) {
+        const a = (ai / 32) * TAU;
+        cands.push({ w, a, pw, v: value(sim(pos, t + w, a, pw)) });
+        yield null;
+      }
+      cands.sort((x, y) => x.v - y.v);
+      let best = cands[0];
+      for (const c of cands.slice(0, 4)) for (const da of [-0.04, 0.04]) for (const dp of [-0.05, 0.05]) {
+        const a = c.a + da, pw = clamp(c.pw + dp, 0.03, 1), v = value(sim(pos, t + c.w, a, pw));
+        if (v < best.v) best = { w: c.w, a, pw, v };
+        yield null;
+      }
+      const r = sim(pos, t + best.w, best.a + gauss() * 0.03, clamp(best.pw * (1 + gauss() * 0.07), 0.03, 1));
+      if (r.sunk) return { strokes: n };
+      if (!r.back) pos = r.end.slice();
+      else n++;
+      t = r.t;
+      yield null;
+    }
+    return { strokes: Infinity };
+  }
+
+  const Workshop = {
+    solo: new Map(), roomItems: new Map(), items: null, clock: 0, room: false, cur: 'H1', sel: null, armed: null, drag: null, cat: 'Walls',
+    status: {}, job: null, answeredAt: 0, curAt: 0, lastCheck: 0,
+    me() { return this.room && ONLINE.on ? ONLINE.me.id : 'me'; },
+    load() {
+      const saved = store.get('workshop', null), checks = store.get('workshopChecks', null);
+      this.checked = checks && typeof checks === 'object' ? checks : {};
+      this.solo.clear();
+      if (Array.isArray(saved)) for (const o of saved) { const it = this.clean(o); if (it) { this.solo.set(it.i, it); this.clock = Math.max(this.clock, it.v); } }
+    },
+    save() {
+      if (this.room) return;
+      store.set('workshop', [...this.solo.values()]);
+      const checks = {};
+      for (const id of this.holes()) { const s = this.status[id]; if (s && (s.state === 'ok' || s.state === 'fail')) checks[id] = { hash: s.hash, state: s.state, par: s.par, note: s.note }; }
+      store.set('workshopChecks', checks);
+    },
+    // Anything from another player is checked and clamped before it touches the design.
+    clean(o) {
+      if (!o || typeof o !== 'object' || typeof o.i !== 'string' || o.i.length > 16 || !Number.isInteger(o.v) || o.v < 0 || typeof o.b !== 'string' || o.b.length > 24) return null;
+      const d = o.d === true || o.d === 1;
+      if (o.t === 'hole') return WS_HOLE_IDS.includes(o.i) ? { i: o.i, t: 'hole', s: WS_SHAPES[o.s] ? o.s : 'room', st: o.st === 'factory' ? 'factory' : 'office', v: o.v, b: o.b, d } : null;
+      if (!WS_HOLE_IDS.includes(o.h) || !Number.isFinite(o.x) || !Number.isFinite(o.y)) return null;
+      const x = clamp(Math.round(o.x), 0, 1000), y = clamp(Math.round(o.y), 0, 600);
+      if (o.t === 'tee' || o.t === 'cup') return o.i === o.h + ':' + o.t ? { i: o.i, t: o.t, h: o.h, x, y, v: o.v, b: o.b, d: false } : null;
+      return PIECES[o.t] ? { i: o.i, t: o.t, h: o.h, x, y, r: Number.isInteger(o.r) ? o.r & 3 : 0, v: o.v, b: o.b, d } : null;
+    },
+    apply(it) {
+      const cur = this.items.get(it.i);
+      if (cur && (cur.v > it.v || (cur.v === it.v && cur.b >= it.b))) return false;
+      // Keep a lid on how much any one hole can hold.
+      if (!cur && PIECES[it.t] && this.pieces(it.h).length >= 40) return false;
+      this.items.set(it.i, it);
+      this.clock = Math.max(this.clock, it.v);
+      this.changed(it.t === 'hole' ? it.i : it.h);
+      return true;
+    },
+    edit(it) {
+      it.v = ++this.clock; it.b = this.me();
+      this.apply(it);
+      if (this.room && ONLINE.on) Net.send({ k: 'wk', it });
+      else this.save();
+    },
+    // Your own design lives in this browser; in an online room, everyone shares the room's.
+    use(room) {
+      if (this.items && this.room === room) return;
+      if (!room && !this.loaded) { this.load(); this.loaded = true; }
+      this.room = room;
+      this.items = room ? this.roomItems : this.solo;
+      this.status = {}; this.job = null; this.sel = null; this.armed = null; this.drag = null;
+      for (const id of this.holes()) this.changed(id);
+    },
+    joinedRoom() { this.roomItems.clear(); this.use(true); },
+    leftRoom() { this.roomItems.clear(); this.use(false); this.publish(); },
+    receive(list) {
+      if (this.items !== this.roomItems) this.use(true);
+      for (const o of list) { const it = this.clean(o); if (it) this.apply(it); }
+    },
+    // Replying to someone who just opened the workshop: send what we have, in pieces small enough for the relays.
+    answer() {
+      if (Date.now() - this.answeredAt < 1500 || !this.roomItems.size) return;
+      this.answeredAt = Date.now();
+      setTimeout(() => this.broadcast(), 150 + Math.random() * 700);
+    },
+    broadcast() {
+      if (!ONLINE.on) return;
+      const all = [...this.roomItems.values()];
+      for (let k = 0; k < all.length; k += 22) Net.send({ k: 'wks', its: all.slice(k, k + 22) });
+    },
+    holes() { return WS_HOLE_IDS.filter(id => { const h = this.items && this.items.get(id); return h && !h.d; }); },
+    // Sorted by id, so everyone in a room builds exactly the same hole from the same pieces.
+    pieces(hid) { const out = []; if (this.items) for (const it of this.items.values()) if (it.h === hid && !it.d && PIECES[it.t]) out.push(it); return out.sort((a, b) => (a.i < b.i ? -1 : a.i > b.i ? 1 : 0)); },
+    addHole() {
+      const id = WS_HOLE_IDS.find(k => { const h = this.items.get(k); return !h || h.d; });
+      if (!id) return null;
+      this.edit({ i: id, t: 'hole', s: 'room', st: 'office', d: false });
+      return id;
+    },
+    removeHole(id) {
+      const h = this.items.get(id);
+      if (!h || this.holes().length < 2) return;
+      this.edit({ ...h, d: true });
+      for (const p of this.pieces(id)) this.edit({ ...p, d: true });
+    },
+    defFor(hid) {
+      const H = this.items.get(hid), S = WS_SHAPES[H.s] || WS_SHAPES.room, n = this.holes().indexOf(hid) + 1;
+      const tee = this.items.get(hid + ':tee'), cup = this.items.get(hid + ':cup');
+      const def = {
+        name: `Side Project ${n}`, time: 'Workshop', short: `W${n}`, par: 3, tip: 'Built by your team in the workshop.',
+        rageName: `Side Project ${n} (Scope Creep)`, rageTip: 'Somebody added a few features overnight.', noMirror: true, theme: H.st,
+        course: [S.pts], tee: tee ? [tee.x, tee.y] : S.tee.slice(), pins: [cup ? [cup.x, cup.y] : S.cup.slice()],
+        blocks: [], bumpers: [], zones: [], movers: [], props: [], decor: [],
+      };
+      for (const p of this.pieces(hid)) { const part = PIECES[p.t].make(p, H.st); for (const k of Object.keys(part)) def[k].push(...part[k]); }
+      const st = this.status[hid];
+      if (st && st.par) def.par = st.par;
+      if (st && st.roomba) def.roomba = st.roomba;
+      return def;
+    },
+    hash(hid) {
+      const H = this.items.get(hid), bits = [H.s, H.st];
+      for (const k of [':tee', ':cup']) { const it = this.items.get(hid + k); bits.push(it ? `${it.x},${it.y}` : '-'); }
+      for (const p of this.pieces(hid).sort((a, b) => (a.i < b.i ? -1 : 1))) bits.push(`${p.t}${p.x},${p.y},${p.r}`);
+      return hashStr(bits.join('|'));
+    },
+    // The quick rules, checked on every change. Returns what's wrong, and which pieces are the problem.
+    inspect(hid) {
+      const def = this.defFor(hid), issues = [], bad = new Set(), counts = { Movers: 0, Hazards: 0, Props: 0 };
+      const pcs = this.pieces(hid);
+      let cost = 0;
+      for (const p of pcs) { const P = PIECES[p.t]; cost += P.cost; if (counts[P.cat] != null) counts[P.cat]++; }
+      if (cost > WS_BUDGET) issues.push(`Over budget: ${cost} of ${WS_BUDGET} points.`);
+      if (pcs.length > WS_MAX.pieces) issues.push(`Too many pieces: ${pcs.length} of ${WS_MAX.pieces}.`);
+      for (const k of ['Movers', 'Hazards', 'Props']) if (counts[k] > WS_MAX[k]) issues.push(`Too many ${k.toLowerCase()}: ${counts[k]} of ${WS_MAX[k]}.`);
+      const keep = PH;
+      PH = MODES.normal;
+      const h = buildHole(0, null, def);
+      PH = keep;
+      const inside = (x, y) => h.course.some(poly => pointInPoly(x, y, poly));
+      const [tx, ty] = def.tee, [cx, cy] = def.pins[0];
+      if (!inside(tx, ty)) issues.push('The tee is off the course.');
+      if (!inside(cx, cy)) issues.push('The cup is off the course.');
+      if (Math.hypot(tx - cx, ty - cy) < 300) issues.push('Move the cup at least 10 feet from the tee.');
+      for (const p of pcs) {
+        const part = PIECES[p.t].make(p, def.theme), room = PIECES[p.t].cat === 'Props' ? 40 : WS_KEEP;
+        if (!inside(p.x, p.y) || partsDist(part, tx, ty) < room || partsDist(part, cx, cy) < room) bad.add(p.i);
+      }
+      if (bad.size) issues.push(`${bad.size === 1 ? 'A piece is' : bad.size + ' pieces are'} off the course or too close to the tee or cup (3 feet, or a foot for props).`);
+      let field = null, d = 1e6;
+      if (!issues.length) {
+        field = distanceField(h);
+        d = field.at(tx, ty);
+        if (d >= 1e6) issues.push('There’s no way through from the tee to the cup.');
+      }
+      return { issues, bad, cost, counts, field, dist: d };
+    },
+    // Called after any change to a hole: re-check it, and queue the test bot if the rules pass.
+    changed(hid) {
+      if (!hid) return;
+      this.dirty = this.dirty || new Set();
+      this.dirty.add(hid);
+    },
+    refresh() {
+      if (!this.dirty || !this.dirty.size || !this.items) return;
+      const ids = [...this.dirty];
+      this.dirty.clear();
+      for (const hid of ids) {
+        if (!this.holes().includes(hid)) { delete this.status[hid]; continue; }
+        const r = this.inspect(hid), hash = this.hash(hid), old = this.status[hid] || {};
+        const st = { issues: r.issues, bad: r.bad, cost: r.cost, counts: r.counts, hash };
+        if (!r.issues.length) {
+          st.roomba = r.field.middle(r.dist);
+          const known = !this.room && this.checked && this.checked[hid];
+          if (old.hash === hash && old.state) { st.state = old.state; st.par = old.par; st.playable = old.playable; st.note = old.note; }
+          else if (known && known.hash === hash && (known.state === 'ok' || known.state === 'fail')) {
+            st.state = known.state; st.par = known.par; st.playable = known.state === 'ok'; st.note = known.note;
+          } else { st.state = 'queued'; st.playable = false; }
+        } else { st.state = 'blocked'; st.playable = false; }
+        this.status[hid] = st;
+        if (this.job && this.job.hid === hid && this.job.hash !== hash) this.job = null;
+      }
+      this.publish();
+      if (G.screen === 'build') this.rebuild();
+    },
+    // One hole at a time, in slices, so the page stays smooth.
+    tick() {
+      this.refresh();
+      if (!this.items) return;
+      if (!this.job) {
+        const hid = this.holes().find(id => this.status[id] && this.status[id].state === 'queued');
+        if (!hid) return;
+        const st = this.status[hid];
+        st.state = 'testing'; st.stroke = 1;
+        this.job = { hid, hash: st.hash, runs: [], gen: botRun(this.defFor(hid), st.hash), seed: st.hash };
+        this.renderUi();
+      }
+      const job = this.job, t0 = performance.now();
+      while (performance.now() - t0 < 9) {
+        const step = job.gen.next();
+        if (step.value && step.value.stroke && this.status[job.hid]) { this.status[job.hid].stroke = step.value.stroke; this.renderStatus(); }
+        if (!step.done) continue;
+        job.runs.push(step.value.strokes);
+        if (job.runs.length < 2 && step.value.strokes < Infinity) { job.gen = botRun(this.defFor(job.hid), job.seed + job.runs.length * 7919); continue; }
+        const st = this.status[job.hid];
+        this.job = null;
+        if (!st || st.hash !== job.hash) return;
+        const ok = job.runs.every(s => s < Infinity);
+        const avg = job.runs.reduce((s, v) => s + v, 0) / job.runs.length;
+        st.state = ok ? 'ok' : 'fail';
+        st.playable = ok;
+        st.par = ok ? clamp(Math.round(avg + 0.6), 2, 5) : null;
+        st.note = ok ? `The test bot took ${job.runs.join(' and ')}.` : 'The test bot couldn’t finish it in 8 strokes. Open it up a little.';
+        if (!this.room) { this.checked = this.checked || {}; this.checked[job.hid] = { hash: st.hash, state: st.state, par: st.par, note: st.note }; this.save(); }
+        this.publish();
+        if (G.screen === 'build' && job.hid === this.cur) this.rebuild();
+        this.renderUi();
+        return;
+      }
+    },
+    // The playable holes become a course you can pick, like the office or the factory.
+    publish() {
+      if (G.screen === 'play' && COURSE.id === 'workshop') return;
+      const ids = this.holes();
+      COURSES.workshop.holes = ids.filter(id => this.status[id] && this.status[id].playable).map(id => this.defFor(id));
+      if (!overlays.setup.hidden) renderCoursePicker('local', COURSES[store.get('building', 'office')] && COURSES[store.get('building', 'office')].holes.length ? store.get('building', 'office') : 'office');
+      if (!overlays.club.hidden) renderClub();
+    },
+    // For an online tee-off: which holes, and at what par, so everyone plays the same course.
+    roundInfo() {
+      const ids = this.holes().filter(id => this.status[id] && this.status[id].playable);
+      return { wh: ids, wp: ids.map(id => this.status[id].par) };
+    },
+    prepareRound(wh, wp) {
+      this.use(true);
+      this.refresh();
+      const ids = (Array.isArray(wh) ? wh : this.roundInfo().wh).filter(id => WS_HOLE_IDS.includes(id) && this.holes().includes(id));
+      COURSES.workshop.holes = ids.map(id => {
+        const d = this.defFor(id), p = Array.isArray(wp) && Array.isArray(wh) ? wp[wh.indexOf(id)] : null;
+        if (Number.isInteger(p) && p >= 2 && p <= 5) d.par = p;
+        return d;
+      });
+      return COURSES.workshop.holes.length > 0;
+    },
+
+    // The builder screen.
+    open(room) {
+      this.use(!!room && ONLINE.on);
+      if (this.room) Net.send({ k: 'wkq' });
+      if (!this.holes().length) this.addHole();
+      if (!this.holes().includes(this.cur)) this.cur = this.holes()[0];
+      for (const id of this.holes()) this.changed(id);
+      this.refresh();
+      setMode(false);
+      G.screen = 'build'; G.phase = 'idle'; G.ball = null; G.practice = null; G.timers.length = 0;
+      closeAllOverlays(); showHud(false);
+      $('wsUi').hidden = false;
+      this.sel = null; this.armed = null; this.drag = null;
+      this.renderUi();
+      this.rebuild();
+    },
+    close() {
+      $('wsUi').hidden = true;
+      this.sel = null; this.armed = null; this.drag = null;
+      this.publish();
+      if (this.room && ONLINE.on) {
+        showBackdrop(ONLINE.settings.course === 'workshop' ? 'office' : ONLINE.settings.course);
+        G.screen = 'club';
+        renderClub();
+        openOverlay('club');
+      } else showSetup();
+    },
+    rebuild() {
+      if (G.screen !== 'build' || !this.holes().includes(this.cur)) return;
+      const keep = PH;
+      PH = MODES.normal;
+      const h = buildHole(0, null, this.defFor(this.cur));
+      PH = keep;
+      if (G.hole && G.hole.def && G.hole.def.time === 'Workshop') h.t = G.hole.t;
+      G.hole = h;
+      layoutView();
+      this.renderUi();
+    },
+    pick(x, y) {
+      const hid = this.cur, def = this.defFor(hid);
+      if (Math.hypot(x - def.tee[0], y - def.tee[1]) < 26) return { i: hid + ':tee', t: 'tee' };
+      if (Math.hypot(x - def.pins[0][0], y - def.pins[0][1]) < 26) return { i: hid + ':cup', t: 'cup' };
+      const pcs = this.pieces(hid);
+      for (let k = pcs.length - 1; k >= 0; k--) if (partsDist(PIECES[pcs[k].t].make(pcs[k], def.theme), x, y) < 8) return pcs[k];
+      return null;
+    },
+    place(type, x, y) {
+      const it = { i: randId().slice(0, 7), t: type, h: this.cur, x: Math.round(x / 10) * 10, y: Math.round(y / 10) * 10, r: 0, d: false };
+      this.edit(it);
+      this.sel = it.i;
+      this.armed = null;
+      this.refresh();
+    },
+    move(id, x, y) {
+      const it = this.items.get(id), nx = Math.round(x / 10) * 10, ny = Math.round(y / 10) * 10;
+      if (it) this.edit({ ...it, x: nx, y: ny });
+      else if (id.endsWith(':tee') || id.endsWith(':cup')) this.edit({ i: id, t: id.endsWith(':tee') ? 'tee' : 'cup', h: this.cur, x: nx, y: ny, d: false });
+      this.refresh();
+    },
+    key(e) {
+      const it = this.sel && this.items.get(this.sel);
+      if (e.key === 'Escape') { this.sel = null; this.armed = null; this.renderUi(); }
+      else if ((e.key === 'r' || e.key === 'R') && it) this.rotate();
+      else if ((e.key === 'Delete' || e.key === 'Backspace') && it) this.remove();
+      else if (it && e.key.startsWith('Arrow')) {
+        const [dx, dy] = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, -10], ArrowDown: [0, 10] }[e.key];
+        this.move(it.i, it.x + dx, it.y + dy);
+      } else return;
+      e.preventDefault();
+    },
+    rotate() { const it = this.sel && this.items.get(this.sel); if (it && PIECES[it.t]) { this.edit({ ...it, r: (it.r + 1) & 3 }); this.refresh(); } },
+    remove() { const it = this.sel && this.items.get(this.sel); if (it && PIECES[it.t]) { this.edit({ ...it, d: true }); this.sel = null; this.refresh(); } },
+    setShape(s) {
+      const H = this.items.get(this.cur);
+      this.edit({ ...H, s });
+      // A new shape gets its own tee and cup spots.
+      for (const k of ['tee', 'cup']) { const it = this.items.get(this.cur + ':' + k); if (it) this.edit({ ...it, x: WS_SHAPES[s][k][0], y: WS_SHAPES[s][k][1] }); }
+      this.refresh();
+    },
+    setStyle(st) { const H = this.items.get(this.cur); this.edit({ ...H, st }); this.refresh(); },
+    sendCursor(x, y) {
+      if (!this.room || !ONLINE.on || performance.now() - this.curAt < 120) return;
+      this.curAt = performance.now();
+      Net.send({ k: 'cur', h: this.cur, x: Math.round(x), y: Math.round(y) });
+    },
+    renderStatus() {
+      const st = this.status[this.cur] || {}, box = $('wsStatus');
+      let text = 'Checking…', cls = 'ws-status';
+      if (st.state === 'blocked') { text = 'Needs work'; cls += ' bad'; }
+      else if (st.state === 'testing' || st.state === 'queued') text = `Test bot: stroke ${st.stroke || 1}`;
+      else if (st.state === 'ok') { text = `Playable · par ${st.par}`; cls += ' ok'; }
+      else if (st.state === 'fail') { text = 'Too hard'; cls += ' bad'; }
+      box.textContent = text; box.className = cls;
+      const issues = st.issues && st.issues.length ? st.issues : st.state === 'fail' || st.state === 'ok' ? [st.note] : [];
+      const note = issues.join(' '), was = $('wsIssues').hidden ? '' : $('wsIssues').textContent;
+      $('wsIssues').hidden = !issues.length;
+      $('wsIssues').textContent = note;
+      // The notes line takes room at the top, so fit the hole around it when it changes.
+      if (note !== was && G.screen === 'build') layoutView();
+      $('wsTest').disabled = st.state !== 'ok';
+    },
+    renderUi() {
+      if ($('wsUi').hidden) return;
+      const tabs = $('wsTabs'), ids = this.holes();
+      tabs.textContent = '';
+      ids.forEach((id, k) => {
+        const b = el('button', 'ws-tab' + (id === this.cur ? ' on' : ''), String(k + 1));
+        b.type = 'button'; b.setAttribute('aria-label', `Hole ${k + 1}`);
+        b.addEventListener('click', () => { this.cur = id; this.sel = null; this.armed = null; this.rebuild(); });
+        tabs.append(b);
+      });
+      if (ids.length < WS_HOLE_IDS.length) {
+        const add = el('button', 'ws-tab add', '+');
+        add.type = 'button'; add.setAttribute('aria-label', 'Add a hole');
+        add.addEventListener('click', () => { const id = this.addHole(); if (id) { this.cur = id; this.refresh(); this.rebuild(); } });
+        tabs.append(add);
+      }
+      const H = this.items.get(this.cur);
+      if ($('wsShape').value !== H.s) $('wsShape').value = H.s;
+      if ($('wsStyle').value !== H.st) $('wsStyle').value = H.st;
+      const st = this.status[this.cur] || { cost: 0, counts: {} };
+      const left = WS_BUDGET - (st.cost || 0);
+      $('wsBudget').textContent = `Budget ${st.cost || 0} of ${WS_BUDGET}`;
+      $('wsBudget').classList.toggle('bad', left < 0);
+      $('wsRemoveHole').hidden = ids.length < 2;
+      // The palette: one category at a time, greyed out when a piece won't fit the budget or the limits.
+      const cats = $('wsCats');
+      if (!cats.childElementCount) for (const c of WS_CATS) {
+        const b = el('button', 'ws-cat', c);
+        b.type = 'button'; b.dataset.cat = c;
+        b.addEventListener('click', () => { this.cat = c; this.renderUi(); });
+        cats.append(b);
+      }
+      for (const b of cats.children) b.classList.toggle('on', b.dataset.cat === this.cat);
+      const items = $('wsItems');
+      items.textContent = '';
+      const n = this.pieces(this.cur).length;
+      for (const [key, P] of Object.entries(PIECES)) {
+        if (P.cat !== this.cat) continue;
+        const full = P.cost > left || n >= WS_MAX.pieces || (WS_MAX[P.cat] != null && (st.counts[P.cat] || 0) >= WS_MAX[P.cat]);
+        const b = el('button', 'ws-item' + (this.armed === key ? ' on' : ''));
+        b.type = 'button';
+        b.append(el('b', '', P.name), el('small', '', `${P.cost} pt${P.cost === 1 ? '' : 's'}`));
+        b.disabled = full;
+        b.addEventListener('click', () => { this.armed = this.armed === key ? null : key; this.sel = null; this.renderUi(); });
+        items.append(b);
+      }
+      const sel = this.sel && this.items.get(this.sel);
+      $('wsSel').hidden = !(sel && PIECES[sel.t] && !sel.d);
+      if (sel && PIECES[sel.t]) $('wsSelName').textContent = PIECES[sel.t].name;
+      $('wsHint').textContent = this.armed ? `Tap the course to place the ${PIECES[this.armed].name.toLowerCase()}.` : 'Pick a piece below, then tap the course. Drag pieces, the tee or the cup to move them.';
+      const people = $('wsPeople');
+      people.textContent = '';
+      if (this.room) for (const p of ONLINE.peers.values()) if (p.cursor && Date.now() - p.cursor.at < 8000) people.append(dotEl(COLORS[p.c]));
+      this.renderStatus();
+    },
+    // Drawn over the hole: keep-clear rings, the selection, a ghost of what you're dragging, and everyone's cursors.
+    drawOverlay(g) {
+      const hid = this.cur;
+      if (!this.items || !this.holes().includes(hid)) return;
+      const def = this.defFor(hid), st = this.status[hid] || {};
+      applyView(g);
+      g.save();
+      g.setLineDash([8, 6]); g.lineWidth = 2;
+      for (const [x, y] of [def.tee, def.pins[0]]) { g.strokeStyle = 'rgba(255,255,255,0.35)'; circle(g, x, y, WS_KEEP); g.stroke(); }
+      g.setLineDash([]);
+      for (const [x, y, lab] of [[def.tee[0], def.tee[1], 'TEE'], [def.pins[0][0], def.pins[0][1], 'CUP']]) {
+        g.strokeStyle = '#ffd447'; g.lineWidth = 3; circle(g, x, y, 22); g.stroke();
+        g.fillStyle = '#ffd447'; g.font = '800 13px ' + DISPLAY_FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; uprightText(g, lab, x, y + 34);
+      }
+      const outline = (it, color, dx = 0, dy = 0) => {
+        const part = PIECES[it.t].make({ ...it, x: it.x + dx, y: it.y + dy }, def.theme);
+        g.strokeStyle = color; g.lineWidth = 3;
+        for (const b of part.blocks || []) { g.beginPath(); tracePoly(g, b.pts); g.stroke(); }
+        for (const c of part.bumpers || []) { circle(g, c.x, c.y, c.r + 3); g.stroke(); }
+        for (const z of part.zones || []) { g.beginPath(); if (z.pts) tracePoly(g, z.pts); else g.arc(z.x, z.y, z.r, 0, TAU); g.stroke(); }
+        for (const m of part.movers || []) {
+          if (m.type === 'spinner') { g.setLineDash([6, 6]); circle(g, m.x, m.y, m.len); g.stroke(); g.setLineDash([]); }
+          else { g.beginPath(); g.moveTo(m.a[0], m.a[1]); g.lineTo(m.b[0], m.b[1]); g.stroke(); g.strokeRect(it.x + dx - m.w / 2, it.y + dy - m.h / 2, m.w, m.h); }
+        }
+        for (const q of part.props || []) { circle(g, q.x, q.y, 16); g.stroke(); }
+      };
+      for (const id of st.bad || []) { const it = this.items.get(id); if (it && !it.d) outline(it, '#ff5a4e'); }
+      const sel = this.sel && this.items.get(this.sel);
+      if (sel && PIECES[sel.t] && !sel.d) outline(sel, '#ffd447');
+      const d = this.drag;
+      if (d && d.moved) {
+        if (PIECES[d.t]) outline(this.items.get(d.i), 'rgba(255,255,255,0.9)', d.x - d.ox, d.y - d.oy);
+        else { g.strokeStyle = '#fff'; g.lineWidth = 3; circle(g, d.x, d.y, 22); g.stroke(); }
+      }
+      if (this.room) {
+        g.font = '600 12px "Work Sans", system-ui, sans-serif'; g.textAlign = 'left'; g.textBaseline = 'middle';
+        for (const p of ONLINE.peers.values()) {
+          const c = p.cursor;
+          if (!c || c.h !== hid || Date.now() - c.at > 4000) continue;
+          const col = COLORS[p.c];
+          g.fillStyle = col; g.strokeStyle = '#1b1d21'; g.lineWidth = 1.5;
+          g.beginPath(); g.moveTo(c.x, c.y); g.lineTo(c.x + 4, c.y + 22); g.lineTo(c.x + 10, c.y + 15); g.lineTo(c.x + 19, c.y + 17); g.closePath(); g.fill(); g.stroke();
+          g.save(); g.translate(c.x + 14, c.y + 30); if (view.textRot) g.rotate(view.textRot);
+          const w = g.measureText(p.n).width + 12;
+          g.fillStyle = withAlpha(col, 0.9); g.beginPath(); rr(g, -4, -10, w, 20, 8); g.fill();
+          g.fillStyle = '#1b1d21'; g.fillText(p.n, 2, 1);
+          g.restore();
+        }
+      }
+      g.restore();
+    },
+    // Pointer handling on the course while building.
+    down(pt) {
+      const w = screenToWorld(pt.x, pt.y);
+      if (this.armed) { this.place(this.armed, w.x, w.y); return; }
+      const hit = this.pick(w.x, w.y);
+      if (!hit) { this.sel = null; this.renderUi(); return; }
+      const ref = PIECES[hit.t] ? hit : { ...hit, ...(hit.t === 'tee' ? { x: this.defFor(this.cur).tee[0], y: this.defFor(this.cur).tee[1] } : { x: this.defFor(this.cur).pins[0][0], y: this.defFor(this.cur).pins[0][1] }) };
+      this.sel = PIECES[hit.t] ? hit.i : null;
+      this.drag = { i: hit.i, t: hit.t, ox: ref.x, oy: ref.y, x: ref.x, y: ref.y, sx: w.x, sy: w.y, moved: false };
+      this.renderUi();
+    },
+    moveTo(pt) {
+      const w = screenToWorld(pt.x, pt.y);
+      this.sendCursor(w.x, w.y);
+      const d = this.drag;
+      if (!d) return;
+      const x = Math.round((d.ox + w.x - d.sx) / 10) * 10, y = Math.round((d.oy + w.y - d.sy) / 10) * 10;
+      if (Math.hypot(w.x - d.sx, w.y - d.sy) > 4) d.moved = true;
+      d.x = x; d.y = y;
+    },
+    up() {
+      const d = this.drag;
+      this.drag = null;
+      if (d && d.moved) this.move(d.i, d.x, d.y);
     },
   };
 
@@ -5285,6 +6004,16 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     Campus.clampCam();
     Campus.idle = -20; Campus.goal = null;
   }, { passive: false });
+  canvas.addEventListener('pointerdown', e => {
+    if (G.screen !== 'build') return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    e.preventDefault();
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    Workshop.down(localPoint(e));
+  });
+  canvas.addEventListener('pointermove', e => { if (G.screen === 'build') Workshop.moveTo(localPoint(e)); });
+  canvas.addEventListener('pointerup', () => { if (G.screen === 'build') Workshop.up(); });
+  canvas.addEventListener('pointercancel', () => { if (G.screen === 'build') Workshop.up(); });
   function mapKey(e) {
     const c = Campus.cam, step = Math.min(cw, ch) * 0.15 / c.z;
     if (e.key === 'Escape') { if (Campus.sel) Campus.select(null); else Campus.close(); }
@@ -5385,6 +6114,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   window.addEventListener('keydown', e => {
     const tag = e.target && e.target.tagName;
     if (G.screen === 'map' && tag !== 'INPUT' && tag !== 'BUTTON') { mapKey(e); return; }
+    if (G.screen === 'build') { if (tag !== 'INPUT' && tag !== 'SELECT' && tag !== 'BUTTON') Workshop.key(e); return; }
     if (Campus.flight) { if (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); Campus.skipFlight(); } return; }
     if (e.key === 'Escape') { if (Swing.phase !== 'idle') { Swing.cancel(); return; } handleEscape(); return; }
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
@@ -5429,6 +6159,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function showHud(on) {
     $('hudTop').hidden = !on;
     $('hudBottom').hidden = !on;
+    $('wsReturnBtn').hidden = !(on && G.practice != null && COURSE.id === 'workshop');
     if (!on) closeTauntPop();
     syncTauntBtn();
     syncTauntsBtn();
@@ -5568,8 +6299,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   // A two-option picker between buildings, used on the setup card and in the clubhouse.
   function renderCoursePicker(where, current) {
     const box = $(where === 'club' ? 'bldClub' : 'bldLocal');
-    const ids = Object.keys(COURSES);
-    if (box.childElementCount !== ids.length) {
+    const ids = Object.keys(COURSES).filter(id => COURSES[id].holes.length);
+    if (box.dataset.ids !== ids.join()) {
+      box.dataset.ids = ids.join();
       box.textContent = '';
       for (const id of ids) {
         const c = COURSES[id];
@@ -5620,7 +6352,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     $('playerCount').textContent = `${setupPlayers.length} of ${MAX_PLAYERS}`;
     $('addPlayer').disabled = setupPlayers.length >= MAX_PLAYERS;
     $('todayLabel').textContent = todayLabel();
-    renderCoursePicker('local', COURSES[store.get('building', 'office')] ? store.get('building', 'office') : 'office');
+    renderCoursePicker('local', COURSES[store.get('building', 'office')] && COURSES[store.get('building', 'office')].holes.length ? store.get('building', 'office') : 'office');
     $('rageToggle').checked = !!store.get('rage', false);
     if (focusIdx != null) { const f = $('player-' + focusIdx); if (f) { f.focus(); f.select(); } }
   }
@@ -5634,7 +6366,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const names = setupPlayers.map((n, i) => (String(n).trim() || `Player ${i + 1}`).slice(0, 16));
     setupPlayers = names.slice();
     store.set('players', names);
-    const rage = $('rageToggle').checked, courseId = COURSES[store.get('building', 'office')] ? store.get('building', 'office') : 'office';
+    const b = store.get('building', 'office'), rage = $('rageToggle').checked, courseId = COURSES[b] && COURSES[b].holes.length ? b : 'office';
     store.set('rage', rage);
     const tail = `${courseId === 'office' ? '' : ' \u00B7 ' + COURSES[courseId].name}${rage ? ' \u00B7 Rage mode' : ''}`;
     let course;
@@ -5665,7 +6397,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       ul.append(li);
     }
     const last = idx === HOLES.length - 1;
-    $('nextBtn').textContent = last ? 'Clock out' : `On to ${HOLES[idx + 1].time}`;
+    const nx = HOLES[idx + 1];
+    $('nextBtn').textContent = last ? COURSE.lastLabel || 'Clock out' : `On to ${nx && nx.time === 'Workshop' ? nx.name : nx.time}`;
     if (last) $('sumNext').textContent = 'That was the last hole of the day.';
     else {
       const nx = HOLES[idx + 1];
@@ -6095,7 +6828,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (typeof m.r !== 'string' || !m.r || m.r.length > 24) return;
       if (peer) peer.seen = now;
       const who = peer || { n: cleanName(m.n) || 'Someone', c: 0 };
-      const mode = m.md === 'rage' ? 'rage' : 'normal', course = COURSES[m.cs] ? m.cs : 'office';
+      const mode = m.md === 'rage' ? 'rage' : 'normal';
+      const course = COURSES[m.cs] ? m.cs : 'office';
+      // Missing the workshop design? Ask for it; the tee-off is repeated, so the next one will catch it.
+      if (course === 'workshop' && ONLINE.status === 'club' && m.r !== ONLINE.lastRound && !Workshop.prepareRound(m.wh, m.wp)) { Net.send({ k: 'wkq' }); return; }
       if (ONLINE.status === 'club' && m.r !== ONLINE.lastRound) { startOnlineRound(m.r, 0, mode, course); roomNews(who, 'teed off. Here we go!'); }
       else if (ONLINE.status === 'fin' && m.r !== ONLINE.lastRound) roomNews(who, 'teed off a new round. Head back to the clubhouse to join.');
       else if (ONLINE.status === 'play' && G.holeIdx === 0 && ONLINE.round && m.r < ONLINE.round && mode === (G.rage ? 'rage' : 'normal') && course === COURSE.id) {
@@ -6130,6 +6866,14 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         shred: 'got shredded',
       }[m.e];
       if (text) roomNews(peer, text);
+    } else if (m.k === 'wk') {
+      if (m.it) Workshop.receive([m.it]);
+    } else if (m.k === 'wks') {
+      if (Array.isArray(m.its)) Workshop.receive(m.its.slice(0, 30));
+    } else if (m.k === 'wkq') {
+      Workshop.answer();
+    } else if (m.k === 'cur') {
+      if (WS_HOLE_IDS.includes(m.h) && Number.isFinite(m.x) && Number.isFinite(m.y)) peer.cursor = { h: m.h, x: clamp(m.x, 0, 1000), y: clamp(m.y, 0, 600), at: now };
     } else if (m.k === 'taunt') {
       // Only preset lines travel, as a number, and each person gets one every few seconds.
       if (!Number.isInteger(m.i) || m.i < 0 || m.i >= TAUNT_PRESETS.length || now - peer.tauntAt < 4000) return;
@@ -6257,6 +7001,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       },
     });
     ONLINE.peers.clear();
+    Workshop.joinedRoom();
     store.set('onlineName', name);
     G.screen = 'club';
     G.phase = 'idle';
@@ -6277,6 +7022,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     clearTimeout(ONLINE.replyTimer);
     Object.assign(ONLINE, { on: false, status: 'off', round: null, gateTimer: 0 });
     ONLINE.peers.clear();
+    Workshop.leftRoom();
     $('waitPanel').hidden = true;
     $('board').hidden = true;
     $('pings').textContent = '';
@@ -6319,14 +7065,26 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function teeOff() {
     Sound.unlock();
     const act = activeRound();
-    if (act) { startOnlineRound(act.r, act.hole, act.md, act.cs); return; }
+    if (act) {
+      const cs = act.cs === 'workshop' && !Workshop.prepareRound() ? 'office' : act.cs;
+      startOnlineRound(act.r, act.hole, act.md, cs);
+      return;
+    }
     const r = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    const md = ONLINE.settings.rage ? 'rage' : 'normal', cs = ONLINE.settings.course;
+    const md = ONLINE.settings.rage ? 'rage' : 'normal';
+    let cs = ONLINE.settings.course, extra = {};
+    // A workshop round: send everyone the latest design first, then which holes and pars to play.
+    if (cs === 'workshop') {
+      Workshop.use(true); Workshop.refresh();
+      extra = Workshop.roundInfo();
+      if (!extra.wh.length || !Workshop.prepareRound(extra.wh, extra.wp)) { cs = 'office'; extra = {}; }
+      else Workshop.broadcast();
+    }
     // Relays deliver at most once, so repeat the tee-off a couple of times; it's harmless to receive twice.
-    const go = () => { if (ONLINE.on && ONLINE.round === r) Net.send({ k: 'go', r, n: ONLINE.me.name, md, cs }); };
+    const go = () => { if (ONLINE.on && ONLINE.round === r) Net.send({ k: 'go', r, n: ONLINE.me.name, md, cs, ...extra }); };
     startOnlineRound(r, 0, md, cs);
-    go();
-    setTimeout(go, 700);
+    setTimeout(go, cs === 'workshop' ? 350 : 0);
+    setTimeout(go, 900);
     setTimeout(go, 2000);
   }
   // Room settings are last-writer-wins: the newest change anyone made applies to the next tee-off.
@@ -6580,6 +7338,24 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); startFromSetup(); } });
   $('startBtn').addEventListener('click', startFromSetup);
   $('exploreBtn').addEventListener('click', () => { Sound.unlock(); Campus.open('setup'); });
+  $('buildBtn').addEventListener('click', () => { Sound.unlock(); Workshop.open(false); });
+  $('wsClubBtn').addEventListener('click', () => { Sound.unlock(); Workshop.open(true); });
+  $('wsBack').addEventListener('click', () => Workshop.close());
+  $('wsRotate').addEventListener('click', () => Workshop.rotate());
+  $('wsDelete').addEventListener('click', () => Workshop.remove());
+  $('wsRemoveHole').addEventListener('click', () => { Workshop.removeHole(Workshop.cur); Workshop.refresh(); Workshop.cur = Workshop.holes()[0]; Workshop.rebuild(); });
+  for (const [k, S] of Object.entries(WS_SHAPES)) { const o = document.createElement('option'); o.value = k; o.textContent = S.name; $('wsShape').append(o); }
+  $('wsShape').addEventListener('change', () => Workshop.setShape($('wsShape').value));
+  $('wsStyle').addEventListener('change', () => Workshop.setStyle($('wsStyle').value));
+  // A test drive plays the hole you're building, over and over, until you head back to the workshop.
+  $('wsTest').addEventListener('click', () => {
+    const idx = Workshop.roundInfo().wh.indexOf(Workshop.cur);
+    if (idx < 0) return;
+    Workshop.publish();
+    $('wsUi').hidden = true;
+    startPractice('workshop', idx);
+  });
+  $('wsReturnBtn').addEventListener('click', () => Workshop.open(Workshop.room));
   $('menuMapBtn').addEventListener('click', () => { closeMenu(); Campus.open('play'); });
   $('mapBack').addEventListener('click', () => Campus.close());
   $('mapIn').addEventListener('click', () => Campus.zoomBy(1.5));
@@ -6642,12 +7418,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   window.addEventListener('pagehide', () => { if (ONLINE.on) Net.send({ k: 'bye' }); });
   if (urlParams.has('debug')) {
     window.n2fDebug = {
-      G, ONLINE, Net, Swing, Party, Campus,
+      G, ONLINE, Net, Swing, Party, Campus, Workshop, view,
       // Jumps to a hole of the current game, for testing.
       jump(i) { loadHole(i); startTurn(0, true); },
       // The pieces the course checker needs to play shots without touching the game.
       sim: {
-        buildHole, stepBall, stepProps, updateMovers, shotSpeed, rollFeetToMeter, setCourse, setMode, variantsFor, pointInPoly,
+        buildHole, stepBall, stepProps, updateMovers, shotSpeed, rollFeetToMeter, setCourse, setMode, variantsFor, pointInPoly, distanceField, segDist,
         get HOLES() { return HOLES; }, get PH() { return PH; }, COURSES, BALL_R, PHYS_DT, UNITS_PER_FT,
       },
       // Runs one celebration by name, for testing.
@@ -6771,6 +7547,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function start(data) {
     if (booted) return;
     booted = true;
+    try { Workshop.use(false); Workshop.refresh(); } catch (e) { /* a broken saved design shouldn't stop the game */ }
     let ok = false;
     try { if (data && data.game) ok = restore(data.game); } catch (e) { ok = false; }
     if (!ok) showSetup();

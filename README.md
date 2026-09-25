@@ -52,7 +52,7 @@ The game is one static page with no server of its own. In an online room, each b
 Worth knowing:
 
 - These are free public services with no uptime guarantee.
-- Anyone who knows a room code can read that room's messages: player names, departments, ball positions, scores and taunts. Don't use a room code or a name you'd mind being public.
+- Anyone who knows a room code can read that room's messages: player names, departments, ball positions, scores, taunts and workshop designs. Don't use a room code or a name you'd mind being public.
 - Some work networks and VPNs block the relays; two of them use ports 8084 and 8884. If the clubhouse says it can't reach the relay servers, try another network, such as a phone hotspot.
 - To use your own relay instead, add `?relay=wss://your-broker.example/mqtt` to the URL. It needs to speak MQTT 3.1.1 over WebSockets without a password. The invite link carries the parameter, so everyone in the room uses the same relay.
 
@@ -100,6 +100,23 @@ Both buildings sit on one campus map, with a pond, a coffee kiosk, a street, the
 - Tap a hole for its details, then **Practice this hole** to play it on its own as many times as you like, or play that building's full round.
 - In an online room, the map shows everyone's ball on the hole they're playing.
 - During a round, the camera flies across the campus from each hole to the next. Tap to skip it.
+
+## The Workshop: build your own holes
+
+Press **Build a course** on the setup card to design up to three holes of your own. They're saved in your browser. In an online room, press **Build holes together** in the clubhouse: everyone in the room edits the same holes at once, sees each other's cursors, and changes merge as they happen.
+
+- Pick a shape for each hole (big room, hallway, L-bend, zigzag or hairpin) and an office or factory look, then drag the tee and the cup where you want them.
+- Choose pieces from the palette and tap the course to place them: walls, filing cabinets, couches, pallets and racks; planters, pillars, beanbags and tables; rugs, oil slicks, ramps, conveyors and bowls; coffee spills, service pits and shredders; clock hands, robot arms, mail carts and forklifts; and props to knock over. Select a piece to rotate or remove it.
+
+Limits keep every hole fair:
+
+- Each hole has a budget of 60 points, and bigger pieces cost more.
+- At most 30 pieces, 3 movers, 4 hazards and 14 props per hole.
+- Nothing but props within 3 feet of the tee or the cup, and the cup at least 10 feet from the tee.
+- There has to be a way through from the tee to the cup.
+- A test bot plays every design with a little human-sized error. It has to finish within 8 strokes, and its score sets the hole's par.
+
+Once a hole passes, **Test drive** plays it on its own, and **The Workshop** shows up as a building on the setup card and in the clubhouse, so a room can tee off on the holes it just built.
 
 ## Things to knock over
 
