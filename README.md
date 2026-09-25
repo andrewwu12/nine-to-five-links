@@ -50,4 +50,4 @@ Each day, each group code, and each online room picks every hole's pin position 
 
 ## Hosting
 
-Everything is in `index.html`, served by GitHub Pages from this repository. Open the file directly in a browser to play offline; online rooms still need the relays.
+Everything is in `index.html`. GitHub Pages publishes the `gh-pages` branch, so after changing `main`, update the site with `git push origin main:gh-pages`. You can also open the file directly in a browser to play offline; online rooms still need the relays.
