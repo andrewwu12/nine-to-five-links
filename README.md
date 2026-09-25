@@ -21,7 +21,7 @@ Everyone can pick a department. When at least two departments are playing, the r
 ## Rules
 
 - Seven strokes max per hole.
-- Coffee spills and the shredder cost one stroke, and you play again from where you hit.
+- Coffee spills, the shredder, the loading dock and the service pit cost one stroke, and you play again from where you hit.
 - Par is 26. Online standings compare each player against par for the holes they've played.
 
 ## Rage mode
@@ -58,6 +58,10 @@ Worth knowing:
 
 ## The holes
 
+There are two buildings, each with nine holes and a par of 26. Pick one on the setup card, or in the clubhouse for an online room.
+
+### Head Office: day shift, 9 AM to 5 PM
+
 | Time | Hole | Par | What's on it |
 | --- | --- | --- | --- |
 | 9:00 AM | Badge In | 2 | A straight hallway with two planters |
@@ -70,7 +74,27 @@ Worth knowing:
 | 4:00 PM | Elevator | 3 | Time the doors; the car drops you off on the 12th floor |
 | 5:00 PM | Clock Out | 4 | A giant wall clock whose hands sweep the green |
 
-Each day, each group code, and each online room picks every hole's pin position, slope and green speed, and flips some holes left to right (all except Clock Out).
+### Factory Floor: second shift, 3 PM to 11 PM
+
+It gets darker as the shift goes on; by the last holes you're putting under work lights and forklift headlights.
+
+| Time | Hole | Par | What's on it |
+| --- | --- | --- | --- |
+| 3:00 PM | Clock In | 2 | A straight aisle with a cone slalom |
+| 4:00 PM | Loading Dock | 3 | A forklift works the dock, and there's a drop where the trucks back in |
+| 5:00 PM | Assembly Line | 3 | Two conveyor lines running opposite ways, carrying boxes, with robot arms by the cups |
+| 6:00 PM | Oil Change | 3 | An oil slick that doesn't slow the ball, and a service pit in front of the cup |
+| 7:00 PM | Break Room | 2 | Lunch tables, vending machines and a can pyramid |
+| 8:00 PM | Robot Cell | 3 | Two robot arms sweep a fenced cell; time them or go around |
+| 9:00 PM | Pallet Racks | 4 | A maze of racks; crates in one rack break if you hit them hard enough |
+| 10:00 PM | Freight Lift | 3 | Time the gate; the lift drops you on the mezzanine |
+| 11:00 PM | Last Truck | 3 | Up the dock plate and into the trailer, past a forklift |
+
+## Things to knock over
+
+Cones, cup pyramids, boxes, office chairs, bins, water jugs and oil drums all move when the ball hits them, and they stay where they land for the next player. Hit a box, crate or water jug hard enough and it breaks. A burst jug or a tipped oil drum leaves a slippery spill, and a tipped bin scatters paper. The results give a *Property damage* award to whoever broke the most.
+
+Each day, each group code, and each online room picks every hole's pin position, slope and green speed, and flips some holes left to right (all except the office's Clock Out).
 
 ## Hosting
 

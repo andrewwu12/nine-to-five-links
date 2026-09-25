@@ -123,7 +123,8 @@ button { font: inherit; color: inherit; }
 .nowrap { white-space: nowrap; }
 .pass-body { padding: 18px 22px 22px; display: grid; gap: 12px; }
 .players { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.player-row { display: flex; align-items: center; gap: 10px; }
+.player-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.player-row input { width: 0; }
 .player-row input, .code-input {
   flex: 1; min-width: 0; height: 44px; border: 1.5px solid var(--line); border-radius: 10px; padding: 0 12px;
   font: 500 16px var(--body); color: var(--ink); background: #fff;
@@ -133,7 +134,7 @@ button { font: inherit; color: inherit; }
 .player-row select, select.text-input { height: 44px; border: 1.5px solid var(--line); border-radius: 10px; padding: 0 8px; font: 500 14px var(--body); color: var(--ink); background: #fff; }
 .player-row select { flex: none; width: 128px; }
 .player-row select:focus, select.text-input:focus { border-color: var(--ink-2); outline: none; box-shadow: 0 0 0 3px rgba(31, 99, 214, .18); }
-.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.seg { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
 .seg-opt { position: relative; display: block; cursor: pointer; }
 .seg-opt input { position: absolute; opacity: 0; pointer-events: none; }
 .seg-opt span { display: grid; gap: 3px; height: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; background: #fff; }
@@ -566,11 +567,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         <dt>Online</dt>
         <dd>Choose Online room and send your coworkers the invite link. Everyone plays the same hole at the same time on their own device and sees each other's balls. The next hole starts when everyone has finished, or you can go on ahead.</dd>
         <dt>Scoring</dt>
-        <dd>Seven strokes max per hole. Coffee spills and the shredder cost a stroke, and you play again from where you hit.</dd>
+        <dd>Seven strokes max per hole. Coffee spills, the shredder, the loading dock and the service pit cost a stroke, and you play again from where you hit.</dd>
         <dt>Rage mode</dt>
         <dd>Waxed floors, bouncy walls, a smaller cup, faster everything, shaky hands and no aim guide. A Roomba roams the course and bumps your ball, hazards send you back to the tee, and the elevator sometimes picks the wrong floor. Ten strokes max per hole.</dd>
         <dt>Taunts</dt>
         <dd>The office has opinions about your putting. Press Heckle to hear them, or in an online room press Taunt to send your coworkers a line. Turn taunts off in the menu.</dd>
+        <dt>Buildings</dt>
+        <dd>Head Office runs the day shift, 9 AM to 5 PM. The Factory Floor runs second shift, 3 PM to 11 PM, with forklifts, conveyor lines, robot arms, oil spills and a loading dock to fall off. It gets darker as the shift goes on.</dd>
+        <dt>Knock things over</dt>
+        <dd>Cones, cup pyramids, boxes, chairs, bins, water jugs and oil drums all move when you hit them. Hit a box, crate or water jug hard enough and it breaks. A burst jug or a tipped oil drum leaves the floor slippery.</dd>
         <dt>Course</dt>
         <dd>Pin positions change every day. Everyone on today's pins, or on the same group code, plays the same layout, so scores compare fairly across devices.</dd>
       </dl>
@@ -596,11 +601,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   // going and still drop, and cap is the most strokes anyone takes on a hole.
   const MODES = {
     normal: {
-      rage: false, friction: 250, drag: 0.42, wallE: 0.72, cupR: 13, capFast: 430, capSlope: 230, cap: 7,
+      rage: false, friction: 250, drag: 0.42, wallE: 0.72, cupR: 13, capFast: 330, capSlope: 190, cap: 7,
       moverSpeed: 1, conveyor: 1, slope: 1, funnel: 1, wobble: false, guide: true, backToTee: false, wrongFloor: 0, roomba: false,
     },
     rage: {
-      rage: true, friction: 175, drag: 0.3, wallE: 0.86, cupR: 10.5, capFast: 340, capSlope: 210, cap: 10,
+      rage: true, friction: 175, drag: 0.3, wallE: 0.86, cupR: 10.5, capFast: 280, capSlope: 180, cap: 10,
       moverSpeed: 1.7, conveyor: 1.4, slope: 1.35, funnel: -0.7, wobble: true, guide: false, backToTee: true, wrongFloor: 0.3, roomba: true,
     },
   };
@@ -681,6 +686,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     ],
     birdie: [['mgr', 'Fine. That was acceptable.'], ['intern', 'Wow. Did you practice at home?']],
     rage: [['ceo', 'Welcome to Mandatory Overtime. Nobody leaves until par.']],
+    smash: [
+      ['fin', 'That’s coming out of your budget.'], ['fac', 'Facilities has been notified. Again.'], ['legal', 'We’ll be needing a statement.'],
+      ['intern', 'I’ll get the broom. Again.'], ['mgr', 'Let’s not make breaking things a habit.'],
+    ],
+    spill: [['fac', 'Who’s going to mop that up? Not me.'], ['hr', 'Please report all spills to Facilities.'], ['it', 'Liquids and putting do not mix.']],
+    dock: [
+      ['fac', 'Mind the dock edge. It was in the safety video.'], ['mgr', 'That ball has been reassigned to shipping.'],
+      ['legal', 'We are not liable for balls that leave the building.'],
+    ],
     heckle: [
       ['mgr', 'Quick question: are you planning to putt today?'], ['hr', 'Reminder that effort is part of your review.'],
       ['fin', 'Every stroke is billable.'], ['it', 'Please don’t blame the hardware.'],
@@ -827,6 +841,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       course: [[[80, 220], [560, 220], [620, 180], [900, 180], [940, 220], [940, 380], [900, 420], [620, 420], [560, 380], [80, 380]]],
       tee: [150, 300],
       pins: [[850, 300], [858, 236], [858, 364]],
+      props: [{ kind: 'sign', x: 480, y: 246 }],
       bumpers: [{ x: 700, y: 252, r: 17, kind: 'planter' }, { x: 700, y: 348, r: 17, kind: 'planter' }],
     },
     {
@@ -837,6 +852,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       course: [[[260, 90], [740, 90], [820, 170], [820, 430], [740, 510], [260, 510], [180, 430], [180, 170]]],
       tee: [250, 300],
       pins: [[750, 300], [720, 180], [720, 420]],
+      props: [{ kind: 'chair', x: 500, y: 186 }, { kind: 'chair', x: 500, y: 414 }],
       bumpers: [{ x: 500, y: 300, r: 88, kind: 'table', e: 0.78 }],
     },
     {
@@ -847,6 +863,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       course: [[[80, 400], [780, 400], [780, 80], [920, 80], [920, 460], [860, 520], [80, 520]]],
       tee: [150, 460],
       pins: [[850, 140], [815, 178], [885, 178]],
+      props: [{ kind: 'bin', x: 380, y: 482 }],
       blocks: [{ pts: rect(440, 394, 58, 42), kind: 'cabinet' }],
       movers: [{ type: 'slider', kind: 'cart', a: [822, 290], b: [878, 290], w: 48, h: 34, period: 2.8, phase: 0 }],
     },
@@ -858,6 +875,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       course: [[[120, 110], [880, 110], [930, 160], [930, 440], [880, 490], [120, 490], [70, 440], [70, 160]]],
       tee: [150, 300],
       pins: [[850, 300], [835, 205], [835, 395]],
+      props: [{ kind: 'sign', x: 330, y: 300 }, { kind: 'cups', x: 220, y: 170 }],
       bumpers: [{ x: 745, y: 214, r: 12, kind: 'stool' }, { x: 745, y: 386, r: 12, kind: 'stool' }],
       zones: [
         { type: 'water', style: 'coffee', pts: smoothClosed([[372, 236], [400, 196], [466, 168], [548, 180], [624, 166], [660, 206], [648, 262], [600, 281], [520, 281], [440, 281], [392, 272]]) },
@@ -872,6 +890,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       course: [[[80, 170], [160, 90], [920, 90], [920, 430], [840, 510], [80, 510]]],
       tee: [150, 445],
       pins: [[840, 165], [862, 300], [690, 130]],
+      props: [{ kind: 'chair', x: 790, y: 250 }],
       blocks: [{ pts: chamferRect(440, 250, 160, 60, 12), kind: 'couch' }],
       bumpers: [
         { x: 290, y: 190, r: 28, kind: 'beanbag', e: 0.16, tint: '#7c4ddb' },
@@ -887,6 +906,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       course: [[[230, 60], [770, 60], [820, 110], [820, 510], [770, 560], [230, 560], [180, 510], [180, 110]]],
       tee: [500, 505],
       pins: [[500, 150], [360, 160], [640, 160]],
+      props: [{ kind: 'box', x: 300, y: 170 }, { kind: 'box', x: 700, y: 170 }, { kind: 'bin', x: 240, y: 480 }],
       blocks: [
         { pts: rect(430, 50, 140, 52), kind: 'printer' },
         { pts: rect(290, 395, 36, 36), kind: 'paper' },
@@ -905,6 +925,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       course: [[[80, 150], [380, 150], [380, 220], [560, 220], [560, 120], [880, 120], [930, 170], [930, 430], [880, 480], [560, 480], [560, 380], [380, 380], [380, 450], [80, 450]]],
       tee: [150, 300],
       pins: [[800, 300], [760, 200], [760, 400]],
+      props: [{ kind: 'jug', x: 200, y: 190 }, { kind: 'cups', x: 250, y: 410 }],
       blocks: [{ pts: rect(888, 256, 50, 88), kind: 'espresso' }],
       bumpers: [{ x: 624, y: 168, r: 16, kind: 'planter' }, { x: 624, y: 432, r: 16, kind: 'planter' }],
       zones: [
@@ -924,6 +945,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       frame: [36, 38, 964, 556],
       tee: [240, 440],
       pins: [[740, 180], [640, 170], [850, 190]],
+      props: [{ kind: 'sign', x: 110, y: 330 }, { kind: 'bin', x: 620, y: 420 }],
       bumpers: [
         { x: 140, y: 270, r: 18, kind: 'planter' }, { x: 360, y: 270, r: 18, kind: 'planter' },
         { x: 650, y: 300, r: 18, kind: 'planter' }, { x: 830, y: 300, r: 18, kind: 'planter' },
@@ -947,6 +969,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       course: [[[70, 120], [130, 60], [870, 60], [930, 120], [930, 480], [870, 540], [130, 540], [70, 480]]],
       tee: [140, 470],
       pins: [[850, 140], [860, 330], [660, 110]],
+      props: [{ kind: 'cups', x: 280, y: 470 }, { kind: 'bin', x: 880, y: 470 }],
       bumpers: [{ x: 500, y: 300, r: 15, kind: 'hub' }],
       movers: [
         { type: 'spinner', kind: 'hour', x: 500, y: 300, len: 82, w: 12, speed: 0.36, a0: -Math.PI / 2 + (5 * Math.PI) / 6 },
@@ -964,8 +987,189 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     [175, 205, 255, 0.07], [195, 220, 255, 0.05], [230, 240, 255, 0.03], [255, 255, 255, 0],
     [255, 246, 225, 0.02], [255, 232, 196, 0.04], [255, 214, 160, 0.06], [255, 190, 125, 0.09], [255, 158, 90, 0.13],
   ];
+  // ---------------------------------------------------------------------------
+  // The factory floor: second shift, 3 PM to 11 PM. It gets dark as the shift goes on.
+  // ---------------------------------------------------------------------------
+  const FACTORY_HOLES = [
+    {
+      name: 'Clock In', time: '3:00 PM', short: '3P', par: 2,
+      tip: 'Punch in and putt straight down the aisle. Mind the cones.',
+      rageName: 'Late Punch', rageTip: 'Your time card says you were late. The floor crew waxed everything anyway.',
+      roomba: [720, 300],
+      course: [chamferRect(80, 225, 860, 150, 34)],
+      tee: [150, 300],
+      pins: [[860, 300], [850, 262], [850, 338]],
+      props: [{ kind: 'cone', x: 470, y: 300 }, { kind: 'cone', x: 610, y: 262 }, { kind: 'cone', x: 610, y: 338 }, { kind: 'sign', x: 760, y: 252 }],
+      decor: [
+        { type: 'stripe', pts: [[112, 244], [908, 244]], color: '#f2b705', lw: 4 },
+        { type: 'stripe', pts: [[112, 356], [908, 356]], color: '#f2b705', lw: 4 },
+        { type: 'sign', x: 250, y: 192, text: 'SHIFT 2 · PUNCH IN', style: 'floor' },
+      ],
+    },
+    {
+      name: 'Loading Dock', time: '4:00 PM', short: '4P', par: 3,
+      tip: 'A forklift works the dock. Don’t roll off the edge where the trucks back in.',
+      rageName: 'Missed Delivery', rageTip: 'The forklift is late for a delivery and it is not stopping for you.',
+      roomba: [300, 200],
+      course: [chamferRect(80, 100, 840, 400, 40)],
+      tee: [150, 430],
+      pins: [[850, 170], [760, 150], [860, 300]],
+      blocks: [{ pts: rect(470, 100, 90, 70), kind: 'pallet' }, { pts: rect(640, 250, 70, 70), kind: 'pallet' }],
+      zones: [{ type: 'water', style: 'pit', pts: rect(360, 446, 300, 54) }],
+      movers: [{ type: 'slider', kind: 'forklift', a: [300, 330], b: [760, 330], w: 64, h: 38, period: 3.4, phase: 0.25 }],
+      props: [{ kind: 'box', x: 610, y: 146 }, { kind: 'box', x: 612, y: 175 }, { kind: 'cone', x: 346, y: 428 }, { kind: 'cone', x: 674, y: 428 }],
+      decor: [{ type: 'sign', x: 510, y: 530, text: 'DOCK 4', style: 'floor' }],
+    },
+    {
+      name: 'Assembly Line', time: '5:00 PM', short: '5P', par: 3,
+      tip: 'Two lines run opposite ways. Cross them with pace, or ride one and see where it takes you.',
+      rageName: 'Line Down', rageTip: 'Both lines are running flat out, and the robot arms are watching.',
+      roomba: [500, 470],
+      course: [chamferRect(120, 70, 760, 460, 40)],
+      tee: [250, 480],
+      pins: [[640, 140], [760, 180], [500, 126]],
+      blocks: [
+        { pts: rect(120, 226, 54, 170), kind: 'machine' }, { pts: rect(826, 226, 54, 170), kind: 'machine' },
+        { pts: rect(440, 294, 120, 34), kind: 'machine' },
+      ],
+      zones: [
+        { type: 'conveyor', skin: 'rollers', pts: rect(174, 234, 652, 60), dir: [1, 0], accel: 700, max: 380, feed: { kind: 'box', every: 1.15 } },
+        { type: 'conveyor', skin: 'rollers', pts: rect(174, 328, 652, 60), dir: [-1, 0], accel: 700, max: 380, feed: { kind: 'box', every: 1.4 } },
+      ],
+      movers: [
+        { type: 'spinner', kind: 'robot', x: 230, y: 112, len: 118, w: 14, speed: 1.5, a0: 0.9, amp: 0.8 },
+        { type: 'spinner', kind: 'robot', x: 770, y: 112, len: 118, w: 14, speed: 1.5, a0: Math.PI - 0.9, amp: -0.8, phase: Math.PI },
+      ],
+      props: [{ kind: 'cone', x: 420, y: 440 }, { kind: 'cone', x: 580, y: 440 }, { kind: 'cups', x: 720, y: 455 }],
+    },
+    {
+      name: 'Oil Change', time: '6:00 PM', short: '6P', par: 3,
+      tip: 'Oil doesn’t slow anything down. Go easy, and stay out of the service pit.',
+      rageName: 'Spill Kit Empty', rageTip: 'Somebody knocked over every drum in the shop. It was you.',
+      roomba: [250, 170],
+      course: [chamferRect(80, 100, 840, 400, 40)],
+      tee: [150, 300],
+      pins: [[860, 300], [820, 160], [820, 440]],
+      bumpers: [{ x: 520, y: 300, r: 18, kind: 'pillar' }],
+      zones: [
+        { type: 'slick', style: 'oil', mul: 0.12, pts: smoothClosed([[380, 210], [500, 180], [620, 220], [650, 300], [610, 390], [480, 420], [370, 370], [340, 290]]) },
+        { type: 'water', style: 'pit', pts: rect(700, 255, 50, 90) },
+      ],
+      props: [{ kind: 'barrel', x: 300, y: 150 }, { kind: 'barrel', x: 330, y: 450 }, { kind: 'barrel', x: 560, y: 138 }, { kind: 'barrel', x: 690, y: 452 }, { kind: 'sign', x: 660, y: 200 }],
+    },
+    {
+      name: 'Break Room', time: '7:00 PM', short: '7P', par: 2,
+      tip: 'Lunch tables, vending machines, and somebody’s can pyramid. Knock it over. We dare you.',
+      rageName: 'Break Cancelled', rageTip: 'Break is cancelled. The vending machine kept your dollar.',
+      roomba: [300, 220],
+      course: [chamferRect(160, 110, 680, 380, 36)],
+      tee: [230, 420],
+      pins: [[770, 180], [770, 300], [620, 170]],
+      blocks: [{ pts: rect(300, 110, 70, 44), kind: 'vending' }, { pts: rect(380, 110, 70, 44), kind: 'vending' }],
+      bumpers: [{ x: 440, y: 340, r: 44, kind: 'table' }, { x: 650, y: 390, r: 40, kind: 'table' }],
+      props: [{ kind: 'cans', x: 560, y: 250 }, { kind: 'bin', x: 790, y: 440 }, { kind: 'chair', x: 350, y: 250 }, { kind: 'chair', x: 540, y: 430 }, { kind: 'jug', x: 205, y: 160 }],
+      lamps: [[500, 300, 260]],
+    },
+    {
+      name: 'Robot Cell', time: '8:00 PM', short: '8P', par: 3,
+      tip: 'Time the robot arms through the cell, or take the long way round the fence.',
+      rageName: 'Greg Is Angry', rageTip: 'Greg the robot arm has feelings, and you hurt them.',
+      roomba: [200, 460],
+      course: [chamferRect(80, 90, 840, 420, 40)],
+      tee: [150, 300],
+      pins: [[850, 300], [840, 160], [840, 440]],
+      blocks: [
+        { pts: rect(330, 170, 340, 12), kind: 'fence' }, { pts: rect(330, 418, 340, 12), kind: 'fence' },
+        { pts: rect(330, 182, 12, 72), kind: 'fence' }, { pts: rect(330, 346, 12, 72), kind: 'fence' },
+        { pts: rect(658, 182, 12, 72), kind: 'fence' }, { pts: rect(658, 346, 12, 72), kind: 'fence' },
+      ],
+      movers: [
+        { type: 'spinner', kind: 'robot', x: 450, y: 200, len: 150, w: 14, speed: 1.7, a0: Math.PI / 2, amp: 1.0 },
+        { type: 'spinner', kind: 'robot', x: 550, y: 400, len: 150, w: 14, speed: 1.7, a0: -Math.PI / 2, amp: 1.0, phase: Math.PI },
+      ],
+      props: [{ kind: 'cone', x: 300, y: 240 }, { kind: 'cone', x: 300, y: 360 }, { kind: 'crate', x: 760, y: 130 }, { kind: 'box', x: 760, y: 470 }],
+      lamps: [[500, 300, 190], [500, 130, 150], [500, 470, 150]],
+    },
+    {
+      name: 'Pallet Racks', time: '9:00 PM', short: '9P', par: 4,
+      tip: 'Weave through the aisles. The crates in the top rack will give if you hit them hard enough.',
+      rageName: 'Inventory Count', rageTip: 'Every aisle, every box, counted by hand. Twice.',
+      roomba: [600, 460],
+      course: [chamferRect(80, 80, 840, 440, 30)],
+      tee: [150, 470],
+      pins: [[190, 140], [300, 130], [560, 140]],
+      blocks: [
+        { pts: rect(80, 200, 300, 40), kind: 'rack' }, { pts: rect(440, 200, 300, 40), kind: 'rack' },
+        { pts: rect(260, 360, 660, 40), kind: 'rack' },
+      ],
+      movers: [{ type: 'slider', kind: 'forklift', a: [330, 300], b: [700, 300], w: 60, h: 36, period: 4, phase: 0.5 }],
+      props: [{ kind: 'crate', x: 395, y: 220 }, { kind: 'crate', x: 425, y: 220 }, { kind: 'box', x: 860, y: 250 }, { kind: 'box', x: 880, y: 330 }, { kind: 'cone', x: 110, y: 300 }],
+      lamps: [[170, 300, 160], [830, 300, 160], [300, 140, 200], [600, 460, 180]],
+    },
+    {
+      name: 'Freight Lift', time: '10:00 PM', short: '10P', par: 3,
+      tip: 'Wait for the gate. The lift takes you up to the mezzanine.',
+      rageName: 'Lift Out of Service', rageTip: 'The lift mostly works. Mostly.',
+      roomba: [320, 450],
+      course: [
+        [[60, 320], [200, 320], [200, 250], [300, 250], [300, 320], [460, 320], [460, 520], [60, 520]],
+        chamferRect(560, 80, 380, 300, 24),
+      ],
+      frame: [36, 50, 964, 546],
+      tee: [260, 470],
+      pins: [[860, 150], [640, 140], [880, 300]],
+      bumpers: [{ x: 120, y: 410, r: 16, kind: 'pillar' }, { x: 400, y: 410, r: 16, kind: 'pillar' }],
+      movers: [{ type: 'doors', style: 'gate', x0: 200, x1: 300, y: 320, depth: 12, period: 4.2 }],
+      teleports: [{ rect: [200, 246, 100, 68], to: [750, 360], dir: [0, -1], arrive: [700, 800, 380] }],
+      zones: [{ type: 'conveyor', skin: 'rollers', pts: rect(580, 196, 340, 48), dir: [1, 0], accel: 500, max: 300, feed: { kind: 'box', every: 1.8, max: 5 } }],
+      props: [{ kind: 'cups', x: 660, y: 320 }, { kind: 'barrel', x: 100, y: 480 }],
+      decor: [
+        { type: 'shaft', x: 490, y: 64, w: 50, h: 472 },
+        { type: 'car', x: 200, y: 250, w: 100, h: 70 },
+        { type: 'sign', x: 250, y: 232, text: '▲ MEZZ', style: 'amber' },
+        { type: 'sign', x: 750, y: 410, text: 'MEZZANINE', style: 'amber' },
+        { type: 'sign', x: 260, y: 546, text: 'GROUND · FREIGHT', style: 'floor' },
+      ],
+      lamps: [[250, 420, 170], [750, 230, 210], [250, 280, 90]],
+    },
+    {
+      name: 'Last Truck', time: '11:00 PM', short: '11P', par: 3,
+      tip: 'Get it up the dock plate and into the trailer before the truck leaves.',
+      rageName: 'Double Shift', rageTip: 'The truck leaves at eleven. You don’t.',
+      roomba: [300, 300],
+      course: [chamferRect(70, 70, 860, 460, 40)],
+      tee: [140, 460],
+      pins: [[850, 300], [790, 240], [790, 360]],
+      blocks: [
+        { pts: rect(640, 186, 264, 16), kind: 'trailer' }, { pts: rect(640, 398, 264, 16), kind: 'trailer' },
+        { pts: rect(904, 186, 26, 228), kind: 'trailer' },
+        { pts: rect(130, 70, 50, 84), kind: 'machine' }, { pts: rect(560, 70, 50, 84), kind: 'machine' },
+      ],
+      zones: [
+        { type: 'slope', pts: rect(580, 202, 60, 196), ax: -260, ay: 0 },
+        { type: 'conveyor', skin: 'rollers', pts: rect(180, 96, 380, 50), dir: [1, 0], accel: 600, max: 340, feed: { kind: 'box', every: 1.3 } },
+      ],
+      movers: [{ type: 'slider', kind: 'forklift', a: [470, 170], b: [470, 470], w: 38, h: 62, period: 3.8, phase: 0 }],
+      props: [{ kind: 'box', x: 560, y: 186 }, { kind: 'box', x: 560, y: 414 }, { kind: 'cone', x: 610, y: 176 }, { kind: 'cone', x: 610, y: 424 }, { kind: 'barrel', x: 250, y: 470 }],
+      decor: [{ type: 'sign', x: 780, y: 440, text: 'TRAILER 11', style: 'floor' }],
+      lamps: [[770, 300, 200], [300, 300, 220], [470, 470, 120]],
+    },
+  ];
+  // Afternoon sun through the dock doors, then dusk, then the night shift under work lights.
+  const FACTORY_TINTS = [
+    [255, 226, 180, 0.04], [255, 214, 160, 0.06], [255, 196, 130, 0.08], [255, 170, 110, 0.1],
+    [210, 160, 200, 0.08], [150, 150, 230, 0.06], [120, 140, 230, 0.05], [110, 130, 220, 0.05], [100, 120, 210, 0.05],
+  ];
+  const FACTORY_DARK = [0, 0, 0.04, 0.12, 0.24, 0.38, 0.48, 0.55, 0.6];
+  // How each building looks: the floor around the course, the putting surface and the rails.
+  const THEMES = {
+    office: { floor: 'carpet', bg: '#2f3744', felt: '#2e9b58', tee: '#237a47', rail: ['#6c7889', '#c3ccd7', '#e6ebf1'], hazard: false },
+    factory: { floor: 'concrete', bg: '#34383e', felt: '#2a8466', tee: '#1f6b52', rail: ['#23272d', '#555e69', '#737d89'], hazard: true },
+  };
+  const theme = () => THEMES[COURSE.theme] || THEMES.office;
   const COURSES = {
-    office: { id: 'office', name: 'Head Office', shift: 'Day shift, 9 AM to 5 PM', holes: OFFICE_HOLES, tints: OFFICE_TINTS, lastLabel: 'Clock out', title: 'Nine-to-Five Links' },
+    office: { id: 'office', name: 'Head Office', shift: 'Day shift, 9 AM to 5 PM', holes: OFFICE_HOLES, tints: OFFICE_TINTS, lastLabel: 'Clock out', title: 'Nine-to-Five Links', theme: 'office' },
+    factory: { id: 'factory', name: 'Factory Floor', shift: 'Second shift, 3 PM to 11 PM', holes: FACTORY_HOLES, tints: FACTORY_TINTS, dark: FACTORY_DARK, lastLabel: 'Clock out', title: 'Nine-to-Five Links', theme: 'factory' },
   };
   let COURSE = COURSES.office;
   let HOLES = COURSE.holes;
@@ -1043,8 +1247,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (m.type === 'spinner') {
         o.x = mx(m.x);
         o.speed = (M ? -m.speed : m.speed) * PH.moverSpeed;
+        if (m.amp) o.speed = m.speed * PH.moverSpeed;
         if (M) o.a0 = Math.PI - m.a0;
-        o.angle = o.a0;
+        if (M && m.amp) o.amp = -m.amp;
+        o.angle = o.a0; o.av = o.speed;
       } else if (m.type === 'slider') {
         o.a = mpt(m.a); o.b = mpt(m.b); o.cx = o.a[0]; o.cy = o.a[1]; o.vx = 0; o.vy = 0;
         o.period = m.period / PH.moverSpeed;
@@ -1070,10 +1276,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     }));
     h.decor = (def.decor || []).map(d => {
       const o = { ...d };
-      if (d.w != null) o.x = M ? BOX_W - d.x - d.w : d.x;
+      if (d.pts) o.pts = d.pts.map(mpt);
+      else if (d.w != null) o.x = M ? BOX_W - d.x - d.w : d.x;
       else o.x = mx(d.x);
       return o;
     });
+    h.props = buildProps(def, mpt);
+    // Night shift: how dark the hole is, and where the work lights are. The tee and the cup always get one.
+    h.dark = (COURSE.dark && COURSE.dark[idx]) || 0;
+    h.lamps = (def.lamps || []).map(([x, y, r]) => [mx(x), y, r]).concat([[h.tee[0], h.tee[1], 120], [h.cup[0], h.cup[1], 130]]);
     h.segs = [];
     for (const poly of h.course) pushSegs(h.segs, poly, PH.wallE);
     for (const b of h.blocks) pushSegs(h.segs, b.pts, b.e != null ? b.e : PH.wallE);
@@ -1190,6 +1401,23 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       cricket() { for (const d of [0, 0.06, 0.12, 0.6, 0.66, 0.72]) tone({ freq: 4200, type: 'square', dur: 0.03, vol: 0.015, delay: d }); },
       deflate() { tone({ freq: 700, to: 140, type: 'sawtooth', dur: 1.1, vol: 0.045 }); noise({ dur: 0.75, vol: 0.05, type: 'bandpass', freq: 1600, to: 500, q: 2 }); },
       rumble() { noise({ dur: 0.75, vol: 0.18, type: 'lowpass', freq: 220, to: 80, q: 0.6 }); },
+      // Knocking props around, by what they're made of.
+      prop(mat, k) {
+        const v = 0.04 + 0.2 * k;
+        if (mat === 'metal' || mat === 'drum' || mat === 'can') {
+          const f = mat === 'can' ? 1800 : mat === 'drum' ? 260 : 520;
+          tone({ freq: f, to: f * 0.75, type: 'triangle', dur: 0.22, vol: v * 0.7 }); tone({ freq: f * 1.75, dur: 0.28, vol: v * 0.3 });
+        } else if (mat === 'paper') noise({ dur: 0.05, vol: v * 0.6, type: 'highpass', freq: 2500, q: 0.7 });
+        else if (mat === 'cardboard') noise({ dur: 0.09, vol: v, type: 'lowpass', freq: 700, q: 0.8 });
+        else if (mat === 'wood') { tone({ freq: 240, to: 160, dur: 0.1, vol: v }); noise({ dur: 0.06, vol: v * 0.5, type: 'bandpass', freq: 900, q: 1.2 }); }
+        else if (mat === 'jug') tone({ freq: 300, to: 200, dur: 0.18, vol: v });
+        else tone({ freq: 420, to: 300, type: 'triangle', dur: 0.08, vol: v * 0.8 });
+      },
+      smash(mat) {
+        if (mat === 'jug') { noise({ dur: 0.5, vol: 0.3, type: 'lowpass', freq: 2400, to: 300, q: 0.6 }); tone({ freq: 380, to: 120, dur: 0.3, vol: 0.14 }); }
+        else if (mat === 'wood') { noise({ dur: 0.3, vol: 0.3, type: 'bandpass', freq: 800, q: 0.9 }); tone({ freq: 180, to: 70, dur: 0.25, vol: 0.2 }); }
+        else { noise({ dur: 0.25, vol: 0.28, type: 'lowpass', freq: 900, to: 200, q: 0.7 }); tone({ freq: 140, to: 60, dur: 0.2, vol: 0.16 }); }
+      },
     };
   })();
 
@@ -1251,7 +1479,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     return (lo + hi) / 2;
   }
 
-  const emptyStats = () => ({ aces: [], spills: 0, bounces: 0, longest: 0, lips: 0, tees: 0, bumps: 0 });
+  const emptyStats = () => ({ aces: [], spills: 0, bounces: 0, longest: 0, lips: 0, tees: 0, bumps: 0, smash: 0 });
   const holeName = i => (PH.rage ? HOLES[i].rageName : HOLES[i].name);
   function setMode(rage) { PH = rage ? MODES.rage : MODES.normal; G.rage = !!rage; }
   function newBall(x, y, color) {
@@ -1364,12 +1592,13 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       { x0: mid + half * o, x1: m.x1 + half * o, y0: m.y - m.depth, y1: m.y, vx: half * m.vo },
     ];
   }
-  function updateMovers(h, dt) {
+  function updateMovers(h, dt, b) {
     h.t += dt;
-    const b = G.ball;
     for (const m of h.movers) {
       if (m.type === 'spinner') {
-        m.angle = m.a0 + m.speed * h.t;
+        // A robot arm sweeps back and forth instead of going all the way round.
+        m.angle = m.amp ? m.a0 + m.amp * Math.sin(m.speed * h.t + (m.phase || 0)) : m.a0 + m.speed * h.t;
+        m.av = m.amp ? m.amp * m.speed * Math.cos(m.speed * h.t + (m.phase || 0)) : m.speed;
       } else if (m.type === 'slider') {
         const k = 0.5 - 0.5 * Math.cos((h.t / m.period + (m.phase || 0)) * TAU);
         const nx = lerp(m.a[0], m.b[0], k), ny = lerp(m.a[1], m.b[1], k);
@@ -1390,7 +1619,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     for (const m of h.movers) {
       if (m.type === 'spinner') {
         const tx = m.x + Math.cos(m.angle) * m.len, ty = m.y + Math.sin(m.angle) * m.len;
-        imp = Math.max(imp, collideSeg(b, m.x, m.y, tx, ty, m.w / 2, 0.6, m));
+        imp = Math.max(imp, collideSeg(b, m.x, m.y, tx, ty, m.w / 2, 0.6, { x: m.x, y: m.y, speed: m.av }));
       } else if (m.type === 'slider') {
         imp = Math.max(imp, collideBox(b, m.cx - m.w / 2, m.cy - m.h / 2, m.cx + m.w / 2, m.cy + m.h / 2, 0.7, m.vx, m.vy));
       } else if (m.type === 'doors') {
@@ -1404,9 +1633,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     return imp;
   }
   function surfaceAt(h, x, y) {
-    let fric = 1, ax = 0, ay = 0, conv = null;
+    let fric = 1, slick = 1, ax = 0, ay = 0, conv = null;
     for (const z of h.zones) {
       if (z.type === 'rough') { if (inZone(z, x, y)) fric = Math.max(fric, z.mul || 2.6); }
+      else if (z.type === 'slick') { if (inZone(z, x, y)) slick = Math.min(slick, z.mul); }
       else if (z.type === 'slope') { if (inZone(z, x, y)) { ax += z.ax; ay += z.ay; } }
       else if (z.type === 'conveyor') { if (inZone(z, x, y)) conv = z; }
       else if (z.type === 'funnel') {
@@ -1414,22 +1644,232 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         if (d < z.r && d > 0.5) { const k = z.strength * (0.35 + 0.65 * (1 - d / z.r)); ax += (dx / d) * k; ay += (dy / d) * k; }
       }
     }
-    return { fric, ax, ay, conv };
+    // A spill beats a rug: oil on carpet is still oil.
+    return { fric: slick < 1 ? slick : fric, ax, ay, conv };
   }
 
-  function physicsStep(dt) {
-    const h = G.hole;
-    if (!h) return;
-    updateMovers(h, dt);
-    const b = G.ball;
-    if (!b) return;
+  // ---------------------------------------------------------------------------
+  // Props: loose things on the course. The ball knocks them around, and some of them tip over or break.
+  // ---------------------------------------------------------------------------
+  // r: radius, m: mass (the ball is 1), fric: how quickly they slide to a stop, e: bounce, tip: the hit that
+  // knocks it over, brk: the hit that breaks it, mat: what it sounds like, eat: small enough to fall in the cup.
+  const PROP_TYPES = {
+    cup: { r: 6, m: 0.12, fric: 300, e: 0.5, tip: 1, mat: 'paper', eat: true },
+    can: { r: 5.5, m: 0.2, fric: 260, e: 0.55, tip: 1, mat: 'can', eat: true },
+    paper: { r: 4.5, m: 0.06, fric: 300, e: 0.45, mat: 'paper', eat: true },
+    cone: { r: 9, m: 0.5, fric: 420, roll: 160, e: 0.45, tip: 200, mat: 'plastic', eat: true },
+    sign: { r: 11, m: 0.45, fric: 460, e: 0.4, tip: 150, mat: 'plastic' },
+    box: { r: 13, m: 1, fric: 520, e: 0.25, brk: 380, mat: 'cardboard' },
+    flat: { r: 8, m: 0.25, fric: 560, e: 0.2, mat: 'cardboard', eat: true },
+    jug: { r: 11, m: 2, fric: 480, e: 0.3, brk: 430, mat: 'jug', spill: 'water' },
+    bin: { r: 12, m: 2.4, fric: 540, roll: 200, e: 0.3, tip: 360, mat: 'metal', dump: 'paper' },
+    chair: { r: 15, m: 1.5, fric: 70, e: 0.55, mat: 'chair' },
+    barrel: { r: 14, m: 3.5, fric: 600, roll: 150, e: 0.3, tip: 460, mat: 'drum', spill: 'oil' },
+    crate: { r: 15, m: 2, fric: 560, e: 0.2, brk: 450, mat: 'wood' },
+    plank: { r: 6, m: 0.3, fric: 520, e: 0.3, mat: 'wood', eat: true },
+  };
+  const PROP_MAX_SPEED = 900;
+  function newProp(kind, x, y, rot = 0) {
+    const T = PROP_TYPES[kind];
+    return { kind, x, y, vx: 0, vy: 0, r: T.r, m: T.m, rot, vr: 0, fallen: false, alive: true, sleep: true, still: 0 };
+  }
+  // Cup and can pyramids come as a triangle of six, apex away from the tee.
+  function buildProps(def, mpt) {
+    const out = [];
+    for (const d of def.props || []) {
+      const [x, y] = mpt([d.x, d.y]);
+      if (d.kind === 'cups' || d.kind === 'cans') {
+        const k = d.kind === 'cups' ? 'cup' : 'can', s = PROP_TYPES[k].r * 2.1;
+        for (let row = 0; row < 3; row++) for (let i = 0; i <= row; i++) out.push(newProp(k, x + (i - row / 2) * s, y + (row - 1) * s * 0.88));
+      } else out.push(newProp(d.kind, x, y, d.rot || 0));
+    }
+    return out;
+  }
+  function spillPuddle(h, x, y, style, r) {
+    if (!h.course.some(p => pointInPoly(x, y, p))) return;
+    const rnd = mulberry32(Math.floor(x * 7 + y * 13));
+    const pts = [];
+    for (let i = 0; i < 9; i++) { const a = (i / 9) * TAU, k = r * (0.7 + rnd() * 0.5); pts.push([x + Math.cos(a) * k, y + Math.sin(a) * k * 0.8]); }
+    const z = { type: 'slick', style, pts: smoothClosed(pts), mul: style === 'oil' ? 0.12 : 0.35 };
+    z.bb = bboxOf(z.pts);
+    h.zones.push(z);
+    staticDirty = true;
+  }
+  // The ball hits a prop: momentum is shared by mass, and a hard enough hit tips it over or breaks it.
+  function hitProp(h, b, p, out) {
+    const dx = b.x - p.x, dy = b.y - p.y, rr = BALL_R + p.r, d2 = dx * dx + dy * dy;
+    if (d2 >= rr * rr) return 0;
+    const T = PROP_TYPES[p.kind], d = Math.sqrt(d2) || 1e-6, nx = dx / d, ny = dy / d, ip = 1 / p.m, tot = 1 + ip, pen = rr - d;
+    b.x += (nx * pen) / tot; b.y += (ny * pen) / tot;
+    p.x -= (nx * pen * ip) / tot; p.y -= (ny * pen * ip) / tot;
+    const rv = (b.vx - p.vx) * nx + (b.vy - p.vy) * ny;
+    if (rv >= 0) return 0;
+    const j = (-(1 + T.e) * rv) / tot;
+    b.vx += j * nx; b.vy += j * ny;
+    p.vx -= j * nx * ip; p.vy -= j * ny * ip;
+    p.vr += (nx * b.vy - ny * b.vx) * 0.004 * ip;
+    p.sleep = false; p.still = 0;
+    out.hits.push({ p, j });
+    if (T.brk && j > T.brk) breakProp(h, p, -nx, -ny, out);
+    else if (T.tip && !p.fallen && j > T.tip) {
+      p.fallen = true;
+      p.rot = Math.atan2(-ny, -nx);
+      out.hits.push({ p, j, tipped: true });
+      if (T.spill) spillPuddle(h, p.x - nx * 30, p.y - ny * 30, T.spill, 42);
+      if (T.dump) for (let i = 0; i < 5; i++) {
+        const q = newProp(T.dump, p.x - nx * (18 + i * 3), p.y - ny * (18 + i * 3) + (i - 2) * 6);
+        const a = Math.atan2(-ny, -nx) + (i - 2) * 0.35, s = 120 + i * 25;
+        q.vx = Math.cos(a) * s; q.vy = Math.sin(a) * s; q.sleep = false;
+        h.props.push(q);
+      }
+    }
+    return j;
+  }
+  function breakProp(h, p, dx, dy, out) {
+    const T = PROP_TYPES[p.kind];
+    p.alive = false;
+    out.hits.push({ p, j: 0, broke: true });
+    if (T.spill) spillPuddle(h, p.x + dx * 12, p.y + dy * 12, T.spill, 48);
+    const bits = p.kind === 'box' ? 'flat' : p.kind === 'crate' ? 'plank' : null;
+    if (!bits) return;
+    const a0 = Math.atan2(dy, dx);
+    for (let i = 0; i < 3; i++) {
+      const a = a0 + (i - 1) * 0.6, q = newProp(bits, p.x + Math.cos(a) * 6, p.y + Math.sin(a) * 6, a);
+      q.vx = Math.cos(a) * 180 + p.vx; q.vy = Math.sin(a) * 180 + p.vy; q.vr = (i - 1) * 6; q.sleep = false;
+      h.props.push(q);
+    }
+  }
+  function bounceProp(p, n, wvx, wvy, e) {
+    const rv = (p.vx - wvx) * n[0] + (p.vy - wvy) * n[1];
+    if (rv >= 0) return;
+    p.vx -= (1 + e) * rv * n[0]; p.vy -= (1 + e) * rv * n[1];
+    if (Math.abs(rv) > 5) { p.sleep = false; p.still = 0; }
+  }
+  function propOffBox(p, x0, y0, x1, y1) {
+    const cx = clamp(p.x, x0, x1), cy = clamp(p.y, y0, y1), dx = p.x - cx, dy = p.y - cy, d = Math.hypot(dx, dy);
+    if (d >= p.r) return null;
+    if (d > 1e-6) { p.x = cx + (dx / d) * p.r; p.y = cy + (dy / d) * p.r; return [dx / d, dy / d]; }
+    const l = p.x - x0, r = x1 - p.x, t = p.y - y0, bo = y1 - p.y, m = Math.min(l, r, t, bo);
+    if (m === l) { p.x = x0 - p.r; return [-1, 0]; }
+    if (m === r) { p.x = x1 + p.r; return [1, 0]; }
+    if (m === t) { p.y = y0 - p.r; return [0, -1]; }
+    p.y = y1 + p.r; return [0, 1];
+  }
+  function propOffSeg(p, ax, ay, bx, by, pad) {
+    const abx = bx - ax, aby = by - ay, l2 = abx * abx + aby * aby;
+    const t = l2 > 0 ? clamp(((p.x - ax) * abx + (p.y - ay) * aby) / l2, 0, 1) : 0;
+    const qx = ax + abx * t, qy = ay + aby * t, dx = p.x - qx, dy = p.y - qy, d = Math.hypot(dx, dy), rr = p.r + pad;
+    if (d >= rr || d < 1e-6) return null;
+    p.x = qx + (dx / d) * rr; p.y = qy + (dy / d) * rr;
+    return [dx / d, dy / d, qx, qy];
+  }
+  // Movers shove props out of their way, awake or not.
+  function pushPropsByMovers(h, p) {
+    for (const m of h.movers) {
+      let n = null, wvx = 0, wvy = 0;
+      if (m.type === 'slider') { n = propOffBox(p, m.cx - m.w / 2, m.cy - m.h / 2, m.cx + m.w / 2, m.cy + m.h / 2); wvx = m.vx; wvy = m.vy; }
+      else if (m.type === 'spinner') {
+        const q = propOffSeg(p, m.x, m.y, m.x + Math.cos(m.angle) * m.len, m.y + Math.sin(m.angle) * m.len, m.w / 2);
+        if (q) { n = q; wvx = -m.av * (q[3] - m.y); wvy = m.av * (q[2] - m.x); }
+      } else if (m.type === 'roomba') { n = discOffCircle(p, m); wvx = m.vx; wvy = m.vy; }
+      else if (m.type === 'doors') for (const d of doorPanels(m)) { const q = propOffBox(p, d.x0, d.y0, d.x1, d.y1); if (q) { n = q; wvx = d.vx; } }
+      if (n) bounceProp(p, n, wvx, wvy, 0.3);
+    }
+  }
+  // Conveyors that feed boxes along the line, and take them off again at the far end.
+  function feedConveyor(h, z, dt) {
+    z.feedT = (z.feedT || 0) + dt;
+    if (z.feedT < z.feed.every) return;
+    z.feedT -= z.feed.every;
+    if (h.props.filter(p => p.alive && p.fed === z).length >= (z.feed.max || 7)) return;
+    const [dx, dy] = z.dir, b = z.bb, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2;
+    const x = dx ? (dx > 0 ? b.x0 + 16 : b.x1 - 16) : cx, y = dy ? (dy > 0 ? b.y0 + 16 : b.y1 - 16) : cy;
+    const p = newProp(z.feed.kind, x, y, 0);
+    p.vx = dx * z.max; p.vy = dy * z.max; p.sleep = false; p.fed = z;
+    h.props.push(p);
+  }
+  function stepProps(h, dt, b, out) {
+    const P = h.props;
+    for (const z of h.zones) if (z.feed) feedConveyor(h, z, dt);
+    if (!P.length) return;
+    for (const p of P) {
+      if (!p.alive) continue;
+      if (h.movers.length) pushPropsByMovers(h, p);
+      if (p.sleep) continue;
+      const T = PROP_TYPES[p.kind], sf = surfaceAt(h, p.x, p.y);
+      let fric = (p.fallen && T.roll ? T.roll : T.fric) * sf.fric;
+      if (sf.conv) {
+        const c = sf.conv, along = p.vx * c.dir[0] + p.vy * c.dir[1];
+        if (along < c.max) { const add = Math.min(c.accel * dt, c.max - along); p.vx += c.dir[0] * add; p.vy += c.dir[1] * add; }
+        // Across the belt, things settle into the middle of the line.
+        const side = -c.dir[1] * p.vx + c.dir[0] * p.vy;
+        p.vx -= -c.dir[1] * side * 4 * dt; p.vy -= c.dir[0] * side * 4 * dt;
+        fric = 0;
+        if (p.fed === c) {
+          const b2 = c.bb, end = c.dir[0] > 0 ? p.x > b2.x1 - 18 : c.dir[0] < 0 ? p.x < b2.x0 + 18 : c.dir[1] > 0 ? p.y > b2.y1 - 18 : p.y < b2.y0 + 18;
+          if (end) { p.alive = false; continue; }
+        }
+      }
+      let sp = Math.hypot(p.vx, p.vy);
+      if (sp > 0) {
+        const drop = (fric + 0.5 * sp) * dt;
+        if (drop >= sp) { p.vx = 0; p.vy = 0; sp = 0; } else { const k = (sp - drop) / sp; p.vx *= k; p.vy *= k; sp -= drop; }
+      }
+      if (sp > PROP_MAX_SPEED) { const k = PROP_MAX_SPEED / sp; p.vx *= k; p.vy *= k; }
+      const px = p.x, py = p.y;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      p.rot += p.vr * dt; p.vr *= Math.max(0, 1 - 2.5 * dt);
+      if (T.roll && p.fallen) p.vr += (p.vx * Math.sin(p.rot) - p.vy * Math.cos(p.rot)) * 0.0006;
+      for (const s of h.segs) { const n = discOffSeg(p, s.ax, s.ay, s.bx, s.by); if (n) bounceProp(p, n, 0, 0, 0.4); }
+      for (const c of h.bumpers) { const n = discOffCircle(p, c); if (n) bounceProp(p, n, 0, 0, 0.4); }
+      if (b && b.state === 'rest') { const n = discOffCircle(p, { x: b.x, y: b.y, r: BALL_R }); if (n) bounceProp(p, n, 0, 0, 0.3); }
+      const cd = Math.hypot(p.x - h.cup[0], p.y - h.cup[1]);
+      if (T.eat && cd < PH.cupR * 0.8) { p.alive = false; out.hits.push({ p, j: 0, eaten: true }); continue; }
+      if (!T.eat && cd < PH.cupR + p.r * 0.4 && cd > 1e-6) {
+        const k = (PH.cupR + p.r * 0.4) / cd;
+        p.x = h.cup[0] + (p.x - h.cup[0]) * k; p.y = h.cup[1] + (p.y - h.cup[1]) * k;
+      }
+      let gone = false;
+      for (const z of h.hazards) if (inZone(z, p.x, p.y)) { p.alive = false; out.hits.push({ p, j: 0, sunk: z }); gone = true; break; }
+      if (gone) continue;
+      if (!h.course.some(poly => pointInPoly(p.x, p.y, poly))) { p.x = px; p.y = py; p.vx = 0; p.vy = 0; }
+      if (sp < 3 && !sf.conv) { if ((p.still += dt) > 0.25) { p.sleep = true; p.vx = 0; p.vy = 0; } } else p.still = 0;
+    }
+    for (let i = 0; i < P.length; i++) {
+      const a = P[i];
+      if (!a.alive) continue;
+      for (let k = i + 1; k < P.length; k++) {
+        const c = P[k];
+        if (!c.alive || (a.sleep && c.sleep)) continue;
+        const dx = c.x - a.x, dy = c.y - a.y, rr = a.r + c.r, d2 = dx * dx + dy * dy;
+        if (d2 >= rr * rr || d2 < 1e-9) continue;
+        const d = Math.sqrt(d2), nx = dx / d, ny = dy / d, ia = 1 / a.m, ic = 1 / c.m, pen = rr - d, tot = ia + ic;
+        a.x -= (nx * pen * ia) / tot; a.y -= (ny * pen * ia) / tot;
+        c.x += (nx * pen * ic) / tot; c.y += (ny * pen * ic) / tot;
+        const rv = (c.vx - a.vx) * nx + (c.vy - a.vy) * ny;
+        if (rv >= 0) continue;
+        const j = (-1.35 * rv) / tot;
+        a.vx -= j * nx * ia; a.vy -= j * ny * ia; c.vx += j * nx * ic; c.vy += j * ny * ic;
+        if (j > 6) { a.sleep = false; c.sleep = false; a.still = 0; c.still = 0; }
+        if (j > 25) out.hits.push({ p: c, j: j * 0.5 });
+      }
+    }
+    // Tidy up now and then, so a long hole doesn't collect dead props.
+    if (P.length > 40) h.props = P.filter(p => p.alive);
+  }
+
+  // Advances one ball on a hole by dt. This is only the physics: it reports what happened in `out` and leaves
+  // sounds, scoring and messages to the caller, so the course checker can run it too.
+  function stepBall(h, b, dt, out) {
     if (b.state === 'rest') {
       if (!h.movers.length) return;
       b.vx = 0; b.vy = 0;
       h.bumpedByRoomba = false;
       collideMovers(h, b);
-      if (Math.hypot(b.vx, b.vy) > 4) { b.state = 'rolling'; b.slowT = 0; b.rollT = 0; b.minCup = Infinity; b.hits = 0; onPushed(h.bumpedByRoomba); }
-      else { b.vx = 0; b.vy = 0; }
+      if (Math.hypot(b.vx, b.vy) > 4) {
+        b.state = 'rolling'; b.slowT = 0; b.rollT = 0; b.minCup = Infinity; b.hits = 0;
+        out.pushed = true; out.byRoomba = h.bumpedByRoomba;
+      } else { b.vx = 0; b.vy = 0; }
       return;
     }
     if (b.state !== 'rolling') return;
@@ -1460,24 +1900,39 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       for (const c of h.bumpers) { const i = collideCircle(b, c.x, c.y, c.r, c.e); if (i > imp) imp = i; }
       const mi = collideMovers(h, b); if (mi > imp) imp = mi;
     }
-    if (imp > 45) { onImpact(imp, b); b.hits = (b.hits || 0) + 1; }
+    for (const p of h.props) if (p.alive) hitProp(h, b, p, out);
+    if (imp > 45) { out.imp = Math.max(out.imp || 0, imp); b.hits = (b.hits || 0) + 1; }
 
-    if (!Number.isFinite(b.x) || !Number.isFinite(b.y) || !h.course.some(p => pointInPoly(b.x, b.y, p))) { outOfBounds(); return; }
+    if (!Number.isFinite(b.x) || !Number.isFinite(b.y) || !h.course.some(p => pointInPoly(b.x, b.y, p))) { out.oob = true; return; }
 
     // The cup: slow balls drop, fast ones can lip out.
     const cdx = h.cup[0] - b.x, cdy = h.cup[1] - b.y, cd = Math.hypot(cdx, cdy);
     if (cd < b.minCup) b.minCup = cd;
     if (cd < PH.cupR) {
       const v = Math.hypot(b.vx, b.vy);
-      if (v < PH.capFast - PH.capSlope * (cd / PH.cupR)) { startSink(); return; }
+      if (v < PH.capFast - PH.capSlope * (cd / PH.cupR)) {
+        b.state = 'sinking'; b.sinkT = 0; b.sx = b.x; b.sy = b.y; b.vx = 0; b.vy = 0;
+        out.sink = true;
+        return;
+      }
       const pull = (2600 * dt) / (cd || 1);
       b.vx += cdx * pull; b.vy += cdy * pull;
       const damp = 1 - 1.4 * dt; b.vx *= damp; b.vy *= damp;
     }
-    for (const z of h.hazards) if (inZone(z, b.x, b.y)) { startSplash(z); return; }
+    for (const z of h.hazards) {
+      if (!inZone(z, b.x, b.y)) continue;
+      b.state = 'splash'; b.splashT = 0; b.vx = 0; b.vy = 0;
+      out.splash = z;
+      return;
+    }
     for (const tp of h.teleports) {
       const [rx, ry, rw, rh] = tp.rect;
-      if (b.x > rx && b.x < rx + rw && b.y > ry && b.y < ry + rh) { doTeleport(tp); break; }
+      if (b.x > rx && b.x < rx + rw && b.y > ry && b.y < ry + rh) {
+        out.teleport = tp; out.from = [b.x, b.y];
+        const s2 = Math.max(170, Math.hypot(b.vx, b.vy) * 0.92);
+        b.x = tp.to[0]; b.y = tp.to[1]; b.vx = tp.dir[0] * s2; b.vy = tp.dir[1] * s2; b.slowT = 0;
+        break;
+      }
     }
 
     sp = Math.hypot(b.vx, b.vy);
@@ -1485,8 +1940,25 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (sp < 6) b.slowT += dt; else b.slowT = 0;
     if ((sp === 0 && force <= fric) || b.slowT > 0.35 || b.rollT > 25) {
       b.vx = 0; b.vy = 0; b.state = 'rest';
-      onBallRest();
+      out.rest = true;
     }
+  }
+  function physicsStep(dt) {
+    const h = G.hole;
+    if (!h) return;
+    const b = G.ball, out = { hits: [] };
+    updateMovers(h, dt, b);
+    stepProps(h, dt, b, out);
+    if (b) stepBall(h, b, dt, out);
+    if (out.hits.length) onPropHits(out.hits);
+    if (!b) return;
+    if (out.pushed) { onPushed(out.byRoomba); return; }
+    if (out.imp) onImpact(out.imp, b);
+    if (out.oob) { outOfBounds(); return; }
+    if (out.sink) { Sound.cup(); return; }
+    if (out.splash) { startSplash(out.splash); return; }
+    if (out.teleport) onTeleport(out.teleport, out.from);
+    if (out.rest && b.state === 'rest') onBallRest();
   }
 
   function raySeg(x, y, dx, dy, ax, ay, bx, by) {
@@ -2383,6 +2855,35 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (G.phase === 'rolling' && G.screen === 'play') curPlayer().stats.bounces++;
     if (imp > 380) burst(b.x, b.y, 'rgba(255,255,255,0.7)', 5, 90, 0.35, 2.2);
   }
+  // Sounds and reactions when the ball knocks things around. Only the player's own shots count toward
+  // the property damage award.
+  let propSoundAt = 0;
+  function onPropHits(hits) {
+    const now = performance.now(), playing = G.screen === 'play' && G.phase === 'rolling';
+    for (const { p, j, tipped, broke, eaten, sunk } of hits) {
+      const T = PROP_TYPES[p.kind];
+      if (broke) {
+        Sound.smash(T.mat);
+        burst(p.x, p.y, p.kind === 'jug' ? '#9fd8ff' : p.kind === 'crate' ? '#b98a52' : '#d2a46a', 14, 220, 0.55, 3);
+        if (!reduceMotion) shake();
+        if (playing) { curPlayer().stats.smash++; Taunts.say(T.spill ? 'spill' : 'smash'); }
+      } else if (tipped) {
+        Sound.prop(T.mat, 1);
+        if (T.spill || T.dump) {
+          burst(p.x, p.y, T.spill === 'oil' ? '#2a2d33' : '#ffffff', 10, 150, 0.5, 2.6);
+          if (playing) { curPlayer().stats.smash++; Taunts.say(T.spill ? 'spill' : 'smash'); }
+        }
+      } else if (eaten) {
+        Sound.blip();
+        ring(p.x, p.y, 'rgba(255,255,255,0.7)', 3, 16, 0.4, 2);
+      } else if (sunk) {
+        ring(p.x, p.y, sunk.style === 'coffee' ? 'rgba(255,236,210,0.7)' : 'rgba(242,183,5,0.7)', 3, 18, 0.5, 2);
+      } else if (j > 30 && now - propSoundAt > 55) {
+        propSoundAt = now;
+        Sound.prop(T.mat, clamp(j / 400, 0.1, 1));
+      }
+    }
+  }
   function onPushed(byRoomba) {
     if (drag) { drag = null; canvas.classList.remove('dragging'); }
     Swing.cancel();
@@ -2394,15 +2895,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       shake();
     }
   }
-  function startSink() {
-    const b = G.ball;
-    b.state = 'sinking'; b.sinkT = 0; b.sx = b.x; b.sy = b.y; b.vx = 0; b.vy = 0;
-    Sound.cup();
-  }
   function startSplash(z) {
     const b = G.ball;
     b.state = 'splash'; b.splashT = 0; b.vx = 0; b.vy = 0;
-    const shred = z.style === 'shredder', back = PH.backToTee;
+    const shred = z.style === 'shredder', pit = z.style === 'pit', back = PH.backToTee;
     if (G.screen === 'play') {
       G.strokes += 1;
       const st = curPlayer().stats;
@@ -2414,6 +2910,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       Sound.shred();
       burst(b.x, b.y, '#f4f4ef', 14, 220, 0.6, 3.2);
       toast('Shredded', penalty, 'bad');
+    } else if (pit) {
+      Sound.thud(); Sound.boom();
+      ring(b.x, b.y, 'rgba(242,183,5,0.8)', 4, 30, 0.6, 3);
+      toast('Over the edge', penalty, 'bad');
     } else {
       Sound.splash();
       ring(b.x, b.y, 'rgba(255,236,210,0.8)', 4, 26, 0.7, 2.5);
@@ -2422,7 +2922,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       toast(z.style === 'oil' ? 'Slipped' : 'Splash', penalty, 'bad');
     }
     if (back) { Sound.sad(); shake(); }
-    Taunts.say(back && Math.random() < 0.5 ? 'tee' : shred ? 'shred' : 'coffee', true);
+    Taunts.say(back && Math.random() < 0.5 ? 'tee' : shred ? 'shred' : pit ? 'dock' : 'coffee', true);
     Office.incident();
     updateHud();
     netEvent(shred ? 'shred' : 'splash');
@@ -2434,24 +2934,22 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     toast('Out of bounds', 'No penalty. Play it again from your last spot.', '');
     onBallRest();
   }
-  function doTeleport(tp) {
+  // The physics has already moved the ball through the doors; this adds the effects, and Rage mode's wrong floor.
+  function onTeleport(tp, from) {
     const b = G.ball;
-    const sp = Math.max(170, Math.hypot(b.vx, b.vy) * 0.92);
-    ring(b.x, b.y, 'rgba(255,255,255,0.7)', 4, 22, 0.4, 2);
+    ring(from[0], from[1], 'rgba(255,255,255,0.7)', 4, 22, 0.4, 2);
+    b.trail.length = 0;
     if (PH.wrongFloor && G.screen === 'play' && Math.random() < PH.wrongFloor) {
       // Rage mode: sometimes the car just takes you back down to the lobby.
       b.x = G.hole.tee[0]; b.y = G.hole.tee[1]; b.vx = 0; b.vy = 0;
-      b.trail.length = 0; b.state = 'rest'; b.quiet = true;
+      b.state = 'rest'; b.quiet = true;
       Sound.ding();
-      toast('Wrong floor', 'The elevator took you back down to the lobby.', 'bad');
+      toast('Wrong floor', COURSE.id === 'factory' ? 'The lift took you back down to the ground floor.' : 'The elevator took you back down to the lobby.', 'bad');
       Taunts.say('floor', true);
       shake();
       onBallRest();
       return;
     }
-    b.x = tp.to[0]; b.y = tp.to[1];
-    b.vx = tp.dir[0] * sp; b.vy = tp.dir[1] * sp;
-    b.trail.length = 0; b.slowT = 0;
     tp.arriveT = 1.4;
     Sound.ding();
     ring(b.x, b.y, 'rgba(255,212,71,0.9)', 6, 34, 0.6, 2.5);
@@ -2763,11 +3261,13 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     g.fillStyle = 'rgba(6,10,16,0.34)'; g.fill();
     g.lineWidth = WALL_T * 2 + 2; g.strokeStyle = 'rgba(6,10,16,0.34)'; g.stroke();
     g.restore();
+    const T = theme();
     coursePath(g, h);
-    g.lineWidth = WALL_T * 2 + 4; g.strokeStyle = '#6c7889'; g.stroke();
-    g.lineWidth = WALL_T * 2; g.strokeStyle = '#c3ccd7'; g.stroke();
-    g.lineWidth = WALL_T * 2 - 9; g.strokeStyle = '#e6ebf1'; g.stroke();
-    g.fillStyle = '#2e9b58'; g.fill();
+    g.lineWidth = WALL_T * 2 + 4; g.strokeStyle = T.rail[0]; g.stroke();
+    g.lineWidth = WALL_T * 2; g.strokeStyle = T.rail[1]; g.stroke();
+    g.lineWidth = WALL_T * 2 - 9; g.strokeStyle = T.rail[2]; g.stroke();
+    if (T.hazard) { g.lineWidth = WALL_T * 2 - 14; g.strokeStyle = hazardPattern(g); g.stroke(); }
+    g.fillStyle = T.felt; g.fill();
     g.save();
     g.clip();
     g.fillStyle = 'rgba(255,255,255,0.045)';
@@ -2784,7 +3284,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const [x, y] = h.tee;
     g.save();
     g.beginPath(); rr(g, x - 17, y - 17, 34, 34, 7);
-    g.fillStyle = '#237a47'; g.fill();
+    g.fillStyle = theme().tee; g.fill();
     g.lineWidth = 1.5; g.strokeStyle = 'rgba(255,255,255,0.22)'; g.stroke();
     circle(g, x, y, 2.5); g.fillStyle = 'rgba(255,255,255,0.7)'; g.fill();
     g.restore();
@@ -2891,7 +3391,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (z.type === 'rough') drawRug(g, z);
       else if (z.type === 'slope') drawSlope(g, z);
       else if (z.type === 'funnel') drawFunnel(g, z);
+      else if (z.type === 'slick') drawSlick(g, z);
       else if (z.style === 'coffee') drawCoffee(g, z);
+      else if (z.style === 'pit') drawPit(g, z);
     }
     g.restore();
   }
@@ -2945,6 +3447,59 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         circle(g, headX, yy, 10); g.fillStyle = '#c7ccd3'; g.fill();
         circle(g, headX, yy, 4.5); g.fillStyle = '#23262b'; g.fill();
       }
+    } else if (b.kind === 'pallet') {
+      // Boxes shrink-wrapped onto a wooden pallet.
+      g.fillStyle = '#8f6236'; g.fillRect(x0, y0, w, hh);
+      g.fillStyle = '#6f4a28'; for (let i = 0; i < 4; i++) g.fillRect(x0 + (i * (w - 8)) / 3, y0, 8, hh);
+      g.fillStyle = '#c99a62'; g.fillRect(x0 + 5, y0 + 5, w - 10, hh - 10);
+      g.strokeStyle = 'rgba(90,60,30,0.6)'; g.lineWidth = 1.5;
+      g.beginPath(); g.moveTo(x0 + w / 2, y0 + 5); g.lineTo(x0 + w / 2, y1 - 5); g.moveTo(x0 + 5, y0 + hh / 2); g.lineTo(x1 - 5, y0 + hh / 2); g.stroke();
+      g.fillStyle = '#e3c48f'; g.fillRect(x0 + w / 4 - 2, y0 + 5, 4, hh - 10); g.fillRect(x0 + (3 * w) / 4 - 2, y0 + 5, 4, hh - 10);
+      g.fillStyle = 'rgba(255,255,255,0.16)'; g.fillRect(x0 + 5, y0 + 5, w - 10, (hh - 10) * 0.3);
+    } else if (b.kind === 'machine') {
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#4c5a6b'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#2b3440'; g.stroke();
+      g.fillStyle = '#5f6f82'; g.fillRect(x0 + 5, y0 + 5, w - 10, hh - 10);
+      g.fillStyle = '#39434f';
+      for (let y = y0 + 22; y < y1 - 26; y += 9) g.fillRect(x0 + 10, y, w - 20, 3);
+      circle(g, x0 + w / 2, y1 - 15, 7); g.fillStyle = '#f2b705'; g.fill();
+      circle(g, x0 + w / 2, y1 - 15, 4.5); g.fillStyle = '#e8453a'; g.fill();
+      circle(g, x0 + w / 2, y0 + 12, 3); g.fillStyle = '#35d07f'; g.fill();
+    } else if (b.kind === 'vending') {
+      g.beginPath(); rr(g, x0, y0, w, hh, 3); g.fillStyle = '#b8232f'; g.fill(); g.strokeStyle = '#7d1720'; g.lineWidth = 2; g.stroke();
+      g.fillStyle = '#1a2230'; g.fillRect(x0 + 5, y0 + 5, w * 0.62, hh - 10);
+      const cols = ['#ffd447', '#5bc0ff', '#ff7a59', '#35d07f', '#c39bff'];
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) { g.fillStyle = cols[(r * 4 + c) % cols.length]; g.fillRect(x0 + 8 + c * ((w * 0.62 - 6) / 4), y0 + 8 + r * ((hh - 16) / 3), 6, (hh - 16) / 3 - 4); }
+      g.fillStyle = '#d7dbe0'; g.fillRect(x0 + w * 0.72, y0 + 8, w * 0.2, hh * 0.35);
+      g.fillStyle = '#12151a'; g.fillRect(x0 + w * 0.74, y1 - 14, w * 0.16, 6);
+    } else if (b.kind === 'fence') {
+      g.fillStyle = 'rgba(242,183,5,0.28)'; g.fillRect(x0, y0, w, hh);
+      g.strokeStyle = '#f2b705'; g.lineWidth = 2; g.strokeRect(x0 + 1, y0 + 1, w - 2, hh - 2);
+      g.fillStyle = '#2b3038';
+      const long = w > hh, n = Math.max(1, Math.round((long ? w : hh) / 42));
+      for (let i = 0; i <= n; i++) {
+        const t = i / n;
+        if (long) g.fillRect(x0 + t * (w - 6), y0 - 1, 6, hh + 2); else g.fillRect(x0 - 1, y0 + t * (hh - 6), w + 2, 6);
+      }
+    } else if (b.kind === 'rack') {
+      // Pallet racking: blue beams, orange uprights, and stock on the shelves.
+      g.fillStyle = '#244a8a'; g.fillRect(x0, y0, w, hh);
+      const long = w > hh, len = long ? w : hh, n = Math.max(1, Math.round(len / 90)), rnd = mulberry32(Math.round(x0 * 3 + y0));
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * len + 8, s = len / n - 16;
+        const bx = long ? x0 + a : x0 + 5, by = long ? y0 + 5 : y0 + a, bw = long ? s : w - 10, bh = long ? hh - 10 : s;
+        g.fillStyle = rnd() < 0.5 ? '#c99a62' : '#b8854f'; g.fillRect(bx, by, bw, bh);
+        g.strokeStyle = 'rgba(90,60,30,0.5)'; g.lineWidth = 1; g.strokeRect(bx, by, bw, bh);
+      }
+      g.fillStyle = '#f07f1e';
+      for (let i = 0; i <= n; i++) { const a = (i / n) * (len - 7); if (long) g.fillRect(x0 + a, y0, 7, hh); else g.fillRect(x0, y0 + a, w, 7); }
+    } else if (b.kind === 'trailer') {
+      g.fillStyle = '#d9dde3'; g.fillRect(x0, y0, w, hh);
+      g.strokeStyle = '#a4acb7'; g.lineWidth = 1.2;
+      g.beginPath();
+      if (w > hh) for (let x = x0 + 6; x < x1; x += 10) { g.moveTo(x, y0); g.lineTo(x, y1); }
+      else for (let y = y0 + 6; y < y1; y += 10) { g.moveTo(x0, y); g.lineTo(x1, y); }
+      g.stroke();
+      g.strokeStyle = '#6b7480'; g.lineWidth = 2; g.strokeRect(x0, y0, w, hh);
     } else {
       g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#9aa6b5'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#5d6878'; g.stroke();
     }
@@ -2998,6 +3553,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       g.strokeStyle = 'rgba(0,0,0,0.18)'; g.lineWidth = 1.5;
       g.beginPath(); g.arc(x + 4, y + 2, r * 0.5, 0.4, 1.9); g.stroke();
       g.beginPath(); g.arc(x - 3, y - 4, r * 0.35, 3.4, 4.6); g.stroke();
+    } else if (c.kind === 'pillar') {
+      // A steel column, wrapped in safety stripes at bumper height.
+      circle(g, x, y, r); g.fillStyle = hazardPattern(g); g.fill();
+      g.lineWidth = 1.5; g.strokeStyle = '#1b1d21'; g.stroke();
+      g.fillStyle = '#5d6672'; g.fillRect(x - r * 0.62, y - r * 0.5, r * 1.24, r * 0.2); g.fillRect(x - r * 0.62, y + r * 0.3, r * 1.24, r * 0.2);
+      g.fillRect(x - r * 0.1, y - r * 0.5, r * 0.2, r);
     } else if (c.kind === 'hub') {
       // Drawn above the clock hands, in the moving layer.
     } else {
@@ -3054,7 +3615,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     g.save();
     coursePath(g, h); g.clip();
     for (const d of h.decor) {
-      if (d.type === 'clock') drawClockFace(g, d);
+      if (d.type === 'stripe') {
+        g.strokeStyle = d.color || '#f2b705'; g.lineWidth = d.lw || 4; g.lineCap = 'butt';
+        g.setLineDash(d.dash || []);
+        g.beginPath(); d.pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke();
+        g.setLineDash([]);
+      } else if (d.type === 'clock') drawClockFace(g, d);
       else if (d.type === 'car') {
         g.fillStyle = '#9aa5b3'; g.fillRect(d.x, d.y, d.w, d.h);
         g.strokeStyle = 'rgba(255,255,255,0.18)'; g.lineWidth = 1;
@@ -3068,10 +3634,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function buildStatic() {
     const g = sctx, h = G.hole;
     g.setTransform(1, 0, 0, 1, 0, 0);
-    g.fillStyle = '#2f3744'; g.fillRect(0, 0, staticCanvas.width, staticCanvas.height);
+    g.fillStyle = theme().bg; g.fillRect(0, 0, staticCanvas.width, staticCanvas.height);
     if (!h) return;
     applyView(g);
-    drawCarpet(g);
+    if (theme().floor === 'concrete') drawConcrete(g); else drawCarpet(g);
     drawDecorUnder(g, h);
     drawCourseBase(g, h);
     drawDecals(g, h);
@@ -3084,10 +3650,331 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const vg = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.hypot(W, H) * 0.62);
     vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.3)');
     g.fillStyle = vg; g.fillRect(0, 0, W, H);
+    if (h.dark) buildLights(h);
     staticDirty = false;
   }
 
+  // Yellow and black safety stripes, as a pattern for whichever canvas asks.
+  const hazardPats = new WeakMap();
+  function hazardPattern(g) {
+    let p = hazardPats.get(g);
+    if (p) return p;
+    const c = document.createElement('canvas');
+    c.width = c.height = 16;
+    const x = c.getContext('2d');
+    x.fillStyle = '#1b1d21'; x.fillRect(0, 0, 16, 16);
+    x.fillStyle = '#f2b705';
+    x.beginPath(); x.moveTo(0, 8); x.lineTo(8, 0); x.lineTo(16, 0); x.lineTo(0, 16); x.closePath(); x.fill();
+    x.beginPath(); x.moveTo(8, 16); x.lineTo(16, 8); x.lineTo(16, 16); x.closePath(); x.fill();
+    p = g.createPattern(c, 'repeat');
+    hazardPats.set(g, p);
+    return p;
+  }
+  // The factory floor: sealed concrete slabs with saw-cut joints, stains, and forklift tire marks.
+  function drawConcrete(g) {
+    const r = visibleWorldRect(), T = 120;
+    const x0 = Math.floor(r.x0 / T) * T, y0 = Math.floor(r.y0 / T) * T;
+    for (let x = x0; x < r.x1; x += T) {
+      for (let y = y0; y < r.y1; y += T) {
+        const rnd = mulberry32(hashStr(x + ',' + y)), v = 55 + Math.floor(rnd() * 8);
+        g.fillStyle = `rgb(${v},${v + 3},${v + 8})`; g.fillRect(x, y, T, T);
+        if (rnd() < 0.35) {
+          g.fillStyle = 'rgba(10,12,16,0.16)';
+          g.beginPath(); g.ellipse(x + rnd() * T, y + rnd() * T, 6 + rnd() * 22, 4 + rnd() * 12, rnd() * 3, 0, TAU); g.fill();
+        }
+      }
+    }
+    g.strokeStyle = 'rgba(0,0,0,0.3)'; g.lineWidth = 1.5;
+    g.beginPath();
+    for (let x = x0; x <= r.x1; x += T) { g.moveTo(x, r.y0); g.lineTo(x, r.y1); }
+    for (let y = y0; y <= r.y1; y += T) { g.moveTo(r.x0, y); g.lineTo(r.x1, y); }
+    g.stroke();
+    g.strokeStyle = 'rgba(8,10,14,0.13)'; g.lineWidth = 5;
+    const rnd = mulberry32(99);
+    for (let i = 0; i < 7; i++) {
+      const cx = lerp(r.x0, r.x1, rnd()), cy = lerp(r.y0, r.y1, rnd()), rad = 150 + rnd() * 250, a = rnd() * TAU, span = 0.9 + rnd() * 0.6;
+      for (const o of [0, 13]) { g.beginPath(); g.arc(cx, cy, rad + o, a, a + span); g.stroke(); }
+    }
+  }
+  function drawSlick(g, z) {
+    const b = z.bb, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2, R = Math.max(b.x1 - b.x0, b.y1 - b.y0) / 2;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    if (z.style === 'oil') {
+      g.fillStyle = 'rgba(14,12,20,0.8)'; g.fill();
+      g.clip();
+      // An oily sheen: soft blooms of violet, teal and gold.
+      [['rgba(150,90,220,0.24)', -1, -0.2], ['rgba(60,200,190,0.2)', 0.2, 0.1], ['rgba(240,200,80,0.15)', 0.8, -0.3]].forEach(([c, ox, oy]) => {
+        const x = cx + ox * R * 0.35, y = cy + oy * R * 0.5, gr = g.createRadialGradient(x, y, 0, x, y, R * 0.7);
+        gr.addColorStop(0, c); gr.addColorStop(1, 'rgba(0,0,0,0)');
+        g.fillStyle = gr; g.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+      });
+    } else {
+      g.fillStyle = 'rgba(150,205,255,0.35)'; g.fill();
+      g.strokeStyle = 'rgba(210,235,255,0.5)'; g.lineWidth = 2; g.stroke();
+      g.clip();
+      g.fillStyle = 'rgba(255,255,255,0.25)';
+      g.beginPath(); g.ellipse(cx - R * 0.2, cy - R * 0.25, R * 0.35, R * 0.12, -0.3, 0, TAU); g.fill();
+    }
+    g.restore();
+  }
+  // The dock edge and the service pit: a drop, with safety stripes painted round it.
+  function drawPit(g, z) {
+    const b = z.bb;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    const gr = g.createLinearGradient(b.x0, b.y0, b.x0, b.y1);
+    gr.addColorStop(0, '#07090c'); gr.addColorStop(1, '#171b21');
+    g.fillStyle = gr; g.fill();
+    g.lineWidth = 9; g.strokeStyle = hazardPattern(g); g.stroke();
+    g.restore();
+  }
+  // A roller conveyor: slats move with the belt, and yellow guard rails run along both sides.
+  function drawRollers(g, z, t) {
+    const b = z.bb, horiz = z.dir[0] !== 0, sign = horiz ? Math.sign(z.dir[0]) : Math.sign(z.dir[1]);
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts); g.clip();
+    g.fillStyle = '#20242a'; g.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+    const gap = 14, off = ((t * 70) % gap) * sign;
+    g.lineWidth = 7; g.strokeStyle = '#48505b';
+    g.beginPath();
+    if (horiz) for (let x = b.x0 - gap + off; x < b.x1 + gap; x += gap) { g.moveTo(x, b.y0 + 5); g.lineTo(x, b.y1 - 5); }
+    else for (let y = b.y0 - gap + off; y < b.y1 + gap; y += gap) { g.moveTo(b.x0 + 5, y); g.lineTo(b.x1 - 5, y); }
+    g.stroke();
+    g.lineWidth = 1.5; g.strokeStyle = 'rgba(255,255,255,0.16)';
+    g.beginPath();
+    if (horiz) for (let x = b.x0 - gap + off; x < b.x1 + gap; x += gap) { g.moveTo(x - 2, b.y0 + 5); g.lineTo(x - 2, b.y1 - 5); }
+    else for (let y = b.y0 - gap + off; y < b.y1 + gap; y += gap) { g.moveTo(b.x0 + 5, y - 2); g.lineTo(b.x1 - 5, y - 2); }
+    g.stroke();
+    g.fillStyle = '#f2b705';
+    if (horiz) { g.fillRect(b.x0, b.y0, b.x1 - b.x0, 4); g.fillRect(b.x0, b.y1 - 4, b.x1 - b.x0, 4); }
+    else { g.fillRect(b.x0, b.y0, 4, b.y1 - b.y0); g.fillRect(b.x1 - 4, b.y0, 4, b.y1 - b.y0); }
+    g.restore();
+  }
+  function drawForklift(g, m, sh) {
+    const horiz = Math.abs(m.b[0] - m.a[0]) >= Math.abs(m.b[1] - m.a[1]);
+    const L = horiz ? m.w : m.h, W = horiz ? m.h : m.w, ang = forkliftAngle(m);
+    g.save();
+    g.translate(m.cx, m.cy);
+    g.save(); g.translate(sh[0] * 0.8, sh[1] * 0.8); g.rotate(ang); g.fillStyle = 'rgba(6,10,16,0.34)'; g.fillRect(-L / 2, -W / 2, L, W); g.restore();
+    g.rotate(ang);
+    g.fillStyle = '#9aa3ae'; g.fillRect(L * 0.16, -W * 0.36, L * 0.34, W * 0.14); g.fillRect(L * 0.16, W * 0.22, L * 0.34, W * 0.14);
+    g.fillStyle = '#3a414b'; g.fillRect(L * 0.08, -W * 0.47, L * 0.1, W * 0.94);
+    g.beginPath(); rr(g, -L / 2, -W / 2, L * 0.6, W, 6); g.fillStyle = '#f2b705'; g.fill(); g.strokeStyle = '#8a6a00'; g.lineWidth = 1.5; g.stroke();
+    g.fillStyle = '#2b3038'; g.fillRect(-L / 2, -W / 2 + 3, L * 0.13, W - 6);
+    g.fillStyle = '#1b1d21'; g.fillRect(-L * 0.26, -W * 0.2, L * 0.14, W * 0.4);
+    g.strokeStyle = '#1b1d21'; g.lineWidth = 1.5; g.strokeRect(-L * 0.3, -W * 0.36, L * 0.36, W * 0.72);
+    g.beginPath();
+    for (let i = 1; i < 3; i++) { const yy = -W * 0.36 + i * W * 0.24; g.moveTo(-L * 0.3, yy); g.lineTo(L * 0.06, yy); }
+    g.stroke();
+    circle(g, -L * 0.38, 0, 3.4); g.fillStyle = (G.clock * 2.2) % 1 < 0.5 ? '#ffb020' : '#8a5a00'; g.fill();
+    g.restore();
+  }
+  function forkliftAngle(m) {
+    const horiz = Math.abs(m.b[0] - m.a[0]) >= Math.abs(m.b[1] - m.a[1]);
+    const ang = horiz ? (m.b[0] > m.a[0] ? 0 : Math.PI) : (m.b[1] > m.a[1] ? Math.PI / 2 : -Math.PI / 2);
+    return m.face < 0 ? ang + Math.PI : ang;
+  }
+  function drawRobotArm(g, m, sh) {
+    const ca = Math.cos(m.angle), sa = Math.sin(m.angle), px = -sa, py = ca, L = m.len;
+    const ex = m.x + ca * L * 0.5, ey = m.y + sa * L * 0.5, tx = m.x + ca * L, ty = m.y + sa * L;
+    g.save();
+    g.lineCap = 'round';
+    g.strokeStyle = 'rgba(6,10,16,0.3)'; g.lineWidth = m.w;
+    g.beginPath(); g.moveTo(m.x + sh[0], m.y + sh[1]); g.lineTo(tx + sh[0] * 1.4, ty + sh[1] * 1.4); g.stroke();
+    circle(g, m.x, m.y, 21); g.fillStyle = '#2b3038'; g.fill(); g.lineWidth = 4; g.strokeStyle = '#f2b705'; g.stroke();
+    g.strokeStyle = '#d9661a'; g.lineWidth = m.w; g.beginPath(); g.moveTo(m.x, m.y); g.lineTo(ex, ey); g.stroke();
+    g.strokeStyle = '#ff8f2e'; g.lineWidth = m.w * 0.78; g.beginPath(); g.moveTo(ex, ey); g.lineTo(tx, ty); g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,0.25)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(ex + px * m.w * 0.2, ey + py * m.w * 0.2); g.lineTo(tx + px * m.w * 0.2, ty + py * m.w * 0.2); g.stroke();
+    circle(g, m.x, m.y, m.w * 0.66); g.fillStyle = '#3a414b'; g.fill();
+    circle(g, ex, ey, m.w * 0.56); g.fillStyle = '#3a414b'; g.fill();
+    g.strokeStyle = '#aab2bd'; g.lineWidth = 3;
+    g.beginPath();
+    g.moveTo(tx + px * 6, ty + py * 6); g.lineTo(tx + ca * 11 + px * 3, ty + sa * 11 + py * 3);
+    g.moveTo(tx - px * 6, ty - py * 6); g.lineTo(tx + ca * 11 - px * 3, ty + sa * 11 - py * 3);
+    g.stroke();
+    circle(g, m.x, m.y, 5); g.fillStyle = (G.clock * 3) % 1 < 0.5 ? '#ff5a4e' : '#6b1d18'; g.fill();
+    g.restore();
+  }
+  // Night shift: darkness with pools of light, cached per hole like the static layer.
+  const lightCanvas = document.createElement('canvas');
+  const lctx = lightCanvas.getContext('2d');
+  function buildLights(h) {
+    lightCanvas.width = canvas.width; lightCanvas.height = canvas.height;
+    const g = lctx;
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.fillStyle = `rgba(4,8,22,${h.dark})`; g.fillRect(0, 0, lightCanvas.width, lightCanvas.height);
+    g.globalCompositeOperation = 'destination-out';
+    applyView(g);
+    for (const [x, y, r] of h.lamps) {
+      const gr = g.createRadialGradient(x, y, 0, x, y, r);
+      gr.addColorStop(0, 'rgba(0,0,0,0.92)'); gr.addColorStop(0.55, 'rgba(0,0,0,0.55)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+    g.globalCompositeOperation = 'source-over';
+  }
+  // Warm light from the work lamps, forklift headlights and the robots' warning lamps.
+  function drawGlows(g, h) {
+    g.save();
+    g.globalCompositeOperation = 'lighter';
+    for (const [x, y, r] of h.lamps) {
+      const gr = g.createRadialGradient(x, y, 0, x, y, r * 0.8);
+      gr.addColorStop(0, 'rgba(255,190,110,0.1)'); gr.addColorStop(1, 'rgba(255,190,110,0)');
+      g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+    for (const m of h.movers) {
+      if (m.type === 'slider' && m.kind === 'forklift') {
+        const horiz = Math.abs(m.b[0] - m.a[0]) >= Math.abs(m.b[1] - m.a[1]), L = horiz ? m.w : m.h, a = forkliftAngle(m);
+        const fx = m.cx + Math.cos(a) * L * 0.5, fy = m.cy + Math.sin(a) * L * 0.5, reach = 170;
+        const gr = g.createRadialGradient(fx, fy, 0, fx, fy, reach);
+        gr.addColorStop(0, 'rgba(255,240,200,0.3)'); gr.addColorStop(1, 'rgba(255,240,200,0)');
+        g.fillStyle = gr;
+        g.beginPath(); g.moveTo(fx, fy); g.arc(fx, fy, reach, a - 0.42, a + 0.42); g.closePath(); g.fill();
+      } else if (m.type === 'spinner' && m.kind === 'robot' && (G.clock * 3) % 1 < 0.5) {
+        const gr = g.createRadialGradient(m.x, m.y, 0, m.x, m.y, 60);
+        gr.addColorStop(0, 'rgba(255,80,60,0.35)'); gr.addColorStop(1, 'rgba(255,80,60,0)');
+        g.fillStyle = gr; g.fillRect(m.x - 60, m.y - 60, 120, 120);
+      }
+    }
+    g.restore();
+  }
+  function drawProps(g, h) {
+    const sh = h.shadow;
+    for (const p of h.props) {
+      if (!p.alive) continue;
+      g.save();
+      if (p.fed) {
+        const z = p.fed, b = z.bb, along = z.dir[0] ? (z.dir[0] > 0 ? [p.x - b.x0, b.x1 - p.x] : [b.x1 - p.x, p.x - b.x0]) : z.dir[1] > 0 ? [p.y - b.y0, b.y1 - p.y] : [b.y1 - p.y, p.y - b.y0];
+        g.globalAlpha = clamp(Math.min(along[0] - 6, along[1] - 18) / 14, 0, 1);
+      }
+      g.translate(p.x, p.y);
+      g.fillStyle = 'rgba(6,10,16,0.3)';
+      g.beginPath(); g.ellipse(sh[0] * 0.45, sh[1] * 0.45, p.r * (p.fallen ? 1.15 : 0.95), p.r * 0.9, p.rot, 0, TAU); g.fill();
+      g.rotate(p.rot);
+      PROP_ART[p.kind](g, p.r, p);
+      g.restore();
+    }
+  }
+  // Each prop drawn at the origin, facing +x. Fallen ones are drawn lying on their side.
+  const PROP_ART = {
+    cup(g, r, p) {
+      g.lineWidth = 1; g.strokeStyle = '#b9bec5';
+      if (p.fallen) {
+        g.beginPath(); g.moveTo(-r, -r * 0.5); g.lineTo(r * 1.1, -r * 0.8); g.lineTo(r * 1.1, r * 0.8); g.lineTo(-r, r * 0.5); g.closePath();
+        g.fillStyle = '#f7f7f2'; g.fill(); g.stroke();
+        g.fillStyle = '#e8453a'; g.fillRect(-r * 0.2, -r * 0.62, r * 0.3, r * 1.24);
+        g.fillStyle = '#d3d7dc'; g.beginPath(); g.ellipse(r * 1.1, 0, r * 0.24, r * 0.8, 0, 0, TAU); g.fill();
+      } else {
+        circle(g, 0, 0, r); g.fillStyle = '#f7f7f2'; g.fill(); g.stroke();
+        circle(g, 0, 0, r * 0.68); g.fillStyle = '#dfe2e6'; g.fill();
+      }
+    },
+    can(g, r, p) {
+      if (p.fallen) {
+        g.beginPath(); rr(g, -r * 1.1, -r * 0.8, r * 2.2, r * 1.6, 2); g.fillStyle = '#e8453a'; g.fill();
+        g.fillStyle = '#d7dbe0'; g.fillRect(-r * 1.1, -r * 0.8, r * 0.3, r * 1.6); g.fillRect(r * 0.8, -r * 0.8, r * 0.3, r * 1.6);
+        g.fillStyle = 'rgba(255,255,255,0.35)'; g.fillRect(-r * 0.8, -r * 0.55, r * 1.6, r * 0.25);
+      } else {
+        circle(g, 0, 0, r); g.fillStyle = '#c5cad1'; g.fill(); g.strokeStyle = '#e8453a'; g.lineWidth = 1.6; g.stroke();
+        g.fillStyle = '#8e959e'; g.fillRect(-r * 0.3, -r * 0.5, r * 0.6, r * 0.35);
+      }
+    },
+    paper(g, r) {
+      g.beginPath();
+      for (let i = 0; i < 7; i++) { const a = (i / 7) * TAU, k = r * (0.75 + 0.3 * ((i * 37) % 5) / 5); if (i) g.lineTo(Math.cos(a) * k, Math.sin(a) * k); else g.moveTo(k, 0); }
+      g.closePath(); g.fillStyle = '#f4f4ee'; g.fill(); g.strokeStyle = '#c9ccd1'; g.lineWidth = 0.8; g.stroke();
+    },
+    cone(g, r, p) {
+      if (p.fallen) {
+        g.beginPath(); g.moveTo(r * 1.4, 0); g.lineTo(-r * 0.6, -r * 0.75); g.lineTo(-r * 0.6, r * 0.75); g.closePath();
+        g.fillStyle = '#ff7a1a'; g.fill();
+        g.fillStyle = '#ffffff'; g.beginPath(); g.moveTo(r * 0.55, -r * 0.33); g.lineTo(r * 0.1, -r * 0.5); g.lineTo(r * 0.1, r * 0.5); g.lineTo(r * 0.55, r * 0.33); g.closePath(); g.fill();
+        g.fillStyle = '#e0600c'; g.fillRect(-r * 0.95, -r * 0.95, r * 0.4, r * 1.9);
+      } else {
+        g.beginPath(); rr(g, -r, -r, r * 2, r * 2, 3); g.fillStyle = '#e0600c'; g.fill();
+        circle(g, 0, 0, r * 0.78); g.fillStyle = '#ff7a1a'; g.fill();
+        circle(g, 0, 0, r * 0.52); g.fillStyle = '#ffffff'; g.fill();
+        circle(g, 0, 0, r * 0.34); g.fillStyle = '#ff7a1a'; g.fill();
+        circle(g, 0, 0, r * 0.14); g.fillStyle = '#6b2a05'; g.fill();
+      }
+    },
+    sign(g, r, p) {
+      if (p.fallen) {
+        g.beginPath(); rr(g, -r, -r * 0.75, r * 2, r * 1.5, 3); g.fillStyle = '#ffd21f'; g.fill(); g.strokeStyle = '#b48f00'; g.lineWidth = 1.2; g.stroke();
+        g.fillStyle = '#1b1d21'; g.beginPath(); g.moveTo(0, -r * 0.5); g.lineTo(r * 0.45, r * 0.35); g.lineTo(-r * 0.45, r * 0.35); g.closePath(); g.fill();
+        g.fillStyle = '#ffd21f'; g.fillRect(-r * 0.05, -r * 0.2, r * 0.1, r * 0.3);
+      } else {
+        g.fillStyle = '#ffd21f'; g.fillRect(-r * 0.95, -r * 0.4, r * 1.9, r * 0.8);
+        g.strokeStyle = '#b48f00'; g.lineWidth = 1.5; g.strokeRect(-r * 0.95, -r * 0.4, r * 1.9, r * 0.8);
+        g.beginPath(); g.moveTo(-r * 0.95, 0); g.lineTo(r * 0.95, 0); g.stroke();
+      }
+    },
+    box(g, r) {
+      const s = r * 0.86;
+      g.beginPath(); rr(g, -s, -s, s * 2, s * 2, 2); g.fillStyle = '#c9965b'; g.fill(); g.strokeStyle = '#8a6236'; g.lineWidth = 1.2; g.stroke();
+      g.fillStyle = '#e3c48f'; g.fillRect(-s, -s * 0.15, s * 2, s * 0.3);
+      g.strokeStyle = 'rgba(90,60,30,0.5)'; g.beginPath(); g.moveTo(-s, 0); g.lineTo(s, 0); g.stroke();
+    },
+    flat(g, r) {
+      g.beginPath(); g.moveTo(-r, -r * 0.6); g.lineTo(r * 0.9, -r * 0.8); g.lineTo(r, r * 0.6); g.lineTo(-r * 0.8, r * 0.7); g.closePath();
+      g.fillStyle = '#c29056'; g.fill(); g.strokeStyle = '#8a6236'; g.lineWidth = 1; g.stroke();
+    },
+    jug(g, r) {
+      circle(g, 0, 0, r); g.fillStyle = 'rgba(120,190,255,0.75)'; g.fill(); g.strokeStyle = '#5d9fd8'; g.lineWidth = 1.5; g.stroke();
+      circle(g, 0, 0, r * 0.62); g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = 1.5; g.stroke();
+      circle(g, 0, 0, r * 0.32); g.fillStyle = '#2f6fb3'; g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.6)'; g.beginPath(); g.ellipse(-r * 0.4, -r * 0.45, r * 0.3, r * 0.14, -0.6, 0, TAU); g.fill();
+    },
+    bin(g, r, p) {
+      if (p.fallen) {
+        g.beginPath(); rr(g, -r * 1.2, -r * 0.85, r * 2.4, r * 1.7, 3); g.fillStyle = '#7d8793'; g.fill();
+        g.strokeStyle = '#5d6672'; g.lineWidth = 1.2;
+        g.beginPath(); for (const x of [-0.6, 0, 0.6]) { g.moveTo(x * r, -r * 0.85); g.lineTo(x * r, r * 0.85); } g.stroke();
+        g.fillStyle = '#2b3038'; g.beginPath(); g.ellipse(r * 1.2, 0, r * 0.25, r * 0.85, 0, 0, TAU); g.fill();
+      } else {
+        circle(g, 0, 0, r); g.fillStyle = '#8c96a3'; g.fill(); g.strokeStyle = '#5d6672'; g.lineWidth = 2; g.stroke();
+        circle(g, 0, 0, r * 0.76); g.fillStyle = '#2b3038'; g.fill();
+        g.fillStyle = '#f4f4ee'; circle(g, -r * 0.25, -r * 0.1, r * 0.25); g.fill(); circle(g, r * 0.2, r * 0.2, r * 0.2); g.fill();
+      }
+    },
+    chair(g, r) {
+      g.strokeStyle = '#2b3038'; g.lineWidth = 3; g.lineCap = 'round';
+      g.beginPath();
+      for (let i = 0; i < 5; i++) { const a = (i / 5) * TAU + 0.3; g.moveTo(0, 0); g.lineTo(Math.cos(a) * r * 1.05, Math.sin(a) * r * 1.05); }
+      g.stroke();
+      g.fillStyle = '#111317';
+      for (let i = 0; i < 5; i++) { const a = (i / 5) * TAU + 0.3; circle(g, Math.cos(a) * r * 1.05, Math.sin(a) * r * 1.05, 2.4); g.fill(); }
+      g.beginPath(); rr(g, -r * 0.62, -r * 0.62, r * 1.24, r * 1.24, r * 0.35); g.fillStyle = '#3f5aa8'; g.fill();
+      g.beginPath(); rr(g, -r * 0.95, -r * 0.7, r * 0.3, r * 1.4, 4); g.fillStyle = '#2f4686'; g.fill();
+    },
+    barrel(g, r, p) {
+      if (p.fallen) {
+        g.beginPath(); rr(g, -r * 1.25, -r * 0.9, r * 2.5, r * 1.8, 4); g.fillStyle = '#2f6fb3'; g.fill();
+        g.strokeStyle = '#1d4a7d'; g.lineWidth = 2;
+        g.beginPath(); for (const x of [-0.55, 0.55]) { g.moveTo(x * r, -r * 0.9); g.lineTo(x * r, r * 0.9); } g.stroke();
+        g.fillStyle = '#16181d'; g.beginPath(); g.ellipse(r * 1.25, 0, r * 0.28, r * 0.9, 0, 0, TAU); g.fill();
+      } else {
+        circle(g, 0, 0, r); g.fillStyle = '#2f6fb3'; g.fill(); g.strokeStyle = '#1d4a7d'; g.lineWidth = 2; g.stroke();
+        circle(g, 0, 0, r * 0.72); g.strokeStyle = 'rgba(255,255,255,0.3)'; g.lineWidth = 1.5; g.stroke();
+        circle(g, r * 0.35, -r * 0.3, r * 0.14); g.fillStyle = '#16181d'; g.fill();
+        g.fillStyle = '#f2b705'; g.fillRect(-r * 0.45, r * 0.1, r * 0.5, r * 0.3);
+      }
+    },
+    crate(g, r) {
+      const s = r * 0.9;
+      g.fillStyle = '#b98a52'; g.fillRect(-s, -s, s * 2, s * 2);
+      g.strokeStyle = '#7a5530'; g.lineWidth = 1.5; g.strokeRect(-s, -s, s * 2, s * 2);
+      g.beginPath(); for (const y of [-0.33, 0.33]) { g.moveTo(-s, y * s * 2); g.lineTo(s, y * s * 2); } g.stroke();
+      g.lineWidth = 3; g.strokeStyle = '#8f6639'; g.beginPath(); g.moveTo(-s, -s); g.lineTo(s, s); g.stroke();
+    },
+    plank(g, r) {
+      g.fillStyle = '#b98a52'; g.fillRect(-r * 1.4, -r * 0.4, r * 2.8, r * 0.8);
+      g.strokeStyle = '#7a5530'; g.lineWidth = 1; g.strokeRect(-r * 1.4, -r * 0.4, r * 2.8, r * 0.8);
+    },
+  };
   function drawConveyor(g, z, t) {
+    if (z.skin === 'rollers') { drawRollers(g, z, t); return; }
     const b = z.bb, horiz = z.dir[0] !== 0, sign = horiz ? Math.sign(z.dir[0]) : Math.sign(z.dir[1]);
     g.save();
     g.beginPath(); tracePoly(g, z.pts); g.clip();
@@ -3143,7 +4030,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function drawMovers(g, h) {
     const sh = h.shadow;
     for (const m of h.movers) {
-      if (m.type === 'slider') {
+      if (m.type === 'slider' && m.kind === 'forklift') drawForklift(g, m, sh);
+      else if (m.type === 'spinner' && m.kind === 'robot') drawRobotArm(g, m, sh);
+      else if (m.type === 'slider') {
         const x0 = m.cx - m.w / 2, y0 = m.cy - m.h / 2;
         g.save();
         g.beginPath(); rr(g, x0 + sh[0] * 0.8, y0 + sh[1] * 0.8, m.w, m.h, 5); g.fillStyle = 'rgba(6,10,16,0.34)'; g.fill();
@@ -3174,7 +4063,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         g.save();
         g.beginPath(); g.rect(m.x0, m.y - m.depth - 2, m.x1 - m.x0, m.depth + 2); g.clip();
         for (const p of doorPanels(m)) {
-          g.fillStyle = '#b3bdc9'; g.fillRect(p.x0, p.y0, p.x1 - p.x0, p.y1 - p.y0);
+          g.fillStyle = m.style === 'gate' ? hazardPattern(g) : '#b3bdc9'; g.fillRect(p.x0, p.y0, p.x1 - p.x0, p.y1 - p.y0);
           g.strokeStyle = '#6f7a88'; g.lineWidth = 1.5; g.strokeRect(p.x0 + 0.75, p.y0 + 0.75, p.x1 - p.x0 - 1.5, p.y1 - p.y0 - 1.5);
           g.strokeStyle = 'rgba(255,255,255,0.35)'; g.lineWidth = 1;
           g.beginPath(); g.moveTo(p.x0 + 4, p.y0 + 4); g.lineTo(p.x1 - 4, p.y0 + 4); g.stroke();
@@ -3355,7 +4244,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     g.restore();
     drawArrivals(g, h);
     drawCupHole(g, h);
+    drawProps(g, h);
     drawMovers(g, h);
+    if (h.dark) {
+      g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(lightCanvas, 0, 0); applyView(g);
+      drawGlows(g, h);
+    }
     const ghosts = visibleGhosts();
     for (const p of ghosts) drawGhostBall(g, p, h);
     drawBall(g, G.ball, h);
@@ -4075,6 +4969,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (tb.stats.tees > 0) add('Back to square one', `${tb.name}, ${tb.stats.tees} trip${tb.stats.tees === 1 ? '' : 's'} back to the tee`);
       const rb = best('bumps');
       if (rb.stats.bumps > 0) add('Roomba’s favorite', `${rb.name}, bumped ${rb.stats.bumps} time${rb.stats.bumps === 1 ? '' : 's'}`);
+      const dm = best('smash');
+      if (dm.stats.smash > 0) add('Property damage', `${dm.name}, ${dm.stats.smash} thing${dm.stats.smash === 1 ? '' : 's'} broken or spilled`);
     } else {
       const p = ps[0];
       add('Holes in one', p.stats.aces.length ? p.stats.aces.map(i => holeName(i)).join(', ') : 'None today');
@@ -4084,6 +4980,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (p.stats.lips) add('Lip-outs', String(p.stats.lips));
       if (p.stats.tees) add('Trips back to the tee', String(p.stats.tees));
       if (p.stats.bumps) add('Roomba bumps', String(p.stats.bumps));
+      if (p.stats.smash) add('Things broken or spilled', String(p.stats.smash));
     }
   }
   function copyResults() {
@@ -4285,7 +5182,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       sc: inRound ? p.scores : Array(HOLES.length).fill(null),
       p: myPhase(),
       x: inRound && b ? Math.round(b.x) : null, y: inRound && b ? Math.round(b.y) : null,
-      sp: st.spills, bo: st.bounces, lp: Math.round(st.longest), ac: st.aces, li: st.lips, tb: st.tees, rb: st.bumps,
+      sp: st.spills, bo: st.bounces, lp: Math.round(st.longest), ac: st.aces, li: st.lips, tb: st.tees, rb: st.bumps, sm: st.smash,
       d: me.dept, md: G.rage ? 'rage' : 'normal', cs: COURSE.id, set: ONLINE.settings, sa: ONLINE.settingsAt,
     });
     ONLINE.beatAt = Date.now();
@@ -4319,6 +5216,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         lips: int(m.li, 0, 999, 0),
         tees: int(m.tb, 0, 999, 0),
         bumps: int(m.rb, 0, 999, 0),
+        smash: int(m.sm, 0, 999, 0),
       },
     };
   }
@@ -4882,6 +5780,13 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   if (urlParams.has('debug')) {
     window.n2fDebug = {
       G, ONLINE, Net, Swing, Party,
+      // Jumps to a hole of the current game, for testing.
+      jump(i) { loadHole(i); startTurn(0, true); },
+      // The pieces the course checker needs to play shots without touching the game.
+      sim: {
+        buildHole, stepBall, stepProps, updateMovers, shotSpeed, rollFeetToMeter, setCourse, setMode, variantsFor, pointInPoly,
+        get HOLES() { return HOLES; }, get PH() { return PH; }, COURSES, BALL_R, PHYS_DT, UNITS_PER_FT,
+      },
       // Runs one celebration by name, for testing.
       show(kind, extra = {}) {
         const h = G.hole;
