@@ -106,6 +106,12 @@ button { font: inherit; color: inherit; }
 .row.between { justify-content: space-between; align-items: flex-start; }
 .stack { display: grid; gap: 8px; margin-top: 16px; }
 .note { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+.memo { margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--hi-soft); font-size: 13px; line-height: 1.45; }
+.memo b { font: 600 11px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; display: block; margin-bottom: 3px; }
+.dept-cup { margin: -4px 0 16px; padding: 12px 14px; border-radius: 12px; background: var(--paper-2); }
+.dept-cup ol { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 3px; }
+.dept-cup li { font-weight: 600; }
+.dept-cup li span { font: 500 12px var(--mono); color: var(--ink-2); margin-left: 6px; }
 
 /* Setup: the course pass */
 .pass { padding: 0; overflow: hidden; }
@@ -124,6 +130,9 @@ button { font: inherit; color: inherit; }
 }
 .player-row input:focus, .code-input:focus { border-color: var(--ink-2); outline: none; box-shadow: 0 0 0 3px rgba(31, 99, 214, .18); }
 .add-player { justify-self: start; }
+.player-row select, select.text-input { height: 44px; border: 1.5px solid var(--line); border-radius: 10px; padding: 0 8px; font: 500 14px var(--body); color: var(--ink); background: #fff; }
+.player-row select { flex: none; width: 128px; }
+.player-row select:focus, select.text-input:focus { border-color: var(--ink-2); outline: none; box-shadow: 0 0 0 3px rgba(31, 99, 214, .18); }
 .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .seg-opt { position: relative; display: block; cursor: pointer; }
 .seg-opt input { position: absolute; opacity: 0; pointer-events: none; }
@@ -198,6 +207,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   100% { opacity: 0; transform: translate(-50%, -58%); }
 }
 @keyframes toast-fade { 0%, 100% { opacity: 0; } 8%, 85% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  #stage.shake { animation: none; }
+  .ping, .ping.out { animation: none; }
+}
 
 /* Setup tabs */
 .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: var(--paper-2); border-radius: 12px; }
@@ -239,9 +252,57 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
 .wait-text { flex: 1; min-width: 0; display: grid; gap: 3px; }
 .wait-text b { font: 800 22px/1 var(--display); text-transform: uppercase; letter-spacing: .01em; }
 .wait-text span { font-size: 13px; color: var(--ink-2); }
-.feed { position: absolute; left: 50%; top: 84px; transform: translateX(-50%); width: min(calc(100% - 32px), 520px); display: grid; gap: 6px; justify-items: center; pointer-events: none; z-index: 7; }
-.feed-item { padding: 7px 13px; border-radius: 999px; background: rgba(15, 20, 28, .76); color: #fff; font: 600 13px/1.25 var(--body); text-align: center; transition: opacity .5s ease, transform .5s ease; }
-.feed-item.out { opacity: 0; transform: translateY(-6px); }
+/* Notifications: coworkers' taunts, the office's commentary, and room news */
+.pings { position: absolute; right: 16px; top: 84px; width: min(340px, calc(100% - 32px)); display: grid; gap: 8px; pointer-events: none; z-index: 7; }
+.ping { display: grid; grid-template-columns: 36px 1fr; gap: 10px; align-items: start; padding: 10px 12px; background: rgba(247, 249, 251, .97); color: var(--ink); border-radius: 12px; box-shadow: 0 10px 28px rgba(0, 0, 0, .35); animation: ping-in .25s ease both; }
+.ping.out { animation: ping-out .35s ease both; }
+.ping-av { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font: 800 14px/1 var(--display); letter-spacing: .02em; color: #fff; background: var(--c, #44505f); }
+.ping-av.ball { border-radius: 50%; color: var(--ink); box-shadow: inset -3px -4px 0 rgba(0, 0, 0, .16), 0 0 0 1.5px rgba(21, 27, 37, .35); }
+.ping-head { display: flex; gap: 8px; align-items: baseline; font: 700 13px/1.2 var(--body); }
+.ping-head small { font: 500 11px/1 var(--mono); color: var(--ink-3); }
+.ping-msg { font-size: 14px; line-height: 1.35; margin-top: 3px; overflow-wrap: anywhere; }
+.ping-msg b { font-weight: 700; }
+@keyframes ping-in { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+@keyframes ping-out { to { opacity: 0; transform: translateX(18px); } }
+
+/* Rage mode */
+.switch-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; }
+.switch-row b { display: block; font: 700 15px/1.2 var(--body); }
+.switch-row small { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.4; color: var(--ink-2); }
+.switch-row input { appearance: none; -webkit-appearance: none; flex: none; width: 46px; height: 28px; margin: 0; border-radius: 999px; background: var(--paper-3); position: relative; cursor: pointer; transition: background .15s ease; }
+.switch-row input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .3); transition: transform .15s ease; }
+.switch-row input:checked { background: var(--signal); }
+.switch-row input:checked::after { transform: translateX(18px); }
+.switch-row input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.switch-row:has(input:checked) { border-color: var(--signal); background: #fff3f1; }
+.rage-tag { background: var(--signal); color: #fff; border-radius: 4px; padding: 1px 5px; letter-spacing: .08em; }
+#stage.shake { animation: shake .38s linear; }
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-7px, 3px); }
+  40% { transform: translate(6px, -4px); }
+  60% { transform: translate(-4px, 2px); }
+  80% { transform: translate(3px, -2px); }
+}
+
+/* The swing button; its meter is drawn on the canvas just above it */
+.swing {
+  position: absolute; left: 50%; bottom: 68px; transform: translateX(-50%); z-index: 6;
+  min-width: 200px; min-height: 58px; padding: 0 28px; border: 0; border-radius: 999px; cursor: pointer; white-space: nowrap;
+  background: var(--hi); color: var(--hi-ink); font: 800 22px/1 var(--display); letter-spacing: .05em; text-transform: uppercase;
+  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .18), 0 10px 26px rgba(0, 0, 0, .38);
+  touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+.swing.back { background: #fff; color: var(--ink); }
+.swing.down { background: #35d07f; color: #062414; }
+.swing:disabled { opacity: .45; cursor: default; }
+@media (max-width: 620px) { .swing { bottom: 62px; min-width: 170px; min-height: 54px; } }
+
+/* Taunt menu */
+.taunt-pop { position: absolute; left: 16px; bottom: 64px; width: min(340px, calc(100% - 32px)); max-height: calc(100% - 150px); overflow-y: auto; display: grid; gap: 4px; padding: 8px; background: var(--paper); border-radius: 14px; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); z-index: 9; }
+.taunt-pop .eyebrow { padding: 4px 6px 2px; }
+.taunt-opt { appearance: none; border: 0; text-align: left; padding: 9px 10px; border-radius: 9px; background: transparent; color: var(--ink); font: 500 14px/1.3 var(--body); cursor: pointer; }
+.taunt-opt:hover, .taunt-opt:focus-visible { background: var(--paper-2); }
 
 @media (min-width: 980px) {
   #setup { padding-left: max(48px, 6vw); }
@@ -250,6 +311,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
 @media (max-width: 620px) {
   .hint { display: none; }
   .board { display: none; }
+  #soundBtn { display: none; }
+  .pings { left: 16px; right: 16px; width: auto; top: 76px; }
   .wait { bottom: 62px; }
   .wait-text b { font-size: 19px; }
   .hud-bottom { justify-content: space-between; }
@@ -282,7 +345,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
 
   <header class="hud hud-top" id="hudTop" hidden>
     <div class="plate">
-      <div class="plate-meta"><span id="hudTime">9:00 AM</span><span id="hudHole">Hole 1/9</span><span id="hudPar">Par 2</span></div>
+      <div class="plate-meta"><span id="hudTime">9:00 AM</span><span id="hudHole">Hole 1/9</span><span id="hudPar">Par 2</span><span class="rage-tag" id="hudRage" hidden>Rage</span></div>
       <div class="plate-name" id="hudName">Badge In</div>
     </div>
     <div class="board" id="board" hidden></div>
@@ -299,8 +362,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     <div class="hud-group">
       <button class="btn btn-floor" id="cardBtn" type="button">Scorecard</button>
       <button class="btn btn-floor" id="menuBtn" type="button">Menu</button>
+      <button class="btn btn-floor" id="tauntBtn" type="button" aria-haspopup="menu" aria-expanded="false">Heckle</button>
     </div>
-    <p class="hint" id="hint">Press anywhere, drag back, and let go to putt. Arrow keys and Space work too.</p>
+    <p class="hint" id="hint">Drag on the course to aim. Hold Swing, let go, then hit as the needle crosses the green zone. Arrows and Space work too.</p>
     <button class="btn btn-floor" id="soundBtn" type="button" aria-pressed="true">Sound on</button>
   </footer>
 
@@ -308,7 +372,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     <div class="toast-big" id="toastBig"></div>
     <div class="toast-small" id="toastSmall"></div>
   </div>
-  <div class="feed" id="feed" aria-live="polite"></div>
+  <div class="pings" id="pings" aria-live="polite"></div>
+  <div class="taunt-pop" id="tauntPop" role="menu" aria-label="Taunts" hidden></div>
+  <button class="swing" id="swingBtn" type="button" hidden>Hold to swing</button>
   <div class="wait" id="waitPanel" hidden>
     <div class="wait-text"><b id="waitTitle"></b><span id="waitSub"></span></div>
     <button class="btn btn-hi" id="waitNext" type="button">Next hole</button>
@@ -331,6 +397,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
           <div class="pane" id="onlineForm">
             <label class="field-label" for="onlineName">Your name</label>
             <input class="text-input" id="onlineName" maxlength="16" autocomplete="off" spellcheck="false" placeholder="Your name">
+            <label class="field-label" for="onlineDept">Your department</label>
+            <select class="text-input" id="onlineDept"></select>
             <label class="field-label" for="roomInput">Room code</label>
             <div class="row">
               <input class="code-input" id="roomInput" maxlength="16" autocomplete="off" spellcheck="false" placeholder="e.g. STAPLER-417">
@@ -358,6 +426,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
             <input class="code-input" id="codeInput" maxlength="12" placeholder="e.g. TACOFRIDAY" autocomplete="off" spellcheck="false" aria-label="Group code">
           </div>
           <p class="error" id="codeError" hidden>Type a code your group will share, like TACOFRIDAY.</p>
+          <p class="field-label">Building</p>
+          <div class="seg" id="bldLocal" role="radiogroup" aria-label="Building"></div>
+          <label class="switch-row" for="rageToggle">
+            <span><b>Rage mode</b><small>Waxed floors, bouncy walls, a smaller cup, shaky hands, a rogue Roomba, and every hazard sends you back to the tee.</small></span>
+            <input type="checkbox" id="rageToggle" role="switch">
+          </label>
           <p class="note">Everyone on the same course gets the same pin positions, so you can also each play on your own device and compare scores in the team chat. To play together live from different places, use Online room.</p>
           <div class="pass-actions">
             <button class="btn btn-hi btn-big" id="startBtn" type="button">Tee off</button>
@@ -381,6 +455,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         </div>
         <p class="field-label">Your ball</p>
         <div class="swatches" id="swatches" role="radiogroup" aria-label="Ball color"></div>
+        <label class="switch-row" for="rageClub">
+          <span><b>Rage mode</b><small id="rageClubNote">Changes it for everyone in the room. Applies from the next tee-off.</small></span>
+          <input type="checkbox" id="rageClub" role="switch">
+        </label>
+        <p class="field-label">Building</p>
+        <div class="seg" id="bldClub" role="radiogroup" aria-label="Building"></div>
         <p class="field-label">In the room <span id="clubCount">1</span></p>
         <ul class="club-list" id="clubList"></ul>
         <p class="note" id="clubNote"></p>
@@ -399,6 +479,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       <p class="sheet-sub" id="sumPar">Par</p>
       <ul class="sum-list" id="sumList"></ul>
       <p class="sheet-sub" id="sumNext"></p>
+      <p class="memo" id="sumMemo"></p>
       <div class="row wrap" style="margin-top: 16px">
         <button class="btn btn-hi btn-big" id="nextBtn" type="button">Next hole</button>
         <button class="btn btn-paper" id="sumCardBtn" type="button">Scorecard</button>
@@ -412,6 +493,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       <h2>End of day</h2>
       <p class="sheet-sub" id="resCourse"></p>
       <ol class="standings" id="standings"></ol>
+      <div class="dept-cup" id="deptCup" hidden></div>
       <div class="awards" id="awards"></div>
       <label class="field-label" for="shareText">Paste into your team chat</label>
       <textarea id="shareText" rows="5" readonly></textarea>
@@ -433,6 +515,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         <button class="btn btn-hi btn-big" id="resumeBtn" type="button">Resume</button>
         <button class="btn btn-paper" id="menuCardBtn" type="button">Scorecard</button>
         <button class="btn btn-paper" id="menuHelpBtn" type="button">How to play</button>
+        <button class="btn btn-paper" id="menuTauntsBtn" type="button" aria-pressed="true">Taunts on</button>
+        <button class="btn btn-paper" id="menuSoundBtn" type="button" aria-pressed="true">Sound on</button>
         <button class="btn btn-paper" id="quitBtn" type="button">Quit round</button>
       </div>
       <div class="confirm" id="quitConfirm" hidden>
@@ -471,16 +555,22 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       <div class="eyebrow">Orientation</div>
       <h2>How to play</h2>
       <dl class="rules">
-        <dt>Putt</dt>
-        <dd>Press anywhere on the course and drag back, like a slingshot. The farther you pull, the harder you hit. Let go to putt, or slide back to where you started to cancel.</dd>
-        <dt>Keyboard</dt>
-        <dd>Arrow keys aim and set power. Hold Shift for fine control. Space or Enter putts.</dd>
+        <dt>Aim</dt>
+        <dd>Press and drag anywhere on the course to turn the putter toward that spot, or use the arrow keys (Shift for fine steps).</dd>
+        <dt>Swing</dt>
+        <dd>Hold Swing (or Space) to draw the putter back. The meter's marks show how far a putt rolls on a flat, medium green. Hold too long and it comes forward again. Let go to start the stroke, then tap again as the needle crosses the green zone. Tap early and the putt pushes right; tap late and it pulls left. Miss the tap entirely and you shank it. Esc cancels.</dd>
+        <dt>Read the green</dt>
+        <dd>Every green slopes a little, and the chevrons point downhill, so putts curve that way as they slow down. The swing meter also shows the green's speed: fast greens roll out further, slow ones come up short.</dd>
         <dt>Turns</dt>
         <dd>On one screen, each player finishes the hole, then hands over. Whoever scored best on the last hole tees off first.</dd>
         <dt>Online</dt>
         <dd>Choose Online room and send your coworkers the invite link. Everyone plays the same hole at the same time on their own device and sees each other's balls. The next hole starts when everyone has finished, or you can go on ahead.</dd>
         <dt>Scoring</dt>
         <dd>Seven strokes max per hole. Coffee spills and the shredder cost a stroke, and you play again from where you hit.</dd>
+        <dt>Rage mode</dt>
+        <dd>Waxed floors, bouncy walls, a smaller cup, faster everything, shaky hands and no aim guide. A Roomba roams the course and bumps your ball, hazards send you back to the tee, and the elevator sometimes picks the wrong floor. Ten strokes max per hole.</dd>
+        <dt>Taunts</dt>
+        <dd>The office has opinions about your putting. Press Heckle to hear them, or in an online room press Taunt to send your coworkers a line. Turn taunts off in the menu.</dd>
         <dt>Course</dt>
         <dd>Pin positions change every day. Everyone on today's pins, or on the same group code, plays the same layout, so scores compare fairly across devices.</dd>
       </dl>
@@ -498,15 +588,24 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   // ---------------------------------------------------------------------------
   const TAU = Math.PI * 2;
   const BALL_R = 7;
-  const CUP_R = 13;
   const WALL_T = 14;
-  const MAX_SHOT = 1050;      // world units per second at full power
-  const FRICTION = 250;       // rolling deceleration, units/s^2
-  const DRAG = 0.42;          // speed-proportional drag, 1/s
   const MAX_SPEED = 1500;
-  const WALL_E = 0.72;        // wall restitution
-  const STROKE_CAP = 7;
   const PHYS_DT = 1 / 240;
+  // Everything Rage mode changes lives here. friction is rolling deceleration (units/s^2), drag is
+  // speed-proportional (1/s), wallE is wall restitution, capFast/capSlope set how fast a ball can be
+  // going and still drop, and cap is the most strokes anyone takes on a hole.
+  const MODES = {
+    normal: {
+      rage: false, friction: 250, drag: 0.42, wallE: 0.72, cupR: 13, capFast: 430, capSlope: 230, cap: 7,
+      moverSpeed: 1, conveyor: 1, slope: 1, funnel: 1, wobble: false, guide: true, backToTee: false, wrongFloor: 0, roomba: false,
+    },
+    rage: {
+      rage: true, friction: 175, drag: 0.3, wallE: 0.86, cupR: 10.5, capFast: 340, capSlope: 210, cap: 10,
+      moverSpeed: 1.7, conveyor: 1.4, slope: 1.35, funnel: -0.7, wobble: true, guide: false, backToTee: true, wrongFloor: 0.3, roomba: true,
+    },
+  };
+  let PH = MODES.normal;
+  const MAX_CAP = MODES.rage.cap;
   const UNITS_PER_FT = 30;
   const BOX_W = 1000;
   const MAX_PLAYERS = 6;
@@ -524,6 +623,115 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   const PEER_TIMEOUT = 20000;
   const ROOM_WORDS = ['STAPLER', 'MEMO', 'INBOX', 'LOBBY', 'PANTRY', 'BAGEL', 'DONUT', 'LANYARD', 'PRINTER', 'ESPRESSO', 'STANDUP', 'OFFSITE', 'PAYDAY', 'CUBICLE', 'KEYCARD', 'COOLER', 'MUFFIN', 'AGENDA'];
   const onlineAllowed = !window.claude && typeof WebSocket === 'function';
+  // The office has opinions. Each taunt is [who, line].
+  const CAST = {
+    mgr: { name: 'Your Manager', initials: 'YM', color: '#3f63d4' },
+    hr: { name: 'HR', initials: 'HR', color: '#c2417e' },
+    it: { name: 'IT Support', initials: 'IT', color: '#1f8f6a' },
+    fac: { name: 'Facilities', initials: 'FA', color: '#b7791f' },
+    fin: { name: 'Finance', initials: 'FN', color: '#6b5bd6' },
+    legal: { name: 'Legal', initials: 'LG', color: '#44505f' },
+    ceo: { name: 'The CEO', initials: 'CEO', color: '#151b25' },
+    intern: { name: 'The Intern', initials: 'IN', color: '#e2553e' },
+  };
+  const LINES = {
+    lipout: [
+      ['mgr', 'So close. Let’s circle back to that one.'], ['intern', 'Even the cup didn’t want it.'],
+      ['fin', 'Almost doesn’t count. I checked the numbers.'], ['it', 'The cup rejected your request. Please try again later.'],
+      ['legal', 'For the record, that is technically a miss.'],
+    ],
+    coffee: [
+      ['fac', 'That’s the third spill this week. The mop is in the closet.'], ['hr', 'Please stop throwing things in the coffee.'],
+      ['intern', 'I’m not cleaning that up.'], ['fin', 'That was the good coffee.'],
+    ],
+    shred: [
+      ['legal', 'Shredded. We were never here.'], ['it', 'Your ball has been permanently deleted.'],
+      ['fin', 'That one’s coming out of your budget.'],
+    ],
+    tee: [
+      ['mgr', 'Back to square one. Like our Q3 strategy.'], ['ceo', 'We’re pivoting. Back to the tee.'],
+      ['hr', 'Let’s restart this conversation from the beginning.'],
+    ],
+    roomba: [
+      ['fac', 'The Roomba has right of way. It was in the memo.'], ['it', 'The Roomba is working as intended.'],
+      ['intern', 'I named the Roomba Kevin. Kevin doesn’t like you.'],
+    ],
+    floor: [
+      ['fac', 'That elevator has been out of order since 2019.'], ['mgr', 'Wrong floor. Happens to the best of us. Not usually this often.'],
+    ],
+    walls: [
+      ['hr', 'Please stop assaulting the walls.'], ['fac', 'Those walls are load-bearing. Probably.'], ['it', 'Have you tried hitting it softer?'],
+    ],
+    over: [
+      ['mgr', 'This will be reflected in your performance review.'], ['fin', 'We are well over budget on strokes.'],
+      ['hr', 'Let’s set up a quick one-on-one about your putting.'], ['ceo', 'Great hustle. Terrible results.'],
+    ],
+    pickup: [
+      ['mgr', 'We’re going to take this one off your plate.'], ['hr', 'Let’s just say you “completed” it.'], ['intern', 'Want me to finish it for you?'],
+    ],
+    short: [
+      ['mgr', 'Was that a putt or a suggestion?'], ['it', 'Your shot timed out.'], ['intern', 'Bold of you to call that a swing.'],
+    ],
+    idle: [
+      ['mgr', 'Any update on that putt?'], ['ceo', 'Time is money. Mostly yours.'], ['hr', 'Just checking in. How are we feeling about the putt?'],
+    ],
+    ace: [
+      ['mgr', 'A hole in one. Probably a fluke, but I’ll note it.'], ['ceo', 'Great. Now do it again in front of the board.'],
+      ['fin', 'Suspiciously good. We’re auditing that.'],
+    ],
+    birdie: [['mgr', 'Fine. That was acceptable.'], ['intern', 'Wow. Did you practice at home?']],
+    rage: [['ceo', 'Welcome to Mandatory Overtime. Nobody leaves until par.']],
+    heckle: [
+      ['mgr', 'Quick question: are you planning to putt today?'], ['hr', 'Reminder that effort is part of your review.'],
+      ['fin', 'Every stroke is billable.'], ['it', 'Please don’t blame the hardware.'],
+      ['intern', 'I believe in you. Nobody else does, but I do.'], ['ceo', 'Let’s make this putt a top priority.'],
+      ['legal', 'You’re doing great. That is not legal advice.'], ['fac', 'Mind the walls. We just painted.'],
+    ],
+  };
+  // Coworkers you overhear while you play. None of them are real people.
+  const COWORKERS = [
+    ['Pat', 'Accounting'], ['Sam', 'Sales'], ['Jordan', 'Ops'], ['Alex', 'IT'], ['Morgan', 'Warehouse'], ['Riley', 'Marketing'],
+    ['Casey', 'HR'], ['Taylor', 'Product'], ['Jamie', 'Design'], ['Drew', 'Facilities'], ['Quinn', 'Legal'], ['Avery', 'Support'],
+  ];
+  const CHATTER = {
+    office: [
+      'Did anyone else get the email about the parking lot?', 'Who keeps microwaving fish?', 'You’re on mute. You’re still on mute.',
+      'Can everyone see my screen?', 'Quick sync? It’ll only take an hour.', 'Who replied-all? Again?', 'The printer is jammed. Again.',
+      'There are donuts in the break room!', 'Has anyone seen my stapler?', 'My badge stopped working.', 'Can we push the 4:00 to 4:15?',
+      'Did you do your timesheet?', 'The Wi-Fi password changed again.', 'Who books a meeting for 4:55 on a Friday?',
+      'Let’s put a pin in that.', 'I’ll circle back after lunch.', 'Is it Friday yet?', 'Which one of you named the Roomba Kevin?',
+      'This could have been an email.', 'Does anyone know how to unfreeze Excel?',
+    ],
+    factory: [
+      'Forklift coming through!', 'Line 3 is down again.', 'Safety glasses, people.', 'The shipment is late. Again.',
+      'Who left the pallet jack in the aisle?', 'Anyone want overtime this weekend?', 'Break’s in ten.', 'Quality wants a word with you.',
+      'The robot arm is making that noise again.', 'Can someone mop up bay 4?', 'Loading dock needs two more hands.',
+      'The vending machine ate my dollar.', 'Which conveyor is the fast one?', 'Night shift left the radio on.',
+    ],
+  };
+  const MEMOS = {
+    office: [
+      'Casual Friday now starts Thursday at 3 PM.', 'The fridge gets cleaned out at 5. No exceptions.', 'IT reminds you never to share your password. Not even with the Intern.',
+      'Facilities says the elevator is fixed. Probably.', 'HR asks that you please stop naming the Roomba.', 'Expense reports are due Friday.',
+      'The parking lot gets repaved on Monday. Good luck.', 'The coffee machine now needs a badge. We are sorry.', 'Congrats to Sales on a record quarter!',
+    ],
+    factory: [
+      'Forklift certification renewals are due Friday.', 'Hard hats are not optional. Neither is the hairnet.', 'Line 2 is running double shifts this week.',
+      'The loading dock door sticks. Kick it gently.', 'Safety meeting at shift change. There will be pizza.', 'Whoever labeled the robot arm “Greg”: it stuck.',
+      'Please stop racing the pallet jacks.', 'The vending machine has been refilled.', 'Overtime sign-up is on the break room board.',
+    ],
+  };
+  // What you can send coworkers in an online room. Only these travel over the wire, as numbers.
+  const TAUNT_PRESETS = [
+    'Per my last email: aim for the hole.',
+    'Bold strategy. Let’s see if it pays off.',
+    'Take your time. Seriously. All of it.',
+    'That’s going in your performance review.',
+    'Is this your first day?',
+    'Can we take this offline?',
+    'New personal worst?',
+    'I’d like to thank my caddie.',
+  ];
   const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   // ---------------------------------------------------------------------------
@@ -533,6 +741,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   const lerp = (a, b, t) => a + (b - a) * t;
   const smoothstep = t => t * t * (3 - 2 * t);
   const $ = id => document.getElementById(id);
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
   function hashStr(s) {
     let h = 2166136261 >>> 0;
@@ -609,10 +818,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   // ---------------------------------------------------------------------------
   // The course: nine holes, 9 AM to 5 PM
   // ---------------------------------------------------------------------------
-  const HOLES = [
+  const OFFICE_HOLES = [
     {
       name: 'Badge In', time: '9:00 AM', short: '9A', par: 2,
       tip: 'Ease into the day. Straight down the hall.',
+      rageName: 'Badge Declined', rageTip: 'Your badge doesn’t work today. Neither does the floor wax.',
+      roomba: [760, 300],
       course: [[[80, 220], [560, 220], [620, 180], [900, 180], [940, 220], [940, 380], [900, 420], [620, 420], [560, 380], [80, 380]]],
       tee: [150, 300],
       pins: [[850, 300], [858, 236], [858, 364]],
@@ -621,6 +832,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     {
       name: 'Stand-up', time: '10:00 AM', short: '10A', par: 2,
       tip: 'Nobody sits at stand-up. Bank it around the table.',
+      rageName: 'Stand-up (Running Long)', rageTip: 'The table is waxed, the walls are springy, and the Roomba is in the meeting.',
+      roomba: [500, 150],
       course: [[[260, 90], [740, 90], [820, 170], [820, 430], [740, 510], [260, 510], [180, 430], [180, 170]]],
       tee: [250, 300],
       pins: [[750, 300], [720, 180], [720, 420]],
@@ -629,6 +842,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     {
       name: 'Inbox', time: '11:00 AM', short: '11A', par: 3,
       tip: 'The mail cart never stops. Time your approach.',
+      rageName: 'Inbox (4,012 Unread)', rageTip: 'The mail cart had three espressos.',
+      roomba: [300, 470],
       course: [[[80, 400], [780, 400], [780, 80], [920, 80], [920, 460], [860, 520], [80, 520]]],
       tee: [150, 460],
       pins: [[850, 140], [815, 178], [885, 178]],
@@ -638,6 +853,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     {
       name: 'Lunch Rush', time: '12:00 PM', short: '12P', par: 3,
       tip: 'Thread the dry gap between the coffee spills, or take the long way round.',
+      rageName: 'Lunch (Stolen)', rageTip: 'Someone ate your lunch. Coffee sends you back to the tee.',
+      roomba: [640, 140],
       course: [[[120, 110], [880, 110], [930, 160], [930, 440], [880, 490], [120, 490], [70, 440], [70, 160]]],
       tee: [150, 300],
       pins: [[850, 300], [835, 205], [835, 395]],
@@ -650,6 +867,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     {
       name: 'Food Coma', time: '1:00 PM', short: '1P', par: 3,
       tip: 'The shag rug slows everything down, and the beanbags swallow shots.',
+      rageName: 'Nap Denied', rageTip: 'The Roomba is awake, and it has opinions.',
+      roomba: [820, 380],
       course: [[[80, 170], [160, 90], [920, 90], [920, 430], [840, 510], [80, 510]]],
       tee: [150, 445],
       pins: [[840, 165], [862, 300], [690, 130]],
@@ -663,6 +882,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     {
       name: 'Copy Room', time: '2:00 PM', short: '2P', par: 3,
       tip: 'The paper feed drags you sideways toward the shredder. Don’t stop on it.',
+      rageName: 'Paper Jam', rageTip: 'The paper feed is cranked up and the shredder is hungry.',
+      roomba: [500, 450],
       course: [[[230, 60], [770, 60], [820, 110], [820, 510], [770, 560], [230, 560], [180, 510], [180, 110]]],
       tee: [500, 505],
       pins: [[500, 150], [360, 160], [640, 160]],
@@ -679,6 +900,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     {
       name: 'Coffee Run', time: '3:00 PM', short: '3P', par: 3,
       tip: 'Hit it hard enough to crest the ramp. The cup sits in a bowl.',
+      rageName: 'Decaf', rageTip: 'The cup is on top of a hill now. Nobody asked for this.',
+      roomba: [720, 440],
       course: [[[80, 150], [380, 150], [380, 220], [560, 220], [560, 120], [880, 120], [930, 170], [930, 430], [880, 480], [560, 480], [560, 380], [380, 380], [380, 450], [80, 450]]],
       tee: [150, 300],
       pins: [[800, 300], [760, 200], [760, 400]],
@@ -692,6 +915,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     {
       name: 'Elevator', time: '4:00 PM', short: '4P', par: 3,
       tip: 'Wait for the doors. The car drops you off on 12.',
+      rageName: 'Out of Order', rageTip: 'The elevator sometimes takes you back down. Facilities is aware.',
+      roomba: [650, 400],
       course: [
         [[60, 140], [200, 140], [200, 80], [280, 80], [280, 140], [440, 140], [440, 460], [400, 500], [100, 500], [60, 460]],
         [[600, 100], [900, 100], [940, 140], [940, 460], [560, 460], [560, 140]],
@@ -716,6 +941,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     {
       name: 'Clock Out', time: '5:00 PM', short: '5P', par: 4,
       tip: 'Go around the clock or time the hands. Mind the spill by the door.',
+      rageName: 'Mandatory Overtime', rageTip: 'The clock is running fast and nobody leaves until par.',
+      roomba: [300, 420],
       noMirror: true,
       course: [[[70, 120], [130, 60], [870, 60], [930, 120], [930, 480], [870, 540], [130, 540], [70, 480]]],
       tee: [140, 470],
@@ -732,12 +959,23 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       decor: [{ type: 'clock', x: 500, y: 300, r: 150 }],
     },
   ];
-  const PAR_TOTAL = HOLES.reduce((s, h) => s + h.par, 0);
   // Late-day light: cool in the morning, golden by 5 PM.
-  const TINTS = [
+  const OFFICE_TINTS = [
     [175, 205, 255, 0.07], [195, 220, 255, 0.05], [230, 240, 255, 0.03], [255, 255, 255, 0],
     [255, 246, 225, 0.02], [255, 232, 196, 0.04], [255, 214, 160, 0.06], [255, 190, 125, 0.09], [255, 158, 90, 0.13],
   ];
+  const COURSES = {
+    office: { id: 'office', name: 'Head Office', shift: 'Day shift, 9 AM to 5 PM', holes: OFFICE_HOLES, tints: OFFICE_TINTS, lastLabel: 'Clock out', title: 'Nine-to-Five Links' },
+  };
+  let COURSE = COURSES.office;
+  let HOLES = COURSE.holes;
+  let PAR_TOTAL = HOLES.reduce((sum, h) => sum + h.par, 0);
+  function setCourse(id) {
+    COURSE = COURSES[id] || COURSES.office;
+    HOLES = COURSE.holes;
+    PAR_TOTAL = HOLES.reduce((sum, h) => sum + h.par, 0);
+  }
+  const DEPTS = ['Engineering', 'Sales', 'Marketing', 'Product', 'Design', 'Finance', 'HR', 'Operations', 'Customer Support', 'IT', 'Warehouse', 'Legal', 'Interns'];
 
   function todayKey() {
     const d = new Date();
@@ -749,7 +987,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function variantsFor(key) {
     return HOLES.map((h, i) => {
       const r = mulberry32(hashStr(key + '#' + i));
-      return { pin: Math.floor(r() * h.pins.length), mirror: r() < 0.5 };
+      const pin = Math.floor(r() * h.pins.length), mirror = r() < 0.5;
+      // Each green also gets a break and a speed for the day. They're drawn after the pin and the flip so
+      // those stay where they were. The first hole never breaks much.
+      const tilts = i === 0 ? [0, 14] : [0, 18, 28, 38];
+      return { pin, mirror, tilt: tilts[Math.floor(r() * tilts.length)], tiltA: r() * TAU, speed: 0.85 + r() * 0.33 };
     });
   }
   const normCode = s => String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
@@ -769,7 +1011,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const mx = x => (M ? BOX_W - x : x);
     const mpt = p => [mx(p[0]), p[1]];
     const mpoly = pts => { const r = pts.map(mpt); if (M) r.reverse(); return r; };
-    const h = { idx, def, name: def.name, par: def.par, mirror: M, t: 0 };
+    const h = { idx, def, name: PH.rage ? def.rageName : def.name, tip: PH.rage ? def.rageTip : def.tip, par: def.par, mirror: M, t: 0 };
     h.course = def.course.map(mpoly);
     h.tee = mpt(def.tee);
     h.cup = mpt(def.pins[(variant ? variant.pin : 0) % def.pins.length]);
@@ -778,9 +1020,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     h.zones = (def.zones || []).map(z => {
       const o = { ...z };
       if (z.pts) { o.pts = mpoly(z.pts); o.bb = bboxOf(o.pts); }
-      if (z.ax != null) o.ax = M ? -z.ax : z.ax;
-      if (z.ay == null) o.ay = 0;
+      if (z.ax != null) o.ax = (M ? -z.ax : z.ax) * PH.slope;
+      o.ay = (z.ay || 0) * PH.slope;
       if (z.dir) o.dir = [M ? -z.dir[0] : z.dir[0], z.dir[1]];
+      if (z.accel) { o.accel = z.accel * PH.conveyor; o.max = z.max * (1 + (PH.conveyor - 1) * 0.75); }
+      if (z.strength) o.strength = z.strength * PH.funnel;
       if (z.at === 'cup') { o.x = h.cup[0]; o.y = h.cup[1]; }
       return o;
     });
@@ -798,16 +1042,25 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       const o = { ...m };
       if (m.type === 'spinner') {
         o.x = mx(m.x);
-        if (M) { o.speed = -m.speed; o.a0 = Math.PI - m.a0; }
+        o.speed = (M ? -m.speed : m.speed) * PH.moverSpeed;
+        if (M) o.a0 = Math.PI - m.a0;
         o.angle = o.a0;
       } else if (m.type === 'slider') {
         o.a = mpt(m.a); o.b = mpt(m.b); o.cx = o.a[0]; o.cy = o.a[1]; o.vx = 0; o.vy = 0;
+        o.period = m.period / PH.moverSpeed;
       } else if (m.type === 'doors') {
         if (M) { o.x0 = BOX_W - m.x1; o.x1 = BOX_W - m.x0; }
         o.timer = 0; o.open = 0; o.vo = 0;
+        // Seconds spent closed, opening, open and closing. Rage mode gives you a much shorter window.
+        o.phases = PH.rage ? [1.0, 0.3, 0.85, 0.3] : [1.5, 0.5, 1.7, 0.5];
+        o.period = o.phases.reduce((a, b) => a + b, 0);
       }
       return o;
     });
+    if (PH.roomba && def.roomba) {
+      const [rx, ry] = mpt(def.roomba);
+      h.movers.push({ type: 'roomba', x: rx, y: ry, sx: rx, sy: ry, r: 16, speed: 85, dir: Math.random() * TAU, vx: 0, vy: 0, wander: 2 + Math.random() * 3, cool: 0 });
+    }
     h.teleports = (def.teleports || []).map(tp => ({
       rect: M ? [BOX_W - tp.rect[0] - tp.rect[2], tp.rect[1], tp.rect[2], tp.rect[3]] : tp.rect.slice(),
       to: mpt(tp.to),
@@ -822,8 +1075,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       return o;
     });
     h.segs = [];
-    for (const poly of h.course) pushSegs(h.segs, poly, WALL_E);
-    for (const b of h.blocks) pushSegs(h.segs, b.pts, b.e != null ? b.e : WALL_E);
+    for (const poly of h.course) pushSegs(h.segs, poly, PH.wallE);
+    for (const b of h.blocks) pushSegs(h.segs, b.pts, b.e != null ? b.e : PH.wallE);
     if (def.frame) {
       const f = def.frame;
       h.frame = M ? [BOX_W - f[2], f[1], BOX_W - f[0], f[3]] : f.slice();
@@ -836,8 +1089,13 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const th = (lerp(160, 20, idx / 8) * Math.PI) / 180;
     const len = 0.78 + (0.5 * Math.abs(idx - 4)) / 4;
     h.shadow = [Math.cos(th) * 6.5 * len, Math.sin(th) * 6.5 * len + 2];
-    const tc = TINTS[idx];
+    const tc = COURSE.tints[idx] || [0, 0, 0, 0];
     h.tint = tc[3] > 0 ? `rgba(${tc[0]},${tc[1]},${tc[2]},${tc[3]})` : null;
+    // The green: a gentle tilt that bends every putt, and a speed shown on the swing meter like a stimp reading.
+    const tilt = (variant && variant.tilt ? variant.tilt : 0) * PH.slope, ta = variant && variant.tiltA ? variant.tiltA : 0;
+    h.tilt = [Math.cos(ta) * tilt, Math.sin(ta) * tilt];
+    h.fm = variant && variant.speed ? variant.speed : 1;
+    h.stimp = Math.round(10 / h.fm);
     return h;
   }
 
@@ -910,6 +1168,28 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       cheer() { [523, 659, 784, 1047, 1319].forEach((f, i) => tone({ freq: f, type: 'triangle', dur: 0.3, vol: 0.16, delay: i * 0.085 })); },
       soft() { [523, 659].forEach((f, i) => tone({ freq: f, type: 'triangle', dur: 0.22, vol: 0.12, delay: i * 0.09 })); },
       thud() { tone({ freq: 160, to: 70, dur: 0.18, vol: 0.2 }); },
+      sad() {
+        [392, 370, 349].forEach((f, i) => tone({ freq: f, to: f * 0.97, type: 'sawtooth', dur: 0.3, vol: 0.07, delay: i * 0.32 }));
+        tone({ freq: 330, to: 262, type: 'sawtooth', dur: 0.95, vol: 0.07, delay: 0.96 });
+      },
+      ooh() { tone({ freq: 560, to: 300, type: 'triangle', dur: 0.55, vol: 0.12 }); },
+      blip() { tone({ freq: 880, dur: 0.07, vol: 0.06 }); tone({ freq: 1320, dur: 0.1, vol: 0.05, delay: 0.07 }); },
+      tick() { tone({ freq: 1800, type: 'square', dur: 0.02, vol: 0.03 }); },
+      // For the celebrations.
+      boom() { noise({ dur: 0.7, vol: 0.3, type: 'lowpass', freq: 900, to: 90, q: 0.7 }); tone({ freq: 110, to: 45, dur: 0.4, vol: 0.2 }); },
+      whistle() { tone({ freq: 700, to: 1900, dur: 0.55, vol: 0.04 }); },
+      crackle() { for (let i = 0; i < 6; i++) noise({ dur: 0.04, vol: 0.07, type: 'highpass', freq: 3000, q: 0.7, delay: 0.12 + i * 0.07 + Math.random() * 0.05 }); },
+      pop() { noise({ dur: 0.08, vol: 0.26, type: 'highpass', freq: 1400, q: 0.8 }); },
+      stamp() { tone({ freq: 120, to: 50, dur: 0.22, vol: 0.3 }); noise({ dur: 0.12, vol: 0.18, type: 'lowpass', freq: 1200, q: 0.8 }); },
+      whoosh() { noise({ dur: 0.6, vol: 0.12, type: 'bandpass', freq: 500, to: 2400, q: 1.4 }); },
+      quack() { for (const d of [0, 0.2]) { tone({ freq: 520, to: 380, type: 'sawtooth', dur: 0.13, vol: 0.08, delay: d }); tone({ freq: 1040, to: 760, type: 'square', dur: 0.1, vol: 0.025, delay: d }); } },
+      clink() { tone({ freq: 2350, type: 'triangle', dur: 0.4, vol: 0.12 }); tone({ freq: 3140, dur: 0.3, vol: 0.06, delay: 0.01 }); },
+      boing() { tone({ freq: 180, to: 520, dur: 0.18, vol: 0.1 }); },
+      printer(n) { for (let i = 0; i < n; i++) noise({ dur: 0.05, vol: 0.06, type: 'bandpass', freq: 2200 + (i % 3) * 400, q: 3, delay: i * 0.075 }); },
+      notes(list, type, vol, step) { list.forEach((f, i) => { if (f) tone({ freq: f, type, dur: step * 0.9, vol, delay: i * step }); }); },
+      cricket() { for (const d of [0, 0.06, 0.12, 0.6, 0.66, 0.72]) tone({ freq: 4200, type: 'square', dur: 0.03, vol: 0.015, delay: d }); },
+      deflate() { tone({ freq: 700, to: 140, type: 'sawtooth', dur: 1.1, vol: 0.045 }); noise({ dur: 0.75, vol: 0.05, type: 'bandpass', freq: 1600, to: 500, q: 2 }); },
+      rumble() { noise({ dur: 0.75, vol: 0.18, type: 'lowpass', freq: 220, to: 80, q: 0.6 }); },
     };
   })();
 
@@ -925,6 +1205,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     on: false, code: '', me: { id: '', name: '', color: 0 }, peers: new Map(),
     round: null, status: 'off', joinedAt: 0, beatAt: 0, moveAt: 0, gateTimer: 0, replyTimer: 0, tick: 0,
     dirty: true, connected: 0, hudH: 0,
+    // Room-wide choices for the next tee-off; whoever changed them last wins.
+    settings: { rage: false, course: 'office' }, settingsAt: 0, settingsBy: '',
   };
   const fxList = [];
   const kbAim = { active: false, angle: 0, power: 0.5 };
@@ -953,8 +1235,25 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (d === 3) return 'Triple bogey';
     return '+' + d;
   }
-  const shotSpeed = p => MAX_SHOT * Math.pow(clamp(p, 0, 1), 1.3);
+  // Power sets how far the putt would roll on a flat green at normal speed, from a couple of ball-widths
+  // at the lightest pull to about a full hole's length. Speed is worked back from the rolling friction, so
+  // the bottom of the range is as usable as the top. Rage mode's waxed floors still send it further.
+  const MIN_ROLL = 20, MAX_ROLL = 1060;
+  function rollDistance(v) {
+    const a = MODES.normal.friction, k = MODES.normal.drag;
+    return v / k - (a / (k * k)) * Math.log(1 + (k * v) / a);
+  }
+  function shotSpeed(power) {
+    const t = clamp((power - 0.03) / 0.97, 0, 1);
+    const want = MIN_ROLL + (MAX_ROLL - MIN_ROLL) * Math.pow(t, 1.5);
+    let lo = 0, hi = MAX_SPEED;
+    for (let i = 0; i < 40; i++) { const mid = (lo + hi) / 2; if (rollDistance(mid) < want) lo = mid; else hi = mid; }
+    return (lo + hi) / 2;
+  }
 
+  const emptyStats = () => ({ aces: [], spills: 0, bounces: 0, longest: 0, lips: 0, tees: 0, bumps: 0 });
+  const holeName = i => (PH.rage ? HOLES[i].rageName : HOLES[i].name);
+  function setMode(rage) { PH = rage ? MODES.rage : MODES.normal; G.rage = !!rage; }
   function newBall(x, y, color) {
     return { x, y, vx: 0, vy: 0, state: 'rest', color, scale: 1, trail: [], slowT: 0, rollT: 0, sinkT: 0, splashT: 0, sx: x, sy: y };
   }
@@ -987,12 +1286,53 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (spin) { wvx = -spin.speed * (cy - spin.y); wvy = spin.speed * (cx - spin.x); }
     return respond(b, nx, ny, e, wvx, wvy);
   }
-  function collideCircle(b, x, y, r, e) {
+  function collideCircle(b, x, y, r, e, wvx = 0, wvy = 0) {
     const dx = b.x - x, dy = b.y - y, rr = r + BALL_R, d2 = dx * dx + dy * dy;
     if (d2 >= rr * rr) return 0;
     const d = Math.sqrt(d2) || 1e-6, nx = dx / d, ny = dy / d;
     b.x = x + nx * rr; b.y = y + ny * rr;
-    return respond(b, nx, ny, e, 0, 0);
+    return respond(b, nx, ny, e, wvx, wvy);
+  }
+  // Pushes a disc of radius r out of a wall segment; returns the push direction if it touched.
+  function discOffSeg(m, ax, ay, bx, by) {
+    const abx = bx - ax, aby = by - ay, l2 = abx * abx + aby * aby;
+    const t = l2 > 0 ? clamp(((m.x - ax) * abx + (m.y - ay) * aby) / l2, 0, 1) : 0;
+    const dx = m.x - (ax + abx * t), dy = m.y - (ay + aby * t), d = Math.hypot(dx, dy);
+    if (d >= m.r || d < 1e-6) return null;
+    m.x += (dx / d) * (m.r - d); m.y += (dy / d) * (m.r - d);
+    return [dx / d, dy / d];
+  }
+  function discOffCircle(m, c) {
+    const dx = m.x - c.x, dy = m.y - c.y, d = Math.hypot(dx, dy), rr = m.r + c.r;
+    if (d >= rr || d < 1e-6) return null;
+    m.x = c.x + (dx / d) * rr; m.y = c.y + (dy / d) * rr;
+    return [dx / d, dy / d];
+  }
+  // The Roomba wanders, bounces off walls, turns away from balls it bumps, and never stops.
+  function updateRoomba(h, m, b, dt) {
+    const px = m.x, py = m.y;
+    m.cool -= dt;
+    m.wander -= dt;
+    if (m.wander <= 0) { m.dir += (Math.random() - 0.5) * 1.6; m.wander = 2 + Math.random() * 3; }
+    if (b && m.cool <= 0 && (b.state === 'rest' || b.state === 'rolling')) {
+      const dx = m.x - b.x, dy = m.y - b.y;
+      if (dx * dx + dy * dy < (m.r + BALL_R + 1.5) ** 2) {
+        m.dir = Math.atan2(dy, dx) + (Math.random() - 0.5) * 1.2;
+        m.cool = 0.6;
+      }
+    }
+    m.x += Math.cos(m.dir) * m.speed * dt;
+    m.y += Math.sin(m.dir) * m.speed * dt;
+    let n = null;
+    for (const s of h.segs) n = discOffSeg(m, s.ax, s.ay, s.bx, s.by) || n;
+    for (const c of h.bumpers) n = discOffCircle(m, c) || n;
+    if (n) {
+      const dx = Math.cos(m.dir), dy = Math.sin(m.dir), dot = dx * n[0] + dy * n[1];
+      if (dot < 0) m.dir = Math.atan2(dy - 2 * dot * n[1], dx - 2 * dot * n[0]) + (Math.random() - 0.5) * 0.9;
+    }
+    if (!h.course.some(p => pointInPoly(m.x, m.y, p))) { m.x = m.sx; m.y = m.sy; }
+    m.vx = (m.x - px) / dt;
+    m.vy = (m.y - py) / dt;
   }
   function collideBox(b, x0, y0, x1, y1, e, wvx, wvy) {
     const cx = clamp(b.x, x0, x1), cy = clamp(b.y, y0, y1);
@@ -1010,11 +1350,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     b.x += nx * pen; b.y += ny * pen;
     return respond(b, nx, ny, e, wvx, wvy);
   }
-  function doorOpenness(t) {
-    if (t < 1.5) return 0;
-    if (t < 2.0) return smoothstep((t - 1.5) / 0.5);
-    if (t < 3.7) return 1;
-    return 1 - smoothstep((t - 3.7) / 0.5);
+  function doorOpenness(t, ph) {
+    const [closed, opening, open, closing] = ph;
+    if (t < closed) return 0;
+    if (t < closed + opening) return smoothstep((t - closed) / opening);
+    if (t < closed + opening + open) return 1;
+    return 1 - smoothstep(clamp((t - closed - opening - open) / closing, 0, 1));
   }
   function doorPanels(m) {
     const mid = (m.x0 + m.x1) / 2, half = (m.x1 - m.x0) / 2, o = m.open;
@@ -1037,8 +1378,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         // Like a real elevator, the doors wait while something is in the doorway.
         const inDoorway = b && (b.state === 'rest' || b.state === 'rolling') && b.x > m.x0 - 6 && b.x < m.x1 + 6 && b.y > m.y - 24 && b.y < m.y + 14;
         if (!(inDoorway && m.open > 0.001)) m.timer += dt;
-        const o = doorOpenness(m.timer % m.period);
+        const o = doorOpenness(m.timer % m.period, m.phases);
         m.vo = (o - m.open) / dt; m.open = o;
+      } else if (m.type === 'roomba') {
+        updateRoomba(h, m, b, dt);
       }
     }
   }
@@ -1052,6 +1395,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         imp = Math.max(imp, collideBox(b, m.cx - m.w / 2, m.cy - m.h / 2, m.cx + m.w / 2, m.cy + m.h / 2, 0.7, m.vx, m.vy));
       } else if (m.type === 'doors') {
         for (const p of doorPanels(m)) imp = Math.max(imp, collideBox(b, p.x0, p.y0, p.x1, p.y1, 0.6, p.vx, 0));
+      } else if (m.type === 'roomba') {
+        const i = collideCircle(b, m.x, m.y, m.r, 0.75, m.vx, m.vy);
+        if (i > 0) h.bumpedByRoomba = true;
+        imp = Math.max(imp, i);
       }
     }
     return imp;
@@ -1079,17 +1426,19 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (b.state === 'rest') {
       if (!h.movers.length) return;
       b.vx = 0; b.vy = 0;
+      h.bumpedByRoomba = false;
       collideMovers(h, b);
-      if (Math.hypot(b.vx, b.vy) > 4) { b.state = 'rolling'; b.slowT = 0; b.rollT = 0; onPushed(); }
+      if (Math.hypot(b.vx, b.vy) > 4) { b.state = 'rolling'; b.slowT = 0; b.rollT = 0; b.minCup = Infinity; b.hits = 0; onPushed(h.bumpedByRoomba); }
       else { b.vx = 0; b.vy = 0; }
       return;
     }
     if (b.state !== 'rolling') return;
 
     const sf = surfaceAt(h, b.x, b.y);
-    let fric = FRICTION * sf.fric;
-    b.vx += sf.ax * dt; b.vy += sf.ay * dt;
-    let force = Math.hypot(sf.ax, sf.ay);
+    let fric = PH.friction * sf.fric * h.fm;
+    const gx = sf.ax + h.tilt[0], gy = sf.ay + h.tilt[1];
+    b.vx += gx * dt; b.vy += gy * dt;
+    let force = Math.hypot(gx, gy);
     if (sf.conv) {
       const c = sf.conv, along = b.vx * c.dir[0] + b.vy * c.dir[1];
       if (along < c.max) { const add = Math.min(c.accel * dt, c.max - along); b.vx += c.dir[0] * add; b.vy += c.dir[1] * add; }
@@ -1098,7 +1447,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     }
     let sp = Math.hypot(b.vx, b.vy);
     if (sp > 0) {
-      const drop = (fric + DRAG * sp) * dt;
+      const drop = (fric + PH.drag * sp) * dt;
       if (drop >= sp) { b.vx = 0; b.vy = 0; sp = 0; }
       else { const k = (sp - drop) / sp; b.vx *= k; b.vy *= k; sp -= drop; }
     }
@@ -1111,15 +1460,16 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       for (const c of h.bumpers) { const i = collideCircle(b, c.x, c.y, c.r, c.e); if (i > imp) imp = i; }
       const mi = collideMovers(h, b); if (mi > imp) imp = mi;
     }
-    if (imp > 45) onImpact(imp, b);
+    if (imp > 45) { onImpact(imp, b); b.hits = (b.hits || 0) + 1; }
 
     if (!Number.isFinite(b.x) || !Number.isFinite(b.y) || !h.course.some(p => pointInPoly(b.x, b.y, p))) { outOfBounds(); return; }
 
     // The cup: slow balls drop, fast ones can lip out.
     const cdx = h.cup[0] - b.x, cdy = h.cup[1] - b.y, cd = Math.hypot(cdx, cdy);
-    if (cd < CUP_R) {
+    if (cd < b.minCup) b.minCup = cd;
+    if (cd < PH.cupR) {
       const v = Math.hypot(b.vx, b.vy);
-      if (v < 430 - 230 * (cd / CUP_R)) { startSink(); return; }
+      if (v < PH.capFast - PH.capSlope * (cd / PH.cupR)) { startSink(); return; }
       const pull = (2600 * dt) / (cd || 1);
       b.vx += cdx * pull; b.vy += cdy * pull;
       const damp = 1 - 1.4 * dt; b.vx *= damp; b.vy *= damp;
@@ -1194,6 +1544,838 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
 
   // ---------------------------------------------------------------------------
+  // Celebrations: a different show every time a ball drops, drawn in screen pixels over everything
+  // ---------------------------------------------------------------------------
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const k01 = (t, a, b) => clamp((t - a) / (b - a), 0, 1);
+  const easeOut = k => 1 - Math.pow(1 - k, 3);
+  const easeBack = k => 1 + 2.7 * Math.pow(k - 1, 3) + 1.7 * Math.pow(k - 1, 2);
+  const PARTY_COLORS = ['#ffd447', '#ff7a59', '#5bc0ff', '#c39bff', '#ff8fc7', '#35d07f', '#ffffff'];
+  const DISPLAY_FONT = '"Big Shoulders Display", "Arial Narrow", sans-serif';
+  const PROMO_TITLES = ['VP of Putting', 'Chief Putting Officer', 'Head of Holes', 'Senior Director of Short Game', 'Principal Putt Engineer', 'Regional Manager of Greens', 'EVP of Birdies', 'Distinguished Putter', 'Global Head of Tap-ins'];
+  const STAMPS = {
+    par: ['MEETS EXPECTATIONS', 'APPROVED', 'LGTM', 'ON TRACK', 'NO NOTES', 'AS PLANNED', 'ON BUDGET', 'SIGNED OFF', 'IN SCOPE'],
+    bad: ['NEEDS IMPROVEMENT', 'SEE ME', 'PER MY LAST EMAIL', "LET'S CIRCLE BACK", 'TAKE IT OFFLINE', "WON'T FIX", 'OVER BUDGET', 'BLOCKED', 'MISSED THE DEADLINE'],
+    rage: ['FINE.', "DON'T GET USED TO IT", "BEGINNER'S LUCK", 'HR HAS BEEN NOTIFIED', 'UNDER INVESTIGATION', 'SUSPICIOUS', 'DO IT AGAIN. WE DARE YOU'],
+  };
+  const STICKY_WORDS = ['nice!', 'wow', '+1', 'LGTM', 'ship it', 'legend', '10/10', 'kudos', 'clean', 'big win', 'so good', 'called it', 'MVP', 'teach me', 'no notes', 'huge'];
+  const DUCK_LINES = ['Quack.', 'Have you tried turning it off and on again?', 'It works on my machine.', 'Quack quack. Ship it.', 'That was the bug. You fixed it.', 'I only listen. You did this.'];
+  function toScreen(x, y) { return { x: view.a * x + view.c * y + view.e, y: view.b * x + view.d * y + view.f }; }
+  function showText(g, text, x, y, size, color, o = {}) {
+    g.save();
+    g.translate(x, y);
+    if (o.rot) g.rotate(o.rot);
+    if (o.scale != null) g.scale(o.scale, o.scale);
+    g.font = `${o.weight || 900} ${size}px ${o.font || DISPLAY_FONT}`;
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    const max = o.max || 4000;
+    if (o.shadow !== false) { g.fillStyle = 'rgba(0,0,0,0.32)'; g.fillText(text, 0, 3, max); }
+    g.fillStyle = color; g.fillText(text, 0, 0, max);
+    g.restore();
+  }
+  // Bits are the loose pieces of a show: confetti, sparks, sprinkles, ink. Gravity is in pixels per second squared.
+  function stepBits(bits, dt, grav) {
+    for (let i = bits.length - 1; i >= 0; i--) {
+      const p = bits[i];
+      if ((p.life -= dt) <= 0) { bits.splice(i, 1); continue; }
+      p.vy += grav * (p.g != null ? p.g : 1) * dt;
+      const k = Math.max(0, 1 - (p.drag || 0) * dt);
+      p.vx *= k; p.vy *= k;
+      p.x += p.vx * dt + (p.sway ? Math.sin(p.life * 6 + p.sway * 9) * p.sway * 40 * dt : 0);
+      p.y += p.vy * dt;
+      if (p.vr) p.rot += p.vr * dt;
+      if (p.trail) { p.trail.push(p.x, p.y); if (p.trail.length > 28) p.trail.splice(0, 2); }
+    }
+  }
+  function drawBits(g, bits) {
+    for (const p of bits) {
+      g.globalAlpha = Math.min(1, p.life / (p.fade || 0.5));
+      if (p.k === 'conf') {
+        g.save(); g.translate(p.x, p.y); g.rotate(p.rot); g.scale(1, 0.2 + Math.abs(Math.cos(p.rot * 1.7)));
+        g.fillStyle = p.c; g.fillRect(-p.s, -p.s * 0.55, p.s * 2, p.s * 1.1);
+        g.restore();
+      } else if (p.k === 'ribbon' && p.trail.length > 4) {
+        g.strokeStyle = p.c; g.lineWidth = p.s; g.lineCap = 'round'; g.lineJoin = 'round';
+        g.beginPath(); g.moveTo(p.trail[0], p.trail[1]);
+        for (let i = 2; i < p.trail.length; i += 2) g.lineTo(p.trail[i] + Math.sin(i * 0.9 + p.life * 8) * 3, p.trail[i + 1]);
+        g.stroke();
+      } else {
+        g.fillStyle = p.c; circle(g, p.x, p.y, p.s); g.fill();
+      }
+    }
+    g.globalAlpha = 1;
+  }
+  function burstBits(bits, x, y, n, o) {
+    if (reduceMotion) n = Math.ceil(n / 4);
+    for (let i = 0; i < n; i++) {
+      const a = o.a != null ? o.a + rand(-o.spread, o.spread) : rand(0, TAU), sp = rand(o.sp[0], o.sp[1]);
+      bits.push({ k: o.k || 'spark', x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, rot: rand(0, TAU), vr: rand(-12, 12), s: rand(o.s[0], o.s[1]),
+        c: o.c || pick(PARTY_COLORS), life: rand(o.life[0], o.life[1]), g: o.g, drag: o.drag, sway: o.sway ? rand(0.4, 1.2) : 0, fade: o.fade, trail: o.k === 'ribbon' ? [] : null });
+    }
+  }
+
+  // The office mascots: a coffee mug, a desk plant, a rubber duck, the printer and the Roomba.
+  function drawFace(g, x, y, s, t) {
+    const blink = (t % 3.1) < 0.12;
+    g.fillStyle = '#1a1d22';
+    if (blink) { g.fillRect(x - s * 0.27, y - s * 0.015, s * 0.14, s * 0.03); g.fillRect(x + s * 0.13, y - s * 0.015, s * 0.14, s * 0.03); }
+    else { circle(g, x - s * 0.2, y, s * 0.065); g.fill(); circle(g, x + s * 0.2, y, s * 0.065); g.fill(); }
+    g.strokeStyle = '#1a1d22'; g.lineWidth = Math.max(1.5, s * 0.045); g.lineCap = 'round';
+    g.beginPath(); g.arc(x, y + s * 0.06, s * 0.14, 0.15 * Math.PI, 0.85 * Math.PI); g.stroke();
+    g.fillStyle = 'rgba(255,110,120,0.45)';
+    circle(g, x - s * 0.32, y + s * 0.11, s * 0.06); g.fill(); circle(g, x + s * 0.32, y + s * 0.11, s * 0.06); g.fill();
+  }
+  function drawHat(g, x, y, s, c) {
+    g.save(); g.translate(x, y); g.rotate(-0.22);
+    g.beginPath(); g.moveTo(-s * 0.17, 0); g.lineTo(s * 0.17, 0); g.lineTo(0, -s * 0.46); g.closePath();
+    g.fillStyle = c; g.fill();
+    g.strokeStyle = 'rgba(255,255,255,0.75)'; g.lineWidth = s * 0.035;
+    g.beginPath(); g.moveTo(-s * 0.11, -s * 0.14); g.lineTo(s * 0.12, -s * 0.12); g.moveTo(-s * 0.06, -s * 0.28); g.lineTo(s * 0.07, -s * 0.27); g.stroke();
+    g.fillStyle = '#fff'; circle(g, 0, -s * 0.46, s * 0.06); g.fill();
+    g.restore();
+  }
+  // Mascots stand on (x, y) and are about s pixels tall.
+  function drawMascot(g, kind, x, y, s, t, o = {}) {
+    g.save();
+    g.translate(x, y);
+    if (o.rot) g.rotate(o.rot);
+    if (o.flip) g.scale(-1, 1);
+    g.fillStyle = 'rgba(0,0,0,0.25)'; g.beginPath(); g.ellipse(0, 0, s * 0.42, s * 0.08, 0, 0, TAU); g.fill();
+    let top = -s;
+    if (kind === 'mug') {
+      const w = s * 0.72, hh = s * 0.82, c = o.color || '#f4f1ea';
+      g.strokeStyle = shade(c.startsWith('#') ? c : '#f4f1ea', -0.25); g.lineWidth = s * 0.1;
+      g.beginPath(); g.arc(w / 2, -hh * 0.52, s * 0.17, -1.2, 1.2); g.stroke();
+      g.beginPath(); rr(g, -w / 2, -hh, w, hh, s * 0.12); g.fillStyle = c; g.fill();
+      g.fillStyle = '#5a3419'; g.beginPath(); g.ellipse(0, -hh + s * 0.03, w * 0.42, s * 0.06, 0, 0, TAU); g.fill();
+      g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = s * 0.035;
+      for (let i = -1; i <= 1; i++) {
+        const sx = i * s * 0.16, ph = t * 3 + i;
+        g.beginPath(); g.moveTo(sx, -hh - s * 0.08);
+        g.bezierCurveTo(sx + Math.sin(ph) * s * 0.1, -hh - s * 0.2, sx - Math.sin(ph) * s * 0.1, -hh - s * 0.3, sx, -hh - s * 0.42); g.stroke();
+      }
+      drawFace(g, 0, -hh * 0.5, s * 0.8, t);
+      top = -hh;
+    } else if (kind === 'plant') {
+      for (let i = 0; i < 6; i++) {
+        const a = -Math.PI / 2 + (i - 2.5) * 0.36 + Math.sin(t * 2.4 + i) * 0.06;
+        g.save(); g.translate(0, -s * 0.5); g.rotate(a);
+        g.beginPath(); g.ellipse(s * 0.3, 0, s * 0.3, s * 0.1, 0, 0, TAU); g.fillStyle = i % 2 ? '#2f8453' : '#3fa566'; g.fill();
+        g.restore();
+      }
+      g.beginPath(); g.moveTo(-s * 0.34, -s * 0.55); g.lineTo(s * 0.34, -s * 0.55); g.lineTo(s * 0.26, 0); g.lineTo(-s * 0.26, 0); g.closePath();
+      g.fillStyle = '#d9784a'; g.fill();
+      g.fillStyle = '#c0643a'; g.fillRect(-s * 0.37, -s * 0.6, s * 0.74, s * 0.1);
+      drawFace(g, 0, -s * 0.3, s * 0.7, t);
+      top = -s * 0.95;
+    } else if (kind === 'duck') {
+      g.fillStyle = '#ffd447';
+      g.beginPath(); g.ellipse(0, -s * 0.3, s * 0.42, s * 0.3, 0, 0, TAU); g.fill();
+      g.beginPath(); g.moveTo(-s * 0.36, -s * 0.42); g.quadraticCurveTo(-s * 0.62, -s * 0.62, -s * 0.5, -s * 0.3); g.fill();
+      circle(g, s * 0.18, -s * 0.72, s * 0.24); g.fill();
+      g.fillStyle = '#ff9a3c'; g.beginPath(); g.ellipse(s * 0.44, -s * 0.66, s * 0.15, s * 0.06, 0.1, 0, TAU); g.fill();
+      g.fillStyle = '#1a1d22'; circle(g, s * 0.26, -s * 0.78, s * 0.045); g.fill();
+      g.strokeStyle = 'rgba(200,140,0,0.6)'; g.lineWidth = s * 0.03; g.beginPath(); g.arc(-s * 0.04, -s * 0.32, s * 0.2, 0.2, 2.2); g.stroke();
+      top = -s * 0.96;
+    } else if (kind === 'printer') {
+      g.fillStyle = '#fbfbf5'; g.fillRect(-s * 0.26, -s * 0.95, s * 0.52, s * 0.25);
+      g.beginPath(); rr(g, -s * 0.45, -s * 0.72, s * 0.9, s * 0.64, s * 0.08); g.fillStyle = '#dfe4ea'; g.fill();
+      g.strokeStyle = '#8f99a6'; g.lineWidth = 2; g.stroke();
+      g.fillStyle = '#2b3038'; g.fillRect(-s * 0.3, -s * 0.2, s * 0.6, s * 0.06);
+      g.fillStyle = '#35d07f'; circle(g, s * 0.33, -s * 0.6, s * 0.035); g.fill();
+      drawFace(g, 0, -s * 0.46, s * 0.75, t);
+      top = -s * 0.95;
+    } else {
+      const r = s * 0.42;
+      g.fillStyle = '#23272e'; g.beginPath(); g.ellipse(0, -r * 0.55, r, r * 0.55, 0, 0, TAU); g.fill();
+      g.fillStyle = '#3a4150'; g.beginPath(); g.ellipse(0, -r * 0.7, r * 0.92, r * 0.4, 0, 0, TAU); g.fill();
+      g.fillStyle = (t * 2) % 1 < 0.5 ? '#35d07f' : '#1b6b44'; circle(g, 0, -r * 0.82, r * 0.08); g.fill();
+      drawFace(g, 0, -r * 0.6, s * 0.6, t);
+      top = -r * 1.1;
+    }
+    if (o.hat) drawHat(g, kind === 'duck' ? s * 0.14 : 0, top - s * 0.02 - (kind === 'duck' ? s * 0.04 : 0), s, o.hat);
+    g.restore();
+  }
+  function drawCannon(g, x, y, side, kick) {
+    g.save(); g.translate(x, y); g.scale(-side, 1);
+    g.save(); g.rotate(-0.95); g.translate(-kick, 0);
+    g.beginPath(); g.moveTo(-12, -15); g.lineTo(58, -11); g.lineTo(58, 11); g.lineTo(-12, 15); g.closePath();
+    g.fillStyle = '#2b3038'; g.fill();
+    g.fillStyle = '#ffd447'; g.fillRect(8, -14, 7, 28); g.fillRect(48, -12, 7, 24);
+    g.fillStyle = '#12151a'; g.beginPath(); g.ellipse(58, 0, 4, 10, 0, 0, TAU); g.fill();
+    g.restore();
+    g.fillStyle = '#7a4a26'; circle(g, -4, 10, 13); g.fill();
+    g.fillStyle = '#c69350'; circle(g, -4, 10, 4); g.fill();
+    g.restore();
+  }
+  function drawPlane(g, x, y, ang, s, col, roll) {
+    g.save(); g.translate(x, y); g.rotate(ang); g.scale(1, roll);
+    g.beginPath(); g.moveTo(s, 0); g.lineTo(-s * 0.8, -s * 0.55); g.lineTo(-s * 0.45, 0); g.lineTo(-s * 0.8, s * 0.55); g.closePath();
+    g.fillStyle = col; g.fill(); g.strokeStyle = 'rgba(0,0,0,0.25)'; g.lineWidth = 1; g.stroke();
+    g.beginPath(); g.moveTo(s, 0); g.lineTo(-s * 0.45, 0); g.lineTo(-s * 0.8, s * 0.55); g.closePath();
+    g.fillStyle = 'rgba(0,0,0,0.12)'; g.fill();
+    g.restore();
+  }
+  function drawDonut(g, d) {
+    g.save(); g.translate(d.x, d.y); g.rotate(d.rot);
+    g.beginPath(); g.arc(0, 0, d.r, 0, TAU); g.arc(0, 0, d.r * 0.34, 0, TAU, true); g.fillStyle = '#d99a5b'; g.fill();
+    g.beginPath();
+    for (let i = 0; i <= 24; i++) {
+      const a = (i / 24) * TAU, r = d.r * (0.84 + 0.07 * Math.sin(a * 5 + d.r));
+      if (i) g.lineTo(Math.cos(a) * r, Math.sin(a) * r); else g.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+    }
+    g.closePath(); g.arc(0, 0, d.r * 0.42, 0, TAU, true);
+    g.fillStyle = d.glaze; g.fill();
+    for (const sp of d.sprinkles) {
+      g.save(); g.rotate(sp[0]); g.translate(d.r * sp[1], 0); g.rotate(sp[2]);
+      g.fillStyle = sp[3]; g.fillRect(-2.5, -0.9, 5, 1.8);
+      g.restore();
+    }
+    g.restore();
+  }
+  function drawStar(g, x, y, r, c) {
+    g.fillStyle = c; g.beginPath();
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * TAU, rr2 = i % 2 ? r * 0.3 : r;
+      if (i) g.lineTo(x + Math.cos(a) * rr2, y + Math.sin(a) * rr2); else g.moveTo(x + rr2, y);
+    }
+    g.closePath(); g.fill();
+  }
+  function drawStampBox(g, text, x, y, size, col, rot, scale, alpha) {
+    g.save();
+    g.globalAlpha = alpha;
+    g.translate(x, y); g.rotate(rot); g.scale(scale, scale);
+    g.font = `900 ${size}px ${DISPLAY_FONT}`;
+    const w = g.measureText(text).width + size * 0.9, hh = size * 1.35;
+    g.strokeStyle = col; g.lineWidth = Math.max(3, size * 0.09);
+    g.beginPath(); rr(g, -w / 2, -hh / 2, w, hh, size * 0.16); g.stroke();
+    g.lineWidth = Math.max(1.5, size * 0.035);
+    g.beginPath(); rr(g, -w / 2 + size * 0.14, -hh / 2 + size * 0.14, w - size * 0.28, hh - size * 0.28, size * 0.1); g.stroke();
+    g.fillStyle = col; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, 0, size * 0.04);
+    g.restore();
+  }
+
+  // Each show gets { tier, word, name, color, score, par, hole, cup } and returns { dur, update(dt, t), draw(g, t) }.
+  const SHOWS = {
+    // Two confetti cannons fire from the bottom corners, twice.
+    cannons() {
+      const bits = [], kick = [0, 0];
+      let shots = 0;
+      const fire = i => {
+        const side = i ? 1 : -1, x = i ? cw - 30 : 30, y = ch - 34;
+        const a = -Math.PI / 2 - side * 0.5;
+        burstBits(bits, x, y, 90, { k: 'conf', a, spread: 0.3, sp: [ch * 0.9, ch * 1.7], s: [3.5, 6], life: [2.2, 3.2], g: 0.55, drag: 1.9, sway: true, fade: 0.6 });
+        burstBits(bits, x, y, 7, { k: 'ribbon', a, spread: 0.25, sp: [ch * 1.1, ch * 1.6], s: [2.5, 3.5], life: [1.8, 2.4], g: 0.5, drag: 1.8, fade: 0.6 });
+        kick[i] = 14;
+        Sound.boom();
+      };
+      return {
+        dur: 3.6,
+        update(dt, t) {
+          const due = t > 0.75 ? 4 : t > 0.1 ? 2 : 0;
+          while (shots < due) fire(shots++ % 2);
+          kick[0] = Math.max(0, kick[0] - 60 * dt); kick[1] = Math.max(0, kick[1] - 60 * dt);
+          stepBits(bits, dt, 620);
+        },
+        draw(g, t) {
+          const a = 1 - k01(t, 3.2, 3.6);
+          g.globalAlpha = a;
+          drawCannon(g, 30, ch - 34, -1, kick[0]);
+          drawCannon(g, cw - 30, ch - 34, 1, kick[1]);
+          g.globalAlpha = 1;
+          drawBits(g, bits);
+        },
+      };
+    },
+    // After hours over the office: rockets go up and burst.
+    fireworks() {
+      const n = reduceMotion ? 3 : 6, sparks = [];
+      const rockets = Array.from({ length: n }, (_, i) => {
+        const apex = rand(0.14, 0.42) * ch, x = rand(0.15, 0.85) * cw;
+        return { at: 0.15 + i * 0.38 + rand(0, 0.12), x, y: ch + 10, vx: rand(-50, 50), vy: -Math.sqrt(2 * 700 * (ch + 10 - apex)), c: pick(PARTY_COLORS.slice(0, 6)), c2: pick(PARTY_COLORS), state: 0, trail: [] };
+      });
+      return {
+        dur: 0.15 + n * 0.38 + 2,
+        update(dt, t) {
+          for (const r of rockets) {
+            if (t < r.at || r.state === 2) continue;
+            if (r.state === 0) { r.state = 1; Sound.whistle(); }
+            r.vy += 700 * dt; r.x += r.vx * dt; r.y += r.vy * dt;
+            r.trail.push(r.x, r.y); if (r.trail.length > 16) r.trail.splice(0, 2);
+            if (r.vy > -30) {
+              r.state = 2;
+              const m = reduceMotion ? 18 : 56;
+              for (let i = 0; i < m; i++) {
+                const a = (i / m) * TAU + rand(-0.05, 0.05), sp = rand(150, 260) * (i % 2 ? 1 : 0.7);
+                sparks.push({ x: r.x, y: r.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, s: rand(1.8, 2.8), c: i % 3 ? r.c : r.c2, life: rand(1.1, 1.6), g: 0.25, drag: 1.5, fade: 0.8, trail: [] });
+              }
+              Sound.boom(); Sound.crackle();
+            }
+          }
+          stepBits(sparks, dt, 300);
+        },
+        draw(g, t) {
+          const dim = Math.min(k01(t, 0, 0.4), 1 - k01(t, this.dur - 0.6, this.dur));
+          g.fillStyle = `rgba(8,10,28,${(0.5 * dim).toFixed(3)})`; g.fillRect(0, 0, cw, ch);
+          g.save(); g.globalCompositeOperation = 'lighter';
+          for (const r of rockets) {
+            if (r.state !== 1) continue;
+            g.strokeStyle = 'rgba(255,220,170,0.6)'; g.lineWidth = 2; g.beginPath();
+            for (let i = 0; i < r.trail.length; i += 2) (i ? g.lineTo : g.moveTo).call(g, r.trail[i], r.trail[i + 1]);
+            g.stroke();
+            g.fillStyle = '#fff4d6'; circle(g, r.x, r.y, 2.6); g.fill();
+          }
+          for (const p of sparks) {
+            const a = Math.min(1, p.life / p.fade) * (p.life < 0.5 && Math.random() < 0.3 ? 0.3 : 1);
+            g.globalAlpha = a;
+            if (p.trail.length > 4) {
+              g.strokeStyle = p.c; g.lineWidth = p.s * 0.8; g.beginPath(); g.moveTo(p.trail[p.trail.length - 6] || p.x, p.trail[p.trail.length - 5] || p.y); g.lineTo(p.x, p.y); g.stroke();
+            }
+            g.fillStyle = p.c; circle(g, p.x, p.y, p.s); g.fill();
+          }
+          g.restore();
+          g.globalAlpha = 1;
+        },
+      };
+    },
+    // A rubber stamp slams down, then your new nameplate slides up.
+    promotion(c) {
+      const title = pick(PROMO_TITLES), ink = [];
+      let hit = false;
+      return {
+        dur: 3.5,
+        update(dt, t) {
+          if (!hit && t >= 0.32) {
+            hit = true; Sound.stamp(); shake();
+            for (let i = 0; i < 26; i++) { const a = rand(0, TAU), d = rand(120, 210); ink.push([Math.cos(a) * d, Math.sin(a) * d * 0.5, rand(1.5, 6)]); }
+          }
+        },
+        draw(g, t) {
+          const cx = cw / 2, cy = ch * 0.5, fade = 1 - k01(t, 3, 3.5);
+          const size = Math.min(64, cw / 7);
+          if (hit) {
+            g.fillStyle = `rgba(232,69,58,${(0.7 * fade).toFixed(3)})`;
+            for (const [x, y, r] of ink) { circle(g, cx + x, cy + y, r); g.fill(); }
+          }
+          const k = k01(t, 0, 0.32);
+          const s = hit ? 1 + 0.08 * Math.exp(-(t - 0.32) * 10) * Math.cos((t - 0.32) * 30) : lerp(3, 1, k * k);
+          drawStampBox(g, 'PROMOTED', cx, cy, size, '#e8453a', -0.14, s, fade * (hit ? 1 : k));
+          if (t > 0.8) {
+            const p = easeBack(k01(t, 0.8, 1.25)), w = Math.min(360, cw - 32), py = lerp(ch + 80, cy + size * 1.5, p);
+            g.save(); g.globalAlpha = fade;
+            const gr = g.createLinearGradient(0, py - 30, 0, py + 30);
+            gr.addColorStop(0, '#f6d77a'); gr.addColorStop(0.5, '#d4a53c'); gr.addColorStop(1, '#a77b22');
+            g.beginPath(); rr(g, cx - w / 2, py - 32, w, 64, 8); g.fillStyle = gr; g.fill();
+            g.strokeStyle = '#7a5816'; g.lineWidth = 2; g.stroke();
+            g.fillStyle = '#7a5816'; for (const sx of [-1, 1]) { circle(g, cx + sx * (w / 2 - 12), py, 3); g.fill(); }
+            showText(g, c.name, cx, py - 9, 24, '#2b1d05', { shadow: false, max: w - 40 });
+            showText(g, title, cx, py + 15, 13, '#3d2a08', { shadow: false, weight: 600, font: '"IBM Plex Mono", monospace', max: w - 40 });
+            g.restore();
+          }
+        },
+      };
+    },
+    // The lights go down, a disco ball drops, and the mascots dance.
+    disco(c) {
+      const cols = ['#ff5a9e', '#5bc0ff', '#ffd447', '#35d07f', '#c39bff', '#ff7a59'];
+      Sound.notes([392, 0, 392, 523, 0, 494, 440, 392, 523, 0, 659, 587, 523, 0, 784], 'square', 0.035, 0.13);
+      return {
+        dur: 4.2,
+        update() {},
+        draw(g, t) {
+          const fade = Math.min(k01(t, 0, 0.35), 1 - k01(t, 3.7, 4.2));
+          g.fillStyle = `rgba(14,4,32,${(0.55 * fade).toFixed(3)})`; g.fillRect(0, 0, cw, ch);
+          const bx = cw / 2, by = lerp(-50, ch * 0.2, easeOut(k01(t, 0, 0.7))), R = Math.min(38, cw * 0.09), len = Math.hypot(cw, ch);
+          g.save(); g.globalCompositeOperation = 'lighter';
+          for (let i = 0; i < 7; i++) {
+            const a = t * 1.1 + (i * TAU) / 7;
+            g.fillStyle = withAlpha(cols[i % cols.length], (0.14 * fade).toFixed(3));
+            g.beginPath(); g.moveTo(bx, by);
+            g.lineTo(bx + Math.cos(a - 0.06) * len, by + Math.sin(a - 0.06) * len); g.lineTo(bx + Math.cos(a + 0.06) * len, by + Math.sin(a + 0.06) * len);
+            g.closePath(); g.fill();
+          }
+          for (let i = 0; i < 16; i++) {
+            const sx = ((i * 157 + t * (70 + i * 9)) % (cw + 80)) - 40, sy = ((i * 97) % Math.max(1, ch)) + Math.sin(t * 2 + i) * 30;
+            g.fillStyle = withAlpha(cols[i % cols.length], (0.22 * fade).toFixed(3)); circle(g, sx, sy, 14 + (i % 3) * 8); g.fill();
+          }
+          g.restore();
+          g.save(); g.globalAlpha = fade;
+          g.strokeStyle = 'rgba(220,220,230,0.8)'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(bx, 0); g.lineTo(bx, by - R); g.stroke();
+          g.save(); circle(g, bx, by, R); g.clip();
+          g.fillStyle = '#8a93a0'; g.fillRect(bx - R, by - R, R * 2, R * 2);
+          for (let yy = -R; yy < R; yy += 7) {
+            for (let xx = -R; xx < R; xx += 7) {
+              const f = Math.sin(xx * 0.31 + yy * 0.23 + t * 9) * 0.5 + 0.5;
+              g.fillStyle = `rgba(255,255,255,${(0.12 + 0.8 * f * f * f).toFixed(2)})`; g.fillRect(bx + xx + 0.5, by + yy + 0.5, 6, 6);
+            }
+          }
+          g.restore();
+          const beat = Math.abs(Math.sin(t * Math.PI / 0.26)), s = Math.min(70, ch * 0.1);
+          ['mug', 'duck', 'plant'].forEach((kind, i) => {
+            const x = cw / 2 + (i - 1) * s * 1.6, y = ch * 0.78 - beat * s * 0.18 * (i === 1 ? 1.3 : 1);
+            drawMascot(g, kind, x, y, s, t + i, { rot: Math.sin(t * Math.PI / 0.26 + i) * 0.15, hat: cols[i + 1], color: c.color });
+          });
+          g.restore();
+        },
+      };
+    },
+    // The mascots march across the screen; the leader carries a sign.
+    parade(c) {
+      const cast = ['duck', 'mug', 'plant', 'printer', 'roomba'];
+      Sound.notes([523, 523, 659, 523, 784, 0, 698, 659, 587, 523, 587, 659, 523, 0, 784, 784], 'sawtooth', 0.03, 0.18);
+      return {
+        dur: 4.6,
+        update() {},
+        draw(g, t) {
+          const s = Math.min(72, ch * 0.1), gap = s * 1.5, y = ch * 0.76;
+          const head = lerp(-s, cw + gap * cast.length + s, t / 4.6);
+          cast.forEach((kind, i) => {
+            const x = head - i * gap, bob = Math.abs(Math.sin(t * 9 + i * 0.8)) * s * 0.16;
+            if (x < -s * 2 || x > cw + s * 2) return;
+            drawMascot(g, kind, x, y - bob, s, t + i, { rot: Math.sin(t * 9 + i * 0.8) * 0.08, hat: PARTY_COLORS[i], color: i === 1 ? c.color : null });
+          });
+          const sx = head + s * 0.1, sy = y - s * 1.9;
+          g.fillStyle = '#8b5a2b'; g.fillRect(sx - 2, sy, 4, s * 1.3);
+          g.font = `900 ${Math.round(s * 0.34)}px ${DISPLAY_FONT}`;
+          const w = g.measureText(c.word.toUpperCase()).width + 20;
+          g.save(); g.translate(sx, sy); g.rotate(Math.sin(t * 9) * 0.05);
+          g.beginPath(); rr(g, -w / 2, -s * 0.5, w, s * 0.5, 5); g.fillStyle = '#fbfbf5'; g.fill(); g.strokeStyle = '#2b3038'; g.lineWidth = 2; g.stroke();
+          g.fillStyle = '#e8453a'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(c.word.toUpperCase(), 0, -s * 0.24);
+          g.restore();
+        },
+      };
+    },
+    // A squadron of paper airplanes, one of them doing a barrel roll.
+    airplanes() {
+      const dir = Math.random() < 0.5 ? 1 : -1;
+      const planes = Array.from({ length: reduceMotion ? 2 : 6 }, (_, i) => ({
+        y0: rand(0.15, 0.7) * ch, amp: rand(18, 55), f: rand(1.6, 3), delay: i * 0.2 + rand(0, 0.15), sp: rand(0.55, 0.75) * (cw + 120),
+        roll: i === 2, col: pick(['#ffffff', '#fff4c2', '#dff1ff', '#ffe3ef']), s: rand(15, 22),
+      }));
+      Sound.whoosh();
+      const at = (p, tt) => ({ x: dir > 0 ? -60 + tt * p.sp : cw + 60 - tt * p.sp, y: p.y0 + Math.sin(tt * p.f) * p.amp });
+      return {
+        dur: 3.2,
+        update() {},
+        draw(g, t) {
+          for (const p of planes) {
+            const tt = t - p.delay;
+            if (tt < 0) continue;
+            g.fillStyle = 'rgba(255,255,255,0.5)';
+            for (let k = 1; k <= 8; k++) { const q = at(p, tt - k * 0.05); if (tt - k * 0.05 > 0) { circle(g, q.x, q.y, 1.6); g.fill(); } }
+            const q = at(p, tt), ang = Math.atan2(Math.cos(tt * p.f) * p.amp * p.f, dir * p.sp);
+            drawPlane(g, q.x, q.y, ang, p.s, p.col, p.roll && tt > 0.6 && tt < 1.6 ? Math.cos((tt - 0.6) * TAU) : 1);
+          }
+        },
+      };
+    },
+    // Balloons float up from the bottom, and a few of them pop.
+    balloons() {
+      const cols = ['#ff5a4e', '#ffd447', '#5bc0ff', '#c39bff', '#ff8fc7', '#35d07f', '#ff9a3c'];
+      const list = Array.from({ length: reduceMotion ? 5 : 15 }, () => ({ x: rand(0.06, 0.94) * cw, delay: rand(0, 0.9), vy: rand(0.32, 0.46) * ch, c: pick(cols), r: rand(20, 30), ph: rand(0, TAU), pop: Math.random() < 0.35 ? rand(1.2, 2.4) : 99, popped: false }));
+      const bits = [];
+      const pos = (b, t) => { const tt = t - b.delay; return { x: b.x + Math.sin(tt * 2 + b.ph) * 14, y: ch + b.r * 2 - tt * b.vy, tt }; };
+      return {
+        dur: 3.8,
+        update(dt, t) {
+          for (const b of list) {
+            if (b.popped || t < b.delay + b.pop) continue;
+            b.popped = true; Sound.pop();
+            const q = pos(b, t);
+            burstBits(bits, q.x, q.y, 10, { k: 'conf', sp: [120, 260], s: [2.5, 4], life: [0.5, 0.8], c: b.c, g: 1, drag: 2 });
+          }
+          stepBits(bits, dt, 800);
+        },
+        draw(g, t) {
+          for (const b of list) {
+            if (b.popped || t < b.delay) continue;
+            const { x, y, tt } = pos(b, t);
+            g.strokeStyle = 'rgba(255,255,255,0.55)'; g.lineWidth = 1.2;
+            g.beginPath(); g.moveTo(x, y + b.r * 1.1); g.quadraticCurveTo(x + Math.sin(tt * 3 + b.ph) * 10, y + b.r * 1.8, x - 4, y + b.r * 2.7); g.stroke();
+            const gr = g.createRadialGradient(x - b.r * 0.35, y - b.r * 0.4, b.r * 0.1, x, y, b.r * 1.2);
+            gr.addColorStop(0, shade(b.c, 0.5)); gr.addColorStop(1, shade(b.c, -0.15));
+            g.fillStyle = gr; g.beginPath(); g.ellipse(x, y, b.r * 0.86, b.r, 0, 0, TAU); g.fill();
+            g.beginPath(); g.moveTo(x, y + b.r - 1); g.lineTo(x - 4, y + b.r + 6); g.lineTo(x + 4, y + b.r + 6); g.closePath(); g.fill();
+          }
+          drawBits(g, bits);
+        },
+      };
+    },
+    // Friday donuts, straight from the ceiling.
+    donuts() {
+      const glazes = ['#ff8fc7', '#6b3a1f', '#fff3e0', '#c39bff', '#ffd447', '#9fe3ff'];
+      const list = Array.from({ length: reduceMotion ? 6 : 18 }, () => ({
+        x: rand(0.05, 0.95) * cw, y: -rand(30, 0.6 * ch), vx: rand(-40, 40), vy: rand(0, 120), rot: rand(0, TAU), vr: rand(-4, 4), r: rand(16, 26), glaze: pick(glazes), bounced: 0,
+        sprinkles: Array.from({ length: 9 }, () => [rand(0, TAU), rand(0.5, 0.78), rand(0, TAU), pick(PARTY_COLORS)]),
+      }));
+      let boings = 0;
+      return {
+        dur: 3.4,
+        update(dt) {
+          const floor = ch * 0.86;
+          for (const d of list) {
+            d.vy += 1300 * dt; d.x += d.vx * dt; d.y += d.vy * dt; d.rot += d.vr * dt;
+            if (d.y > floor - d.r && d.vy > 0 && d.bounced < 2) {
+              d.y = floor - d.r; d.vy *= -0.42; d.vx *= 0.8; d.vr *= -0.6; d.bounced++;
+              if (boings < 4 && d.bounced === 1) { boings++; Sound.boing(); }
+            }
+          }
+        },
+        draw(g, t) {
+          g.globalAlpha = 1 - k01(t, 2.9, 3.4);
+          for (const d of list) drawDonut(g, d);
+          g.globalAlpha = 1;
+          showText(g, 'DONUTS IN THE BREAK ROOM', cw / 2, ch * 0.64, Math.min(34, cw / 13), '#ffd447', { scale: easeBack(k01(t, 0.5, 0.9)) * (1 - k01(t, 2.9, 3.4)), max: cw - 32 });
+        },
+      };
+    },
+    // Sticky notes flutter down with reviews from the team.
+    stickies() {
+      const cols = ['#fff27a', '#ffb1d8', '#9fe3ff', '#b6f5a3', '#ffcf8a'];
+      const words = STICKY_WORDS.slice().sort(() => Math.random() - 0.5);
+      const list = words.slice(0, reduceMotion ? 5 : 14).map(w => ({ w, x: rand(0.06, 0.94) * cw, y: -rand(40, 0.55 * ch), vy: rand(0.3, 0.42) * ch, ph: rand(0, TAU), rot: rand(-0.3, 0.3), c: pick(cols), s: rand(52, 64) }));
+      return {
+        dur: 3.8,
+        update(dt, t) { for (const n of list) { n.y += n.vy * dt; n.x += Math.cos(t * 2.6 + n.ph) * 40 * dt; } },
+        draw(g, t) {
+          g.globalAlpha = 1 - k01(t, 3.3, 3.8);
+          for (const n of list) {
+            g.save(); g.translate(n.x, n.y); g.rotate(n.rot + Math.sin(t * 2.6 + n.ph) * 0.3);
+            g.fillStyle = 'rgba(0,0,0,0.2)'; g.fillRect(-n.s / 2 + 3, -n.s / 2 + 4, n.s, n.s);
+            g.fillStyle = n.c; g.fillRect(-n.s / 2, -n.s / 2, n.s, n.s);
+            g.fillStyle = 'rgba(0,0,0,0.07)'; g.fillRect(-n.s / 2, -n.s / 2, n.s, n.s * 0.2);
+            g.fillStyle = '#3a3320'; g.font = `italic 800 ${Math.round(n.s * 0.24)}px "Work Sans", system-ui, sans-serif`;
+            g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(n.w, 0, n.s * 0.06);
+            g.restore();
+          }
+          g.globalAlpha = 1;
+        },
+      };
+    },
+    // The old dot-matrix printer runs a banner across the screen.
+    banner(c) {
+      const word = ` ${c.word.toUpperCase()}!! `;
+      const oc = document.createElement('canvas');
+      oc.width = word.length * 7 + 4; oc.height = 11;
+      const og = oc.getContext('2d');
+      og.font = 'bold 10px monospace'; og.textBaseline = 'top'; og.fillStyle = '#000'; og.fillText(word, 2, 0);
+      const px = og.getImageData(0, 0, oc.width, oc.height).data, dots = [];
+      for (let y = 0; y < oc.height; y++) for (let x = 0; x < oc.width; x++) if (px[(y * oc.width + x) * 4 + 3] > 110) dots.push(x, y);
+      Sound.printer(30);
+      return {
+        dur: 3.8,
+        update() {},
+        draw(g, t) {
+          const cell = clamp(Math.floor(ch / 64), 5, 9), W = oc.width * cell + 60, H = oc.height * cell + 44;
+          const x = lerp(cw + 10, -W - 10, t / 3.8), y = ch * 0.62 - H / 2;
+          g.save();
+          g.fillStyle = 'rgba(0,0,0,0.25)'; g.fillRect(x + 4, y + 5, W, H);
+          g.fillStyle = '#fbfbf5'; g.fillRect(x, y, W, H);
+          g.fillStyle = 'rgba(120,190,140,0.18)';
+          for (let yy = y + 22; yy < y + H - 22; yy += cell * 4) g.fillRect(x + 20, yy, W - 40, cell * 2);
+          g.fillStyle = '#c8cdd4';
+          for (let xx = x + 10; xx < x + W; xx += 16) { circle(g, xx, y + 9, 3); g.fill(); circle(g, xx, y + H - 9, 3); g.fill(); }
+          g.strokeStyle = 'rgba(0,0,0,0.12)'; g.setLineDash([3, 4]);
+          g.beginPath(); g.moveTo(x, y + 18); g.lineTo(x + W, y + 18); g.moveTo(x, y + H - 18); g.lineTo(x + W, y + H - 18); g.stroke();
+          g.setLineDash([]);
+          g.fillStyle = '#2b3038';
+          const ox = x + 30, oy = y + 22;
+          for (let i = 0; i < dots.length; i += 2) { circle(g, ox + dots[i] * cell, oy + dots[i + 1] * cell, cell * 0.42); g.fill(); }
+          g.restore();
+        },
+      };
+    },
+    // Two coffee mugs clink in the middle of the screen.
+    mugs(c) {
+      const drops = [];
+      let clinked = false;
+      return {
+        dur: 2.9,
+        update(dt, t) {
+          if (!clinked && t > 0.62) {
+            clinked = true; Sound.clink();
+            burstBits(drops, cw / 2, ch * 0.52 - Math.min(90, ch * 0.12) * 0.8, 18, { a: -Math.PI / 2, spread: 1.1, sp: [160, 380], s: [2.5, 4.5], life: [0.6, 1], c: '#7a4a26', g: 1, drag: 0.6 });
+          }
+          stepBits(drops, dt, 1100);
+        },
+        draw(g, t) {
+          const s = Math.min(90, ch * 0.12), cx = cw / 2, cy = ch * 0.52;
+          const inK = easeBack(k01(t, 0, 0.6)), out = k01(t, 2.3, 2.9);
+          const off = lerp(cw * 0.6, s * 0.55, inK) + out * out * cw * 0.6;
+          const tilt = 0.4 * k01(t, 0.3, 0.62) * (1 - out);
+          drawMascot(g, 'mug', cx - off, cy, s, t, { rot: tilt });
+          drawMascot(g, 'mug', cx + off, cy, s, t + 1, { rot: -tilt, flip: true, color: c.color });
+          drawBits(g, drops);
+          if (clinked) {
+            drawStar(g, cx, cy - s * 0.9, 16 * (1 - k01(t, 0.62, 1)), '#fff4c2');
+            showText(g, 'CHEERS!', cx, cy - s * 1.6, 40, '#ffd447', { scale: easeBack(k01(t, 0.62, 0.9)) * (1 - out) });
+          }
+        },
+      };
+    },
+    // The debugging duck waddles in and says its piece.
+    duck() {
+      const line = pick(DUCK_LINES);
+      let quacked = false;
+      return {
+        dur: 3.7,
+        update(dt, t) { if (!quacked && t > 1.05) { quacked = true; Sound.quack(); } },
+        draw(g, t) {
+          const s = Math.min(110, ch * 0.15), inK = k01(t, 0, 1), out = k01(t, 2.9, 3.7);
+          const x = lerp(-s, cw * 0.5, easeOut(inK)) + out * out * (cw * 0.5 + s * 1.5), walking = inK < 1 || out > 0;
+          const y = ch * 0.7 - (walking ? Math.abs(Math.sin(t * 11)) * s * 0.07 : 0);
+          drawMascot(g, 'duck', x, y, s, t, { rot: walking ? Math.sin(t * 11) * 0.08 : Math.sin(t * 3) * 0.03 });
+          if (quacked && t < 3) {
+            g.font = '700 15px "Work Sans", system-ui, sans-serif';
+            const w = Math.min(cw - 40, g.measureText(line).width + 28), bx = clamp(x + s * 0.3, w / 2 + 12, cw - w / 2 - 12), by = y - s * 1.35;
+            const a = easeBack(k01(t, 1.05, 1.3));
+            g.save(); g.translate(bx, by); g.scale(a, a);
+            g.beginPath(); rr(g, -w / 2, -22, w, 40, 14); g.fillStyle = '#fbfbf5'; g.fill();
+            g.beginPath(); g.moveTo(-10, 17); g.lineTo(-22, 32); g.lineTo(4, 17); g.fill();
+            g.fillStyle = '#1a1d22'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(line, 0, -2, w - 20);
+            g.restore();
+            for (let i = 0; i < 3; i++) {
+              const ht = (t - 1.1 - i * 0.25) % 1.6;
+              if (ht < 0) continue;
+              g.globalAlpha = 1 - ht / 1.6;
+              drawStar(g, x - s * 0.3 + i * s * 0.3, y - s - ht * 60, 6, '#ff8fc7');
+            }
+            g.globalAlpha = 1;
+          }
+        },
+      };
+    },
+    // A mascot takes an office chair for a joyride.
+    chair() {
+      const who = pick(['mug', 'plant', 'duck']);
+      const papers = [];
+      Sound.whoosh();
+      return {
+        dur: 2.8,
+        update(dt, t) {
+          const s = Math.min(90, ch * 0.12), x = lerp(-s * 2, cw + s * 2, k01(t, 0.1, 2.3));
+          if (t < 2.3 && Math.random() < dt * 14) papers.push({ k: 'conf', x: x - s * 0.4, y: ch * 0.7 - s * 0.8, vx: rand(-160, -40), vy: rand(-260, -80), rot: rand(0, TAU), vr: rand(-6, 6), s: 7, c: '#fbfbf5', life: 1.2, g: 0.5, drag: 1.4, fade: 0.5 });
+          stepBits(papers, dt, 500);
+        },
+        draw(g, t) {
+          const s = Math.min(90, ch * 0.12), x = lerp(-s * 2, cw + s * 2, k01(t, 0.1, 2.3)), y = ch * 0.7;
+          drawBits(g, papers);
+          g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = 3; g.lineCap = 'round';
+          for (let i = 0; i < 4; i++) { const ly = y - s * (0.3 + i * 0.25); g.beginPath(); g.moveTo(x - s * (1.1 + i * 0.2), ly); g.lineTo(x - s * (2 + i * 0.3), ly); g.stroke(); }
+          g.save(); g.translate(x, y); g.rotate(Math.sin(t * 20) * 0.04);
+          g.fillStyle = '#2b3038';
+          for (const dx of [-0.45, -0.15, 0.15, 0.45]) { circle(g, dx * s, -s * 0.06, s * 0.06); g.fill(); }
+          g.fillRect(-s * 0.5, -s * 0.16, s, s * 0.06); g.fillRect(-s * 0.04, -s * 0.5, s * 0.08, s * 0.36);
+          g.beginPath(); rr(g, -s * 0.42, -s * 0.62, s * 0.84, s * 0.14, 6); g.fillStyle = '#3a4150'; g.fill();
+          g.beginPath(); rr(g, -s * 0.55, -s * 1.3, s * 0.16, s * 0.72, 6); g.fill();
+          drawMascot(g, who, 0, -s * 0.6, s * 0.75, t, { hat: '#ff5a4e' });
+          g.restore();
+          showText(g, 'WHEEE!', x - s * 1.2, y - s * 1.5, 30, '#fff', { rot: -0.1, scale: 1 - k01(t, 2.1, 2.4) });
+        },
+      };
+    },
+    // You're Employee of the Month. The frame drops in and swings on its nail.
+    employee(c) {
+      let landed = false;
+      return {
+        dur: 3.6,
+        update(dt, t) { if (!landed && t > 0.45) { landed = true; Sound.thud(); } },
+        draw(g, t) {
+          const W = Math.min(210, cw * 0.55), H = W * 1.25, cx = cw / 2, fade = 1 - k01(t, 3.1, 3.6);
+          const ny = lerp(-H - 60, ch * 0.16, easeOut(k01(t, 0, 0.45)));
+          const swing = landed ? 0.2 * Math.exp(-(t - 0.45) * 1.5) * Math.sin((t - 0.45) * 7) : 0;
+          g.save(); g.globalAlpha = fade;
+          g.translate(cx, ny); g.rotate(swing);
+          g.strokeStyle = '#d9dee6'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(-W * 0.35, 40); g.lineTo(0, 0); g.lineTo(W * 0.35, 40); g.stroke();
+          g.fillStyle = '#9aa3ae'; circle(g, 0, 0, 4); g.fill();
+          const gr = g.createLinearGradient(-W / 2, 0, W / 2, H);
+          gr.addColorStop(0, '#f6d77a'); gr.addColorStop(0.5, '#c8952f'); gr.addColorStop(1, '#f1cf6b');
+          g.fillStyle = gr; g.fillRect(-W / 2, 36, W, H);
+          g.fillStyle = '#f7f3e8'; g.fillRect(-W / 2 + 12, 48, W - 24, H - 24);
+          const px = -W / 2 + 24, py = 60, pw = W - 48, ph = H * 0.56;
+          const bg = g.createLinearGradient(0, py, 0, py + ph);
+          bg.addColorStop(0, '#6f8fbf'); bg.addColorStop(1, '#3d5a88');
+          g.fillStyle = bg; g.fillRect(px, py, pw, ph);
+          const r = pw * 0.28, bx = 0, by = py + ph * 0.52;
+          g.fillStyle = '#2b3038'; g.beginPath(); g.moveTo(bx - r * 1.2, py + ph); g.quadraticCurveTo(bx, by + r * 0.4, bx + r * 1.2, py + ph); g.fill();
+          g.fillStyle = '#e8453a'; g.beginPath(); g.moveTo(bx, by + r * 0.95); g.lineTo(bx - r * 0.14, by + r * 1.25); g.lineTo(bx, py + ph); g.lineTo(bx + r * 0.14, by + r * 1.25); g.closePath(); g.fill();
+          const bgr = g.createRadialGradient(bx - r * 0.35, by - r * 0.4, r * 0.1, bx, by, r);
+          bgr.addColorStop(0, '#ffffff'); bgr.addColorStop(0.4, c.color); bgr.addColorStop(1, shade(c.color, -0.3));
+          circle(g, bx, by, r); g.fillStyle = bgr; g.fill();
+          drawFace(g, bx, by + r * 0.05, r * 1.4, t);
+          showText(g, 'EMPLOYEE OF THE MONTH', 0, py + ph + 22, Math.round(W * 0.085), '#7a5816', { shadow: false, max: W - 36 });
+          showText(g, c.name, 0, py + ph + 22 + W * 0.13, Math.round(W * 0.12), '#2b1d05', { shadow: false, max: W - 36 });
+          g.restore();
+          for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * TAU + 0.4, tw = Math.sin(t * 5 + i * 1.7);
+            if (tw > 0) drawStar(g, cx + Math.cos(a) * W * 0.75, ny + 36 + H / 2 + Math.sin(a) * H * 0.62, 9 * tw * fade, '#fff4c2');
+          }
+        },
+      };
+    },
+    // An itemized receipt for the hole.
+    receipt(c) {
+      const pad = (a, b) => a + ' ' + '.'.repeat(Math.max(2, 22 - a.length - String(b).length)) + ' ' + b;
+      const lines = ['NINE-TO-FIVE LINKS', `HOLE ${c.hole}: ${c.holeName.toUpperCase()}`.slice(0, 24), '-'.repeat(24), pad('STROKES', c.score), pad('PAR', c.par),
+        pad('SKILL', 'YES'), pad('LUCK', pick(['SOME', 'A LITTLE', 'NONE', 'LOTS'])), pad('VIBES', '10/10'), '-'.repeat(24), pad('TOTAL', c.word.toUpperCase()), '', 'THANK YOU FOR PUTTING', 'WITH US. NO REFUNDS.'];
+      Sound.printer(20);
+      return {
+        dur: 3.8,
+        update() {},
+        draw(g, t) {
+          const W = 236, lh = 16, H = lines.length * lh + 30, x = cw / 2 - W / 2, y0 = Math.max(12, ch * 0.18);
+          const shown = easeOut(k01(t, 0, 1.5)) * H, fade = 1 - k01(t, 3.3, 3.8);
+          g.save(); g.globalAlpha = fade;
+          g.fillStyle = '#2b3038'; g.beginPath(); rr(g, x - 14, y0 - 16, W + 28, 20, 8); g.fill();
+          g.beginPath(); g.rect(x - 4, y0, W + 8, shown + 8); g.clip();
+          g.fillStyle = 'rgba(0,0,0,0.25)'; g.fillRect(x + 4, y0 + 4, W, H);
+          g.fillStyle = '#fbfbf5';
+          g.beginPath(); g.moveTo(x, y0); g.lineTo(x + W, y0); g.lineTo(x + W, y0 + H);
+          for (let zx = x + W; zx > x; zx -= 8) { g.lineTo(zx - 4, y0 + H - 5); g.lineTo(zx - 8, y0 + H); }
+          g.closePath(); g.fill();
+          g.fillStyle = '#2b3038'; g.font = '600 12px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.textBaseline = 'top';
+          lines.forEach((l, i) => g.fillText(l, cw / 2, y0 + 12 + i * lh));
+          g.restore();
+        },
+      };
+    },
+    // An office stamp, good or bad. Rage mode's are sarcastic.
+    stamp(c) {
+      let hit = false;
+      return {
+        dur: 2.5,
+        update(dt, t) { if (!hit && t > 0.22) { hit = true; Sound.stamp(); } },
+        draw(g, t) {
+          const size = clamp(Math.floor((cw - 60) / (c.stampText.length * 0.62 + 1)), 20, 46);
+          const k = k01(t, 0, 0.22), s = hit ? 1 : lerp(2.6, 1, k * k);
+          drawStampBox(g, c.stampText, cw / 2, ch * 0.5, size, c.stampColor, c.stampRot || -0.1, s, (hit ? 1 : k) * (1 - k01(t, 2, 2.5)));
+        },
+      };
+    },
+    // A tangle of HDMI cables rolls past. Somewhere, a cricket.
+    tumbleweed() {
+      const loops = Array.from({ length: 9 }, () => [rand(0.4, 1), rand(0, TAU), rand(0.6, 1.4)]);
+      Sound.cricket();
+      return {
+        dur: 3.3,
+        update() {},
+        draw(g, t) {
+          const r = Math.min(34, ch * 0.05), x = lerp(-r * 2, cw + r * 2, t / 3.3), y = ch * 0.74 - Math.abs(Math.sin(t * 4.5)) * r * 0.9;
+          g.fillStyle = 'rgba(0,0,0,0.2)'; g.beginPath(); g.ellipse(x, ch * 0.74 + r, r, r * 0.2, 0, 0, TAU); g.fill();
+          g.save(); g.translate(x, y); g.rotate(x / r);
+          g.strokeStyle = '#8a8f98'; g.lineWidth = 2.5;
+          for (const [k, a, e] of loops) { g.beginPath(); g.ellipse(0, 0, r * k, r * k * 0.5 * e, a, 0, TAU); g.stroke(); }
+          g.fillStyle = '#2b3038'; g.fillRect(r * 0.6, -4, 12, 8);
+          g.restore();
+        },
+      };
+    },
+    // One sad balloon, with the air going out of it.
+    sadballoon() {
+      let pff = false;
+      return {
+        dur: 3,
+        update(dt, t) { if (!pff && t > 0.7) { pff = true; Sound.deflate(); } },
+        draw(g, t) {
+          const k = k01(t, 0.7, 1.9), r = lerp(30, 9, k), cx = cw / 2, rise = easeOut(k01(t, 0, 0.7)) * ch * 0.12;
+          const x = cx + (k > 0 && k < 1 ? Math.sin(t * 17) * 70 * k + Math.cos(t * 11) * 30 : k >= 1 ? 40 : 0);
+          const y = ch * 0.62 - rise + (k > 0 && k < 1 ? Math.cos(t * 13) * 40 * k : 0) + k01(t, 1.9, 2.6) * ch * 0.3;
+          g.globalAlpha = 1 - k01(t, 2.4, 3);
+          g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = 1.2;
+          g.beginPath(); g.moveTo(x, y + r); g.quadraticCurveTo(x + 8, y + r + 20, x - 3, y + r + 44); g.stroke();
+          g.fillStyle = '#6f7a88'; g.beginPath(); g.ellipse(x, y, r * 0.85, r, Math.sin(t * 9) * 0.3 * k, 0, TAU); g.fill();
+          g.globalAlpha = 1;
+        },
+      };
+    },
+    // A little rain cloud parks over the cup.
+    raincloud(c) {
+      const drops = [];
+      Sound.rumble();
+      return {
+        dur: 3,
+        update(dt, t) {
+          const p = toScreen(c.cup[0], c.cup[1]);
+          if (t < 2.3) for (let i = 0; i < 3; i++) if (Math.random() < dt * 20) drops.push({ x: p.x + rand(-36, 36), y: p.y - 70 + rand(-4, 8), vy: 380, life: 0.3 });
+          for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i]; d.y += d.vy * dt; if ((d.life -= dt) <= 0) drops.splice(i, 1); }
+        },
+        draw(g, t) {
+          const p = toScreen(c.cup[0], c.cup[1]), a = Math.min(k01(t, 0, 0.3), 1 - k01(t, 2.5, 3));
+          g.strokeStyle = `rgba(160,200,255,${(0.8 * a).toFixed(3)})`; g.lineWidth = 2; g.lineCap = 'round';
+          for (const d of drops) { g.beginPath(); g.moveTo(d.x, d.y); g.lineTo(d.x - 2, d.y + 9); g.stroke(); }
+          g.fillStyle = `rgba(120,130,145,${(0.95 * a).toFixed(3)})`;
+          const cy = p.y - 76 + Math.sin(t * 2) * 3;
+          for (const [dx, dy, r] of [[-26, 4, 16], [-6, -8, 22], [18, 0, 18], [34, 8, 12], [4, 10, 16]]) { circle(g, p.x + dx, cy + dy, r); g.fill(); }
+        },
+      };
+    },
+  };
+  const SHOW_POOLS = {
+    ace: ['cannons', 'fireworks', 'promotion', 'disco', 'parade'],
+    eagle: ['fireworks', 'parade', 'employee', 'promotion', 'cannons', 'disco'],
+    birdie: ['airplanes', 'balloons', 'donuts', 'stickies', 'banner', 'duck', 'mugs', 'chair', 'employee', 'receipt'],
+    par: ['stamp', 'stamp', 'duck', 'mugs', 'receipt', 'airplanes'],
+    bogey: ['stamp', 'stamp', 'tumbleweed', 'sadballoon', 'raincloud'],
+  };
+  const Party = {
+    running: [],
+    decks: {},
+    // Deal from a shuffled deck, so you see every show before any of them comes around again.
+    deal(name, list) {
+      let deck = this.decks[name];
+      if (!deck || !deck.length) {
+        const last = deck && deck.last;
+        deck = list.slice().sort(() => Math.random() - 0.5);
+        if (deck.length > 1 && deck[deck.length - 1] === last) deck.unshift(deck.pop());
+        this.decks[name] = deck;
+      }
+      const out = deck.pop();
+      deck.last = out;
+      return out;
+    },
+    add(kind, c, delay = 0) {
+      const s = SHOWS[kind](c);
+      s.t = -delay; s.kind = kind;
+      this.running.push(s);
+      return s;
+    },
+    // Starts the show for a holed ball and returns how long the turn should wait for it.
+    celebrate(tier, c) {
+      const kind = this.deal('show:' + tier, SHOW_POOLS[tier]);
+      if (kind === 'stamp') {
+        const good = tier === 'par';
+        c.stampText = this.deal(good ? 'stamp:par' : 'stamp:bad', good ? STAMPS.par : STAMPS.bad);
+        c.stampColor = good ? '#35d07f' : '#ff5a4e';
+      }
+      const s = this.add(kind, c);
+      let hold = Math.min(s.dur * 0.8, 3.4);
+      // Rage mode doesn't let a good hole go unremarked.
+      if (G.rage && (tier === 'ace' || tier === 'eagle' || tier === 'birdie') && Math.random() < 0.6) {
+        this.add('stamp', { ...c, stampText: this.deal('stamp:rage', STAMPS.rage), stampColor: '#c39bff', stampRot: 0.12 }, Math.min(2.2, s.dur - 1));
+        hold = Math.max(hold, Math.min(2.2, s.dur - 1) + 1.6);
+      }
+      return Math.max(1.8, hold);
+    },
+    clear() { this.running.length = 0; },
+    update(dt) {
+      for (let i = this.running.length - 1; i >= 0; i--) {
+        const s = this.running[i];
+        s.t += dt;
+        if (s.t < 0) continue;
+        if (s.t > s.dur) { this.running.splice(i, 1); continue; }
+        s.update(dt, s.t);
+      }
+    },
+    draw(g) {
+      if (!this.running.length) return;
+      g.save();
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      for (const s of this.running) if (s.t >= 0) { g.save(); s.draw(g, s.t); g.restore(); }
+      g.restore();
+    },
+  };
+
+  // ---------------------------------------------------------------------------
   // Turn flow
   // ---------------------------------------------------------------------------
   function onImpact(imp, b) {
@@ -1201,10 +2383,16 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (G.phase === 'rolling' && G.screen === 'play') curPlayer().stats.bounces++;
     if (imp > 380) burst(b.x, b.y, 'rgba(255,255,255,0.7)', 5, 90, 0.35, 2.2);
   }
-  function onPushed() {
+  function onPushed(byRoomba) {
     if (drag) { drag = null; canvas.classList.remove('dragging'); }
+    Swing.cancel();
     if (G.phase === 'aim') G.phase = 'rolling';
     Sound.thud();
+    if (byRoomba && G.screen === 'play') {
+      curPlayer().stats.bumps++;
+      Taunts.say('roomba', true);
+      shake();
+    }
   }
   function startSink() {
     const b = G.ball;
@@ -1214,19 +2402,28 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function startSplash(z) {
     const b = G.ball;
     b.state = 'splash'; b.splashT = 0; b.vx = 0; b.vy = 0;
-    const shred = z.style === 'shredder';
-    if (G.screen === 'play') { G.strokes += 1; curPlayer().stats.spills++; }
+    const shred = z.style === 'shredder', back = PH.backToTee;
+    if (G.screen === 'play') {
+      G.strokes += 1;
+      const st = curPlayer().stats;
+      st.spills++;
+      if (back) st.tees++;
+    }
+    const penalty = back ? '+1 stroke, and it’s back to the tee.' : '+1 stroke. Back to where you hit it.';
     if (shred) {
       Sound.shred();
       burst(b.x, b.y, '#f4f4ef', 14, 220, 0.6, 3.2);
-      toast('Shredded', '+1 stroke. Back to where you hit it.', 'bad');
+      toast('Shredded', penalty, 'bad');
     } else {
       Sound.splash();
       ring(b.x, b.y, 'rgba(255,236,210,0.8)', 4, 26, 0.7, 2.5);
       ring(b.x, b.y, 'rgba(255,236,210,0.55)', 2, 42, 0.9, 1.5);
-      burst(b.x, b.y, '#8a5a33', 12, 200, 0.5, 3);
-      toast('Splash', '+1 stroke. Back to where you hit it.', 'bad');
+      burst(b.x, b.y, z.style === 'oil' ? '#2a2d33' : '#8a5a33', 12, 200, 0.5, 3);
+      toast(z.style === 'oil' ? 'Slipped' : 'Splash', penalty, 'bad');
     }
+    if (back) { Sound.sad(); shake(); }
+    Taunts.say(back && Math.random() < 0.5 ? 'tee' : shred ? 'shred' : 'coffee', true);
+    Office.incident();
     updateHud();
     netEvent(shred ? 'shred' : 'splash');
   }
@@ -1241,6 +2438,17 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const b = G.ball;
     const sp = Math.max(170, Math.hypot(b.vx, b.vy) * 0.92);
     ring(b.x, b.y, 'rgba(255,255,255,0.7)', 4, 22, 0.4, 2);
+    if (PH.wrongFloor && G.screen === 'play' && Math.random() < PH.wrongFloor) {
+      // Rage mode: sometimes the car just takes you back down to the lobby.
+      b.x = G.hole.tee[0]; b.y = G.hole.tee[1]; b.vx = 0; b.vy = 0;
+      b.trail.length = 0; b.state = 'rest'; b.quiet = true;
+      Sound.ding();
+      toast('Wrong floor', 'The elevator took you back down to the lobby.', 'bad');
+      Taunts.say('floor', true);
+      shake();
+      onBallRest();
+      return;
+    }
     b.x = tp.to[0]; b.y = tp.to[1];
     b.vx = tp.dir[0] * sp; b.vy = tp.dir[1] * sp;
     b.trail.length = 0; b.slowT = 0;
@@ -1251,11 +2459,29 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function onBallRest() {
     if (G.screen !== 'play') return;
     if (G.phase !== 'rolling') return;
-    if (G.strokes >= STROKE_CAP) { pickUp(); return; }
+    const b = G.ball;
+    if (!b.quiet) reactToRest(b, G.hole);
+    b.quiet = false;
+    if (G.strokes >= PH.cap) { pickUp(); return; }
     G.phase = 'aim';
+    G.aimSince = G.clock;
     aimAtCup();
     updateHud();
     netState();
+  }
+  // The office comments on how that shot went.
+  function reactToRest(b, h) {
+    const st = curPlayer().stats, from = G.lastShot || h.tee;
+    const toCup = Math.hypot(from[0] - h.cup[0], from[1] - h.cup[1]), moved = Math.hypot(b.x - from[0], b.y - from[1]);
+    if (b.minCup < PH.cupR) {
+      st.lips++;
+      Sound.ooh();
+      toast('Lipped out', 'It was right there.', 'bad');
+      Taunts.say('lipout', true);
+    } else if (b.minCup < PH.cupR + 7) Taunts.say('lipout');
+    else if (b.hits >= 6) Taunts.say('walls');
+    else if (toCup > 180 && moved < toCup * 0.25) Taunts.say('short');
+    if (G.strokes >= h.par + 3 && !G.overSaid) { G.overSaid = true; Taunts.say('over'); }
   }
   function aimAtCup() {
     if (G.ball && G.hole) kbAim.angle = Math.atan2(G.hole.cup[1] - G.ball.y, G.hole.cup[0] - G.ball.x);
@@ -1263,7 +2489,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function onHoled() {
     if (G.screen !== 'play') { G.ball = null; return; }
     const p = curPlayer(), h = G.hole;
-    const score = Math.min(G.strokes, STROKE_CAP);
+    const score = Math.min(G.strokes, PH.cap);
     p.scores[G.holeIdx] = score;
     const ls = G.lastShot || h.tee;
     const dist = Math.hypot(ls[0] - h.cup[0], ls[1] - h.cup[1]) / UNITS_PER_FT;
@@ -1272,23 +2498,29 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     G.phase = 'done';
     const diff = score - h.par;
     const [cx, cy] = h.cup;
-    if (score === 1) { Sound.cheer(); confetti(cx, cy, 90); ring(cx, cy, 'rgba(255,212,71,0.95)', CUP_R, 90, 0.9, 4); }
-    else if (diff < 0) { Sound.soft(); confetti(cx, cy, 36); ring(cx, cy, 'rgba(255,255,255,0.9)', CUP_R, 60, 0.7, 3); }
-    else ring(cx, cy, 'rgba(255,255,255,0.8)', CUP_R, 40, 0.5, 2.5);
+    if (score === 1) { Sound.cheer(); confetti(cx, cy, 90); ring(cx, cy, 'rgba(255,212,71,0.95)', PH.cupR, 90, 0.9, 4); }
+    else if (diff < 0) { Sound.soft(); confetti(cx, cy, 36); ring(cx, cy, 'rgba(255,255,255,0.9)', PH.cupR, 60, 0.7, 3); }
+    else ring(cx, cy, 'rgba(255,255,255,0.8)', PH.cupR, 40, 0.5, 2.5);
     const who = G.players.length > 1 ? `${p.name}: ` : '';
     const detail = score === 1 ? `${who}first stroke, straight in.` : `${who}${score} strokes on a par ${h.par}.`;
     toast(termFor(score, h.par), detail, diff < 0 ? 'hi' : '');
     updateHud();
     netState();
     if (score === 1) netEvent('ace'); else if (diff <= -2) netEvent('eagle'); else if (diff === -1) netEvent('birdie');
-    after(1.8, endTurn);
+    if (score === 1) after(0.9, () => Taunts.say('ace', true));
+    else if (diff < 0 && Math.random() < 0.6) after(0.9, () => Taunts.say('birdie'));
+    const tier = score === 1 ? 'ace' : diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 0 ? 'par' : 'bogey';
+    const hold = Party.celebrate(tier, { word: termFor(score, h.par), name: p.name, color: p.color, score, par: h.par, hole: G.holeIdx + 1, holeName: h.name, cup: h.cup });
+    after(hold, endTurn);
   }
   function pickUp() {
     const p = curPlayer();
-    p.scores[G.holeIdx] = STROKE_CAP;
+    p.scores[G.holeIdx] = PH.cap;
     G.phase = 'done';
     if (G.ball) G.ball.state = 'hidden';
-    toast('Picked up', `${G.players.length > 1 ? p.name + ' takes' : 'You take'} a ${STROKE_CAP} on this one.`, 'bad');
+    toast('Picked up', `${G.players.length > 1 ? p.name + ' takes' : 'You take'} a ${PH.cap} on this one.`, 'bad');
+    Sound.sad();
+    Taunts.say('pickup', true);
     updateHud();
     netState();
     after(1.6, endTurn);
@@ -1301,20 +2533,24 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function startTurn(turnIdx, firstOfHole) {
     G.turn = turnIdx;
     G.strokes = 0;
-    const p = curPlayer(), h = G.hole, def = HOLES[G.holeIdx];
+    const p = curPlayer(), h = G.hole;
     G.ball = newBall(h.tee[0], h.tee[1], p.color);
     G.lastShot = h.tee.slice();
     G.phase = 'aim';
+    G.aimSince = G.clock;
+    G.overSaid = false;
+    G.idleSaid = false;
     kbAim.active = false;
     kbAim.angle = Math.atan2(h.cup[1] - h.tee[1], h.cup[0] - h.tee[0]);
     kbAim.power = 0.5;
     updateHud();
     const multi = G.players.length > 1;
-    let small = `Hole ${G.holeIdx + 1}, par ${def.par}.`;
-    if (firstOfHole) small += ' ' + def.tip;
+    let small = `Hole ${G.holeIdx + 1}, par ${h.par}.`;
+    if (firstOfHole) small += ' ' + h.tip;
     else if (multi) small = `You're up. ${small}`;
-    toast(multi ? p.name : def.name, small, '');
+    toast(multi ? p.name : h.name, small, PH.rage ? 'bad' : '');
     $('hint').hidden = G.firstShotDone;
+    if (PH.rage && firstOfHole && G.holeIdx === 0 && turnIdx === 0) after(1.2, () => Taunts.say('rage', true));
     netState();
   }
   function holeComplete() {
@@ -1333,16 +2569,17 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     loadHole(prev + 1);
     startTurn(0, true);
   }
-  function shoot(angle, power, fromKeyboard) {
+  function shoot(angle, power, mul = 1) {
     if (!canAim()) return;
-    const b = G.ball, sp = shotSpeed(power);
+    const b = G.ball, sp = shotSpeed(power) * mul;
     G.lastShot = [b.x, b.y];
     b.vx = Math.cos(angle) * sp; b.vy = Math.sin(angle) * sp;
     b.state = 'rolling'; b.slowT = 0; b.rollT = 0; b.trail.length = 0;
+    b.minCup = Infinity; b.hits = 0;
+    G.idleSaid = false;
+    Office.putt();
     G.strokes += 1;
     G.phase = 'rolling';
-    kbAim.angle = angle; kbAim.power = power;
-    if (!fromKeyboard) kbAim.active = false;
     Sound.putt(power);
     ring(b.x, b.y, 'rgba(255,255,255,0.75)', BALL_R, BALL_R + 16, 0.3, 2);
     if (!G.firstShotDone) { G.firstShotDone = true; $('hint').hidden = true; }
@@ -1358,12 +2595,20 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     G.hole = buildHole(idx, v);
     fxList.length = 0;
     layoutView();
-    canvas.setAttribute('aria-label', `Mini golf course, hole ${idx + 1}: ${HOLES[idx].name}`);
+    canvas.setAttribute('aria-label', `Mini golf course, hole ${idx + 1}: ${holeName(idx)}`);
   }
-  function startGame(names, course) {
+  // players: [{ name, dept }]; opts: { rage, courseId }
+  function startGame(players, course, opts = {}) {
     G.timers.length = 0;
-    G.players = names.map((name, i) => ({ name, color: COLORS[i % COLORS.length], scores: Array(HOLES.length).fill(null), stats: { aces: [], spills: 0, bounces: 0, longest: 0 } }));
+    Party.clear();
+    setCourse(opts.courseId || 'office');
+    setMode(!!opts.rage);
+    G.players = players.map((p, i) => ({
+      name: p.name, dept: Number.isInteger(p.dept) ? p.dept : -1, color: COLORS[i % COLORS.length],
+      scores: Array(HOLES.length).fill(null), stats: emptyStats(),
+    }));
     G.course = course;
+    Office.startRound();
     G.variants = variantsFor(course.key);
     G.order = G.players.map((_, i) => i);
     G.screen = 'play';
@@ -1383,15 +2628,23 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function showSetup() {
     G.timers.length = 0;
+    Party.clear();
     G.screen = 'setup';
     G.phase = 'idle';
     closeAllOverlays();
     showHud(false);
-    loadHole(8, variantsFor('day:' + todayKey()));
-    G.ball = newBall(G.hole.tee[0], G.hole.tee[1], COLORS[0]);
+    $('tauntPop').hidden = true;
+    showBackdrop(store.get('building', 'office'));
     renderSetup();
     renderOnlineSetup();
     openOverlay('setup');
+  }
+  // The course behind the setup card: the last hole of whichever building is picked.
+  function showBackdrop(courseId) {
+    setMode(false);
+    setCourse(courseId);
+    loadHole(HOLES.length - 1, variantsFor('day:' + todayKey()));
+    G.ball = newBall(G.hole.tee[0], G.hole.tee[1], COLORS[0]);
   }
 
   // ---------------------------------------------------------------------------
@@ -1411,6 +2664,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     let t = 12, bm = 12;
     if (!top.hidden) t = top.getBoundingClientRect().bottom - r.top + 6;
     if (!bot.hidden) bm = r.bottom - bot.getBoundingClientRect().top + 6;
+    const sw = $('swingBtn');
+    if (!sw.hidden) bm = Math.max(bm, r.bottom - sw.getBoundingClientRect().top + 60);
     return { top: t, bottom: bm };
   }
   function screenVecToWorld(dx, dy) {
@@ -1593,11 +2848,40 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function drawFunnel(g, z) {
     g.save();
-    const gr = g.createRadialGradient(z.x, z.y, CUP_R, z.x, z.y, z.r);
-    gr.addColorStop(0, 'rgba(0,20,8,0.3)'); gr.addColorStop(1, 'rgba(0,20,8,0)');
+    const gr = g.createRadialGradient(z.x, z.y, PH.cupR, z.x, z.y, z.r);
+    // A bowl shades darker toward the cup; Rage mode's hill catches the light on top instead.
+    if (z.strength < 0) { gr.addColorStop(0, 'rgba(255,255,230,0.3)'); gr.addColorStop(1, 'rgba(255,255,230,0)'); }
+    else { gr.addColorStop(0, 'rgba(0,20,8,0.3)'); gr.addColorStop(1, 'rgba(0,20,8,0)'); }
     g.fillStyle = gr; circle(g, z.x, z.y, z.r); g.fill();
-    g.strokeStyle = 'rgba(255,255,255,0.1)'; g.lineWidth = 1.5;
+    g.strokeStyle = z.strength < 0 ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.1)'; g.lineWidth = 1.5;
     for (const k of [0.42, 0.7, 0.98]) { circle(g, z.x, z.y, z.r * k); g.stroke(); }
+    g.restore();
+  }
+  // The day's break: the uphill side catches the light, and faint chevrons point downhill.
+  function drawBreak(g, h) {
+    const m = Math.hypot(h.tilt[0], h.tilt[1]);
+    if (m < 1) return;
+    const dx = h.tilt[0] / m, dy = h.tilt[1] / m, px = -dy, py = dx, k = Math.min(1.3, m / 38);
+    const bb = bboxOf(h.course.flat()), cx = (bb.x0 + bb.x1) / 2, cy = (bb.y0 + bb.y1) / 2;
+    const R = Math.hypot(bb.x1 - bb.x0, bb.y1 - bb.y0) / 2;
+    g.save();
+    coursePath(g, h); g.clip();
+    const gr = g.createLinearGradient(cx - dx * R, cy - dy * R, cx + dx * R, cy + dy * R);
+    gr.addColorStop(0, `rgba(255,255,225,${(0.08 * k).toFixed(3)})`); gr.addColorStop(1, `rgba(0,28,10,${(0.14 * k).toFixed(3)})`);
+    g.fillStyle = gr; g.fillRect(bb.x0, bb.y0, bb.x1 - bb.x0, bb.y1 - bb.y0);
+    g.strokeStyle = `rgba(255,255,255,${(0.06 + 0.1 * k).toFixed(3)})`; g.lineWidth = 2; g.lineCap = 'round'; g.lineJoin = 'round';
+    const S = 64, n = Math.ceil(R / S) + 1, arm = 4 + 3 * k;
+    for (let i = -n; i <= n; i++) {
+      for (let j = -n; j <= n; j++) {
+        const along = j * S + (i & 1 ? S / 2 : 0);
+        const ox = cx + px * i * S + dx * along, oy = cy + py * i * S + dy * along;
+        g.beginPath();
+        g.moveTo(ox - dx * arm + px * arm * 1.3, oy - dy * arm + py * arm * 1.3);
+        g.lineTo(ox + dx * arm * 0.5, oy + dy * arm * 0.5);
+        g.lineTo(ox - dx * arm - px * arm * 1.3, oy - dy * arm - py * arm * 1.3);
+        g.stroke();
+      }
+    }
     g.restore();
   }
   function drawZonesStatic(g, h) {
@@ -1791,6 +3075,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     drawDecorUnder(g, h);
     drawCourseBase(g, h);
     drawDecals(g, h);
+    drawBreak(g, h);
     drawZonesStatic(g, h);
     for (const b of h.blocks) drawBlock(g, b, h.shadow);
     for (const c of h.bumpers) drawBumper(g, c, h.shadow);
@@ -1895,6 +3180,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
           g.beginPath(); g.moveTo(p.x0 + 4, p.y0 + 4); g.lineTo(p.x1 - 4, p.y0 + 4); g.stroke();
         }
         g.restore();
+      } else if (m.type === 'roomba') {
+        drawRoomba(g, m, sh);
       }
     }
     for (const c of h.bumpers) {
@@ -1904,6 +3191,26 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       circle(g, c.x, c.y, c.r * 0.42); g.fillStyle = '#e2b541'; g.fill();
       g.restore();
     }
+  }
+  function drawRoomba(g, m, sh) {
+    const { x, y, r, dir } = m, fx = Math.cos(dir), fy = Math.sin(dir), sx = -fy, sy = fx;
+    g.save();
+    circle(g, x + sh[0] * 0.7, y + sh[1] * 0.7, r); g.fillStyle = 'rgba(6,10,16,0.34)'; g.fill();
+    circle(g, x, y, r); g.fillStyle = '#2b3038'; g.fill();
+    g.lineWidth = 2; g.strokeStyle = '#5a616c'; g.stroke();
+    g.beginPath(); g.arc(x, y, r - 1.8, dir - 1.15, dir + 1.15); g.strokeStyle = '#a3abb6'; g.lineWidth = 3.2; g.stroke();
+    circle(g, x - fx * 2, y - fy * 2, r * 0.5); g.fillStyle = '#3b414b'; g.fill();
+    circle(g, x - fx * 2, y - fy * 2, r * 0.18); g.fillStyle = '#e2b541'; g.fill();
+    for (const s of [-1, 1]) {
+      const ex = x + fx * r * 0.45 + sx * s * r * 0.3, ey = y + fy * r * 0.45 + sy * s * r * 0.3;
+      circle(g, ex, ey, 2.4); g.fillStyle = '#ff5a4e'; g.fill();
+      // Angry brows slanting in toward the middle.
+      g.beginPath();
+      g.moveTo(ex - fx * 1.2 + sx * s * 3.4, ey - fy * 1.2 + sy * s * 3.4);
+      g.lineTo(ex + fx * 2.4 - sx * s * 1.2, ey + fy * 2.4 - sy * s * 1.2);
+      g.strokeStyle = '#11141a'; g.lineWidth = 1.6; g.stroke();
+    }
+    g.restore();
   }
   function drawArrivals(g, h) {
     for (const tp of h.teleports) {
@@ -1927,10 +3234,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function drawCupHole(g, h) {
     const [x, y] = h.cup;
-    circle(g, x, y, CUP_R + 2.5); g.fillStyle = '#e9eef3'; g.fill();
-    const gr = g.createRadialGradient(x - 3, y - 3, 1, x, y, CUP_R);
+    circle(g, x, y, PH.cupR + 2.5); g.fillStyle = '#e9eef3'; g.fill();
+    const gr = g.createRadialGradient(x - 3, y - 3, 1, x, y, PH.cupR);
     gr.addColorStop(0, '#05070a'); gr.addColorStop(1, '#1d242d');
-    circle(g, x, y, CUP_R); g.fillStyle = gr; g.fill();
+    circle(g, x, y, PH.cupR); g.fillStyle = gr; g.fill();
   }
   function drawFlag(g, h, t) {
     const [x, y] = h.cup, up = view.up, side = [-up[1], up[0]];
@@ -1979,18 +3286,13 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     g.lineWidth = 1; g.strokeStyle = 'rgba(0,0,0,0.4)'; g.stroke();
     g.restore();
   }
+  // Rage mode: too much espresso. The aim drifts back and forth, and what you see is what you hit.
+  function wobble() { return PH.wobble ? 0.052 * Math.sin(G.clock * 2.7) + 0.02 * Math.sin(G.clock * 7.9 + 1.3) : 0; }
   function currentAim() {
     const b = G.ball;
-    if (!canAim()) return null;
-    if (drag) {
-      const dx = drag.sx - drag.cx, dy = drag.sy - drag.cy;
-      const power = clamp(Math.hypot(dx, dy) / pullMax(), 0, 1);
-      if (power < 0.03) return { angle: 0, power, cancel: true, x: b.x, y: b.y };
-      const w = screenVecToWorld(dx, dy);
-      return { angle: Math.atan2(w.y, w.x), power, x: b.x, y: b.y };
-    }
-    if (kbAim.active) return { angle: kbAim.angle, power: kbAim.power, x: b.x, y: b.y };
-    return null;
+    if (!canAim() || !b) return null;
+    const power = Swing.phase === 'back' ? Swing.power : Swing.phase === 'down' ? Swing.locked : 0;
+    return { angle: kbAim.angle + wobble(), power, x: b.x, y: b.y };
   }
   function powerColor(p) {
     if (p < 0.5) { const k = p / 0.5; return `rgb(255,${Math.round(lerp(255, 212, k))},${Math.round(lerp(255, 71, k))})`; }
@@ -1998,21 +3300,18 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function drawAim(g, aim) {
     const { x, y, angle, power } = aim;
-    if (aim.cancel) {
-      g.save(); g.strokeStyle = 'rgba(255,255,255,0.45)'; g.setLineDash([3, 4]); g.lineWidth = 1.5;
-      circle(g, x, y, BALL_R + 9); g.stroke(); g.restore();
-      return;
-    }
     const dx = Math.cos(angle), dy = Math.sin(angle);
-    const reach = raycast(x, y, dx, dy, 560);
     g.save();
-    g.fillStyle = '#ffffff';
-    for (let d = BALL_R + 12; d < reach; d += 13) {
-      g.globalAlpha = Math.max(0.1, 0.6 * (1 - d / 620));
-      circle(g, x + dx * d, y + dy * d, 1.9); g.fill();
+    if (PH.guide) {
+      const reach = raycast(x, y, dx, dy, 560);
+      g.fillStyle = '#ffffff';
+      for (let d = BALL_R + 12; d < reach; d += 13) {
+        g.globalAlpha = Math.max(0.1, 0.6 * (1 - d / 620));
+        circle(g, x + dx * d, y + dy * d, 1.9); g.fill();
+      }
+      g.globalAlpha = 1;
     }
-    g.globalAlpha = 1;
-    const col = powerColor(power), L = 16 + power * 110;
+    const col = powerColor(power), L = 20 + power * 110;
     const sx = x + dx * (BALL_R + 5), sy = y + dy * (BALL_R + 5), ex = sx + dx * L, ey = sy + dy * L;
     g.lineCap = 'round';
     g.strokeStyle = 'rgba(0,0,0,0.3)'; g.lineWidth = 8; g.beginPath(); g.moveTo(sx + 1, sy + 2); g.lineTo(ex + 1, ey + 2); g.stroke();
@@ -2066,6 +3365,64 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (aim) drawAim(g, aim);
     drawFx(g);
     if (ghosts.length) drawGhostLabels(g, ghosts);
+    drawSwingMeter(g);
+    Party.draw(g);
+  }
+  // The swing meter, in screen pixels just above the swing button.
+  function rollFeetToMeter(ft) {
+    const want = ft * UNITS_PER_FT, t = Math.pow(clamp((want - MIN_ROLL) / (MAX_ROLL - MIN_ROLL), 0, 1), 2 / 3);
+    return 0.03 + 0.97 * t;
+  }
+  function drawSwingMeter(g) {
+    const b = G.ball, h = G.hole;
+    if (swingBtn.hidden || !h) return;
+    const aiming = canAim() && b;
+    if (!aiming && Swing.labelT <= 0) return;
+    const r = swingBtn.getBoundingClientRect(), app = canvas.getBoundingClientRect();
+    const W = Math.min(400, cw - 40), H = 14, x0 = (cw - W) / 2, y0 = r.top - app.top - 32;
+    const P = Swing.P, IMP = 0.2;
+    const X = v => (v >= 0 ? x0 + W * (IMP + (1 - IMP) * Math.min(v, 1)) : x0 + W * IMP * (1 + Math.max(v, P.shank) / -P.shank));
+    g.save();
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (aiming) {
+      g.beginPath(); rr(g, x0 - 6, y0 - 22, W + 12, H + 38, 10); g.fillStyle = 'rgba(15,20,28,0.62)'; g.fill();
+      g.beginPath(); rr(g, x0, y0, W, H, 7); g.fillStyle = 'rgba(247,249,251,0.14)'; g.fill();
+      g.fillStyle = 'rgba(255,212,71,0.55)'; g.fillRect(X(-P.good), y0, X(P.good) - X(-P.good), H);
+      g.fillStyle = '#35d07f'; g.fillRect(X(-P.perfect), y0, X(P.perfect) - X(-P.perfect), H);
+      g.fillStyle = 'rgba(247,249,251,0.85)'; g.fillRect(X(0) - 1, y0 - 3, 2, H + 6);
+      g.font = '600 10px "IBM Plex Mono", monospace'; g.textBaseline = 'top'; g.textAlign = 'center';
+      for (const ft of [5, 10, 20, 30]) {
+        const x = X(rollFeetToMeter(ft));
+        g.fillStyle = 'rgba(247,249,251,0.35)'; g.fillRect(x - 0.5, y0 + H - 5, 1, 5);
+        if (Swing.phase !== 'down') { g.fillStyle = 'rgba(247,249,251,0.6)'; g.fillText(`${ft}'`, x, y0 + H + 2); }
+      }
+      if (Swing.phase === 'down') {
+        g.fillStyle = 'rgba(247,249,251,0.6)';
+        g.textAlign = 'right'; g.fillText('PULL', X(-P.good) - 4, y0 + H + 2);
+        g.textAlign = 'left'; g.fillText('PUSH', X(P.good) + 4, y0 + H + 2);
+      }
+      if (Swing.phase === 'back') {
+        g.fillStyle = 'rgba(255,255,255,0.85)';
+        g.fillRect(X(0), y0 + 3, X(Swing.power) - X(0), H - 6);
+      } else if (Swing.phase === 'down') {
+        const lx = X(Swing.locked);
+        g.fillStyle = '#ffffff'; g.beginPath(); g.moveTo(lx, y0 - 1); g.lineTo(lx - 5, y0 - 8); g.lineTo(lx + 5, y0 - 8); g.fill();
+        const nx = X(Swing.needle);
+        g.fillStyle = '#ff5a4e'; g.fillRect(nx - 1.5, y0 - 4, 3, H + 8);
+      }
+      const dist = Math.hypot(b.x - h.cup[0], b.y - h.cup[1]) / UNITS_PER_FT;
+      g.font = '600 11px "IBM Plex Mono", monospace'; g.textBaseline = 'bottom';
+      g.fillStyle = '#eef2f7'; g.textAlign = 'left'; g.fillText(`PIN ${dist < 10 ? dist.toFixed(1) : Math.round(dist)} FT`, x0, y0 - 5);
+      g.textAlign = 'right'; g.fillText(`GREEN ${h.stimp >= 11 ? 'FAST' : h.stimp <= 9 ? 'SLOW' : 'MEDIUM'} (${h.stimp})`, x0 + W, y0 - 5);
+    }
+    if (Swing.labelT > 0) {
+      const a = Math.min(1, Swing.labelT / 0.4);
+      g.globalAlpha = a;
+      g.font = '800 24px "Big Shoulders Display", "Arial Narrow", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'bottom';
+      g.fillStyle = Swing.tone === 'hi' ? '#35d07f' : Swing.tone === 'bad' ? '#ffb1a8' : '#eef2f7';
+      g.fillText(Swing.label.toUpperCase(), cw / 2, y0 - 26);
+    }
+    g.restore();
   }
   // Other players in an online room who are on the same hole as you.
   function visibleGhosts() {
@@ -2100,7 +3457,27 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       const w = g.measureText(p.n).width + 14, ly = sy - BALL_R * view.s - 15;
       g.beginPath(); rr(g, sx - w / 2, ly - 9, w, 18, 9); g.fillStyle = 'rgba(15,20,28,0.72)'; g.fill();
       g.fillStyle = '#ffffff'; g.fillText(p.n, sx, ly + 0.5);
+      if (p.say && performance.now() < p.say.until) drawBubble(g, sx, ly - 14, p.say.text);
     }
+    g.restore();
+  }
+  // A speech bubble in screen pixels, wrapped to a few short lines.
+  function drawBubble(g, x, bottom, text) {
+    g.save();
+    g.font = '600 13px "Work Sans", system-ui, sans-serif';
+    const words = text.split(' '), lines = [];
+    let line = '';
+    for (const w of words) {
+      const t = line ? line + ' ' + w : w;
+      if (g.measureText(t).width > 190 && line) { lines.push(line); line = w; } else line = t;
+    }
+    if (line) lines.push(line);
+    const lh = 17, w = Math.max(...lines.map(l => g.measureText(l).width)) + 20, hgt = lines.length * lh + 12;
+    const left = clamp(x - w / 2, 8, cw - w - 8), top = bottom - hgt - 8;
+    g.beginPath(); rr(g, left, top, w, hgt, 10); g.fillStyle = '#ffffff'; g.fill();
+    g.beginPath(); g.moveTo(x - 6, top + hgt); g.lineTo(x, top + hgt + 8); g.lineTo(x + 6, top + hgt); g.fill();
+    g.fillStyle = '#151b25'; g.textAlign = 'left'; g.textBaseline = 'top';
+    lines.forEach((l, i) => g.fillText(l, left + 10, top + 7 + i * lh));
     g.restore();
   }
 
@@ -2124,16 +3501,21 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       } else if (b.state === 'splash') {
         b.splashT += dt;
         if (b.splashT > 0.95) {
-          const p = G.lastShot || h.tee;
+          const p = PH.backToTee ? h.tee : G.lastShot || h.tee;
           b.x = p[0]; b.y = p[1]; b.vx = 0; b.vy = 0; b.scale = 1; b.state = 'rest';
           if (G.screen === 'play') {
-            if (G.strokes >= STROKE_CAP) pickUp();
-            else { G.phase = 'aim'; aimAtCup(); updateHud(); netState(); }
+            if (G.strokes >= PH.cap) pickUp();
+            else { G.phase = 'aim'; G.aimSince = G.clock; aimAtCup(); updateHud(); netState(); }
           }
         }
       }
     }
     updateFx(dt);
+    Swing.update(dt);
+    Party.update(dt);
+    syncSwingBtn();
+    if (canAim() && !G.idleSaid && G.clock - (G.aimSince || 0) > 25) { G.idleSaid = true; Taunts.say('idle'); }
+    Office.tick();
     if (ONLINE.on) onlineFrame(dt);
     canvas.classList.toggle('busy', !canAim());
   }
@@ -2157,56 +3539,127 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   // ---------------------------------------------------------------------------
   // Input
   // ---------------------------------------------------------------------------
-  const pullMax = () => clamp(Math.min(cw, ch) * 0.3, 110, 230);
   function localPoint(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  // Aim by pointing: press and drag anywhere on the course, and the putter turns to face your finger.
+  function aimAt(pt) {
+    const b = G.ball;
+    if (!b) return;
+    const w = screenToWorld(pt.x, pt.y), dx = w.x - b.x, dy = w.y - b.y;
+    if (dx * dx + dy * dy > 64) kbAim.angle = Math.atan2(dy, dx);
+  }
   canvas.addEventListener('pointerdown', e => {
     Sound.unlock();
-    if (!canAim()) return;
+    if (!canAim() || Swing.phase !== 'idle') return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     e.preventDefault();
     try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-    const p = localPoint(e);
-    drag = { id: e.pointerId, sx: p.x, sy: p.y, cx: p.x, cy: p.y, t: performance.now() };
-    kbAim.active = false;
+    drag = { id: e.pointerId };
+    aimAt(localPoint(e));
     canvas.classList.add('dragging');
   });
-  canvas.addEventListener('pointermove', e => {
-    if (!drag || e.pointerId !== drag.id) return;
-    const p = localPoint(e); drag.cx = p.x; drag.cy = p.y;
+  canvas.addEventListener('pointermove', e => { if (drag && e.pointerId === drag.id && Swing.phase === 'idle') aimAt(localPoint(e)); });
+  const endAim = () => { drag = null; canvas.classList.remove('dragging'); };
+  canvas.addEventListener('pointerup', endAim);
+  canvas.addEventListener('pointercancel', endAim);
+
+  // The swing: hold to draw the putter back (hold too long and it swings forward again), let go to start
+  // the stroke, then hit as the needle crosses the green zone. The needle always sweeps in from the far end,
+  // so every stroke has the same tempo. Hit early and the face is still open, pushing it right; hit late and
+  // it has closed, pulling it left. No hit at all is a shank.
+  const SWING = {
+    normal: { up: 1.15, down: 1.25, perfect: 0.055, good: 0.13, shank: -0.32 },
+    rage: { up: 0.8, down: 1.7, perfect: 0.04, good: 0.1, shank: -0.26 },
+  };
+  const Swing = {
+    phase: 'idle', t: 0, power: 0, locked: 0, needle: 0, label: '', labelT: 0, tone: '',
+    get P() { return PH.rage ? SWING.rage : SWING.normal; },
+    press() {
+      if (this.phase === 'idle') {
+        if (!canAim()) return;
+        this.phase = 'back'; this.t = 0; this.power = 0; this.labelT = 0;
+        endAim();
+        Sound.tick();
+      } else if (this.phase === 'down') this.strike(false);
+    },
+    release() {
+      if (this.phase !== 'back') return;
+      this.locked = Math.max(0.03, this.power);
+      this.needle = 1;
+      this.phase = 'down';
+      this.t = 0;
+    },
+    cancel() { this.phase = 'idle'; },
+    update(dt) {
+      if (this.labelT > 0) this.labelT -= dt;
+      if (this.phase === 'idle') return;
+      if (!canAim()) { this.cancel(); return; }
+      this.t += dt;
+      if (this.phase === 'back') {
+        const u = (this.t / this.P.up) % 2;
+        this.power = u <= 1 ? u : 2 - u;
+      } else if ((this.needle -= this.P.down * dt) < this.P.shank) this.strike(true);
+    },
+    strike(missed) {
+      const P = this.P, o = missed ? P.shank : this.needle, a = Math.abs(o);
+      let err = 0, mul = 1, label, tone = '';
+      if (missed) {
+        err = (Math.random() < 0.5 ? -1 : 1) * (0.2 + Math.random() * 0.12);
+        mul = 0.6; label = 'Shanked'; tone = 'bad';
+      } else if (a <= P.perfect) {
+        label = 'Perfect'; tone = 'hi';
+      } else if (a <= P.good) {
+        err = Math.sign(o) * (a - P.perfect) * 0.35; label = 'Good';
+      } else {
+        err = Math.sign(o) * Math.min(0.26, (P.good - P.perfect) * 0.35 + (a - P.good) * 0.9);
+        if (a > 0.2) mul = 0.92;
+        label = `${o > 0 ? 'Pushed' : 'Pulled'} ${Math.max(1, Math.round((Math.abs(err) * 180) / Math.PI))}° ${o > 0 ? 'right' : 'left'}`;
+        tone = 'bad';
+      }
+      this.phase = 'idle';
+      this.label = label; this.labelT = 1.8; this.tone = tone;
+      shoot(kbAim.angle + wobble() + err, this.locked, mul);
+    },
+  };
+  const swingBtn = $('swingBtn');
+  swingBtn.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    e.preventDefault();
+    Sound.unlock();
+    try { swingBtn.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    Swing.press();
   });
-  canvas.addEventListener('pointerup', e => {
-    if (!drag || e.pointerId !== drag.id) return;
-    const p = localPoint(e); drag.cx = p.x; drag.cy = p.y;
-    const aim = currentAim();
-    const quick = performance.now() - drag.t < 260;
-    drag = null;
-    canvas.classList.remove('dragging');
-    if (aim && !aim.cancel) shoot(aim.angle, aim.power, false);
-    else if (aim && quick) toast('Drag to putt', 'Press, pull back away from where you want to go, then let go.', '');
-  });
-  canvas.addEventListener('pointercancel', () => { drag = null; canvas.classList.remove('dragging'); });
+  swingBtn.addEventListener('pointerup', e => { e.preventDefault(); Swing.release(); });
+  swingBtn.addEventListener('pointercancel', () => Swing.release());
+  swingBtn.addEventListener('contextmenu', e => e.preventDefault());
+  function syncSwingBtn() {
+    const show = G.screen === 'play' && !$('hudBottom').hidden && ONLINE.status !== 'wait';
+    if (swingBtn.hidden === show) { swingBtn.hidden = !show; layoutView(); }
+    if (!show) return;
+    const cls = 'swing' + (Swing.phase === 'back' ? ' back' : Swing.phase === 'down' ? ' down' : '');
+    if (swingBtn.className !== cls) swingBtn.className = cls;
+    const text = Swing.phase === 'back' ? 'Let go' : Swing.phase === 'down' ? 'Hit!' : 'Hold to swing';
+    if (swingBtn.textContent !== text) swingBtn.textContent = text;
+    const off = Swing.phase === 'idle' && !canAim();
+    if (swingBtn.disabled !== off) swingBtn.disabled = off;
+  }
   window.addEventListener('keydown', e => {
     const tag = e.target && e.target.tagName;
-    if (e.key === 'Escape') { handleEscape(); return; }
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-    if (tag === 'BUTTON' && (e.key === ' ' || e.key === 'Enter')) return;
-    if (!canAim()) return;
-    const fine = e.shiftKey;
-    const deg = Math.PI / 180;
-    switch (e.key) {
-      case 'ArrowLeft': kbAim.angle -= (fine ? 0.4 : 2.5) * deg; break;
-      case 'ArrowRight': kbAim.angle += (fine ? 0.4 : 2.5) * deg; break;
-      case 'ArrowUp': kbAim.power = clamp(kbAim.power + (fine ? 0.01 : 0.04), 0.03, 1); break;
-      case 'ArrowDown': kbAim.power = clamp(kbAim.power - (fine ? 0.01 : 0.04), 0.03, 1); break;
-      case ' ': case 'Enter':
-        Sound.unlock();
-        if (kbAim.active) shoot(kbAim.angle, kbAim.power, true);
-        break;
-      default: return;
+    if (e.key === 'Escape') { if (Swing.phase !== 'idle') { Swing.cancel(); return; } handleEscape(); return; }
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (tag === 'BUTTON' && e.target !== swingBtn && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      if (!e.repeat) { Sound.unlock(); Swing.press(); }
+      return;
     }
-    kbAim.active = true;
+    if (!canAim() || Swing.phase !== 'idle') return;
+    const deg = Math.PI / 180, step = (e.shiftKey ? 0.4 : 2.5) * deg;
+    if (e.key === 'ArrowLeft') kbAim.angle -= step;
+    else if (e.key === 'ArrowRight') kbAim.angle += step;
+    else return;
     e.preventDefault();
   });
+  window.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') Swing.release(); });
 
   // ---------------------------------------------------------------------------
   // HUD, overlays and screens
@@ -2226,6 +3679,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function closeAllOverlays() { for (const k in overlays) overlays[k].hidden = true; }
   function handleEscape() {
+    if (!$('tauntPop').hidden) { closeTauntPop(); return; }
     for (const k of ['help', 'card']) if (!overlays[k].hidden) { closeOverlay(k); return; }
     if (!overlays.menu.hidden) { closeMenu(); return; }
     if (G.screen === 'play' && !anyOverlayOpen()) openMenu();
@@ -2233,8 +3687,81 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function showHud(on) {
     $('hudTop').hidden = !on;
     $('hudBottom').hidden = !on;
+    if (!on) closeTauntPop();
+    syncTauntBtn();
+    syncTauntsBtn();
     layoutView();
   }
+  function shake() {
+    if (reduceMotion) return;
+    canvas.classList.remove('shake');
+    void canvas.offsetWidth;
+    canvas.classList.add('shake');
+  }
+  const initialsOf = name => name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+  // A notification card: who it's from, and what they have to say about your putting.
+  function ping({ from, initials, color, ball, text, mention, tag }) {
+    const box = $('pings');
+    const card = el('div', 'ping');
+    const av = el('div', 'ping-av' + (ball ? ' ball' : ''), ball ? '' : initials);
+    av.style.setProperty('--c', color);
+    const body = el('div');
+    const head = el('div', 'ping-head');
+    head.append(el('span', '', from), el('small', '', tag || 'now'));
+    const msg = el('div', 'ping-msg');
+    if (mention) msg.append(el('b', '', `@${mention} `));
+    msg.append(document.createTextNode(text));
+    body.append(head, msg);
+    card.append(av, body);
+    box.prepend(card);
+    while (box.children.length > 3) box.lastChild.remove();
+    setTimeout(() => card.classList.add('out'), 4600);
+    setTimeout(() => card.remove(), 5000);
+  }
+  const Taunts = {
+    on: !!store.get('taunts', true),
+    lastAt: -99,
+    recent: [],
+    // Priority taunts (splashes, pick-ups) always get through; the rest wait their turn.
+    say(kind, priority) {
+      if (!this.on || G.screen !== 'play') return;
+      const lines = LINES[kind];
+      if (!lines) return;
+      if (!priority && G.clock - this.lastAt < 3.5) return;
+      const fresh = lines.filter(l => !this.recent.includes(l[1]));
+      const [who, text] = (fresh.length ? fresh : lines)[Math.floor(Math.random() * (fresh.length || lines.length))];
+      this.recent = [text, ...this.recent].slice(0, 6);
+      this.lastAt = G.clock;
+      const c = CAST[who];
+      const mention = G.players.length > 1 && !ONLINE.on && curPlayer() ? curPlayer().name : '';
+      ping({ from: c.name, initials: c.initials, color: c.color, text, mention });
+      Sound.blip();
+    },
+    setOn(v) { this.on = v; store.set('taunts', v); syncTauntsBtn(); },
+  };
+  function syncTauntsBtn() {
+    $('menuTauntsBtn').textContent = Taunts.on ? 'Taunts on' : 'Taunts off';
+    $('menuTauntsBtn').setAttribute('aria-pressed', String(Taunts.on));
+    $('tauntBtn').hidden = !Taunts.on;
+  }
+  const Office = {
+    sinceIncident: 0, nextChat: 0,
+    startRound() { this.sinceIncident = 0; this.nextChat = G.clock + 35 + Math.random() * 25; },
+    putt() { this.sinceIncident++; },
+    // "Putts since last incident" resets whenever anyone lands in a hazard.
+    incident() {
+      const was = this.sinceIncident;
+      this.sinceIncident = 0;
+      if (was >= 3) ping({ from: 'Safety Board', initials: '0', color: '#e8453a', text: `Putts since the last incident: 0. It was ${was}.`, tag: 'posted' });
+    },
+    tick() {
+      if (G.screen !== 'play' || G.clock < this.nextChat) return;
+      this.nextChat = G.clock + 45 + Math.random() * 45;
+      const [name, dept] = pick(COWORKERS);
+      ping({ from: `${name}, ${dept}`, initials: name[0], color: '#5b6b7f', text: pick(CHATTER[COURSE.id] || CHATTER.office), tag: 'overheard' });
+    },
+    memo() { return pick(MEMOS[COURSE.id] || MEMOS.office); },
+  };
   let toastTimer = 0;
   function toast(big, small, tone) {
     const t = $('toast');
@@ -2252,7 +3779,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     $('hudTime').textContent = def.time;
     $('hudHole').textContent = `Hole ${G.holeIdx + 1}/${HOLES.length}`;
     $('hudPar').textContent = `Par ${def.par}`;
-    $('hudName').textContent = def.name;
+    $('hudName').textContent = G.hole.name;
+    $('hudRage').hidden = !PH.rage;
     if (!p) return;
     $('hudDot').style.setProperty('--c', p.color);
     $('hudPlayer').textContent = p.name;
@@ -2263,7 +3791,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (G.screen !== 'play') return;
     $('quitConfirm').hidden = true;
     const p = curPlayer();
-    $('menuSub').textContent = p ? `${HOLES[G.holeIdx].time}, ${HOLES[G.holeIdx].name}. ${ONLINE.on ? 'Room ' + ONLINE.code + '.' : G.players.length > 1 ? p.name + ' is up.' : ''}` : '';
+    $('menuSub').textContent = p ? `${HOLES[G.holeIdx].time}, ${holeName(G.holeIdx)}. ${ONLINE.on ? 'Room ' + ONLINE.code + '.' : G.players.length > 1 ? p.name + ' is up.' : ''}` : '';
     $('quitBtn').textContent = ONLINE.on ? 'Leave room' : 'Quit round';
     $('quitYes').textContent = ONLINE.on ? 'Leave room' : 'Quit round';
     $('quitMsg').textContent = ONLINE.on
@@ -2280,6 +3808,48 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     return ['Player 1', 'Player 2'];
   }
   let setupPlayers = loadSetupPlayers();
+  let setupDepts = (() => {
+    const d = store.get('playerDepts', []);
+    return setupPlayers.map((_, i) => (Array.isArray(d) && Number.isInteger(d[i]) ? clamp(d[i], -1, DEPTS.length - 1) : -1));
+  })();
+  function deptSelect(id, value, label) {
+    const sel = document.createElement('select');
+    sel.id = id;
+    sel.setAttribute('aria-label', label);
+    const none = el('option', '', 'No team');
+    none.value = '-1';
+    sel.append(none);
+    DEPTS.forEach((d, i) => { const o = el('option', '', d); o.value = String(i); sel.append(o); });
+    sel.value = String(value);
+    return sel;
+  }
+  // A two-option picker between buildings, used on the setup card and in the clubhouse.
+  function renderCoursePicker(where, current) {
+    const box = $(where === 'club' ? 'bldClub' : 'bldLocal');
+    const ids = Object.keys(COURSES);
+    if (box.childElementCount !== ids.length) {
+      box.textContent = '';
+      for (const id of ids) {
+        const c = COURSES[id];
+        const lab = el('label', 'seg-opt');
+        const inp = document.createElement('input');
+        inp.type = 'radio';
+        inp.name = 'bld-' + where;
+        inp.id = `bld-${where}-${id}`;
+        inp.value = id;
+        inp.addEventListener('change', () => {
+          if (!inp.checked) return;
+          if (where === 'club') changeSettings({ course: id });
+          else { store.set('building', id); if (G.screen === 'setup') showBackdrop(id); }
+        });
+        const span = el('span');
+        span.append(el('b', '', c.name), el('small', '', c.shift));
+        lab.append(inp, span);
+        box.append(lab);
+      }
+    }
+    for (const inp of box.querySelectorAll('input')) inp.checked = inp.value === current;
+  }
   function renderSetup(focusIdx) {
     const list = $('playerList');
     list.textContent = '';
@@ -2295,17 +3865,21 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       input.setAttribute('aria-label', `Player ${i + 1} name`);
       input.addEventListener('input', () => { setupPlayers[i] = input.value; });
       input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); startFromSetup(); } });
+      const dept = deptSelect('player-dept-' + i, setupDepts[i] ?? -1, `Player ${i + 1} department`);
+      dept.addEventListener('change', () => { setupDepts[i] = parseInt(dept.value, 10); store.set('playerDepts', setupDepts); });
       const rm = el('button', 'icon-btn', '×');
       rm.type = 'button';
       rm.setAttribute('aria-label', `Remove player ${i + 1}`);
       rm.disabled = setupPlayers.length <= 1;
-      rm.addEventListener('click', () => { setupPlayers.splice(i, 1); renderSetup(); });
-      li.append(dotEl(COLORS[i]), input, rm);
+      rm.addEventListener('click', () => { setupPlayers.splice(i, 1); setupDepts.splice(i, 1); renderSetup(); });
+      li.append(dotEl(COLORS[i]), input, dept, rm);
       list.append(li);
     });
     $('playerCount').textContent = `${setupPlayers.length} of ${MAX_PLAYERS}`;
     $('addPlayer').disabled = setupPlayers.length >= MAX_PLAYERS;
     $('todayLabel').textContent = todayLabel();
+    renderCoursePicker('local', COURSES[store.get('building', 'office')] ? store.get('building', 'office') : 'office');
+    $('rageToggle').checked = !!store.get('rage', false);
     if (focusIdx != null) { const f = $('player-' + focusIdx); if (f) { f.focus(); f.select(); } }
   }
   function syncCourseChoice() {
@@ -2318,24 +3892,27 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const names = setupPlayers.map((n, i) => (String(n).trim() || `Player ${i + 1}`).slice(0, 16));
     setupPlayers = names.slice();
     store.set('players', names);
+    const rage = $('rageToggle').checked, courseId = COURSES[store.get('building', 'office')] ? store.get('building', 'office') : 'office';
+    store.set('rage', rage);
+    const tail = `${courseId === 'office' ? '' : ' \u00B7 ' + COURSES[courseId].name}${rage ? ' \u00B7 Rage mode' : ''}`;
     let course;
     if ($('courseCode').checked) {
       const code = normCode($('codeInput').value);
       if (!code) { $('codeError').hidden = false; $('codeInput').focus(); return; }
       store.set('code', code);
       $('codeInput').value = code;
-      course = { kind: 'code', key: 'code:' + code, label: `Group code ${code}` };
+      course = { kind: 'code', key: `code:${code}:${courseId}`, label: `Group code ${code}${tail}` };
     } else {
-      course = { kind: 'today', key: 'day:' + todayKey(), label: `Today's pins · ${todayLabel()}` };
+      course = { kind: 'today', key: `day:${todayKey()}:${courseId}`, label: `Today's pins \u00B7 ${todayLabel()}${tail}` };
     }
-    startGame(names, course);
+    startGame(names.map((name, i) => ({ name, dept: setupDepts[i] ?? -1 })), course, { rage, courseId });
   }
 
   // Hole summary
   function renderSummary() {
     const idx = G.holeIdx, def = HOLES[idx];
     $('sumEyebrow').textContent = `${def.time} · Hole ${idx + 1} of ${HOLES.length}`;
-    $('sumTitle').textContent = def.name;
+    $('sumTitle').textContent = holeName(idx);
     $('sumPar').textContent = `Par ${def.par}`;
     const ul = $('sumList');
     ul.textContent = '';
@@ -2351,8 +3928,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     else {
       const nx = HOLES[idx + 1];
       const first = G.players.length > 1 ? ` ${rows[0].name} tees off first.` : '';
-      $('sumNext').textContent = `Up next: ${nx.name}, par ${nx.par}.${first}`;
+      $('sumNext').textContent = `Up next: ${holeName(idx + 1)}, par ${nx.par}.${first}`;
     }
+    const memo = $('sumMemo');
+    memo.textContent = '';
+    memo.append(el('b', '', `Memo · ${Office.sinceIncident} putt${Office.sinceIncident === 1 ? '' : 's'} since the last incident`), document.createTextNode(Office.memo()));
   }
 
   // Scorecard
@@ -2447,15 +4027,39 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       ol.append(li);
     }
     renderAwards(G.players);
+    renderDeptCup(G.players.map(p => ({ dept: p.dept, played: p.scores.filter(v => v != null).length, rel: totalOf(p) - parThrough(p) })));
     $('shareText').value = shareText(rows);
     $('copyBtn').textContent = 'Copy results';
+  }
+  // Departments ranked by their players' average score against par, for the holes each played.
+  function renderDeptCup(rows) {
+    const box = $('deptCup'), by = new Map();
+    for (const r of rows) {
+      if (!(r.dept >= 0) || !r.played) continue;
+      const d = by.get(r.dept) || { dept: r.dept, sum: 0, n: 0 };
+      d.sum += r.rel; d.n++;
+      by.set(r.dept, d);
+    }
+    box.textContent = '';
+    if (by.size < 2) { box.hidden = true; return; }
+    const teams = [...by.values()].map(d => ({ ...d, avg: d.sum / d.n })).sort((a, b) => a.avg - b.avg);
+    box.append(el('div', 'award-k', 'Department cup'));
+    const ol = el('ol');
+    for (const t of teams) {
+      const li = el('li', '', DEPTS[t.dept]);
+      const avg = Math.round(t.avg * 10) / 10;
+      li.append(el('span', '', `${avg === 0 ? 'E' : avg > 0 ? '+' + avg : '−' + Math.abs(avg)} avg · ${t.n} player${t.n === 1 ? '' : 's'}`));
+      ol.append(li);
+    }
+    box.append(ol);
+    box.hidden = false;
   }
   function renderAwards(ps) {
     const aw = $('awards');
     aw.textContent = '';
     const add = (k, v) => { const d = el('div', 'award'); d.append(el('div', 'award-k', k), el('div', 'award-v', v)); aw.append(d); };
     const aces = [];
-    ps.forEach(p => p.stats.aces.forEach(i => aces.push(`${p.name} on ${HOLES[i].name}`)));
+    ps.forEach(p => p.stats.aces.forEach(i => aces.push(`${p.name} on ${holeName(i)}`)));
     const best = key => ps.reduce((a, b) => (b.stats[key] > a.stats[key] ? b : a), ps[0]);
     if (ps.length > 1) {
       add('Hole in one', aces.length ? aces.slice(0, 3).join(', ') + (aces.length > 3 ? ` and ${aces.length - 3} more` : '') : 'Nobody today');
@@ -2465,12 +4069,21 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       add('Most coffee spills', sp.stats.spills > 0 ? `${sp.name}, ${sp.stats.spills}` : 'A clean floor all day');
       const wb = best('bounces');
       add('Wall banger', `${wb.name}, ${wb.stats.bounces} bounces`);
+      const lo = best('lips');
+      if (lo.stats.lips > 0) add('So close', `${lo.name}, ${lo.stats.lips} lip-out${lo.stats.lips === 1 ? '' : 's'}`);
+      const tb = best('tees');
+      if (tb.stats.tees > 0) add('Back to square one', `${tb.name}, ${tb.stats.tees} trip${tb.stats.tees === 1 ? '' : 's'} back to the tee`);
+      const rb = best('bumps');
+      if (rb.stats.bumps > 0) add('Roomba’s favorite', `${rb.name}, bumped ${rb.stats.bumps} time${rb.stats.bumps === 1 ? '' : 's'}`);
     } else {
       const p = ps[0];
-      add('Holes in one', p.stats.aces.length ? p.stats.aces.map(i => HOLES[i].name).join(', ') : 'None today');
+      add('Holes in one', p.stats.aces.length ? p.stats.aces.map(i => holeName(i)).join(', ') : 'None today');
       add('Longest putt', p.stats.longest > 0 ? `${Math.round(p.stats.longest)} ft` : 'None');
       add('Coffee spills', String(p.stats.spills));
       add('Wall bounces', String(p.stats.bounces));
+      if (p.stats.lips) add('Lip-outs', String(p.stats.lips));
+      if (p.stats.tees) add('Trips back to the tee', String(p.stats.tees));
+      if (p.stats.bumps) add('Roomba bumps', String(p.stats.bumps));
     }
   }
   function copyResults() {
@@ -2662,7 +4275,6 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (b && (b.state === 'rolling' || b.state === 'sinking' || b.state === 'splash')) return 'roll';
     return 'aim';
   }
-  const emptyStats = () => ({ aces: [], spills: 0, bounces: 0, longest: 0 });
   function myStats() { return ONLINE.status !== 'club' && G.players[0] ? G.players[0].stats : emptyStats(); }
   function sendState() {
     const me = ONLINE.me, p = G.players[0], b = G.ball, st = myStats();
@@ -2673,7 +4285,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       sc: inRound ? p.scores : Array(HOLES.length).fill(null),
       p: myPhase(),
       x: inRound && b ? Math.round(b.x) : null, y: inRound && b ? Math.round(b.y) : null,
-      sp: st.spills, bo: st.bounces, lp: Math.round(st.longest), ac: st.aces,
+      sp: st.spills, bo: st.bounces, lp: Math.round(st.longest), ac: st.aces, li: st.lips, tb: st.tees, rb: st.bumps,
+      d: me.dept, md: G.rage ? 'rage' : 'normal', cs: COURSE.id, set: ONLINE.settings, sa: ONLINE.settingsAt,
     });
     ONLINE.beatAt = Date.now();
   }
@@ -2689,15 +4302,23 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       r: typeof m.r === 'string' && m.r.length > 0 && m.r.length <= 24 ? m.r : null,
       h: int(m.h, -1, HOLES.length - 1, -1),
       s: int(m.s, 0, 99, 0),
-      sc: Array.from({ length: HOLES.length }, (_, i) => (Array.isArray(m.sc) ? int(m.sc[i], 1, STROKE_CAP, null) : null)),
+      sc: Array.from({ length: HOLES.length }, (_, i) => (Array.isArray(m.sc) ? int(m.sc[i], 1, MAX_CAP, null) : null)),
       p: ['club', 'aim', 'roll', 'done', 'fin'].includes(m.p) ? m.p : 'club',
       x: coord(m.x),
       y: coord(m.y),
+      d: int(m.d, -1, DEPTS.length - 1, -1),
+      md: m.md === 'rage' ? 'rage' : 'normal',
+      cs: COURSES[m.cs] ? m.cs : 'office',
+      set: m.set && typeof m.set === 'object' ? { rage: m.set.rage === true, course: COURSES[m.set.course] ? m.set.course : 'office' } : null,
+      sa: Number.isFinite(m.sa) ? m.sa : 0,
       stats: {
         spills: int(m.sp, 0, 999, 0),
         bounces: int(m.bo, 0, 99999, 0),
         longest: Number.isFinite(m.lp) ? clamp(m.lp, 0, 200) : 0,
         aces: Array.isArray(m.ac) ? m.ac.filter(v => Number.isInteger(v) && v >= 0 && v < HOLES.length).slice(0, HOLES.length) : [],
+        lips: int(m.li, 0, 999, 0),
+        tees: int(m.tb, 0, 999, 0),
+        bumps: int(m.rb, 0, 999, 0),
       },
     };
   }
@@ -2705,19 +4326,20 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const now = Date.now();
     let peer = ONLINE.peers.get(m.id);
     if (m.k === 'bye') {
-      if (peer) { ONLINE.peers.delete(m.id); feedItem(`${peer.n} left the room`); touch(); }
+      if (peer) { ONLINE.peers.delete(m.id); roomNews(peer, 'left the room'); touch(); }
       return;
     }
     if (m.k === 'st') {
       const s = readState(m);
       if (!s) return;
       const fresh = !peer;
-      if (fresh) { peer = { id: m.id, rx: null, ry: null, sig: '' }; ONLINE.peers.set(m.id, peer); }
+      if (fresh) { peer = { id: m.id, rx: null, ry: null, sig: '', tauntAt: 0 }; ONLINE.peers.set(m.id, peer); }
       const moved = peer.h !== s.h || peer.r !== s.r;
-      const sig = [s.n, s.c, s.r, s.h, s.s, s.p, s.sc.join(',')].join('|');
+      const sig = [s.n, s.c, s.d, s.r, s.h, s.s, s.p, s.md, s.cs, s.sc.join(',')].join('|');
       Object.assign(peer, s, { seen: now });
       if (moved || s.x == null) { peer.rx = s.x; peer.ry = s.y; }
-      if (fresh) { feedItem(`${s.n} joined the room`); replySoon(); }
+      if (fresh) { roomNews(peer, 'joined the room'); replySoon(); }
+      if (s.set && s.sa > ONLINE.settingsAt) adoptSettings(s.set, s.sa, null);
       if (sig !== peer.sig) { peer.sig = sig; touch(); }
       resolveColorClash();
       return;
@@ -2726,14 +4348,21 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       // Handled even before we've heard this player's state, since a tee-off is a one-time moment.
       if (typeof m.r !== 'string' || !m.r || m.r.length > 24) return;
       if (peer) peer.seen = now;
-      const who = peer ? peer.n : cleanName(m.n) || 'Someone';
-      if (ONLINE.status === 'club' && m.r !== ONLINE.lastRound) { startOnlineRound(m.r, 0); feedItem(`${who} teed off. Here we go!`); }
-      else if (ONLINE.status === 'fin' && m.r !== ONLINE.lastRound) feedItem(`${who} teed off a new round. Head back to the clubhouse to join.`);
-      else if (ONLINE.status === 'play' && G.holeIdx === 0 && ONLINE.round && m.r < ONLINE.round) {
+      const who = peer || { n: cleanName(m.n) || 'Someone', c: 0 };
+      const mode = m.md === 'rage' ? 'rage' : 'normal', course = COURSES[m.cs] ? m.cs : 'office';
+      if (ONLINE.status === 'club' && m.r !== ONLINE.lastRound) { startOnlineRound(m.r, 0, mode, course); roomNews(who, 'teed off. Here we go!'); }
+      else if (ONLINE.status === 'fin' && m.r !== ONLINE.lastRound) roomNews(who, 'teed off a new round. Head back to the clubhouse to join.');
+      else if (ONLINE.status === 'play' && G.holeIdx === 0 && ONLINE.round && m.r < ONLINE.round && mode === (G.rage ? 'rage' : 'normal') && course === COURSE.id) {
         // Two people pressed Tee off at the same moment: everyone settles on the same round.
         ONLINE.round = m.r;
         sendState();
         touch();
+      }
+      return;
+    }
+    if (m.k === 'set') {
+      if (m.s && typeof m.s === 'object' && Number.isFinite(m.at) && m.at > ONLINE.settingsAt) {
+        adoptSettings({ rage: m.s.rage === true, course: COURSES[m.s.course] ? m.s.course : 'office' }, m.at, peer || { n: cleanName(m.n) || 'Someone', c: 0 });
       }
       return;
     }
@@ -2746,15 +4375,23 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         peer.p = 'roll';
       }
     } else if (m.k === 'ev') {
-      const hole = Number.isInteger(m.h) && m.h >= 0 && m.h < HOLES.length ? HOLES[m.h].name : 'the course';
+      const hole = Number.isInteger(m.h) && m.h >= 0 && m.h < HOLES.length ? holeName(m.h) : 'the course';
       const text = {
-        ace: `${peer.n} made a hole in one on ${hole}!`,
-        eagle: `${peer.n} made an eagle on ${hole}`,
-        birdie: `${peer.n} made a birdie on ${hole}`,
-        splash: `${peer.n} landed in the coffee`,
-        shred: `${peer.n} got shredded`,
+        ace: `made a hole in one on ${hole}!`,
+        eagle: `made an eagle on ${hole}`,
+        birdie: `made a birdie on ${hole}`,
+        splash: G.rage ? 'landed in a spill and went back to the tee' : 'landed in a spill',
+        shred: 'got shredded',
       }[m.e];
-      if (text) feedItem(text);
+      if (text) roomNews(peer, text);
+    } else if (m.k === 'taunt') {
+      // Only preset lines travel, as a number, and each person gets one every few seconds.
+      if (!Number.isInteger(m.i) || m.i < 0 || m.i >= TAUNT_PRESETS.length || now - peer.tauntAt < 4000) return;
+      peer.tauntAt = now;
+      if (!Taunts.on) return;
+      const text = TAUNT_PRESETS[m.i];
+      peer.say = { text, until: performance.now() + 4000 };
+      if (G.screen === 'play' || G.screen === 'results') { ping({ from: peer.n, ball: true, color: COLORS[peer.c], text }); Sound.blip(); }
     }
   }
   // Two players on the same ball color: whoever sorts later moves to a free one, unless they chose it.
@@ -2784,7 +4421,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (!ONLINE.on) return;
     const now = Date.now();
     for (const [id, p] of ONLINE.peers) {
-      if (now - p.seen > PEER_TIMEOUT) { ONLINE.peers.delete(id); feedItem(`${p.n} dropped out`); ONLINE.dirty = true; }
+      if (now - p.seen > PEER_TIMEOUT) { ONLINE.peers.delete(id); roomNews(p, 'dropped out'); ONLINE.dirty = true; }
     }
     if (now - ONLINE.beatAt > 4000) sendState();
     if (ONLINE.status === 'wait') checkGate();
@@ -2809,13 +4446,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       Net.send({ k: 'mv', h: G.holeIdx, x: Math.round(b.x), y: Math.round(b.y) });
     }
   }
-  function feedItem(text) {
-    const f = $('feed');
-    const item = el('div', 'feed-item', text);
-    f.prepend(item);
-    while (f.children.length > 3) f.lastChild.remove();
-    setTimeout(() => item.classList.add('out'), 4200);
-    setTimeout(() => item.remove(), 4800);
+  function roomNews(p, text) {
+    if (G.screen === 'club' || !overlays.club.hidden) return;
+    ping({ from: p.n, ball: true, color: COLORS[p.c] || COLORS[0], text });
   }
 
   // Joining, the clubhouse, and leaving
@@ -2835,6 +4468,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     store.set('tab', online ? 'online' : 'local');
   }
   function renderOnlineSetup() {
+    const dsel = $('onlineDept');
+    if (!dsel.childElementCount) {
+      const tmp = deptSelect('tmp', -1, 'Your department');
+      for (const o of [...tmp.options]) dsel.append(o);
+    }
+    dsel.value = String(clamp(store.get('dept', -1) | 0, -1, DEPTS.length - 1));
     $('onlineForm').hidden = !onlineAllowed;
     $('onlineElsewhere').hidden = onlineAllowed;
     $('roomError').hidden = true;
@@ -2856,6 +4495,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     }
     const code = normRoom($('roomInput').value) || newRoomCode();
     $('roomInput').value = code;
+    store.set('dept', parseInt($('onlineDept').value, 10));
     joinRoom(code, name);
   }
   function joinRoom(code, name) {
@@ -2864,7 +4504,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const saved = store.get('onlineColor', null);
     Object.assign(ONLINE, {
       on: true, code, round: null, lastRound: null, status: 'club', joinedAt: Date.now(), connected: 0, dirty: true,
-      me: { id: randId(), name, picked: Number.isInteger(saved), color: Number.isInteger(saved) ? clamp(saved, 0, COLORS.length - 1) : Math.floor(Math.random() * COLORS.length) },
+      settings: { rage: false, course: 'office' }, settingsAt: 0, settingsBy: '',
+      me: {
+        id: randId(), name, dept: clamp(store.get('dept', -1) | 0, -1, DEPTS.length - 1),
+        picked: Number.isInteger(saved), color: Number.isInteger(saved) ? clamp(saved, 0, COLORS.length - 1) : Math.floor(Math.random() * COLORS.length),
+      },
     });
     ONLINE.peers.clear();
     store.set('onlineName', name);
@@ -2889,7 +4533,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     ONLINE.peers.clear();
     $('waitPanel').hidden = true;
     $('board').hidden = true;
-    $('feed').textContent = '';
+    $('pings').textContent = '';
+    $('tauntPop').hidden = true;
     try {
       const relay = urlParams.get('relay');
       history.replaceState(null, '', location.href.split('#')[0].split('?')[0] + (relay ? `?relay=${encodeURIComponent(relay)}` : ''));
@@ -2916,7 +4561,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const groups = new Map();
     for (const p of ONLINE.peers.values()) {
       if (!p.r || p.r === ONLINE.lastRound || p.h < 0 || !(p.p === 'aim' || p.p === 'roll' || p.p === 'done')) continue;
-      const g = groups.get(p.r) || { r: p.r, hole: HOLES.length, names: [] };
+      const g = groups.get(p.r) || { r: p.r, hole: 99, names: [], md: p.md, cs: p.cs };
       g.hole = Math.min(g.hole, p.h);
       g.names.push(p.n);
       groups.set(p.r, g);
@@ -2928,14 +4573,31 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function teeOff() {
     Sound.unlock();
     const act = activeRound();
-    if (act) { startOnlineRound(act.r, act.hole); return; }
+    if (act) { startOnlineRound(act.r, act.hole, act.md, act.cs); return; }
     const r = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const md = ONLINE.settings.rage ? 'rage' : 'normal', cs = ONLINE.settings.course;
     // Relays deliver at most once, so repeat the tee-off a couple of times; it's harmless to receive twice.
-    const go = () => { if (ONLINE.on && ONLINE.round === r) Net.send({ k: 'go', r, n: ONLINE.me.name }); };
-    startOnlineRound(r, 0);
+    const go = () => { if (ONLINE.on && ONLINE.round === r) Net.send({ k: 'go', r, n: ONLINE.me.name, md, cs }); };
+    startOnlineRound(r, 0, md, cs);
     go();
     setTimeout(go, 700);
     setTimeout(go, 2000);
+  }
+  // Room settings are last-writer-wins: the newest change anyone made applies to the next tee-off.
+  function adoptSettings(set, at, by) {
+    ONLINE.settings = { rage: !!set.rage, course: COURSES[set.course] ? set.course : 'office' };
+    ONLINE.settingsAt = at;
+    ONLINE.settingsBy = by ? by.n : ONLINE.settingsBy;
+    ONLINE.dirty = true;
+    if (!overlays.club.hidden) renderClub();
+  }
+  function changeSettings(patch) {
+    ONLINE.settings = { ...ONLINE.settings, ...patch };
+    ONLINE.settingsAt = Date.now();
+    ONLINE.settingsBy = 'You';
+    Net.send({ k: 'set', s: ONLINE.settings, at: ONLINE.settingsAt, n: ONLINE.me.name });
+    sendState();
+    renderClub();
   }
   function peerStateLabel(p) {
     if (p.p === 'club' || p.h < 0) return 'In the clubhouse';
@@ -2971,9 +4633,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       li.append(dotEl(color), el('span', 'club-name', name), el('span', 'club-state', state));
       ul.append(li);
     };
-    addRow(COLORS[ONLINE.me.color], `${ONLINE.me.name} (you)`, 'In the clubhouse');
+    const deptOf = d => (d >= 0 ? ` · ${DEPTS[d]}` : '');
+    addRow(COLORS[ONLINE.me.color], `${ONLINE.me.name} (you)${deptOf(ONLINE.me.dept)}`, 'In the clubhouse');
     const peers = [...ONLINE.peers.values()].sort((a, b) => a.n.localeCompare(b.n));
-    for (const p of peers) addRow(COLORS[p.c], p.n, peerStateLabel(p));
+    for (const p of peers) addRow(COLORS[p.c], `${p.n}${deptOf(p.d)}`, peerStateLabel(p));
+    $('rageClub').checked = ONLINE.settings.rage;
+    $('rageClubNote').textContent = ONLINE.settingsBy
+      ? `${ONLINE.settingsBy === 'You' ? 'You' : ONLINE.settingsBy} set this for the room. Applies from the next tee-off.`
+      : 'Changes it for everyone in the room. Applies from the next tee-off.';
+    renderCoursePicker('club', ONLINE.settings.course);
     $('clubCount').textContent = String(peers.length + 1);
     const act = activeRound();
     if (act) {
@@ -3002,12 +4670,14 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
 
   // Playing a round together
-  function startOnlineRound(round, hole) {
+  function startOnlineRound(round, hole, mode, course) {
+    setCourse(course);
+    setMode(mode === 'rage');
     ONLINE.round = round;
     ONLINE.status = 'play';
     G.timers.length = 0;
-    G.players = [{ name: ONLINE.me.name, color: COLORS[ONLINE.me.color], scores: Array(HOLES.length).fill(null), stats: emptyStats() }];
-    G.course = { kind: 'room', key: 'room:' + ONLINE.code, label: `Room ${ONLINE.code}` };
+    G.players = [{ name: ONLINE.me.name, dept: ONLINE.me.dept, color: COLORS[ONLINE.me.color], scores: Array(HOLES.length).fill(null), stats: emptyStats() }];
+    G.course = { kind: 'room', key: `room:${ONLINE.code}:${COURSE.id}`, label: `Room ${ONLINE.code} \u00B7 ${COURSE.name}${G.rage ? ' \u00B7 Rage mode' : ''}` };
     G.variants = variantsFor(G.course.key);
     G.order = [0];
     G.screen = 'play';
@@ -3038,15 +4708,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function checkGate() {
     if (ONLINE.status !== 'wait') return;
     const def = HOLES[G.holeIdx], s = G.players[0].scores[G.holeIdx];
-    $('waitTitle').textContent = s != null ? `${termFor(s, def.par)} · ${s}` : def.name;
+    $('waitTitle').textContent = s != null ? `${termFor(s, def.par)} · ${s}` : holeName(G.holeIdx);
     const waiting = blockers();
     if (waiting.length) {
       clearTimeout(ONLINE.gateTimer);
       ONLINE.gateTimer = 0;
-      $('waitSub').textContent = `Waiting for ${listNames(waiting.map(p => p.n))} to finish ${def.name}. Watch their shots, or go on ahead.`;
+      $('waitSub').textContent = `Waiting for ${listNames(waiting.map(p => p.n))} to finish ${holeName(G.holeIdx)}. Watch their shots, or go on ahead.`;
       $('waitNext').textContent = 'Go on ahead';
     } else {
-      $('waitSub').textContent = `Everyone's done. ${HOLES[G.holeIdx + 1].name} is next.`;
+      $('waitSub').textContent = `Everyone's done. ${holeName(G.holeIdx + 1)} is next.`;
       $('waitNext').textContent = 'Next hole';
       if (!ONLINE.gateTimer) {
         ONLINE.gateTimer = setTimeout(() => {
@@ -3077,11 +4747,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function onlineRows() {
     const me = G.players[0], inRound = ONLINE.status !== 'club' && !!me;
     const rows = [{
-      id: ONLINE.me.id, name: ONLINE.me.name, color: COLORS[ONLINE.me.color], me: true, h: G.holeIdx, p: myPhase(),
+      id: ONLINE.me.id, name: ONLINE.me.name, dept: ONLINE.me.dept, color: COLORS[ONLINE.me.color], me: true, h: G.holeIdx, p: myPhase(),
       scores: inRound ? me.scores : Array(HOLES.length).fill(null), stats: myStats(),
     }];
     for (const p of ONLINE.peers.values()) {
-      if (p.r && p.r === ONLINE.round) rows.push({ id: p.id, name: p.n, color: COLORS[p.c], me: false, h: p.h, p: p.p, scores: p.sc, stats: p.stats });
+      if (p.r && p.r === ONLINE.round) rows.push({ id: p.id, name: p.n, dept: p.d, color: COLORS[p.c], me: false, h: p.h, p: p.p, scores: p.sc, stats: p.stats });
     }
     for (const r of rows) {
       r.played = r.scores.filter(v => v != null).length;
@@ -3139,6 +4809,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       ol.append(li);
     }
     renderAwards(rows);
+    renderDeptCup(rows);
     const lines = [`Nine-to-Five Links · ${G.course.label}`];
     for (const r of rows) {
       const tag = rows.length > 1 ? `${r.tie ? 'T' : ''}${r.place}. ` : '';
@@ -3154,6 +4825,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   $('addPlayer').addEventListener('click', () => {
     if (setupPlayers.length >= MAX_PLAYERS) return;
     setupPlayers.push(`Player ${setupPlayers.length + 1}`);
+    setupDepts.push(-1);
     renderSetup(setupPlayers.length - 1);
   });
   $('courseToday').addEventListener('change', syncCourseChoice);
@@ -3175,7 +4847,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   $('quitNo').addEventListener('click', () => { $('quitConfirm').hidden = true; });
   $('quitYes').addEventListener('click', () => (ONLINE.on ? leaveRoom() : showSetup()));
   $('copyBtn').addEventListener('click', copyResults);
-  $('againBtn').addEventListener('click', () => (ONLINE.on ? backToClubhouse() : startGame(G.players.map(p => p.name), G.course)));
+  $('againBtn').addEventListener('click', () => (ONLINE.on ? backToClubhouse() : startGame(G.players.map(p => ({ name: p.name, dept: p.dept })), G.course, { rage: G.rage, courseId: COURSE.id })));
   $('resCardBtn').addEventListener('click', openScorecard);
   $('newBtn').addEventListener('click', () => (ONLINE.on ? leaveRoom() : showSetup()));
   $('tabLocal').addEventListener('click', () => selectTab(false));
@@ -3186,6 +4858,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     $(id).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); joinFromSetup(); } });
   }
   $('joinBtn').addEventListener('click', joinFromSetup);
+  $('rageClub').addEventListener('change', () => changeSettings({ rage: $('rageClub').checked }));
   $('helpBtn2').addEventListener('click', () => openOverlay('help'));
   $('teeOffBtn').addEventListener('click', teeOff);
   $('leaveBtn').addEventListener('click', leaveRoom);
@@ -3206,18 +4879,86 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     $('swatches').append(sw);
   });
   window.addEventListener('pagehide', () => { if (ONLINE.on) Net.send({ k: 'bye' }); });
-  if (urlParams.has('debug')) window.n2fDebug = { G, ONLINE, Net };
+  if (urlParams.has('debug')) {
+    window.n2fDebug = {
+      G, ONLINE, Net, Swing, Party,
+      // Runs one celebration by name, for testing.
+      show(kind, extra = {}) {
+        const h = G.hole;
+        return Party.add(kind, { word: 'Birdie', name: 'Test Player', color: COLORS[1], score: 2, par: 3, hole: G.holeIdx + 1, holeName: h.name, cup: h.cup, stampText: 'MEETS EXPECTATIONS', stampColor: '#35d07f', ...extra }).dur;
+      },
+      // A test bot: aim at the cup, off by `err` radians, and hit it the flat-green distance times `extra`.
+      putt(err = 0, extra = 1.1) {
+        const b = G.ball, h = G.hole;
+        if (!canAim()) return false;
+        const d = Math.hypot(h.cup[0] - b.x, h.cup[1] - b.y) / UNITS_PER_FT;
+        shoot(Math.atan2(h.cup[1] - b.y, h.cup[0] - b.x) + err, rollFeetToMeter(d * extra));
+        return true;
+      },
+    };
+  }
   function syncSound() {
     const on = !Sound.muted;
-    $('soundBtn').textContent = on ? 'Sound on' : 'Sound off';
-    $('soundBtn').setAttribute('aria-pressed', String(on));
+    for (const id of ['soundBtn', 'menuSoundBtn']) {
+      $(id).textContent = on ? 'Sound on' : 'Sound off';
+      $(id).setAttribute('aria-pressed', String(on));
+    }
   }
-  $('soundBtn').addEventListener('click', () => { Sound.unlock(); Sound.setMuted(!Sound.muted); syncSound(); });
+  const toggleSound = () => { Sound.unlock(); Sound.setMuted(!Sound.muted); syncSound(); };
+  $('soundBtn').addEventListener('click', toggleSound);
+  $('menuSoundBtn').addEventListener('click', toggleSound);
+  $('menuTauntsBtn').addEventListener('click', () => Taunts.setOn(!Taunts.on));
+  // On one screen the office heckles whoever's up; in an online room you pick a line to send.
+  let heckleAt = -99, tauntAt = 0, tauntTimer = 0;
+  function syncTauntBtn() {
+    const btn = $('tauntBtn'), left = Math.ceil((tauntAt + 6000 - Date.now()) / 1000);
+    btn.textContent = ONLINE.on ? (left > 0 ? `Taunt (${left})` : 'Taunt') : 'Heckle';
+    btn.disabled = ONLINE.on && left > 0;
+  }
+  function renderTauntPop() {
+    const pop = $('tauntPop');
+    pop.textContent = '';
+    pop.append(el('div', 'eyebrow', 'Send to the room'));
+    TAUNT_PRESETS.forEach((t, i) => {
+      const b = el('button', 'taunt-opt', t);
+      b.type = 'button';
+      b.setAttribute('role', 'menuitem');
+      b.addEventListener('click', () => sendTaunt(i));
+      pop.append(b);
+    });
+  }
+  function closeTauntPop() { $('tauntPop').hidden = true; $('tauntBtn').setAttribute('aria-expanded', 'false'); }
+  function sendTaunt(i) {
+    closeTauntPop();
+    if (!ONLINE.on || Date.now() - tauntAt < 6000) return;
+    tauntAt = Date.now();
+    Net.send({ k: 'taunt', i });
+    ping({ from: 'You', ball: true, color: COLORS[ONLINE.me.color], text: TAUNT_PRESETS[i] });
+    syncTauntBtn();
+    clearInterval(tauntTimer);
+    tauntTimer = setInterval(() => { syncTauntBtn(); if (Date.now() - tauntAt >= 6000) clearInterval(tauntTimer); }, 500);
+  }
+  $('tauntBtn').addEventListener('click', () => {
+    Sound.unlock();
+    if (!ONLINE.on) {
+      if (G.clock - heckleAt < 2.5) return;
+      heckleAt = G.clock;
+      Taunts.say('heckle', true);
+      return;
+    }
+    const pop = $('tauntPop');
+    if (pop.hidden) { renderTauntPop(); pop.hidden = false; $('tauntBtn').setAttribute('aria-expanded', 'true'); pop.querySelector('button').focus(); }
+    else closeTauntPop();
+  });
+  document.addEventListener('pointerdown', e => {
+    if (!$('tauntPop').hidden && !$('tauntPop').contains(e.target) && e.target !== $('tauntBtn')) closeTauntPop();
+  });
   for (const o of Object.values(overlays)) {
     o.addEventListener('pointerdown', e => { if (e.target === o) Sound.unlock(); });
   }
   (() => { const c = store.get('code', ''); if (c) $('codeInput').value = c; })();
   syncSound();
+  syncTauntsBtn();
 
   // ---------------------------------------------------------------------------
   // Keeping a round in progress across page updates
@@ -3227,12 +4968,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const b = G.ball;
     return {
       v: 1, screen: G.screen, players: G.players, course: G.course, holeIdx: G.holeIdx, order: G.order, turn: G.turn, strokes: G.strokes,
+      rage: G.rage, courseId: COURSE.id,
       ball: b && (b.state === 'rest' || b.state === 'rolling') ? [b.x, b.y] : null, lastShot: G.lastShot, firstShotDone: G.firstShotDone,
     };
   }
   function restore(s) {
     if (!s || s.v !== 1 || !Array.isArray(s.players) || !s.players.length || !s.course) return false;
-    G.players = s.players;
+    setCourse(s.courseId || 'office');
+    setMode(!!s.rage);
+    G.players = s.players.map(p => ({ ...p, stats: { ...emptyStats(), ...(p.stats || {}) } }));
     G.course = s.course;
     G.variants = variantsFor(s.course.key);
     G.firstShotDone = !!s.firstShotDone;
