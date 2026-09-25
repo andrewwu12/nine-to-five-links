@@ -286,6 +286,22 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   80% { transform: translate(3px, -2px); }
 }
 
+/* The campus map's controls, over the canvas */
+.map-ui { position: absolute; inset: 0; pointer-events: none; z-index: 7; }
+.map-ui > * { pointer-events: auto; }
+.map-top { position: absolute; top: 12px; left: 16px; right: 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; pointer-events: none; }
+.map-top > * { pointer-events: auto; }
+.map-clock { display: grid; justify-items: center; gap: 2px; border: 0; border-radius: 12px; padding: 8px 16px; background: var(--paper); color: var(--ink); box-shadow: 0 8px 24px rgba(0, 0, 0, .28); cursor: pointer; font: inherit; }
+.map-clock b { font: 900 18px/1 var(--display); text-transform: uppercase; letter-spacing: .04em; }
+.map-clock small { font: 600 11px var(--mono); color: var(--ink-2); }
+.map-zoom { display: flex; gap: 6px; }
+.map-zoom .btn { min-width: 44px; padding-inline: 0; font-size: 20px; }
+.map-card { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); width: min(92vw, 440px); background: var(--paper); color: var(--ink); border-radius: 16px; padding: 14px 16px 16px; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); }
+.map-card h3 { margin: 4px 0 6px; font: 900 26px/1 var(--display); text-transform: uppercase; }
+.map-card p { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.map-hint { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); margin: 0; padding: 6px 12px; border-radius: 999px; background: rgba(15, 20, 28, .6); color: var(--on-floor); font: 500 12px var(--body); white-space: nowrap; pointer-events: none; }
+.map-card:not([hidden]) ~ .map-hint { display: none; }
+
 /* The swing button; its meter is drawn on the canvas just above it */
 .swing {
   position: absolute; left: 50%; bottom: 68px; transform: translateX(-50%); z-index: 6;
@@ -373,6 +389,23 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     <div class="toast-big" id="toastBig"></div>
     <div class="toast-small" id="toastSmall"></div>
   </div>
+  <div class="map-ui" id="mapUi" hidden>
+    <div class="map-top">
+      <button class="btn btn-paper" id="mapBack" type="button">Back</button>
+      <button class="map-clock" id="mapClockBtn" type="button" title="Tap for a time-lapse"><b>The campus</b><small id="mapClock"></small></button>
+      <div class="map-zoom"><button class="btn btn-paper" id="mapOut" type="button" aria-label="Zoom out">−</button><button class="btn btn-paper" id="mapIn" type="button" aria-label="Zoom in">+</button></div>
+    </div>
+    <div class="map-card" id="mapCard" hidden>
+      <div class="eyebrow" id="mapCardEyebrow"></div>
+      <h3 id="mapCardName"></h3>
+      <p id="mapCardTip"></p>
+      <div class="row wrap">
+        <button class="btn btn-hi" id="mapPractice" type="button">Practice this hole</button>
+        <button class="btn btn-paper" id="mapPlay" type="button">Play</button>
+      </div>
+    </div>
+    <p class="map-hint">Drag to look around. Scroll or pinch to zoom. Tap a hole.</p>
+  </div>
   <div class="pings" id="pings" aria-live="polite"></div>
   <div class="taunt-pop" id="tauntPop" role="menu" aria-label="Taunts" hidden></div>
   <button class="swing" id="swingBtn" type="button" hidden>Hold to swing</button>
@@ -436,6 +469,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
           <p class="note">Everyone on the same course gets the same pin positions, so you can also each play on your own device and compare scores in the team chat. To play together live from different places, use Online room.</p>
           <div class="pass-actions">
             <button class="btn btn-hi btn-big" id="startBtn" type="button">Tee off</button>
+            <button class="btn btn-paper" id="exploreBtn" type="button">Explore the campus</button>
             <button class="btn btn-paper" id="helpBtn" type="button">How to play</button>
           </div>
         </div>
@@ -515,6 +549,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       <div class="stack">
         <button class="btn btn-hi btn-big" id="resumeBtn" type="button">Resume</button>
         <button class="btn btn-paper" id="menuCardBtn" type="button">Scorecard</button>
+        <button class="btn btn-paper" id="menuMapBtn" type="button">Campus map</button>
         <button class="btn btn-paper" id="menuHelpBtn" type="button">How to play</button>
         <button class="btn btn-paper" id="menuTauntsBtn" type="button" aria-pressed="true">Taunts on</button>
         <button class="btn btn-paper" id="menuSoundBtn" type="button" aria-pressed="true">Sound on</button>
@@ -574,6 +609,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         <dd>The office has opinions about your putting. Press Heckle to hear them, or in an online room press Taunt to send your coworkers a line. Turn taunts off in the menu.</dd>
         <dt>Buildings</dt>
         <dd>Head Office runs the day shift, 9 AM to 5 PM. The Factory Floor runs second shift, 3 PM to 11 PM, with forklifts, conveyor lines, robot arms, oil spills and a loading dock to fall off. It gets darker as the shift goes on.</dd>
+        <dt>The campus</dt>
+        <dd>Press Explore the campus on the setup card, or Campus map in the menu, to see both buildings on one map. Drag to look around and pinch or scroll to zoom. Coworkers walk the halls, traffic runs down the street, and the sun follows your clock; tap the clock for a time-lapse. Tap any hole to practice it on its own. Between holes in a round, the camera flies you to the next one.</dd>
         <dt>Knock things over</dt>
         <dd>Cones, cup pyramids, boxes, chairs, bins, water jugs and oil drums all move when you hit them. Hit a box, crate or water jug hard enough and it breaks. A burst jug or a tipped oil drum leaves the floor slippery.</dd>
         <dt>Course</dt>
@@ -1166,7 +1203,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     office: { floor: 'carpet', bg: '#2f3744', felt: '#2e9b58', tee: '#237a47', rail: ['#6c7889', '#c3ccd7', '#e6ebf1'], hazard: false },
     factory: { floor: 'concrete', bg: '#34383e', felt: '#2a8466', tee: '#1f6b52', rail: ['#23272d', '#555e69', '#737d89'], hazard: true },
   };
-  const theme = () => THEMES[COURSE.theme] || THEMES.office;
+  const theme = h => THEMES[(h && h.theme) || COURSE.theme] || THEMES.office;
   const COURSES = {
     office: { id: 'office', name: 'Head Office', shift: 'Day shift, 9 AM to 5 PM', holes: OFFICE_HOLES, tints: OFFICE_TINTS, lastLabel: 'Clock out', title: 'Nine-to-Five Links', theme: 'office' },
     factory: { id: 'factory', name: 'Factory Floor', shift: 'Second shift, 3 PM to 11 PM', holes: FACTORY_HOLES, tints: FACTORY_TINTS, dark: FACTORY_DARK, lastLabel: 'Clock out', title: 'Nine-to-Five Links', theme: 'factory' },
@@ -1215,7 +1252,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const mx = x => (M ? BOX_W - x : x);
     const mpt = p => [mx(p[0]), p[1]];
     const mpoly = pts => { const r = pts.map(mpt); if (M) r.reverse(); return r; };
-    const h = { idx, def, name: PH.rage ? def.rageName : def.name, tip: PH.rage ? def.rageTip : def.tip, par: def.par, mirror: M, t: 0 };
+    const h = { idx, def, name: PH.rage ? def.rageName : def.name, tip: PH.rage ? def.rageTip : def.tip, par: def.par, mirror: M, t: 0, theme: COURSE.theme };
     h.course = def.course.map(mpoly);
     h.tee = mpt(def.tee);
     h.cup = mpt(def.pins[(variant ? variant.pin : 0) % def.pins.length]);
@@ -3053,6 +3090,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function holeComplete() {
     if (ONLINE.on) { enterWait(); return; }
+    if (G.practice != null) { practiceAgain(); return; }
     G.phase = 'between';
     G.ball = null;
     renderSummary();
@@ -3064,8 +3102,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const prev = G.holeIdx;
     // Honors: best score on the last hole tees off first; ties keep their order.
     G.order = G.order.slice().sort((a, b) => G.players[a].scores[prev] - G.players[b].scores[prev]);
-    loadHole(prev + 1);
-    startTurn(0, true);
+    Campus.fly(prev, prev + 1, () => { loadHole(prev + 1); startTurn(0, true); });
   }
   function shoot(angle, power, mul = 1) {
     if (!canAim()) return;
@@ -3095,9 +3132,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     layoutView();
     canvas.setAttribute('aria-label', `Mini golf course, hole ${idx + 1}: ${holeName(idx)}`);
   }
-  // players: [{ name, dept }]; opts: { rage, courseId }
+  // players: [{ name, dept }]; opts: { rage, courseId, practice }
   function startGame(players, course, opts = {}) {
     G.timers.length = 0;
+    G.practice = Number.isInteger(opts.practice) ? opts.practice : null;
     Party.clear();
     setCourse(opts.courseId || 'office');
     setMode(!!opts.rage);
@@ -3112,9 +3150,21 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     G.screen = 'play';
     closeAllOverlays();
     showHud(true);
-    loadHole(0);
+    loadHole(G.practice != null ? G.practice : 0);
     startTurn(0, true);
     try { canvas.focus({ preventScroll: true }); } catch (e) { /* ignore */ }
+  }
+  function startPractice(courseId, idx) {
+    const name = (String(setupPlayers[0] || '').trim() || 'You').slice(0, 16);
+    setCourse(courseId);
+    startGame([{ name, dept: setupDepts[0] ?? -1 }], { kind: 'practice', key: `day:${todayKey()}:${courseId}`, label: `Practice · ${HOLES[idx].name}` }, { courseId, rage: !!store.get('rage', false), practice: idx });
+  }
+  // Practice keeps your best score and sends you straight back to the tee.
+  function practiceAgain() {
+    const p = G.players[0], s = p.scores[G.holeIdx];
+    p.best = Math.min(p.best || 99, s);
+    toast(`${s} ${s === 1 ? 'stroke' : 'strokes'}`, `Practice. Your best here: ${p.best}. Go again.`, s <= HOLES[G.holeIdx].par ? 'hi' : '');
+    after(1.4, () => { if (G.practice == null || G.screen !== 'play') return; loadHole(G.practice); startTurn(0, true); });
   }
   function showResults() {
     G.screen = 'results';
@@ -3261,7 +3311,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     g.fillStyle = 'rgba(6,10,16,0.34)'; g.fill();
     g.lineWidth = WALL_T * 2 + 2; g.strokeStyle = 'rgba(6,10,16,0.34)'; g.stroke();
     g.restore();
-    const T = theme();
+    const T = theme(h);
     coursePath(g, h);
     g.lineWidth = WALL_T * 2 + 4; g.strokeStyle = T.rail[0]; g.stroke();
     g.lineWidth = WALL_T * 2; g.strokeStyle = T.rail[1]; g.stroke();
@@ -3284,7 +3334,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const [x, y] = h.tee;
     g.save();
     g.beginPath(); rr(g, x - 17, y - 17, 34, 34, 7);
-    g.fillStyle = theme().tee; g.fill();
+    g.fillStyle = theme(h).tee; g.fill();
     g.lineWidth = 1.5; g.strokeStyle = 'rgba(255,255,255,0.22)'; g.stroke();
     circle(g, x, y, 2.5); g.fillStyle = 'rgba(255,255,255,0.7)'; g.fill();
     g.restore();
@@ -3634,10 +3684,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function buildStatic() {
     const g = sctx, h = G.hole;
     g.setTransform(1, 0, 0, 1, 0, 0);
-    g.fillStyle = theme().bg; g.fillRect(0, 0, staticCanvas.width, staticCanvas.height);
+    g.fillStyle = theme(h).bg; g.fillRect(0, 0, staticCanvas.width, staticCanvas.height);
     if (!h) return;
     applyView(g);
-    if (theme().floor === 'concrete') drawConcrete(g); else drawCarpet(g);
+    if (theme(h).floor === 'concrete') drawConcrete(g); else drawCarpet(g);
     drawDecorUnder(g, h);
     drawCourseBase(g, h);
     drawDecals(g, h);
@@ -4228,6 +4278,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function render() {
     const g = ctx;
+    if (G.screen === 'map') { Campus.render(g); return; }
+    if (Campus.flight && !Campus.flight.landed) { Campus.render(g, Campus.flight.cam); return; }
+    renderPlay(g);
+    if (Campus.flight) Campus.renderFade(g);
+  }
+  function renderPlay(g) {
     g.setTransform(1, 0, 0, 1, 0, 0);
     if (staticDirty) buildStatic();
     g.drawImage(staticCanvas, 0, 0);
@@ -4407,6 +4463,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     updateFx(dt);
     Swing.update(dt);
     Party.update(dt);
+    if (G.screen === 'map' || Campus.flight) Campus.update(dt);
+    if (G.screen === 'map' && Math.floor(G.clock) !== Math.floor(G.clock - dt)) Campus.syncClock();
     syncSwingBtn();
     if (canAim() && !G.idleSaid && G.clock - (G.aimSince || 0) > 25) { G.idleSaid = true; Taunts.say('idle'); }
     Office.tick();
@@ -4431,6 +4489,720 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
 
   // ---------------------------------------------------------------------------
+  // The campus: both buildings and the grounds around them as one living map. Coworkers walk the halls,
+  // traffic runs down the street, clouds drift over, and the sun follows your own clock.
+  // ---------------------------------------------------------------------------
+  const SLOT_W = 1040, SLOT_H = 660, SLOT_GAP = 120, BLD_PAD = 130;
+  const BLD_W = BLD_PAD * 2 + SLOT_W * 3 + SLOT_GAP * 2, BLD_H = BLD_PAD * 2 + SLOT_H * 3 + SLOT_GAP * 2;
+  const CAMPUS = {
+    w: 9400, h: 4300,
+    bld: { office: { x: 700, y: 440, name: 'HEAD OFFICE' }, factory: { x: 5080, y: 440, name: 'FACTORY FLOOR' } },
+    street: [4460, 4940],
+    lot: [900, 3140, 4200, 3900],
+    yard: [5200, 3040, 8600, 4100],
+    plaza: [2110, 2920, 2910, 3140],
+    pond: [330, 1700, 230, 380],
+  };
+  const OV_Z = 0.22, LIVE_Z = 0.26;
+  // Holes run through each building in a snake: left to right, back again, then across once more.
+  function slotRect(courseId, i) {
+    const b = CAMPUS.bld[courseId], r = Math.floor(i / 3), c = r % 2 ? 2 - (i % 3) : i % 3;
+    const x = b.x + BLD_PAD + c * (SLOT_W + SLOT_GAP), y = b.y + BLD_PAD + r * (SLOT_H + SLOT_GAP);
+    return { x, y, w: SLOT_W, h: SLOT_H, cx: x + SLOT_W / 2, cy: y + SLOT_H / 2 };
+  }
+  function tileCanvas(w, h, paint) {
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    paint(c.getContext('2d'), w, h);
+    return c;
+  }
+  const campusPats = new WeakMap();
+  // Repeating textures for the grounds, drawn at twice the world scale so they stay sharp up close.
+  function campusPattern(g, kind) {
+    let m = campusPats.get(g);
+    if (!m) { m = {}; campusPats.set(g, m); }
+    if (m[kind]) return m[kind];
+    let c;
+    if (kind === 'grass') c = tileCanvas(256, 256, (x, w, h) => {
+      x.fillStyle = '#4f8a3c'; x.fillRect(0, 0, w, h);
+      const r = mulberry32(7);
+      for (let i = 0; i < 900; i++) { x.fillStyle = r() < 0.5 ? 'rgba(20,60,10,0.18)' : 'rgba(170,220,120,0.12)'; x.fillRect(r() * w, r() * h, 2 + r() * 3, 2 + r() * 3); }
+    });
+    else if (kind === 'asphalt') c = tileCanvas(256, 256, (x, w, h) => {
+      x.fillStyle = '#3b3f45'; x.fillRect(0, 0, w, h);
+      const r = mulberry32(11);
+      for (let i = 0; i < 1400; i++) { x.fillStyle = r() < 0.5 ? 'rgba(0,0,0,0.16)' : 'rgba(255,255,255,0.06)'; x.fillRect(r() * w, r() * h, 1.5, 1.5); }
+    });
+    else if (kind === 'carpet') c = tileCanvas(240, 240, (x, w) => {
+      x.fillStyle = '#343d4a'; x.fillRect(0, 0, w, w);
+      x.fillStyle = '#313a46'; x.fillRect(0, 0, w / 2, w / 2); x.fillRect(w / 2, w / 2, w / 2, w / 2);
+      x.strokeStyle = 'rgba(0,0,0,0.16)'; x.lineWidth = 2; x.strokeRect(0, 0, w / 2, w / 2); x.strokeRect(w / 2, w / 2, w / 2, w / 2);
+    });
+    else if (kind === 'concrete') c = tileCanvas(480, 480, (x, w) => {
+      x.fillStyle = '#3c4148'; x.fillRect(0, 0, w, w);
+      const r = mulberry32(5);
+      for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) { const v = 56 + Math.floor(r() * 8); x.fillStyle = `rgb(${v},${v + 3},${v + 8})`; x.fillRect(i * 120, j * 120, 120, 120); }
+      for (let i = 0; i < 18; i++) { x.fillStyle = 'rgba(10,12,16,0.14)'; x.beginPath(); x.ellipse(r() * w, r() * w, 8 + r() * 26, 5 + r() * 14, r() * 3, 0, TAU); x.fill(); }
+      x.strokeStyle = 'rgba(0,0,0,0.3)'; x.lineWidth = 2;
+      for (let i = 0; i <= 4; i++) { x.beginPath(); x.moveTo(i * 120, 0); x.lineTo(i * 120, w); x.moveTo(0, i * 120); x.lineTo(w, i * 120); x.stroke(); }
+    });
+    else if (kind === 'paving') c = tileCanvas(160, 160, (x, w) => {
+      x.fillStyle = '#b9b1a3'; x.fillRect(0, 0, w, w);
+      x.strokeStyle = 'rgba(80,70,60,0.35)'; x.lineWidth = 2;
+      for (let i = 0; i <= 4; i++) { x.beginPath(); x.moveTo(0, i * 40); x.lineTo(w, i * 40); x.stroke(); }
+      for (let j = 0; j < 4; j++) for (let i = 0; i <= 2; i++) { const ox = (j % 2) * 40 + i * 80; x.beginPath(); x.moveTo(ox, j * 40); x.lineTo(ox, j * 40 + 40); x.stroke(); }
+    });
+    const p = g.createPattern(c, 'repeat');
+    const scale = kind === 'carpet' || kind === 'paving' ? 0.5 : 1;
+    if (p.setTransform && typeof DOMMatrix === 'function') p.setTransform(new DOMMatrix().scaleSelf(scale, scale));
+    m[kind] = p;
+    return p;
+  }
+  function drawTree(g, x, y, r, seed) {
+    const rnd = mulberry32(seed);
+    g.fillStyle = 'rgba(10,25,8,0.3)'; circle(g, x + r * 0.35, y + r * 0.45, r); g.fill();
+    for (let i = 0; i < 5; i++) {
+      const a = rnd() * TAU, d = r * 0.35 * rnd(), rr2 = r * (0.55 + rnd() * 0.25);
+      const gr = g.createRadialGradient(x + Math.cos(a) * d - rr2 * 0.3, y + Math.sin(a) * d - rr2 * 0.3, rr2 * 0.1, x + Math.cos(a) * d, y + Math.sin(a) * d, rr2);
+      gr.addColorStop(0, i % 2 ? '#6fae4a' : '#5b9c3e'); gr.addColorStop(1, '#2f6b28');
+      g.fillStyle = gr; circle(g, x + Math.cos(a) * d, y + Math.sin(a) * d, rr2); g.fill();
+    }
+  }
+  function drawCarTop(g, x, y, ang, color, len = 88, wid = 44) {
+    g.save(); g.translate(x, y); g.rotate(ang);
+    g.fillStyle = 'rgba(0,0,0,0.3)'; g.beginPath(); rr(g, -len / 2 + 4, -wid / 2 + 5, len, wid, 10); g.fill();
+    g.beginPath(); rr(g, -len / 2, -wid / 2, len, wid, 10); g.fillStyle = color; g.fill();
+    g.fillStyle = 'rgba(20,30,45,0.85)'; g.beginPath(); rr(g, len * 0.08, -wid * 0.38, len * 0.2, wid * 0.76, 4); g.fill();
+    g.beginPath(); rr(g, -len * 0.36, -wid * 0.36, len * 0.14, wid * 0.72, 4); g.fill();
+    g.fillStyle = shade(color, 0.18); g.beginPath(); rr(g, -len * 0.2, -wid * 0.36, len * 0.27, wid * 0.72, 5); g.fill();
+    g.fillStyle = '#fff6c2'; g.fillRect(len / 2 - 4, -wid * 0.4, 4, 7); g.fillRect(len / 2 - 4, wid * 0.4 - 7, 4, 7);
+    g.fillStyle = '#ff4a3d'; g.fillRect(-len / 2, -wid * 0.4, 3, 7); g.fillRect(-len / 2, wid * 0.4 - 7, 3, 7);
+    g.restore();
+  }
+  function drawTrailer(g, x, y, w, h) {
+    g.fillStyle = 'rgba(0,0,0,0.3)'; g.fillRect(x + 8, y + 10, w, h);
+    g.fillStyle = '#d9dde3'; g.fillRect(x, y, w, h);
+    g.strokeStyle = '#a4acb7'; g.lineWidth = 2; g.beginPath();
+    for (let yy = y + 10; yy < y + h; yy += 14) { g.moveTo(x, yy); g.lineTo(x + w, yy); }
+    g.stroke();
+    g.fillStyle = '#e8453a'; g.fillRect(x, y + h - 6, w, 6);
+  }
+  // A coworker seen from above: shoulders, swinging arms, a head, and maybe a hard hat.
+  function drawPerson(g, p) {
+    const fx = Math.cos(p.dir), fy = Math.sin(p.dir), sx = -fy, sy = fx, sw = p.pause > 0 ? 0 : Math.sin(p.phase);
+    g.fillStyle = 'rgba(0,0,0,0.25)'; g.beginPath(); g.ellipse(p.x + 3, p.y + 4, 12, 9, 0, 0, TAU); g.fill();
+    g.fillStyle = '#1b1d21';
+    circle(g, p.x + fx * sw * 5 + sx * 4, p.y + fy * sw * 5 + sy * 4, 3.4); g.fill();
+    circle(g, p.x - fx * sw * 5 - sx * 4, p.y - fy * sw * 5 - sy * 4, 3.4); g.fill();
+    g.fillStyle = p.skin;
+    circle(g, p.x - fx * sw * 4 + sx * 10, p.y - fy * sw * 4 + sy * 10, 3.2); g.fill();
+    circle(g, p.x + fx * sw * 4 - sx * 10, p.y + fy * sw * 4 - sy * 10, 3.2); g.fill();
+    g.save(); g.translate(p.x, p.y); g.rotate(p.dir);
+    g.fillStyle = p.vest ? '#ff8a1f' : p.shirt; g.beginPath(); g.ellipse(0, 0, 6, 11, 0, 0, TAU); g.fill();
+    if (p.vest) { g.fillStyle = '#e8f0f2'; g.fillRect(-1.5, -10, 3, 20); }
+    g.restore();
+    if (p.hat) { g.fillStyle = '#ffcf1f'; circle(g, p.x, p.y, 7.2); g.fill(); g.fillStyle = '#e0b000'; circle(g, p.x - fx * 1.5, p.y - fy * 1.5, 4); g.fill(); }
+    else { g.fillStyle = p.skin; circle(g, p.x, p.y, 5.6); g.fill(); g.fillStyle = p.hair; g.beginPath(); g.arc(p.x - fx * 1.2, p.y - fy * 1.2, 5.6, p.dir + 1.2, p.dir + TAU - 1.2); g.fill(); }
+  }
+  let cloudSprite = null;
+  function getCloudSprite() {
+    if (cloudSprite) return cloudSprite;
+    cloudSprite = tileCanvas(256, 160, (x, w, h) => {
+      const r = mulberry32(21);
+      for (let i = 0; i < 9; i++) {
+        const cx = 50 + r() * 156, cy = 40 + r() * 80, rad = 30 + r() * 40;
+        const gr = x.createRadialGradient(cx, cy, 0, cx, cy, rad);
+        gr.addColorStop(0, 'rgba(20,30,50,0.2)'); gr.addColorStop(1, 'rgba(20,30,50,0)');
+        x.fillStyle = gr; x.fillRect(0, 0, w, h);
+      }
+    });
+    return cloudSprite;
+  }
+
+  const Campus = {
+    ready: false, holes: [], nodes: [], npcs: [], cars: [], parked: [], trees: [], lamps: [], ducks: [], clouds: [], birds: [],
+    cam: { x: 4700, y: 2100, z: 0.12, rot: 0 }, goal: null, drag: null, pointers: new Map(), idle: 0, sel: null, mins: 0,
+    overview: null, lightMap: null, flight: null, prevScreen: null, lastSay: 0,
+    // Builds every hole of both buildings with today's pins, plus the grounds, the walkways and the people.
+    build() {
+      if (this.ready) return;
+      const keepCourse = COURSE.id, keepMode = PH;
+      PH = MODES.normal;
+      for (const id of Object.keys(CAMPUS.bld)) {
+        setCourse(id);
+        const vs = variantsFor('day:' + todayKey());
+        HOLES.forEach((_, i) => this.holes.push(this.place(id, i, buildHole(i, vs[i]), 'day')));
+      }
+      setCourse(keepCourse); PH = keepMode;
+      this.buildGrounds();
+      this.buildPeople();
+      this.ready = true;
+    },
+    place(course, idx, h, key) {
+      const s = slotRect(course, idx), f = h.frame;
+      return { course, idx, h, key, slot: s, ox: s.cx - (f[0] + f[2]) / 2, oy: s.cy - (f[1] + f[3]) / 2 };
+    },
+    // During a round, the map shows your building with the round's own pins and flips, so balls land where they should.
+    matchRound() {
+      if (!G.variants || !G.course) return false;
+      let changed = false;
+      this.holes = this.holes.map(wh => {
+        if (wh.course !== COURSE.id || wh.key === G.course.key) return wh;
+        changed = true;
+        return this.place(wh.course, wh.idx, buildHole(wh.idx, G.variants[wh.idx]), G.course.key);
+      });
+      return changed;
+    },
+    buildGrounds() {
+      const rnd = mulberry32(2024);
+      // Trees along the top lawn, around the pond, and down both sides of the street.
+      for (let x = 150; x < CAMPUS.w; x += 260 + rnd() * 120) this.trees.push([x, 180 + rnd() * 120, 60 + rnd() * 30]);
+      for (let i = 0; i < 16; i++) this.trees.push([80 + rnd() * 500, 500 + rnd() * 3500, 50 + rnd() * 35]);
+      for (let y = 600; y < 2900; y += 420) { this.trees.push([4390, y, 48]); this.trees.push([5010, y + 200, 48]); }
+      this.trees = this.trees.filter(([x, y, r]) => {
+        const [px, py, rx, ry] = CAMPUS.pond;
+        return ((x - px) / (rx + r)) ** 2 + ((y - py) / (ry + r)) ** 2 > 1;
+      });
+      const cols = ['#e8453a', '#f4f1ea', '#2f6fb3', '#1b1d21', '#8c96a3', '#ffd447', '#35a06a', '#c39bff'];
+      const [lx0, ly0, lx1, ly1] = CAMPUS.lot;
+      for (let x = lx0 + 60; x < lx1 - 40; x += 72) {
+        if (rnd() < 0.8) this.parked.push([x, ly0 + 110, Math.PI / 2, cols[Math.floor(rnd() * cols.length)]]);
+        if (rnd() < 0.7) this.parked.push([x, ly1 - 110, -Math.PI / 2, cols[Math.floor(rnd() * cols.length)]]);
+      }
+      for (let y = 200; y < CAMPUS.h; y += 420) { this.lamps.push([4420, y, 260]); this.lamps.push([4980, y + 210, 260]); }
+      for (let x = lx0 + 200; x < lx1; x += 600) this.lamps.push([x, (ly0 + ly1) / 2, 320]);
+      for (const id of Object.keys(CAMPUS.bld)) for (let i = 0; i < 9; i++) { const s = slotRect(id, i); this.lamps.push([s.cx, s.cy, 700]); }
+      this.lamps.push([2510, 3030, 300], [6890, 3300, 380], [7800, 3500, 380]);
+    },
+    buildPeople() {
+      const rnd = mulberry32(99), nodes = this.nodes, add = (x, y, zone) => { nodes.push({ x, y, zone, n: [] }); return nodes.length - 1; };
+      const link = (a, b) => { nodes[a].n.push(b); nodes[b].n.push(a); };
+      const doors = {};
+      for (const id of Object.keys(CAMPUS.bld)) {
+        const b = CAMPUS.bld[id];
+        const xs = [b.x + BLD_PAD / 2, b.x + BLD_PAD + SLOT_W + SLOT_GAP / 2, b.x + BLD_PAD + 2 * SLOT_W + 1.5 * SLOT_GAP, b.x + BLD_W - BLD_PAD / 2];
+        const ys = [b.y + BLD_PAD / 2, b.y + BLD_PAD + SLOT_H + SLOT_GAP / 2, b.y + BLD_PAD + 2 * SLOT_H + 1.5 * SLOT_GAP, b.y + BLD_H - BLD_PAD / 2];
+        const grid = ys.map(y => xs.map(x => add(x, y, id)));
+        for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) { if (c < 3 && r !== 3) link(grid[r][c], grid[r][c + 1]); if (r < 3) link(grid[r][c], grid[r + 1][c]); }
+        // The bottom hallway has the front door in the middle.
+        const mid = add(b.x + BLD_W / 2, ys[3], id);
+        link(grid[3][0], grid[3][1]); link(grid[3][1], mid); link(mid, grid[3][2]); link(grid[3][2], grid[3][3]);
+        doors[id] = add(b.x + BLD_W / 2, b.y + BLD_H + 90, 'out');
+        link(mid, doors[id]);
+      }
+      const west = add(4400, 3010, 'out'), east = add(5000, 3010, 'out');
+      link(doors.office, west); link(west, east); link(east, doors.factory);
+      const lot = [1500, 2500, 3500].map(x => add(x, (CAMPUS.lot[1] + CAMPUS.lot[3]) / 2, 'out'));
+      link(doors.office, lot[1]); link(lot[0], lot[1]); link(lot[1], lot[2]);
+      const bench = add(560, 2700, 'out'), pond = add(660, 1700, 'out'), cafe = add(420, 900, 'out');
+      link(lot[0], bench); link(bench, pond); link(pond, cafe);
+      const yard = add(6890, 3400, 'out'), yard2 = add(8000, 3400, 'out');
+      link(doors.factory, yard); link(yard, yard2);
+      const skins = ['#f1c7a5', '#d9a47c', '#b07a52', '#7d4f33', '#5a3825', '#f6d7c3'];
+      const hairs = ['#1b1d21', '#4a3020', '#8a5a2a', '#c9a15a', '#6b6b6b', '#2a2a40'];
+      const shirts = ['#3f63d4', '#e8453a', '#35a06a', '#f4f1ea', '#c39bff', '#ff8fc7', '#2b3038', '#5bc0ff', '#ffd447'];
+      for (let i = 0; i < 34; i++) {
+        const zone = i < 16 ? 'office' : i < 28 ? 'factory' : 'out';
+        const pool = nodes.map((nd, k) => k).filter(k => nodes[k].zone === zone);
+        const at = pool[Math.floor(rnd() * pool.length)], [name, dept] = COWORKERS[i % COWORKERS.length];
+        this.npcs.push({
+          x: nodes[at].x, y: nodes[at].y, node: at, next: at, prev: -1, dir: rnd() * TAU, speed: 38 + rnd() * 30, pause: rnd() * 3, phase: rnd() * 6,
+          skin: skins[Math.floor(rnd() * skins.length)], hair: hairs[Math.floor(rnd() * hairs.length)], shirt: shirts[Math.floor(rnd() * shirts.length)],
+          hat: zone === 'factory' && rnd() < 0.8, vest: zone === 'factory' && rnd() < 0.6, name, dept, say: '', sayT: 0,
+        });
+      }
+      const carCols = ['#e8453a', '#f4f1ea', '#2f6fb3', '#ffd447', '#35a06a', '#1b1d21', '#c39bff'];
+      for (let i = 0; i < 7; i++) this.cars.push({ lane: i % 2, y: rnd() * CAMPUS.h, speed: 170 + rnd() * 90, color: carCols[i % carCols.length] });
+      // Things in the halls: plants where the office hallways cross, and stock and drums on the factory floor.
+      this.decor = [];
+      for (const nd of nodes) {
+        if (nd.zone === 'office' && rnd() < 0.7) this.decor.push({ k: 'plant', x: nd.x + (rnd() < 0.5 ? -44 : 44), y: nd.y + (rnd() < 0.5 ? -44 : 44) });
+        if (nd.zone === 'factory' && rnd() < 0.55) {
+          const x = nd.x + (rnd() < 0.5 ? -52 : 52), y = nd.y + (rnd() < 0.5 ? -52 : 52);
+          if (rnd() < 0.5) this.decor.push({ k: 'pallet', x, y });
+          else this.decor.push({ k: 'drums', x, y });
+        }
+      }
+      const ob = CAMPUS.bld.office;
+      this.decor.push({ k: 'desk', x: ob.x + BLD_W / 2, y: ob.y + BLD_H - 70 });
+      const [px, py, rx, ry] = CAMPUS.pond;
+      for (let i = 0; i < 3; i++) this.ducks.push({ a: rnd() * TAU, r: 0.4 + rnd() * 0.4, speed: (0.05 + rnd() * 0.05) * (rnd() < 0.5 ? -1 : 1), px, py, rx, ry, bob: rnd() * 6 });
+      for (let i = 0; i < 6; i++) this.clouds.push({ x: rnd() * CAMPUS.w, y: rnd() * CAMPUS.h, s: 5 + rnd() * 6, speed: 18 + rnd() * 14 });
+      this.forklift = { t: 0 };
+    },
+    // Hours past midnight, from your clock at open, then running a minute a second.
+    hour() { return (this.mins / 60) % 24; },
+    darkness() {
+      const h = this.hour(), c = Math.cos(((h - 12) / 24) * TAU);
+      return clamp((-c + 0.3) / 1.3, 0, 1) * 0.66;
+    },
+    // Staticworld: the ground, roads, buildings and every hole's fixed parts.
+    drawStatic(g, vis) {
+      const W = CAMPUS.w, H = CAMPUS.h;
+      g.fillStyle = campusPattern(g, 'grass'); g.fillRect(-2000, -2000, W + 4000, H + 4000);
+      const [sx0, sx1] = CAMPUS.street;
+      g.fillStyle = '#9d9a92'; g.fillRect(sx0 - 140, -2000, sx1 - sx0 + 280, H + 4000);
+      g.fillStyle = campusPattern(g, 'asphalt'); g.fillRect(sx0, -2000, sx1 - sx0, H + 4000);
+      g.strokeStyle = '#f2d24b'; g.lineWidth = 6; g.setLineDash([60, 50]);
+      g.beginPath(); g.moveTo((sx0 + sx1) / 2, -2000); g.lineTo((sx0 + sx1) / 2, H + 2000); g.stroke(); g.setLineDash([]);
+      g.fillStyle = 'rgba(255,255,255,0.85)';
+      for (let x = sx0 + 10; x < sx1 - 10; x += 44) g.fillRect(x, 2960, 24, 100);
+      const [lx0, ly0, lx1, ly1] = CAMPUS.lot;
+      g.fillStyle = campusPattern(g, 'asphalt'); g.fillRect(lx0, ly0, lx1 - lx0, ly1 - ly0);
+      g.strokeStyle = 'rgba(255,255,255,0.7)'; g.lineWidth = 4;
+      g.beginPath();
+      for (let x = lx0 + 24; x < lx1; x += 72) { g.moveTo(x, ly0 + 40); g.lineTo(x, ly0 + 180); g.moveTo(x, ly1 - 40); g.lineTo(x, ly1 - 180); }
+      g.stroke();
+      const [yx0, yy0, yx1, yy1] = CAMPUS.yard;
+      g.fillStyle = campusPattern(g, 'concrete'); g.fillRect(yx0, yy0, yx1 - yx0, yy1 - yy0);
+      g.fillStyle = '#9d9a92'; g.fillRect(sx1, 3000, yx0 - sx1, 400);
+      g.fillStyle = campusPattern(g, 'asphalt'); g.fillRect(sx1, 3040, yx0 - sx1 + 20, 320);
+      const [pl0, pt0, pl1, pt1] = CAMPUS.plaza;
+      g.fillStyle = campusPattern(g, 'paving'); g.fillRect(pl0, pt0, pl1 - pl0, pt1 - pt0); g.fillRect(4320, 2920, 140, 200); g.fillRect(2410, 3140, 200, 240);
+      g.fillStyle = campusPattern(g, 'paving');
+      g.fillRect(100, 2640, 2010, 90); g.fillRect(560, 700, 90, 2030);
+      // The pond, with a stone rim.
+      const [px, py, rx, ry] = CAMPUS.pond;
+      g.fillStyle = '#9d9a92'; g.beginPath(); g.ellipse(px, py, rx + 16, ry + 16, 0, 0, TAU); g.fill();
+      const pg = g.createRadialGradient(px - rx * 0.3, py - ry * 0.3, 10, px, py, Math.max(rx, ry));
+      pg.addColorStop(0, '#5fb3d9'); pg.addColorStop(1, '#2f6f9a');
+      g.fillStyle = pg; g.beginPath(); g.ellipse(px, py, rx, ry, 0, 0, TAU); g.fill();
+      // The fountain in the plaza.
+      g.fillStyle = '#8c8578'; circle(g, 2510, 3030, 70); g.fill();
+      g.fillStyle = '#4c9ec6'; circle(g, 2510, 3030, 58); g.fill();
+      g.fillStyle = '#b9b1a3'; circle(g, 2510, 3030, 12); g.fill();
+      // A coffee kiosk by the pond, with its tables.
+      g.fillStyle = '#6b3a1f'; g.fillRect(300, 760, 220, 120);
+      g.fillStyle = '#e8453a'; for (let i = 0; i < 6; i++) g.fillRect(300 + i * 37, 740, 18, 24);
+      for (const [tx, ty] of [[280, 1000], [420, 1040], [540, 980]]) { g.fillStyle = '#f4f1ea'; circle(g, tx, ty, 26); g.fill(); g.fillStyle = '#ffd447'; circle(g, tx, ty, 8); g.fill(); }
+      for (const [x, y, a, c] of this.parked) drawCarTop(g, x, y, a, c);
+      for (let i = 0; i < 3; i++) drawTrailer(g, 5500 + i * 900, 2960, 200, 700);
+      // The buildings: an outside wall with windows, and inside, carpet or concrete.
+      for (const id of Object.keys(CAMPUS.bld)) {
+        const b = CAMPUS.bld[id];
+        g.fillStyle = 'rgba(0,0,0,0.35)'; g.fillRect(b.x + 30, b.y + 36, BLD_W, BLD_H);
+        g.fillStyle = campusPattern(g, id === 'office' ? 'carpet' : 'concrete'); g.fillRect(b.x, b.y, BLD_W, BLD_H);
+        g.strokeStyle = id === 'office' ? '#c3ccd7' : '#6b7480'; g.lineWidth = 26; g.strokeRect(b.x, b.y, BLD_W, BLD_H);
+        g.strokeStyle = 'rgba(140,200,240,0.8)'; g.lineWidth = 8; g.setLineDash([90, 50]);
+        g.strokeRect(b.x, b.y, BLD_W, BLD_H); g.setLineDash([]);
+        g.fillStyle = id === 'office' ? '#e6ebf1' : '#f2b705'; g.fillRect(b.x + BLD_W / 2 - 90, b.y + BLD_H - 16, 180, 32);
+        if (id === 'factory') {
+          g.strokeStyle = 'rgba(242,183,5,0.5)'; g.lineWidth = 6;
+          g.strokeRect(b.x + 30, b.y + 30, BLD_W - 60, BLD_H - 60);
+        }
+      }
+      for (const d of this.decor || []) {
+        if (vis && (d.x < vis.x0 - 80 || d.x > vis.x1 + 80 || d.y < vis.y0 - 80 || d.y > vis.y1 + 80)) continue;
+        if (d.k === 'plant') drawBumper(g, { x: d.x, y: d.y, r: 20, kind: 'planter' }, [4, 5]);
+        else if (d.k === 'pallet') { const pts = rect(d.x - 34, d.y - 30, 68, 60); drawBlock(g, { pts, bb: bboxOf(pts), kind: 'pallet' }, [5, 6]); }
+        else if (d.k === 'drums') for (const [ox, oy] of [[-15, -15], [15, -15], [0, 12]]) { g.save(); g.translate(d.x + ox, d.y + oy); PROP_ART.barrel(g, 14, { fallen: false }); g.restore(); }
+        else if (d.k === 'desk') {
+          g.fillStyle = 'rgba(0,0,0,0.3)'; g.beginPath(); rr(g, d.x - 146, d.y - 26, 300, 60, 26); g.fill();
+          g.fillStyle = '#b8854f'; g.beginPath(); rr(g, d.x - 150, d.y - 30, 300, 56, 26); g.fill();
+          g.fillStyle = '#2b3038'; g.fillRect(d.x - 20, d.y - 24, 40, 6);
+          g.fillStyle = '#e6ebf1'; g.font = '800 22px ' + DISPLAY_FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('RECEPTION', d.x, d.y + 6);
+        }
+      }
+      for (const t of this.trees) if (!vis || (t[0] > vis.x0 - 120 && t[0] < vis.x1 + 120 && t[1] > vis.y0 - 120 && t[1] < vis.y1 + 120)) drawTree(g, t[0], t[1], t[2], Math.round(t[0] * 13 + t[1]));
+      for (const wh of this.holes) if (!vis || this.holeVisible(wh, vis)) this.drawHoleStatic(g, wh);
+    },
+    // Up close, the ground and the holes' fixed parts are drawn once for an area a bit bigger than the screen,
+    // then reused while the camera stays nearby. Zooming out a little reuses it; zooming in redraws it sharp.
+    ensureDetail(cam, vis) {
+      const d = this.detail, k = d ? cam.z / d.z : 0;
+      if (d && k > 0.72 && k < 1.12 && vis.x0 >= d.x0 && vis.y0 >= d.y0 && vis.x1 <= d.x1 && vis.y1 <= d.y1 && d.dpr === dpr) return d;
+      const ex = (vis.x1 - vis.x0) * 0.35, ey = (vis.y1 - vis.y0) * 0.35;
+      const r = { x0: vis.x0 - ex, y0: vis.y0 - ey, x1: vis.x1 + ex, y1: vis.y1 + ey };
+      const scale = Math.min(cam.z * dpr, 3600 / (r.x1 - r.x0), 3600 / (r.y1 - r.y0));
+      const c = d ? d.canvas : document.createElement('canvas');
+      c.width = Math.ceil((r.x1 - r.x0) * scale); c.height = Math.ceil((r.y1 - r.y0) * scale);
+      const g = c.getContext('2d');
+      g.setTransform(scale, 0, 0, scale, -r.x0 * scale, -r.y0 * scale);
+      this.drawStatic(g, r);
+      this.detail = { canvas: c, z: cam.z, dpr, ...r };
+      return this.detail;
+    },
+    holeVisible(wh, v) { const s = wh.slot; return s.x < v.x1 && s.x + s.w > v.x0 && s.y < v.y1 && s.y + s.h > v.y0; },
+    drawHoleStatic(g, wh) {
+      const h = this.holeFor(wh);
+      g.save(); g.translate(wh.ox, wh.oy);
+      drawDecorUnder(g, h); drawCourseBase(g, h); drawDecals(g, h); drawZonesStatic(g, h);
+      for (const b of h.blocks) drawBlock(g, b, h.shadow);
+      for (const c of h.bumpers) drawBumper(g, c, h.shadow);
+      g.restore();
+    },
+    holeFor(wh) { return (this.flight && this.flight.swap && this.flight.swap[wh.course + wh.idx]) || wh.h; },
+    drawHoleLive(g, wh) {
+      const h = this.holeFor(wh), t = h.t;
+      g.save(); g.translate(wh.ox, wh.oy);
+      g.save(); coursePath(g, h); g.clip();
+      for (const z of h.zones) { if (z.type === 'conveyor') drawConveyor(g, z, t); else if (z.style === 'coffee') drawRipples(g, z, t); }
+      for (const z of h.zones) if (z.style === 'shredder') drawShredder(g, z, t);
+      g.restore();
+      drawArrivals(g, h); drawCupHole(g, h); drawProps(g, h); drawMovers(g, h);
+      drawFlag(g, h, G.clock);
+      g.restore();
+    },
+    buildOverview() {
+      const c = document.createElement('canvas');
+      c.width = Math.ceil(CAMPUS.w * OV_Z); c.height = Math.ceil(CAMPUS.h * OV_Z);
+      const g = c.getContext('2d');
+      g.setTransform(OV_Z, 0, 0, OV_Z, 0, 0);
+      this.withMapView(() => this.drawStatic(g, null));
+      this.overview = c;
+      // Where the lights are at night, as a soft low-resolution map.
+      const L = 0.05, lm = document.createElement('canvas');
+      lm.width = Math.ceil(CAMPUS.w * L); lm.height = Math.ceil(CAMPUS.h * L);
+      const lg = lm.getContext('2d');
+      lg.fillStyle = 'rgb(5,9,24)'; lg.fillRect(0, 0, lm.width, lm.height);
+      lg.globalCompositeOperation = 'destination-out';
+      lg.setTransform(L, 0, 0, L, 0, 0);
+      for (const [x, y, r] of this.lamps) {
+        const gr = lg.createRadialGradient(x, y, 0, x, y, r);
+        gr.addColorStop(0, 'rgba(0,0,0,0.95)'); gr.addColorStop(0.5, 'rgba(0,0,0,0.55)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+        lg.fillStyle = gr; lg.fillRect(x - r, y - r, r * 2, r * 2);
+      }
+      this.lightMap = lm;
+    },
+    // Drawing a hole uses the play view's idea of "up"; on the map, up is up.
+    withMapView(fn, rot = 0) {
+      const keep = { rot: view.rot, textRot: view.textRot, up: view.up, down: view.down }, ball = G.ball;
+      view.rot = false; view.textRot = -rot;
+      view.up = [-Math.sin(rot), -Math.cos(rot)]; view.down = [-view.up[0], -view.up[1]];
+      G.ball = null;
+      try { fn(); } finally { Object.assign(view, keep); G.ball = ball; }
+    },
+    matrix(cam) {
+      const a = Math.cos(cam.rot) * cam.z, b = Math.sin(cam.rot) * cam.z;
+      return [a, b, -b, a, cw / 2 - (a * cam.x - b * cam.y), ch / 2 - (b * cam.x + a * cam.y)];
+    },
+    toWorld(cam, sx, sy) {
+      const [a, b, c, d, e, f] = this.matrix(cam), det = a * d - b * c, x = sx - e, y = sy - f;
+      return { x: (d * x - c * y) / det, y: (-b * x + a * y) / det };
+    },
+    visible(cam) {
+      const pts = [[0, 0], [cw, 0], [0, ch], [cw, ch]].map(([x, y]) => this.toWorld(cam, x, y));
+      return { x0: Math.min(...pts.map(p => p.x)), y0: Math.min(...pts.map(p => p.y)), x1: Math.max(...pts.map(p => p.x)), y1: Math.max(...pts.map(p => p.y)) };
+    },
+    update(dt) {
+      if (!this.ready) return;
+      this.mins += dt * (this.fast ? 20 : 1);
+      const vis = this.visible(this.cam);
+      const sub = Math.ceil(dt / (1 / 120)), sdt = dt / sub;
+      for (const wh of this.holes) {
+        const swapped = this.flight && this.flight.swap && this.flight.swap[wh.course + wh.idx];
+        if (!swapped && !this.holeVisible(wh, vis)) continue;
+        // The hole you're playing is already stepped by the game.
+        if (swapped === G.hole) continue;
+        const h = this.holeFor(wh);
+        for (let i = 0; i < sub; i++) { updateMovers(h, sdt, null); stepProps(h, sdt, null, { hits: [] }); }
+      }
+      for (const p of this.npcs) {
+        if (p.sayT > 0) p.sayT -= dt;
+        if (p.pause > 0) { p.pause -= dt; continue; }
+        const n = this.nodes[p.next], dx = n.x - p.x, dy = n.y - p.y, d = Math.hypot(dx, dy);
+        if (d < 2) {
+          p.prev = p.node; p.node = p.next;
+          const opts = this.nodes[p.node].n.filter(k => k !== p.prev);
+          p.next = (opts.length ? opts : this.nodes[p.node].n)[Math.floor(Math.random() * (opts.length || this.nodes[p.node].n.length))];
+          if (Math.random() < 0.3) p.pause = 1 + Math.random() * 4;
+          continue;
+        }
+        const step = Math.min(d, p.speed * dt);
+        p.x += (dx / d) * step; p.y += (dy / d) * step;
+        p.dir = Math.atan2(dy, dx); p.phase += dt * p.speed * 0.16;
+      }
+      // Now and then someone within view says something.
+      if (this.cam.z > 0.22 && G.clock - this.lastSay > 2.6) {
+        const near = this.npcs.filter(p => p.x > vis.x0 && p.x < vis.x1 && p.y > vis.y0 && p.y < vis.y1 && p.sayT <= 0);
+        if (near.length) {
+          const p = pick(near), zone = this.nodes[p.node].zone;
+          p.say = pick(CHATTER[zone === 'factory' ? 'factory' : 'office']); p.sayT = 4.2;
+          this.lastSay = G.clock;
+        }
+      }
+      for (const c of this.cars) { c.y += (c.lane ? 1 : -1) * c.speed * dt; if (c.y > CAMPUS.h + 300) c.y = -300; if (c.y < -300) c.y = CAMPUS.h + 300; }
+      for (const d of this.ducks) { d.a += d.speed * dt; d.bob += dt; }
+      for (const c of this.clouds) { c.x += c.speed * dt; if (c.x > CAMPUS.w + 1600) c.x = -1600; }
+      this.forklift.t += dt;
+      if (Math.random() < dt / 14 && !this.birds.length) {
+        const y = 400 + Math.random() * (CAMPUS.h - 800), dir = Math.random() < 0.5 ? 1 : -1;
+        this.birds = Array.from({ length: 5 }, (_, i) => ({ x: dir > 0 ? -300 - i * 60 : CAMPUS.w + 300 + i * 60, y: y + (i % 2 ? 1 : -1) * i * 30, dir, f: Math.random() * 6 }));
+      }
+      for (const b of this.birds) { b.x += b.dir * 260 * dt; b.f += dt * 9; }
+      if (this.birds.length && this.birds.every(b => b.x < -600 || b.x > CAMPUS.w + 600)) this.birds = [];
+      if (this.flight) this.updateFlight(dt);
+      else if (G.screen === 'map') this.updateCamera(dt);
+    },
+    updateCamera(dt) {
+      this.idle += dt;
+      // Left alone, the camera takes itself on a slow tour.
+      if (this.idle > 9 && !this.drag) {
+        if (!this.goal || this.goal.t >= 1) {
+          const spots = this.holes.map(w => [w.slot.cx, w.slot.cy, 0.42]).concat([[2510, 3030, 0.5], [330, 1700, 0.45], [4700, 2000, 0.3], [6890, 3400, 0.4], [4700, 2150, 0.1]]);
+          const s = pick(spots);
+          this.goal = { from: { ...this.cam }, to: { x: s[0], y: s[1], z: s[2] * (0.8 + Math.random() * 0.5), rot: 0 }, t: 0, dur: 7 };
+        }
+      }
+      if (this.goal) {
+        const gl = this.goal;
+        gl.t = Math.min(1, gl.t + dt / gl.dur);
+        const e = smoothstep(gl.t);
+        this.cam.x = lerp(gl.from.x, gl.to.x, e); this.cam.y = lerp(gl.from.y, gl.to.y, e);
+        this.cam.z = Math.exp(lerp(Math.log(gl.from.z), Math.log(gl.to.z), e));
+        if (gl.t >= 1 && this.idle < 9) this.goal = null;
+      }
+      this.clampCam();
+    },
+    clampCam() {
+      const c = this.cam, fitZ = Math.min(cw / CAMPUS.w, ch / CAMPUS.h) * 0.95;
+      c.z = clamp(c.z, fitZ, 2);
+      c.x = clamp(c.x, 0, CAMPUS.w); c.y = clamp(c.y, 0, CAMPUS.h);
+    },
+    render(g, cam) {
+      cam = cam || this.cam;
+      const m = this.matrix(cam), vis = this.visible(cam);
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      g.fillStyle = '#2d4a24'; g.fillRect(0, 0, canvas.width, canvas.height);
+      const set = () => g.setTransform(m[0] * dpr, m[1] * dpr, m[2] * dpr, m[3] * dpr, m[4] * dpr, m[5] * dpr);
+      set();
+      const live = cam.z >= LIVE_Z;
+      this.withMapView(() => {
+        if (!live || cam.z < LIVE_Z * 1.3) g.drawImage(this.overview, 0, 0, CAMPUS.w, CAMPUS.h);
+        if (live) {
+          const d = this.ensureDetail(cam, vis);
+          g.save();
+          if (cam.z < LIVE_Z * 1.3) g.globalAlpha = (cam.z - LIVE_Z) / (LIVE_Z * 0.3);
+          g.drawImage(d.canvas, d.x0, d.y0, d.x1 - d.x0, d.y1 - d.y0);
+          g.restore();
+        }
+        if (cam.z > 0.14) for (const wh of this.holes) if (this.holeVisible(wh, vis)) this.drawHoleLive(g, wh);
+        this.drawLife(g, vis, cam);
+      }, cam.rot);
+      this.drawNight(g, cam);
+      this.drawLabels(g, cam, vis);
+    },
+    drawLife(g, vis, cam) {
+      const t = G.clock, [px, py, rx, ry] = CAMPUS.pond;
+      // Sparkles on the pond and ducks doing laps.
+      for (let i = 0; i < 8; i++) {
+        const a = i * 2.39 + t * 0.2, k = ((t * 0.5 + i * 0.37) % 1);
+        g.strokeStyle = `rgba(255,255,255,${(0.35 * (1 - k)).toFixed(3)})`; g.lineWidth = 3;
+        g.beginPath(); g.ellipse(px + Math.cos(a) * rx * 0.5, py + Math.sin(a * 1.3) * ry * 0.5, 10 + k * 40, 5 + k * 20, 0, 0, TAU); g.stroke();
+      }
+      for (const d of this.ducks) {
+        const x = d.px + Math.cos(d.a) * d.rx * d.r, y = d.py + Math.sin(d.a) * d.ry * d.r, dir = d.a + (d.speed > 0 ? Math.PI / 2 : -Math.PI / 2);
+        g.strokeStyle = 'rgba(255,255,255,0.3)'; g.lineWidth = 2;
+        g.beginPath(); g.arc(x - Math.cos(dir) * 16, y - Math.sin(dir) * 16, 14, dir + 2.2, dir + 4.1); g.stroke();
+        g.save(); g.translate(x, y); g.rotate(dir);
+        g.fillStyle = '#f4f1ea'; g.beginPath(); g.ellipse(0, 0, 16, 10, 0, 0, TAU); g.fill();
+        g.fillStyle = '#2f7a4a'; circle(g, 12, 0, 7); g.fill();
+        g.fillStyle = '#ff9a3c'; g.fillRect(17, -2, 7, 4);
+        g.restore();
+      }
+      // The fountain.
+      for (let i = 0; i < 10; i++) {
+        const a = (i / 10) * TAU + t * 0.6, k = (t * 1.4 + i * 0.1) % 1;
+        g.fillStyle = `rgba(220,240,255,${(0.8 * (1 - k)).toFixed(3)})`;
+        circle(g, 2510 + Math.cos(a) * k * 46, 3030 + Math.sin(a) * k * 46, 4); g.fill();
+      }
+      // The yard forklift loops between the trailers.
+      const ft = this.forklift.t * 0.08, fx = 5700 + (Math.sin(ft) * 0.5 + 0.5) * 2200, fy = 3560 + Math.sin(ft * 2) * 120;
+      drawForklift(g, { cx: fx, cy: fy, a: [0, 0], b: [1, 0], w: 70, h: 42, face: Math.cos(ft) > 0 ? 1 : -1 }, [6, 8]);
+      for (const c of this.cars) {
+        const x = c.lane ? 4580 : 4820;
+        if (c.y > vis.y0 - 200 && c.y < vis.y1 + 200) drawCarTop(g, x, c.y, c.lane ? Math.PI / 2 : -Math.PI / 2, c.color);
+      }
+      for (const p of this.npcs) if (p.x > vis.x0 - 40 && p.x < vis.x1 + 40 && p.y > vis.y0 - 40 && p.y < vis.y1 + 40) drawPerson(g, p);
+      if (ONLINE.on) this.drawPlayers(g);
+      const cs = getCloudSprite();
+      for (const c of this.clouds) g.drawImage(cs, c.x, c.y, 256 * c.s, 160 * c.s);
+      g.strokeStyle = '#1b1d21'; g.lineWidth = 5; g.lineCap = 'round';
+      for (const b of this.birds) {
+        const f = Math.sin(b.f) * 12;
+        g.beginPath(); g.moveTo(b.x - 22, b.y - 6 - f); g.lineTo(b.x, b.y); g.lineTo(b.x + 22 * 1, b.y - 6 - f); g.stroke();
+      }
+    },
+    // In an online room, everyone's ball shows on the hole they're playing.
+    drawPlayers(g) {
+      for (const p of ONLINE.peers.values()) {
+        if (p.rx == null || p.cs !== COURSE.id) continue;
+        const wh = this.holes.find(w => w.course === p.cs && w.idx === p.h);
+        if (!wh) continue;
+        const x = wh.ox + p.rx, y = wh.oy + p.ry;
+        g.fillStyle = COLORS[p.c] || '#fff'; circle(g, x, y, 14); g.fill();
+        g.lineWidth = 3; g.strokeStyle = '#1b1d21'; g.stroke();
+      }
+    },
+    drawNight(g, cam) {
+      const d = this.darkness(), h = this.hour();
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      // Golden hour and dawn get a warm wash.
+      const warm = Math.max(Math.exp(-(((h - 18.2) / 1.1) ** 2)), 0.7 * Math.exp(-(((h - 6.4) / 0.9) ** 2)));
+      if (warm > 0.02) { g.fillStyle = `rgba(255,150,70,${(0.16 * warm).toFixed(3)})`; g.fillRect(0, 0, canvas.width, canvas.height); }
+      if (d <= 0.01) return;
+      const m = this.matrix(cam);
+      g.setTransform(m[0] * dpr, m[1] * dpr, m[2] * dpr, m[3] * dpr, m[4] * dpr, m[5] * dpr);
+      g.globalAlpha = d / 0.66 * 0.9;
+      g.drawImage(this.lightMap, -1, -1, CAMPUS.w + 2, CAMPUS.h + 2);
+      g.globalAlpha = 1;
+      // Headlights and warm lamp glow.
+      g.globalCompositeOperation = 'lighter';
+      for (const c of this.cars) {
+        const x = c.lane ? 4580 : 4820, dir = c.lane ? 1 : -1, y = c.y + dir * 44;
+        const gr = g.createRadialGradient(x, y, 0, x, y, 300);
+        gr.addColorStop(0, `rgba(255,240,200,${(0.35 * d / 0.66).toFixed(3)})`); gr.addColorStop(1, 'rgba(255,240,200,0)');
+        g.fillStyle = gr; g.beginPath(); g.moveTo(x, y); g.arc(x, y, 300, (dir > 0 ? Math.PI / 2 : -Math.PI / 2) - 0.35, (dir > 0 ? Math.PI / 2 : -Math.PI / 2) + 0.35); g.closePath(); g.fill();
+      }
+      g.globalCompositeOperation = 'source-over';
+    },
+    drawLabels(g, cam, vis) {
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const m = this.matrix(cam), P = (x, y) => [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]];
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      if (cam.z < 0.2 && !this.flight) {
+        for (const id of Object.keys(CAMPUS.bld)) {
+          const b = CAMPUS.bld[id], [x, y] = P(b.x + BLD_W / 2, b.y - 150);
+          g.font = `900 ${Math.round(clamp(cam.z * 160, 14, 30))}px ${DISPLAY_FONT}`;
+          g.fillStyle = 'rgba(0,0,0,0.45)'; g.fillText(b.name, x + 1, y + 2);
+          g.fillStyle = '#fff8e0'; g.fillText(b.name, x, y);
+        }
+      }
+      if (cam.z >= 0.15 && !this.flight) {
+        g.font = `600 ${cam.z > 0.3 ? 13 : 11}px "IBM Plex Mono", monospace`;
+        for (const wh of this.holes) {
+          if (!this.holeVisible(wh, vis)) continue;
+          const def = COURSES[wh.course].holes[wh.idx], [x, y] = P(wh.slot.cx, wh.slot.y + 34);
+          const txt = `${def.time} · ${def.name}`, w = g.measureText(txt).width + 14;
+          const on = this.sel === wh;
+          g.fillStyle = on ? '#ffd447' : 'rgba(15,20,28,0.72)'; g.beginPath(); rr(g, x - w / 2, y - 11, w, 22, 11); g.fill();
+          g.fillStyle = on ? '#251d00' : '#eef2f7'; g.fillText(txt, x, y + 1);
+        }
+      }
+      if (this.sel && !this.flight) {
+        const s = this.sel.slot, a = P(s.x, s.y), b = P(s.x + s.w, s.y + s.h);
+        g.strokeStyle = '#ffd447'; g.lineWidth = 3; g.setLineDash([10, 6]);
+        g.strokeRect(Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1]));
+        g.setLineDash([]);
+      }
+      if (ONLINE.on && cam.z > 0.12 && !this.flight) {
+        g.font = '600 12px "Work Sans", system-ui, sans-serif';
+        for (const p of ONLINE.peers.values()) {
+          const wh = p.rx != null && this.holes.find(w => w.course === p.cs && w.idx === p.h);
+          if (!wh) continue;
+          const [x, y] = P(wh.ox + p.rx, wh.oy + p.ry), w = g.measureText(p.n).width + 16;
+          g.fillStyle = 'rgba(15,20,28,0.8)'; g.beginPath(); rr(g, x - w / 2, y - 36, w, 22, 11); g.fill();
+          g.fillStyle = '#fff'; g.fillText(p.n, x, y - 25);
+        }
+      }
+      if (cam.z > 0.3 && !this.flight) {
+        g.font = '600 12px "Work Sans", system-ui, sans-serif';
+        for (const p of this.npcs) {
+          if (p.sayT <= 0 || p.x < vis.x0 || p.x > vis.x1 || p.y < vis.y0 || p.y > vis.y1) continue;
+          const [x, y] = P(p.x, p.y), txt = p.say, w = Math.min(240, g.measureText(txt).width + 16), a = Math.min(1, p.sayT / 0.4, (4.2 - p.sayT) / 0.2);
+          g.globalAlpha = a;
+          g.fillStyle = '#fbfbf5'; g.beginPath(); rr(g, x - w / 2, y - 48, w, 26, 9); g.fill();
+          g.beginPath(); g.moveTo(x - 6, y - 23); g.lineTo(x, y - 14); g.lineTo(x + 6, y - 23); g.fill();
+          g.fillStyle = '#1a1d22'; g.fillText(txt, x, y - 35, w - 12);
+          g.font = '600 10px "IBM Plex Mono", monospace'; g.fillStyle = 'rgba(255,255,255,0.8)';
+          g.fillText(`${p.name}, ${p.dept}`, x, y + 18);
+          g.font = '600 12px "Work Sans", system-ui, sans-serif';
+          g.globalAlpha = 1;
+        }
+      }
+    },
+    // Opening the map from the setup card or the pause menu.
+    open(from) {
+      this.build();
+      if (from === 'play' && this.matchRound()) { this.overview = null; this.detail = null; }
+      if (!this.overview) this.buildOverview();
+      if (!this.mins) { const d = new Date(); this.mins = d.getHours() * 60 + d.getMinutes(); }
+      this.prevScreen = from;
+      G.screen = 'map';
+      closeAllOverlays(); showHud(false);
+      $('mapUi').hidden = false;
+      this.sel = null; $('mapCard').hidden = true;
+      this.idle = 0; this.goal = null;
+      const fitZ = Math.min(cw / CAMPUS.w, ch / CAMPUS.h) * 0.95;
+      this.cam = { x: CAMPUS.w / 2, y: CAMPUS.h / 2, z: fitZ, rot: 0 };
+      // Swoop in toward the building you were looking at.
+      const target = from === 'play' ? this.holes.find(w => w.course === COURSE.id && w.idx === G.holeIdx) : null;
+      const s = target ? target.slot : { cx: CAMPUS.bld[store.get('building', 'office')].x + BLD_W / 2, cy: CAMPUS.bld[store.get('building', 'office')].y + BLD_H / 2 };
+      this.goal = { from: { ...this.cam }, to: { x: s.cx, y: s.cy, z: target ? 0.5 : Math.max(fitZ * 1.6, 0.16), rot: 0 }, t: 0, dur: 2.2 };
+      this.syncClock();
+    },
+    close() {
+      $('mapUi').hidden = true;
+      this.goal = null; this.sel = null;
+      if (this.prevScreen === 'play') { G.screen = 'play'; showHud(true); layoutView(); }
+      else showSetup();
+    },
+    syncClock() {
+      const h = this.hour(), hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
+      $('mapClock').textContent = `${((hh + 11) % 12) + 1}:${String(mm).padStart(2, '0')} ${hh < 12 ? 'AM' : 'PM'}${this.fast ? ' · time-lapse' : ''}`;
+    },
+    select(wh) {
+      this.sel = wh;
+      if (!wh) { $('mapCard').hidden = true; return; }
+      const def = COURSES[wh.course].holes[wh.idx];
+      $('mapCardEyebrow').textContent = `${COURSES[wh.course].name} · ${def.time} · Hole ${wh.idx + 1} · Par ${def.par}`;
+      $('mapCardName').textContent = def.name;
+      $('mapCardTip').textContent = def.tip;
+      $('mapPlay').textContent = `Play ${COURSES[wh.course].name}`;
+      $('mapPlay').hidden = this.prevScreen === 'play';
+      $('mapPractice').hidden = this.prevScreen === 'play';
+      $('mapCard').hidden = false;
+      this.goal = { from: { ...this.cam }, to: { x: wh.slot.cx, y: wh.slot.cy + SLOT_H * 0.08, z: Math.min(cw / (SLOT_W * 1.15), ch / (SLOT_H * 1.6)), rot: 0 }, t: 0, dur: 0.9 };
+      this.idle = -30;
+    },
+    // Flying from one hole to the next during a round, from the current view to the next hole's view.
+    fly(fromIdx, toIdx, done) {
+      if (reduceMotion || ONLINE.on) { done(); return; }
+      this.build();
+      if (!this.overview) this.buildOverview();
+      if (!this.mins) { const d = new Date(); this.mins = d.getHours() * 60 + d.getMinutes(); }
+      const A = this.holes.find(w => w.course === COURSE.id && w.idx === fromIdx), B = this.holes.find(w => w.course === COURSE.id && w.idx === toIdx);
+      if (!A || !B || !G.hole) { done(); return; }
+      const camOf = (wh, h) => {
+        const keep = G.hole; G.hole = h; layoutView();
+        const c = screenToWorld(cw / 2, ch / 2), z = Math.hypot(view.a, view.b), rot = Math.atan2(view.b, view.a);
+        G.hole = keep;
+        return { x: c.x + wh.ox, y: c.y + wh.oy, z, rot };
+      };
+      const hB = buildHole(toIdx, (G.variants || [])[toIdx]);
+      const from = camOf(A, G.hole), to = camOf(B, hB);
+      layoutView();
+      this.flight = { t: 0, dur: 2.1, from, to, done, swap: { [COURSE.id + fromIdx]: G.hole, [COURSE.id + toIdx]: hB }, cam: { ...from } };
+    },
+    updateFlight(dt) {
+      const f = this.flight;
+      f.t = Math.min(1, f.t + dt / f.dur);
+      const e = f.t < 0.5 ? 4 * f.t ** 3 : 1 - Math.pow(-2 * f.t + 2, 3) / 2;
+      const span = Math.hypot(f.to.x - f.from.x, f.to.y - f.from.y);
+      const out = Math.min(f.from.z, f.to.z, Math.min(cw, ch) / (span + 1400));
+      const zl = lerp(Math.log(f.from.z), Math.log(f.to.z), e), dip = Math.sin(Math.PI * f.t);
+      let dr = f.to.rot - f.from.rot;
+      while (dr > Math.PI) dr -= TAU; while (dr < -Math.PI) dr += TAU;
+      f.cam = { x: lerp(f.from.x, f.to.x, e), y: lerp(f.from.y, f.to.y, e), z: Math.exp(zl + (Math.log(out) - zl) * dip * 0.9), rot: f.from.rot + dr * e };
+      if (f.t >= 0.86 && !f.landed) { f.landed = true; staticDirty = true; f.done(); }
+      if (f.t >= 1) this.flight = null;
+    },
+    skipFlight() { if (this.flight) { this.flight.t = 1; this.updateFlight(0); } },
+    zoomBy(k) { this.goal = { from: { ...this.cam }, to: { ...this.cam, z: this.cam.z * k }, t: 0, dur: 0.35 }; this.idle = -20; },
+    // During the last moments of a flight the play view is already underneath; the map fades off it.
+    renderFade(g) {
+      const f = this.flight;
+      if (!this.fcanvas) { this.fcanvas = document.createElement('canvas'); this.fctx = this.fcanvas.getContext('2d'); }
+      if (this.fcanvas.width !== canvas.width || this.fcanvas.height !== canvas.height) { this.fcanvas.width = canvas.width; this.fcanvas.height = canvas.height; }
+      this.render(this.fctx, f.cam);
+      g.setTransform(1, 0, 0, 1, 0, 0);
+      g.globalAlpha = clamp(1 - (f.t - 0.86) / 0.14, 0, 1);
+      g.drawImage(this.fcanvas, 0, 0);
+      g.globalAlpha = 1;
+    },
+  };
+
+  // ---------------------------------------------------------------------------
   // Input
   // ---------------------------------------------------------------------------
   function localPoint(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
@@ -4453,6 +5225,80 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   });
   canvas.addEventListener('pointermove', e => { if (drag && e.pointerId === drag.id && Swing.phase === 'idle') aimAt(localPoint(e)); });
   const endAim = () => { drag = null; canvas.classList.remove('dragging'); };
+  // The campus map: drag to look around, pinch or scroll to zoom, tap a hole to see it. A tap during a
+  // flight between holes skips the flight.
+  const mapPtrs = new Map();
+  let mapGesture = null;
+  canvas.addEventListener('pointerdown', e => {
+    if (Campus.flight && G.screen === 'play') { Campus.skipFlight(); return; }
+    if (G.screen !== 'map') return;
+    e.preventDefault();
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    const pt = localPoint(e);
+    mapPtrs.set(e.pointerId, pt);
+    Campus.idle = -20; Campus.goal = null;
+    if (mapPtrs.size === 1) mapGesture = { kind: 'pan', start: pt, cam: { ...Campus.cam }, moved: false };
+    else if (mapPtrs.size === 2) {
+      const [a, b] = [...mapPtrs.values()], mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      mapGesture = { kind: 'pinch', dist: Math.hypot(a.x - b.x, a.y - b.y) || 1, cam: { ...Campus.cam }, anchor: Campus.toWorld(Campus.cam, mid.x, mid.y) };
+    }
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (G.screen !== 'map' || !mapPtrs.has(e.pointerId)) return;
+    const pt = localPoint(e), gs = mapGesture;
+    mapPtrs.set(e.pointerId, pt);
+    if (!gs) return;
+    if (gs.kind === 'pan' && mapPtrs.size === 1) {
+      const dx = pt.x - gs.start.x, dy = pt.y - gs.start.y;
+      if (Math.hypot(dx, dy) > 6) gs.moved = true;
+      Campus.cam.x = gs.cam.x - dx / Campus.cam.z; Campus.cam.y = gs.cam.y - dy / Campus.cam.z;
+    } else if (gs.kind === 'pinch' && mapPtrs.size >= 2) {
+      const [a, b] = [...mapPtrs.values()], mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      Campus.cam.z = gs.cam.z * (Math.hypot(a.x - b.x, a.y - b.y) / gs.dist);
+      Campus.clampCam();
+      const w = Campus.toWorld(Campus.cam, mid.x, mid.y);
+      Campus.cam.x += gs.anchor.x - w.x; Campus.cam.y += gs.anchor.y - w.y;
+    }
+    Campus.clampCam();
+  });
+  const mapUp = e => {
+    if (!mapPtrs.has(e.pointerId)) return;
+    mapPtrs.delete(e.pointerId);
+    const gs = mapGesture;
+    if (gs && gs.kind === 'pan' && !gs.moved && G.screen === 'map') {
+      const w = Campus.toWorld(Campus.cam, gs.start.x, gs.start.y);
+      Campus.select(Campus.holes.find(h => w.x > h.slot.x && w.x < h.slot.x + h.slot.w && w.y > h.slot.y && w.y < h.slot.y + h.slot.h) || null);
+    }
+    if (mapPtrs.size === 1) { const [p] = [...mapPtrs.values()]; mapGesture = { kind: 'pan', start: p, cam: { ...Campus.cam }, moved: true }; }
+    else if (!mapPtrs.size) mapGesture = null;
+  };
+  canvas.addEventListener('pointerup', mapUp);
+  canvas.addEventListener('pointercancel', mapUp);
+  canvas.addEventListener('wheel', e => {
+    if (G.screen !== 'map') return;
+    e.preventDefault();
+    const pt = localPoint(e), before = Campus.toWorld(Campus.cam, pt.x, pt.y);
+    Campus.cam.z *= Math.exp(-e.deltaY * 0.0015);
+    Campus.clampCam();
+    const after = Campus.toWorld(Campus.cam, pt.x, pt.y);
+    Campus.cam.x += before.x - after.x; Campus.cam.y += before.y - after.y;
+    Campus.clampCam();
+    Campus.idle = -20; Campus.goal = null;
+  }, { passive: false });
+  function mapKey(e) {
+    const c = Campus.cam, step = Math.min(cw, ch) * 0.15 / c.z;
+    if (e.key === 'Escape') { if (Campus.sel) Campus.select(null); else Campus.close(); }
+    else if (e.key === 'ArrowLeft') c.x -= step;
+    else if (e.key === 'ArrowRight') c.x += step;
+    else if (e.key === 'ArrowUp') c.y -= step;
+    else if (e.key === 'ArrowDown') c.y += step;
+    else if (e.key === '+' || e.key === '=') Campus.zoomBy(1.5);
+    else if (e.key === '-' || e.key === '_') Campus.zoomBy(1 / 1.5);
+    else return;
+    e.preventDefault();
+    Campus.idle = -20;
+    Campus.clampCam();
+  }
   canvas.addEventListener('pointerup', endAim);
   canvas.addEventListener('pointercancel', endAim);
 
@@ -4526,7 +5372,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   swingBtn.addEventListener('pointercancel', () => Swing.release());
   swingBtn.addEventListener('contextmenu', e => e.preventDefault());
   function syncSwingBtn() {
-    const show = G.screen === 'play' && !$('hudBottom').hidden && ONLINE.status !== 'wait';
+    const show = G.screen === 'play' && !$('hudBottom').hidden && ONLINE.status !== 'wait' && !(Campus.flight && !Campus.flight.landed);
     if (swingBtn.hidden === show) { swingBtn.hidden = !show; layoutView(); }
     if (!show) return;
     const cls = 'swing' + (Swing.phase === 'back' ? ' back' : Swing.phase === 'down' ? ' down' : '');
@@ -4538,6 +5384,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   window.addEventListener('keydown', e => {
     const tag = e.target && e.target.tagName;
+    if (G.screen === 'map' && tag !== 'INPUT' && tag !== 'BUTTON') { mapKey(e); return; }
+    if (Campus.flight) { if (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); Campus.skipFlight(); } return; }
     if (e.key === 'Escape') { if (Swing.phase !== 'idle') { Swing.cancel(); return; } handleEscape(); return; }
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
     if (tag === 'BUTTON' && e.target !== swingBtn && (e.key === ' ' || e.key === 'Enter')) return;
@@ -5731,6 +6579,21 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   $('codeInput').addEventListener('input', () => { $('codeError').hidden = true; });
   $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); startFromSetup(); } });
   $('startBtn').addEventListener('click', startFromSetup);
+  $('exploreBtn').addEventListener('click', () => { Sound.unlock(); Campus.open('setup'); });
+  $('menuMapBtn').addEventListener('click', () => { closeMenu(); Campus.open('play'); });
+  $('mapBack').addEventListener('click', () => Campus.close());
+  $('mapIn').addEventListener('click', () => Campus.zoomBy(1.5));
+  $('mapOut').addEventListener('click', () => Campus.zoomBy(1 / 1.5));
+  $('mapClockBtn').addEventListener('click', () => { Campus.fast = !Campus.fast; Campus.syncClock(); });
+  $('mapPlay').addEventListener('click', () => {
+    const wh = Campus.sel;
+    if (!wh) return;
+    $('mapUi').hidden = true;
+    store.set('building', wh.course);
+    renderSetup();
+    startFromSetup();
+  });
+  $('mapPractice').addEventListener('click', () => { const wh = Campus.sel; if (wh) { $('mapUi').hidden = true; startPractice(wh.course, wh.idx); } });
   $('helpBtn').addEventListener('click', () => openOverlay('help'));
   $('helpClose').addEventListener('click', () => closeOverlay('help'));
   $('nextBtn').addEventListener('click', () => { Sound.unlock(); nextHole(); });
@@ -5779,7 +6642,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   window.addEventListener('pagehide', () => { if (ONLINE.on) Net.send({ k: 'bye' }); });
   if (urlParams.has('debug')) {
     window.n2fDebug = {
-      G, ONLINE, Net, Swing, Party,
+      G, ONLINE, Net, Swing, Party, Campus,
       // Jumps to a hole of the current game, for testing.
       jump(i) { loadHole(i); startTurn(0, true); },
       // The pieces the course checker needs to play shots without touching the game.

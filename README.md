@@ -90,6 +90,17 @@ It gets darker as the shift goes on; by the last holes you're putting under work
 | 10:00 PM | Freight Lift | 3 | Time the gate; the lift drops you on the mezzanine |
 | 11:00 PM | Last Truck | 3 | Up the dock plate and into the trailer, past a forklift |
 
+## The campus
+
+Both buildings sit on one campus map, with a pond, a coffee kiosk, a street, the parking lot and the loading yard. Open it with **Explore the campus** on the setup card, or **Campus map** in the pause menu.
+
+- Drag to look around and pinch or scroll to zoom (arrow keys and +/− work too). Left alone, the camera takes itself on a slow tour.
+- Coworkers walk the halls and say what's on their minds, cars drive down the street, a forklift works the yard, and ducks do laps of the pond.
+- The sun follows your own clock: golden hour, then lights on at night. Tap the clock for a time-lapse.
+- Tap a hole for its details, then **Practice this hole** to play it on its own as many times as you like, or play that building's full round.
+- In an online room, the map shows everyone's ball on the hole they're playing.
+- During a round, the camera flies across the campus from each hole to the next. Tap to skip it.
+
 ## Things to knock over
 
 Cones, cup pyramids, boxes, office chairs, bins, water jugs and oil drums all move when the ball hits them, and they stay where they land for the next player. Hit a box, crate or water jug hard enough and it breaks. A burst jug or a tipped oil drum leaves a slippery spill, and a tipped bin scatters paper. The results give a *Property damage* award to whoever broke the most.
