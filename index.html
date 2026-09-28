@@ -426,7 +426,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     </div>
     <div class="ws-bar" id="wsBar">
       <label class="ws-field"><span>Shape</span><select id="wsShape"></select></label>
-      <label class="ws-field"><span>Look</span><select id="wsStyle"><option value="office">Office</option><option value="factory">Factory</option></select></label>
+      <label class="ws-field"><span>Look</span><select id="wsStyle"><option value="office">Office</option><option value="factory">Factory</option><option value="garage">Garage</option><option value="gameroom">Game room</option><option value="datacenter">Data center</option></select></label>
       <div class="ws-budget" id="wsBudget"></div>
       <div class="ws-people" id="wsPeople" aria-label="Also building"></div>
       <button class="btn btn-paper" id="wsRemoveHole" type="button">Remove hole</button>
@@ -658,19 +658,19 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         <dt>Online</dt>
         <dd>Choose Online room and send your coworkers the invite link. Everyone plays the same hole at the same time on their own device and sees each other's balls. The next hole starts when everyone has finished, or you can go on ahead.</dd>
         <dt>Scoring</dt>
-        <dd>Seven strokes max per hole. Coffee spills, the shredder, the loading dock and the service pit cost a stroke, and you play again from where you hit.</dd>
+        <dd>Seven strokes max per hole. Hazards cost a stroke, and you play again from where you hit: coffee spills, the shredder, the loading dock, the service pit, puddles, open floor tiles, pool pockets, gutters and the pinball drain.</dd>
         <dt>Rage mode</dt>
-        <dd>Waxed floors, bouncy walls, a smaller cup, faster everything, shaky hands and no aim guide. A Roomba roams the course and bumps your ball, hazards send you back to the tee, and the elevator sometimes picks the wrong floor. Ten strokes max per hole.</dd>
+        <dd>Waxed floors, bouncy walls, a smaller cup, faster everything, shaky hands and no aim guide. A Roomba roams the course and bumps your ball, hazards send you back to the tee, and the elevator and the garage ramp sometimes take you to the wrong floor. Ten strokes max per hole.</dd>
         <dt>Taunts</dt>
         <dd>The office has opinions about your putting. Press Heckle to hear them, or in an online room press Taunt to send your coworkers a line. Turn taunts off in the menu.</dd>
         <dt>Buildings</dt>
-        <dd>Head Office runs the day shift, 9 AM to 5 PM. The Factory Floor runs second shift, 3 PM to 11 PM, with forklifts, conveyor lines, robot arms, oil spills and a loading dock to fall off. It gets darker as the shift goes on.</dd>
+        <dd>Head Office runs the day shift, 9 AM to 5 PM. The Factory Floor runs second shift, 3 PM to 11 PM, with forklifts, conveyor lines, robot arms, oil spills and a loading dock to fall off, and it gets darker as the shift goes on. The Parking Garage is the morning rush, 7 to 9 AM: cars pulling out, barrier arms, speed bumps, flung-open doors, a car wash and a ramp up to the roof. The Game Room is after hours, 5 PM to 1 AM: pinball, air hockey, foosball, pool, bowling, skee-ball and a spinning dance floor. The Data Center runs the graveyard shift, 11 PM to 7 AM, with cooling fans that push your ball around, open floor tiles, tape robots and a power cut.</dd>
         <dt>The campus</dt>
-        <dd>Press Explore the campus on the setup card, or Campus map in the menu, to see both buildings on one map. Drag to look around and pinch or scroll to zoom. Coworkers walk the halls, traffic runs down the street, and the sun follows your clock; tap the clock for a time-lapse. Tap any hole to practice it on its own. Between holes in a round, the camera flies you to the next one.</dd>
+        <dd>Press Explore the campus on the setup card, or Campus map in the menu, to see every building on one map. Drag to look around and pinch or scroll to zoom. Coworkers walk the halls, traffic runs down the streets, and the sun follows your clock; tap the clock for a time-lapse. Tap any hole to practice it on its own. Between holes in a round, the camera flies you to the next one.</dd>
         <dt>The workshop</dt>
         <dd>Build your own holes with Build a course on the setup card, or build them together from an online room's clubhouse, where everyone edits the same holes live and sees each other's cursors. Pick a shape, then place walls, bumpers, rugs, ramps, conveyors, spills, movers and props. Each hole has a 60-point budget, limits on hazards, movers and props, and a clear space around the tee and the cup. A test bot plays every design; once it finishes, the hole is playable and gets its par, and The Workshop appears as a building you can play.</dd>
         <dt>Knock things over</dt>
-        <dd>Cones, cup pyramids, boxes, chairs, bins, water jugs and oil drums all move when you hit them. Hit a box, crate or water jug hard enough and it breaks. A burst jug or a tipped oil drum leaves the floor slippery.</dd>
+        <dd>Cones, cup pyramids, boxes, chairs, bins, water jugs, oil drums, tape cartridges, pool balls and bowling pins all move when you hit them. Hit a box, crate or water jug hard enough and it breaks. A burst jug or a tipped oil drum leaves the floor slippery. Knock down all ten pins for a strike.</dd>
         <dt>Course</dt>
         <dd>Pin positions change every day. Everyone on today's pins, or on the same group code, plays the same layout, so scores compare fairly across devices.</dd>
       </dl>
@@ -790,6 +790,25 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       ['fac', 'Mind the dock edge. It was in the safety video.'], ['mgr', 'That ball has been reassigned to shipping.'],
       ['legal', 'We are not liable for balls that leave the building.'],
     ],
+    puddle: [
+      ['fac', 'That puddle has been there since the garage opened.'], ['it', 'Your ball is water-cooled now.'],
+      ['intern', 'I am not fishing that out.'], ['legal', 'Please park at your own risk. Putt at your own risk too.'],
+    ],
+    tile: [
+      ['it', 'Your ball is under the raised floor. Please submit a ticket.'], ['fac', 'Somebody was supposed to put that tile back.'],
+      ['legal', 'The underfloor is a restricted area.'], ['intern', 'I dropped my badge down there once. It’s still there.'],
+    ],
+    pocket: [
+      ['intern', 'Scratch! That’s a foul.'], ['fin', 'Pool balls go in the pockets. Golf balls go in the cup.'],
+      ['mgr', 'Wrong game. Let’s circle back to golf.'],
+    ],
+    gutter: [
+      ['intern', 'Gutter ball. Want me to put the bumpers up?'], ['hr', 'Everyone throws a gutter ball sometimes. You throw a lot of them.'],
+      ['ceo', 'We don’t do gutter balls at this company.'],
+    ],
+    drain: [
+      ['it', 'Ball drained. Insert a coin to continue.'], ['intern', 'Tilt!'], ['fin', 'That was our last quarter.'],
+    ],
     heckle: [
       ['mgr', 'Quick question: are you planning to putt today?'], ['hr', 'Reminder that effort is part of your review.'],
       ['fin', 'Every stroke is billable.'], ['it', 'Please don’t blame the hardware.'],
@@ -817,6 +836,20 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       'The robot arm is making that noise again.', 'Can someone mop up bay 4?', 'Loading dock needs two more hands.',
       'The vending machine ate my dollar.', 'Which conveyor is the fast one?', 'Night shift left the radio on.',
     ],
+    garage: [
+      'Where did I park?', 'P3 is full again.', 'Who parked across two spots?', 'The ticket machine ate my card.',
+      'I parked on P4 and walked down to P2.', 'Has anyone seen my keys?', 'My car alarm keeps going off.', 'Carpool lane, my foot.',
+      'The EV chargers are all taken. Again.', 'Is the car wash free on Fridays?', 'Mind the puddle on the ramp.', 'Nine o’clock stand-up. Run!',
+    ],
+    datacenter: [
+      'Did someone just unplug something?', 'It’s always DNS.', 'Rack 12 is running hot.', 'Who has the cage key?',
+      'The backup job failed. Again.', 'Why is that floor tile up?', 'Works on my machine.', 'Who labeled this cable “misc”?',
+      'The pager went off at 3 AM. Of course.', 'Is it a hardware problem or a people problem?', 'Change freeze starts Friday.', 'Coffee? The hot aisle is warm enough.',
+    ],
+    gameroom: [
+      'Winner stays on!', 'Who’s got next?', 'That was a scratch!', 'I’m on a heater!', 'Rematch?', 'Karaoke at ten!',
+      'Who ordered the nachos?', 'Best of seven.', 'No spinning the rods!', 'The claw machine is rigged.', 'One more game.', 'Last call is at one.',
+    ],
   };
   const MEMOS = {
     office: [
@@ -828,6 +861,21 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       'Forklift certification renewals are due Friday.', 'Hard hats are not optional. Neither is the hairnet.', 'Line 2 is running double shifts this week.',
       'The loading dock door sticks. Kick it gently.', 'Safety meeting at shift change. There will be pizza.', 'Whoever labeled the robot arm “Greg”: it stuck.',
       'Please stop racing the pallet jacks.', 'The vending machine has been refilled.', 'Overtime sign-up is on the break room board.',
+    ],
+    garage: [
+      'Parking permits renew on the 1st.', 'Level P3 is closed for resurfacing.', 'Please don’t leave your car in the fire lane.',
+      'EV chargers are for charging, not parking.', 'The car wash is free on Fridays.', 'Lost and found is at the security booth.',
+      'Carpool spots are for carpools. We checked.', 'The ramp to the roof is one way. Up.', 'Validate your parking at reception.',
+    ],
+    datacenter: [
+      'Change freeze starts Friday at 5 PM.', 'Please close the cage door behind you.', 'No food or drinks on the data hall floor.',
+      'The generator test is Tuesday at 3 AM.', 'Hot aisle doors must stay shut.', 'Label your cables. Please.',
+      'The tape library is not a toaster.', 'Badge in, badge out. Every time.', 'Uptime this month: 99.98%. So close.',
+    ],
+    gameroom: [
+      'The pool table is first come, first served.', 'Please return the ping-pong paddles.', 'Karaoke night is Thursday.',
+      'The claw machine is rigged. We checked.', 'Happy hour ends at seven. Mostly.', 'No food in the ball pit.',
+      'The foosball table is not a stress ball.', 'The tournament bracket is on the board.', 'Last call is at one. For real this time.',
     ],
   };
   // What you can send coworkers in an online room. Only these travel over the wire, as numbers.
@@ -1256,15 +1304,620 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     [210, 160, 200, 0.08], [150, 150, 230, 0.06], [120, 140, 230, 0.05], [110, 130, 220, 0.05], [100, 120, 210, 0.05],
   ];
   const FACTORY_DARK = [0, 0, 0.04, 0.12, 0.24, 0.38, 0.48, 0.55, 0.6];
+  // ---------------------------------------------------------------------------
+  // The parking garage: the morning rush, 7 to 9 AM, from the entry barrier up to the roof.
+  // ---------------------------------------------------------------------------
+  // A parked car centered on (x, y): upright cars are nose-down when face is 1, sideways ones nose-right.
+  const carAt = (x, y, upright, color, face = 1) => ({ pts: upright ? rect(x - 23, y - 43, 46, 86) : rect(x - 44, y - 22, 88, 44), kind: 'car', color, face });
+  const FLUO = '225,238,255';
+  const GARAGE_HOLES = [
+    {
+      name: 'Pull In', time: '7:00 AM', short: '7:00', par: 2,
+      tip: 'Wait for the barrier arm to lift, then drive it through.',
+      rageName: 'Ticket Not Validated', rageTip: 'The barrier arm is having a bad morning. So is the floor wax.',
+      roomba: [760, 300],
+      course: [[[80, 230], [540, 230], [580, 190], [920, 190], [920, 410], [580, 410], [540, 370], [80, 370]]],
+      tee: [150, 300],
+      pins: [[855, 300], [848, 244], [848, 356]],
+      blocks: [{ pts: rect(444, 232, 24, 30), kind: 'ticket' }],
+      movers: [{ type: 'spinner', kind: 'barrier', x: 480, y: 216, len: 158, w: 10, a0: Math.PI / 2, amp: Math.PI / 2, gate: [1.7, 0.8, 1.4, 0.8] }],
+      props: [{ kind: 'cone', x: 700, y: 236 }, { kind: 'cone', x: 700, y: 364 }],
+      decor: [
+        { type: 'stripe', pts: [[492, 232], [492, 368]], color: 'rgba(255,255,255,0.55)', lw: 5 },
+        { type: 'sign', x: 300, y: 402, text: 'LEVEL P1 · ENTRY', style: 'floor' },
+        { type: 'sign', x: 420, y: 202, text: 'PAY ON FOOT', style: 'amber' },
+      ],
+      lamps: [[260, 300, 190, FLUO, 0.07], [720, 300, 230, FLUO, 0.07]],
+    },
+    {
+      name: 'Compact Only', time: '7:15 AM', short: '7:15', par: 3,
+      tip: 'Tuck it into the empty bay. Watch for the car backing out.',
+      rageName: 'Somebody Took Two Spots', rageTip: 'Every car is backing out at once, and none of them can see you.',
+      roomba: [300, 300],
+      course: [chamferRect(80, 90, 840, 420, 30)],
+      tee: [140, 300],
+      pins: [[775, 150], [625, 452], [860, 300]],
+      blocks: [
+        carAt(175, 143, true, '#e8453a', -1), carAt(275, 143, true, '#f4f1ea', -1), carAt(375, 143, true, '#2f6fb3', -1),
+        carAt(575, 143, true, '#8c96a3', -1), carAt(675, 143, true, '#1b1d21', -1), carAt(875, 143, true, '#35a06a', -1),
+        carAt(225, 457, true, '#ffd447'), carAt(325, 457, true, '#c39bff'), carAt(425, 457, true, '#f4f1ea'),
+        carAt(525, 457, true, '#2f6fb3'), carAt(725, 457, true, '#e8453a'), carAt(825, 457, true, '#8c96a3'),
+      ],
+      movers: [{ type: 'slider', kind: 'car', a: [475, 143], b: [475, 246], w: 46, h: 86, period: 5.2, phase: 0.1, face: -1, color: '#ff8f2e' }],
+      props: [{ kind: 'cone', x: 610, y: 262 }],
+      decor: [{ type: 'sign', x: 500, y: 536, text: 'COMPACT CARS ONLY', style: 'floor' }],
+      lamps: [[300, 300, 220, FLUO, 0.07], [700, 300, 220, FLUO, 0.07]],
+    },
+    {
+      name: 'Speed Bumps', time: '7:30 AM', short: '7:30', par: 3,
+      tip: 'Every speed bump steals your pace. Hit it firmly, then turn the corner.',
+      rageName: 'Speed Humps', rageTip: 'Maintenance made the bumps taller. Nobody knows why.',
+      roomba: [400, 460],
+      course: [[[80, 400], [700, 400], [700, 110], [730, 80], [890, 80], [920, 110], [920, 490], [890, 520], [80, 520]]],
+      tee: [140, 460],
+      pins: [[810, 140], [752, 132], [868, 132]],
+      zones: [
+        { type: 'rough', style: 'bump', pts: rect(300, 400, 24, 120), mul: 6 },
+        { type: 'rough', style: 'bump', pts: rect(520, 400, 24, 120), mul: 6 },
+        { type: 'rough', style: 'bump', pts: rect(700, 262, 220, 24), mul: 6 },
+      ],
+      movers: [{ type: 'slider', kind: 'car', a: [810, 230], b: [810, 360], w: 44, h: 86, period: 6, phase: 0.3, face: 1, color: '#2f6fb3' }],
+      props: [{ kind: 'cone', x: 660, y: 430 }],
+      decor: [
+        { type: 'sign', x: 360, y: 380, text: 'SLOW · 5 MPH', style: 'floor' },
+        { type: 'sign', x: 670, y: 60, text: 'UP TO P2', style: 'amber' },
+      ],
+      lamps: [[300, 460, 200, FLUO, 0.07], [810, 300, 240, FLUO, 0.07]],
+    },
+    {
+      name: 'Spiral Ramp', time: '7:45 AM', short: '7:45', par: 3,
+      tip: 'Round the ramp core and let the ramps carry you down to the cup.',
+      rageName: 'Wrong Way', rageTip: 'The ramps are steeper today, and somebody waxed them.',
+      roomba: [860, 300],
+      course: [chamferRect(80, 100, 840, 400, 60)],
+      tee: [150, 172],
+      pins: [[152, 428], [262, 452], [372, 432]],
+      blocks: [{ pts: rect(220, 245, 580, 110), kind: 'core', label: 'P2 ▼ P3' }, { pts: rect(80, 285, 140, 30), kind: 'island' }],
+      zones: [
+        { type: 'slope', style: 'ramp', pts: rect(300, 104, 440, 138), ax: 210, ay: 0 },
+        { type: 'slope', style: 'ramp', pts: rect(300, 358, 440, 138), ax: -210, ay: 0 },
+      ],
+      bumpers: [{ x: 860, y: 300, r: 13, kind: 'bollard' }],
+      props: [{ kind: 'cone', x: 880, y: 160 }, { kind: 'cone', x: 880, y: 440 }],
+      decor: [{ type: 'sign', x: 510, y: 80, text: 'DOWN TO P3', style: 'amber' }],
+      lamps: [[200, 170, 170, FLUO, 0.07], [860, 300, 200, FLUO, 0.07], [200, 430, 170, FLUO, 0.07], [520, 172, 200, FLUO, 0.06], [520, 428, 200, FLUO, 0.06]],
+    },
+    {
+      name: 'EV Charging', time: '8:00 AM', short: '8:00', par: 3,
+      tip: 'Weave between the chargers, and keep clear of the puddle.',
+      rageName: 'Range Anxiety', rageTip: 'Every charger is taken, and the puddle keeps growing.',
+      roomba: [760, 300],
+      course: [chamferRect(80, 100, 840, 400, 34)],
+      tee: [140, 220],
+      pins: [[590, 150], [860, 300], [330, 452]],
+      blocks: [
+        carAt(330, 147, true, '#f4f1ea'), carAt(460, 147, true, '#e8453a'), carAt(720, 147, true, '#2f6fb3'),
+        carAt(460, 453, true, '#35a06a', -1), carAt(590, 453, true, '#1b1d21', -1), carAt(720, 453, true, '#8c96a3', -1),
+      ],
+      bumpers: [
+        { x: 330, y: 300, r: 13, kind: 'charger' }, { x: 460, y: 300, r: 13, kind: 'charger' },
+        { x: 590, y: 300, r: 13, kind: 'charger' }, { x: 720, y: 300, r: 13, kind: 'charger' },
+      ],
+      zones: [
+        { type: 'water', style: 'puddle', pts: smoothClosed([[182, 352], [232, 334], [292, 346], [306, 390], [264, 424], [204, 420], [170, 390]]) },
+        { type: 'slick', style: 'oil', mul: 0.14, pts: smoothClosed([[820, 388], [868, 380], [892, 420], [860, 452], [812, 440]]) },
+      ],
+      props: [{ kind: 'cone', x: 525, y: 372 }, { kind: 'sign', x: 810, y: 218 }],
+      decor: [{ type: 'sign', x: 500, y: 76, text: 'EV CHARGING ONLY', style: 'amber' }],
+      lamps: [[330, 300, 190, FLUO, 0.07], [720, 300, 210, FLUO, 0.07]],
+    },
+    {
+      name: 'Car Wash', time: '8:15 AM', short: '8:15', par: 3,
+      tip: 'Ride the belt through the brushes, or thread the gaps between them.',
+      rageName: 'Deluxe Wash', rageTip: 'Somebody paid for the deluxe wash. The brushes are furious.',
+      roomba: [180, 400],
+      course: [chamferRect(80, 140, 840, 320, 30)],
+      tee: [132, 300],
+      pins: [[852, 300], [832, 200], [832, 400]],
+      blocks: [{ pts: rect(300, 140, 400, 40), kind: 'washwall' }, { pts: rect(300, 420, 400, 40), kind: 'washwall' }],
+      zones: [
+        { type: 'slick', style: 'suds', mul: 0.35, pts: smoothClosed([[172, 252], [240, 232], [292, 262], [290, 340], [240, 370], [172, 348]]) },
+        { type: 'conveyor', pts: rect(262, 272, 476, 56), dir: [1, 0], accel: 520, max: 300 },
+      ],
+      movers: [
+        { type: 'spinner', kind: 'brush', x: 420, y: 252, len: 62, w: 18, speed: 2.2, a0: 0 },
+        { type: 'spinner', kind: 'brush', x: 580, y: 348, len: 62, w: 18, speed: -2.2, a0: Math.PI },
+      ],
+      decor: [{ type: 'sign', x: 500, y: 118, text: 'EXPRESS WASH · $9', style: 'amber' }],
+      lamps: [[500, 300, 230, '160,210,255', 0.1], [160, 300, 150, FLUO, 0.07], [840, 300, 150, FLUO, 0.07]],
+    },
+    {
+      name: 'Door Ding', time: '8:30 AM', short: '8:30', par: 3,
+      tip: 'Car doors fly open without warning, and there’s a car looking for a spot.',
+      rageName: 'Door Dent', rageTip: 'Everybody is getting out of their car at the same time.',
+      roomba: [500, 360],
+      course: [chamferRect(80, 150, 840, 300, 30)],
+      tee: [132, 300],
+      pins: [[862, 300], [872, 238], [872, 362]],
+      blocks: [
+        carAt(194, 176, false, '#e8453a'), carAt(374, 176, false, '#2f6fb3'), carAt(554, 176, false, '#f4f1ea'), carAt(734, 176, false, '#35a06a'),
+        carAt(284, 424, false, '#ffd447', -1), carAt(464, 424, false, '#1b1d21', -1), carAt(644, 424, false, '#c39bff', -1), carAt(824, 424, false, '#8c96a3', -1),
+      ],
+      movers: [
+        { type: 'spinner', kind: 'cardoor', x: 205, y: 198, len: 30, w: 6, a0: Math.PI, amp: -1.1, gate: [2.2, 0.22, 1.2, 0.6], delay: 0.3, color: '#e8453a' },
+        { type: 'spinner', kind: 'cardoor', x: 385, y: 198, len: 30, w: 6, a0: Math.PI, amp: -1.1, gate: [2.6, 0.22, 1.1, 0.6], delay: 1.6, color: '#2f6fb3' },
+        { type: 'spinner', kind: 'cardoor', x: 565, y: 198, len: 30, w: 6, a0: Math.PI, amp: -1.1, gate: [2.0, 0.22, 1.3, 0.6], delay: 2.4, color: '#f4f1ea' },
+        { type: 'spinner', kind: 'cardoor', x: 745, y: 198, len: 30, w: 6, a0: Math.PI, amp: -1.1, gate: [2.4, 0.22, 1.0, 0.6], delay: 0.9, color: '#35a06a' },
+        { type: 'spinner', kind: 'cardoor', x: 273, y: 402, len: 30, w: 6, a0: 0, amp: -1.1, gate: [2.3, 0.22, 1.2, 0.6], delay: 1.1, color: '#ffd447' },
+        { type: 'spinner', kind: 'cardoor', x: 453, y: 402, len: 30, w: 6, a0: 0, amp: -1.1, gate: [2.1, 0.22, 1.1, 0.6], delay: 2.9, color: '#1b1d21' },
+        { type: 'spinner', kind: 'cardoor', x: 633, y: 402, len: 30, w: 6, a0: 0, amp: -1.1, gate: [2.5, 0.22, 1.2, 0.6], delay: 0.5, color: '#c39bff' },
+        { type: 'slider', kind: 'car', a: [300, 300], b: [700, 300], w: 88, h: 44, period: 7.5, phase: 0.2, face: 1, color: '#ff8f2e' },
+      ],
+      decor: [{ type: 'sign', x: 500, y: 128, text: 'VISITOR PARKING', style: 'floor' }],
+      lamps: [[300, 300, 210, FLUO, 0.07], [700, 300, 210, FLUO, 0.07]],
+    },
+    {
+      name: 'Up to the Roof', time: '8:45 AM', short: '8:45', par: 3,
+      tip: 'Hit it hard enough to climb the ramp. It comes out on the roof.',
+      rageName: 'Full, Try Roof', rageTip: 'Sometimes you miss the turn and end up back at the entrance.',
+      roomba: [720, 260],
+      course: [
+        [[60, 300], [190, 300], [190, 90], [310, 90], [310, 300], [440, 300], [440, 520], [60, 520]],
+        chamferRect(560, 90, 380, 400, 30),
+      ],
+      frame: [36, 60, 964, 546],
+      tee: [250, 462],
+      pins: [[750, 170], [642, 162], [858, 200]],
+      zones: [
+        { type: 'slope', style: 'ramp', pts: rect(190, 124, 120, 176), ax: 0, ay: 250 },
+        { type: 'water', style: 'puddle', pts: smoothClosed([[836, 262], [880, 250], [912, 278], [900, 318], [856, 328], [826, 300]]) },
+      ],
+      bumpers: [{ x: 640, y: 330, r: 12, kind: 'bollard' }, { x: 120, y: 360, r: 12, kind: 'bollard' }, { x: 380, y: 360, r: 12, kind: 'bollard' }],
+      movers: [{ type: 'slider', kind: 'car', a: [250, 150], b: [250, 246], w: 44, h: 86, period: 5, phase: 0.6, face: 1, color: '#f4f1ea' }],
+      teleports: [{ rect: [190, 86, 120, 38], to: [750, 462], dir: [0, -1], arrive: [700, 800, 490], style: 'ramp' }],
+      decor: [
+        { type: 'sign', x: 250, y: 66, text: '▲ ROOF', style: 'amber' },
+        { type: 'sign', x: 750, y: 532, text: 'ROOF · LEVEL P6', style: 'floor' },
+        { type: 'sign', x: 250, y: 546, text: 'LEVEL P5', style: 'floor' },
+      ],
+      lamps: [[250, 420, 200, FLUO, 0.07], [250, 200, 120, FLUO, 0.06]],
+    },
+    {
+      name: 'Last Spot', time: '8:59 AM', short: '8:59', par: 4,
+      tip: 'Grab the last open spot before somebody else does.',
+      rageName: 'Lot Full', rageTip: 'The last spot is compact only. Your ball is not.',
+      roomba: [500, 460],
+      course: [chamferRect(70, 70, 860, 460, 40)],
+      tee: [130, 462],
+      pins: [[730, 256], [880, 130], [500, 124]],
+      blocks: [
+        carAt(230, 257, true, '#8c96a3', -1), carAt(330, 257, true, '#e8453a', -1), carAt(430, 257, true, '#f4f1ea', -1),
+        carAt(530, 257, true, '#35a06a', -1), carAt(630, 257, true, '#1b1d21', -1), carAt(830, 257, true, '#2f6fb3', -1),
+        carAt(230, 343, true, '#ffd447'), carAt(330, 343, true, '#2f6fb3'), carAt(430, 343, true, '#c39bff'),
+        carAt(530, 343, true, '#8c96a3'), carAt(630, 343, true, '#e8453a'), carAt(730, 343, true, '#f4f1ea'), carAt(830, 343, true, '#1b1d21'),
+      ],
+      bumpers: [{ x: 172, y: 300, r: 12, kind: 'bollard' }, { x: 888, y: 300, r: 12, kind: 'bollard' }],
+      movers: [
+        { type: 'slider', kind: 'car', a: [260, 140], b: [800, 140], w: 88, h: 44, period: 8, phase: 0, face: 1, color: '#ff8f2e' },
+        { type: 'slider', kind: 'car', a: [800, 462], b: [320, 462], w: 88, h: 44, period: 9, phase: 0.5, face: 1, color: '#5bc0ff' },
+      ],
+      zones: [
+        { type: 'water', style: 'puddle', pts: smoothClosed([[572, 108], [624, 96], [672, 116], [664, 150], [612, 164], [566, 140]]) },
+        { type: 'slick', style: 'oil', mul: 0.14, pts: smoothClosed([[96, 250], [140, 238], [158, 276], [132, 316], [98, 300]]) },
+      ],
+      decor: [{ type: 'sign', x: 500, y: 552, text: 'ROOF · LAST SPOT', style: 'floor' }],
+    },
+  ];
+  // Cool blue at 7, brighter by 9 when you come out on the roof.
+  const GARAGE_TINTS = [
+    [170, 195, 255, 0.08], [175, 200, 255, 0.07], [185, 205, 255, 0.06], [195, 210, 255, 0.05], [210, 220, 250, 0.04],
+    [225, 230, 250, 0.03], [240, 240, 245, 0.02], [255, 245, 220, 0.03], [255, 236, 200, 0.05],
+  ];
+  const GARAGE_DARK = [0.24, 0.26, 0.28, 0.3, 0.26, 0.22, 0.26, 0.14, 0];
+  // ---------------------------------------------------------------------------
+  // The data center: the graveyard shift, 11 PM to 7 AM, among the racks, fans and cables.
+  // ---------------------------------------------------------------------------
+  const LED = '150,220,255', RED = '255,60,50';
+  const DATACENTER_HOLES = [
+    {
+      name: 'Badge Scan', time: '11:00 PM', short: '11P', par: 2,
+      tip: 'Wait for the security door to open, then putt through.',
+      rageName: 'Badge Expired', rageTip: 'Your badge expired at midnight. The door is not sympathetic.',
+      roomba: [500, 200],
+      course: [[[300, 520], [300, 360], [440, 360], [440, 300], [250, 300], [250, 80], [750, 80], [750, 300], [560, 300], [560, 360], [700, 360], [700, 520]]],
+      tee: [500, 468],
+      pins: [[500, 142], [334, 150], [666, 150]],
+      blocks: [{ pts: rect(254, 196, 34, 100), kind: 'server' }, { pts: rect(712, 196, 34, 100), kind: 'server' }],
+      movers: [{ type: 'doors', style: 'glass', x0: 440, x1: 560, y: 330, depth: 12, period: 4.2 }],
+      decor: [
+        { type: 'sign', x: 610, y: 382, text: 'BADGE ▸', style: 'amber' },
+        { type: 'sign', x: 500, y: 546, text: 'SECURITY · MANTRAP', style: 'floor' },
+        { type: 'sign', x: 500, y: 58, text: 'DATA HALL 1', style: 'floor' },
+      ],
+      lamps: [[500, 190, 240, LED, 0.06], [500, 440, 180, LED, 0.06]],
+    },
+    {
+      name: 'Cold Aisle', time: '12:00 AM', short: '12A', par: 3,
+      tip: 'Cold air blows down one aisle and back up the other. Ride it round.',
+      rageName: 'Hurricane Mode', rageTip: 'Someone turned the cooling all the way up. Hold on to your ball.',
+      roomba: [860, 300],
+      course: [chamferRect(80, 80, 840, 440, 30)],
+      tee: [140, 183],
+      pins: [[152, 417], [300, 444], [452, 396]],
+      blocks: [
+        { pts: rect(200, 80, 520, 34), kind: 'server' }, { pts: rect(80, 250, 700, 100), kind: 'server' },
+        { pts: rect(200, 486, 520, 34), kind: 'server' },
+      ],
+      zones: [
+        { type: 'air', pts: rect(80, 114, 700, 136), ax: 160, ay: 0 },
+        { type: 'air', pts: rect(80, 350, 700, 136), ax: -160, ay: 0 },
+      ],
+      bumpers: [{ x: 850, y: 300, r: 13, kind: 'extinguisher' }],
+      decor: [{ type: 'sign', x: 450, y: 58, text: 'ROW A · COLD AISLE', style: 'floor' }, { type: 'sign', x: 450, y: 546, text: 'ROW B · RETURN', style: 'floor' }],
+      lamps: [[300, 183, 220, LED, 0.06], [700, 183, 220, LED, 0.06], [300, 417, 220, LED, 0.06], [860, 300, 160, LED, 0.06]],
+    },
+    {
+      name: 'Hot Aisle', time: '1:00 AM', short: '1A', par: 3,
+      tip: 'The exhaust fans cycle on and off. Putt when they spin down.',
+      rageName: 'Thermal Event', rageTip: 'The exhaust fans are on turbo, and the floor tiles are loose.',
+      roomba: [200, 230],
+      course: [chamferRect(80, 160, 840, 280, 30)],
+      tee: [140, 300],
+      pins: [[856, 300], [846, 212], [846, 388]],
+      blocks: [
+        { pts: rect(190, 160, 500, 48), kind: 'server' }, { pts: rect(190, 392, 500, 48), kind: 'server' },
+        { pts: rect(890, 236, 30, 128), kind: 'crac', label: 'EXH' },
+      ],
+      zones: [
+        { type: 'air', pts: rect(300, 208, 470, 184), ax: -430, ay: 0, pulse: [4.6, 2.3] },
+        { type: 'water', style: 'tile', pts: rect(424, 210, 44, 44) },
+        { type: 'water', style: 'tile', pts: rect(584, 346, 44, 44) },
+      ],
+      decor: [{ type: 'sign', x: 440, y: 138, text: 'HOT AISLE · 104°F', style: 'amber' }],
+      lamps: [[300, 300, 200, '255,170,110', 0.08], [700, 300, 220, '255,170,110', 0.08]],
+    },
+    {
+      name: 'Raised Floor', time: '2:00 AM', short: '2A', par: 3,
+      tip: 'Somebody lifted the floor tiles. Don’t fall through.',
+      rageName: 'Floor Inspection', rageTip: 'Facilities pulled up every other tile. Good luck.',
+      roomba: [760, 440],
+      course: [chamferRect(80, 90, 840, 420, 30)],
+      tee: [140, 300],
+      pins: [[854, 300], [840, 158], [840, 442]],
+      zones: [
+        { type: 'water', style: 'tile', pts: rect(274, 124, 52, 52) }, { type: 'water', style: 'tile', pts: rect(334, 364, 52, 52) },
+        { type: 'water', style: 'tile', pts: rect(454, 244, 52, 52) }, { type: 'water', style: 'tile', pts: rect(514, 424, 52, 52) },
+        { type: 'water', style: 'tile', pts: rect(574, 124, 52, 52) }, { type: 'water', style: 'tile', pts: rect(694, 304, 52, 52) },
+        { type: 'rough', style: 'cables', pts: rect(394, 124, 52, 112), mul: 3.2 },
+        { type: 'rough', style: 'cables', pts: rect(634, 364, 52, 112), mul: 3.2 },
+      ],
+      blocks: [{ pts: rect(200, 206, 36, 188), kind: 'server' }, { pts: rect(770, 186, 36, 90), kind: 'server' }],
+      props: [{ kind: 'cone', x: 240, y: 130 }, { kind: 'cone', x: 610, y: 262 }],
+      decor: [{ type: 'sign', x: 500, y: 68, text: 'CAUTION · OPEN FLOOR', style: 'amber' }],
+      lamps: [[300, 300, 230, LED, 0.06], [700, 300, 230, LED, 0.06]],
+    },
+    {
+      name: 'Tape Library', time: '3:00 AM', short: '3A', par: 3,
+      tip: 'Robots run up and down the tape library. Time your shot between them.',
+      rageName: 'Restore From Backup', rageTip: 'The robots are restoring everything, all at once.',
+      roomba: [150, 200],
+      course: [chamferRect(80, 110, 840, 380, 30)],
+      tee: [140, 300],
+      pins: [[856, 300], [846, 196], [846, 404]],
+      blocks: [{ pts: rect(200, 110, 600, 64), kind: 'library' }, { pts: rect(200, 426, 600, 64), kind: 'library' }],
+      movers: [
+        { type: 'slider', kind: 'tapebot', a: [262, 246], b: [738, 246], w: 56, h: 40, period: 5.4, phase: 0 },
+        { type: 'slider', kind: 'tapebot', a: [738, 354], b: [262, 354], w: 56, h: 40, period: 6.2, phase: 0.35 },
+      ],
+      props: [{ kind: 'tape', x: 330, y: 190 }, { kind: 'tape', x: 520, y: 188 }, { kind: 'tape', x: 690, y: 410 }, { kind: 'tape', x: 420, y: 412 }, { kind: 'tape', x: 880, y: 150 }],
+      decor: [{ type: 'sign', x: 500, y: 88, text: 'TAPE LIBRARY · LTO-9', style: 'amber' }],
+      lamps: [[300, 300, 220, LED, 0.06], [700, 300, 220, LED, 0.06]],
+    },
+    {
+      name: 'Cable Management', time: '4:00 AM', short: '4A', par: 3,
+      tip: 'Cable spaghetti slows everything down. Find the clean floor.',
+      rageName: 'Who Wired This', rageTip: 'Nobody labeled anything. Nobody ever does.',
+      roomba: [150, 150],
+      course: [chamferRect(80, 90, 840, 420, 30)],
+      tee: [140, 440],
+      pins: [[860, 158], [700, 128], [864, 300]],
+      blocks: [{ pts: rect(440, 250, 120, 100), kind: 'server' }, { pts: rect(80, 216, 110, 30), kind: 'patch' }, { pts: rect(810, 354, 110, 30), kind: 'patch' }],
+      zones: [
+        { type: 'rough', style: 'cables', mul: 3.6, pts: smoothClosed([[222, 118], [360, 100], [440, 150], [430, 240], [330, 300], [236, 270], [206, 190]]) },
+        { type: 'rough', style: 'cables', mul: 3.6, pts: smoothClosed([[572, 360], [680, 300], [772, 330], [790, 420], [720, 490], [600, 486], [560, 430]]) },
+        { type: 'rough', style: 'cables', mul: 3.6, pts: smoothClosed([[600, 120], [660, 110], [700, 150], [670, 200], [610, 196]]) },
+      ],
+      decor: [{ type: 'sign', x: 500, y: 68, text: 'MEET-ME ROOM', style: 'amber' }],
+      lamps: [[300, 400, 220, LED, 0.06], [700, 200, 220, LED, 0.06]],
+    },
+    {
+      name: 'Power Outage', time: '5:00 AM', short: '5A', par: 3,
+      tip: 'The power’s out. Follow the emergency lights round the batteries.',
+      rageName: 'Generator Failed', rageTip: 'Total darkness, except for the error lights.',
+      roomba: [500, 300],
+      course: [chamferRect(80, 90, 840, 420, 30)],
+      tee: [150, 446],
+      pins: [[850, 154], [860, 300], [700, 140]],
+      blocks: [{ pts: rect(300, 90, 64, 290), kind: 'ups' }, { pts: rect(636, 220, 64, 290), kind: 'ups' }, { pts: rect(450, 230, 100, 36), kind: 'server' }],
+      bumpers: [{ x: 500, y: 430, r: 13, kind: 'extinguisher' }, { x: 180, y: 150, r: 13, kind: 'extinguisher' }],
+      decor: [{ type: 'sign', x: 500, y: 68, text: 'UPS ROOM · ON BATTERY', style: 'amber' }],
+      lamps: [[150, 440, 170, RED, 0.2], [330, 440, 150, RED, 0.18], [500, 160, 170, RED, 0.2], [500, 440, 150, RED, 0.18], [670, 160, 150, RED, 0.18], [850, 300, 180, RED, 0.2]],
+    },
+    {
+      name: 'Cooling Plant', time: '6:00 AM', short: '6A', par: 3,
+      tip: 'The chiller fans blast across the room in turns. Slip through the gaps.',
+      rageName: 'Chiller Meltdown', rageTip: 'The chillers are on emergency blast. Stay dry.',
+      roomba: [150, 250],
+      course: [chamferRect(80, 110, 840, 380, 30)],
+      tee: [130, 300],
+      pins: [[870, 300], [862, 196], [862, 404]],
+      blocks: [
+        { pts: rect(250, 110, 100, 40), kind: 'chiller' }, { pts: rect(450, 110, 100, 40), kind: 'chiller' }, { pts: rect(650, 110, 100, 40), kind: 'chiller' },
+        { pts: rect(80, 454, 840, 36), kind: 'pipe' },
+      ],
+      zones: [
+        { type: 'air', pts: rect(250, 150, 100, 300), ax: 0, ay: 380, pulse: [3.6, 1.5, 0] },
+        { type: 'air', pts: rect(450, 150, 100, 300), ax: 0, ay: 380, pulse: [3.6, 1.5, 1.2] },
+        { type: 'air', pts: rect(650, 150, 100, 300), ax: 0, ay: 380, pulse: [3.6, 1.5, 2.4] },
+        { type: 'water', style: 'puddle', pts: smoothClosed([[262, 404], [300, 392], [340, 406], [336, 440], [300, 452], [264, 440]]) },
+        { type: 'water', style: 'puddle', pts: smoothClosed([[462, 404], [500, 392], [540, 406], [536, 440], [500, 452], [464, 440]]) },
+        { type: 'water', style: 'puddle', pts: smoothClosed([[662, 404], [700, 392], [740, 406], [736, 440], [700, 452], [664, 440]]) },
+      ],
+      decor: [{ type: 'sign', x: 500, y: 88, text: 'CHILLER PLANT · CH-1 CH-2 CH-3', style: 'amber' }],
+      lamps: [[150, 300, 180, LED, 0.06], [500, 300, 240, LED, 0.06], [850, 300, 180, LED, 0.06]],
+    },
+    {
+      name: 'Five Nines', time: '7:00 AM', short: '7A', par: 4,
+      tip: 'Get through the cage door to the core switch. Uptime is on the line.',
+      rageName: 'Five Minutes of Downtime', rageTip: 'The whole data hall is down, and it’s your fault.',
+      roomba: [300, 470],
+      course: [chamferRect(70, 70, 860, 460, 36)],
+      tee: [130, 470],
+      pins: [[825, 150], [890, 196], [760, 118]],
+      blocks: [
+        { pts: rect(170, 170, 450, 56), kind: 'server' }, { pts: rect(170, 350, 450, 56), kind: 'server' },
+        { pts: rect(708, 70, 12, 192), kind: 'cage' }, { pts: rect(708, 250, 72, 12), kind: 'cage' }, { pts: rect(870, 250, 60, 12), kind: 'cage' },
+      ],
+      movers: [
+        { type: 'doors', style: 'cage', x0: 780, x1: 870, y: 262, depth: 12, period: 4.2 },
+        { type: 'slider', kind: 'crash', a: [230, 288], b: [640, 288], w: 44, h: 30, period: 6, phase: 0 },
+      ],
+      zones: [
+        { type: 'air', pts: rect(170, 406, 450, 90), ax: 150, ay: 0 },
+        { type: 'air', pts: rect(624, 300, 84, 200), ax: 0, ay: -260, pulse: [5, 2.5, 1] },
+        { type: 'water', style: 'tile', pts: rect(400, 108, 48, 48) },
+      ],
+      bumpers: [{ x: 850, y: 400, r: 13, kind: 'extinguisher' }],
+      decor: [{ type: 'sign', x: 820, y: 48, text: 'CORE CAGE', style: 'amber' }, { type: 'sign', x: 400, y: 552, text: 'DATA HALL 2', style: 'floor' }],
+      lamps: [[300, 288, 220, LED, 0.06], [820, 160, 170, LED, 0.08], [300, 460, 200, LED, 0.06], [700, 420, 180, LED, 0.06]],
+    },
+  ];
+  const DATACENTER_TINTS = [
+    [120, 200, 255, 0.05], [120, 200, 255, 0.05], [140, 190, 255, 0.05], [120, 200, 255, 0.05], [120, 200, 255, 0.05],
+    [120, 200, 255, 0.05], [255, 60, 50, 0.05], [120, 210, 255, 0.05], [170, 215, 255, 0.04],
+  ];
+  const DATACENTER_DARK = [0.14, 0.14, 0.18, 0.14, 0.14, 0.16, 0.66, 0.14, 0.1];
+  // ---------------------------------------------------------------------------
+  // The game room: after hours, 5 PM to 1 AM. Pinball, pool, bowling and a dance floor that spins.
+  // ---------------------------------------------------------------------------
+  // Points along a circular arc, and a thick arc as a polygon (for the skee-ball rings).
+  function arcPts(cx, cy, r, a0, a1, n) {
+    const out = [];
+    for (let i = 0; i <= n; i++) { const a = a0 + ((a1 - a0) * i) / n; out.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
+    return out;
+  }
+  const arcBand = (cx, cy, r0, r1, a0, a1, n = 24) => arcPts(cx, cy, r1, a0, a1, n).concat(arcPts(cx, cy, r0, a1, a0, n));
+  const PINK = '255,80,190', CYAN = '60,220,255', VIOLET = '160,110,255', GOLD = '255,212,71';
+  const FLIP = [1.3, 0.07, 0.22, 0.3];
+  const foosRod = (x, ys, amp, period, phase, color) => ys.map(y => ({ type: 'slider', kind: 'foos', a: [x, y - amp], b: [x, y + amp], w: 16, h: 26, period, phase, color }));
+  const GAMEROOM_HOLES = [
+    {
+      name: 'Happy Hour', time: '5:00 PM', short: '5P', par: 2,
+      tip: 'Weave past the high-tops and the bar stools.',
+      rageName: 'Open Bar', rageTip: 'Somebody opened a tab. The floor is sticky, and so is everyone.',
+      roomba: [700, 300],
+      course: [chamferRect(80, 170, 840, 260, 40)],
+      tee: [140, 330],
+      pins: [[858, 300], [846, 228], [846, 372]],
+      blocks: [{ pts: rect(220, 170, 360, 34), kind: 'bar' }],
+      bumpers: [
+        { x: 262, y: 224, r: 11, kind: 'stool' }, { x: 342, y: 224, r: 11, kind: 'stool' }, { x: 422, y: 224, r: 11, kind: 'stool' }, { x: 502, y: 224, r: 11, kind: 'stool' },
+        { x: 660, y: 362, r: 20, kind: 'hightop' }, { x: 770, y: 246, r: 20, kind: 'hightop' },
+      ],
+      props: [{ kind: 'cups', x: 520, y: 372 }],
+      decor: [{ type: 'neon', x: 500, y: 138, text: 'HAPPY HOUR 5–7', color: '#ff4fb8' }],
+      lamps: [[400, 250, 220, PINK, 0.14], [760, 300, 200, CYAN, 0.12], [160, 330, 150, GOLD, 0.1]],
+    },
+    {
+      name: 'Air Hockey', time: '6:00 PM', short: '6P', par: 3,
+      tip: 'The table barely slows anything down. Get past the mallet and into the goal.',
+      rageName: 'Sudden Death', rageTip: 'The mallet has been practicing. It never misses.',
+      roomba: [300, 200],
+      course: [[[160, 150], [820, 150], [840, 170], [840, 250], [920, 250], [920, 350], [840, 350], [840, 430], [820, 450], [160, 450], [140, 430], [140, 170]]],
+      tee: [222, 300],
+      pins: [[882, 300], [882, 277], [882, 323]],
+      zones: [{ type: 'slick', style: 'airhockey', mul: 0.3, pts: rect(140, 150, 700, 300) }],
+      movers: [{ type: 'slider', kind: 'mallet', a: [796, 226], b: [796, 374], w: 44, h: 44, r: 22, period: 2.2, phase: 0, color: '#e8453a' }],
+      decor: [{ type: 'neon', x: 490, y: 118, text: 'AIR HOCKEY', color: '#3fe0ff' }],
+      lamps: [[490, 300, 300, CYAN, 0.12], [870, 300, 140, PINK, 0.14]],
+    },
+    {
+      name: 'Foosball', time: '7:00 PM', short: '7P', par: 3,
+      tip: 'Time the little men as they slide, and score in the goal.',
+      rageName: 'No Spinning', rageTip: 'The rods are going flat out. That’s illegal, by the way.',
+      roomba: [240, 200],
+      theme: 'foos',
+      course: [[[120, 130], [880, 130], [880, 250], [930, 250], [930, 350], [880, 350], [880, 470], [120, 470]]],
+      tee: [180, 300],
+      pins: [[906, 300], [906, 280], [906, 320]],
+      movers: [
+        ...foosRod(330, [200, 300, 400], 38, 2.2, 0, '#e0342b'),
+        ...foosRod(530, [180, 260, 340, 420], 30, 1.8, 0.5, '#2f6fd6'),
+        ...foosRod(730, [240, 360], 50, 2.6, 0.2, '#e0342b'),
+        ...foosRod(830, [300], 42, 1.5, 0.7, '#2f6fd6'),
+      ],
+      decor: [
+        { type: 'stripe', pts: [[500, 130], [500, 470]], color: 'rgba(255,255,255,0.7)', lw: 3 },
+        { type: 'stripe', pts: arcPts(500, 300, 60, 0, TAU, 36), color: 'rgba(255,255,255,0.7)', lw: 3 },
+        { type: 'stripe', pts: [[880, 220], [820, 220], [820, 380], [880, 380]], color: 'rgba(255,255,255,0.7)', lw: 3 },
+        { type: 'stripe', pts: [[120, 220], [180, 220], [180, 380], [120, 380]], color: 'rgba(255,255,255,0.7)', lw: 3 },
+        { type: 'rod', x: 330, y0: 100, y1: 500 }, { type: 'rod', x: 530, y0: 100, y1: 500 }, { type: 'rod', x: 730, y0: 100, y1: 500 }, { type: 'rod', x: 830, y0: 100, y1: 500 },
+      ],
+      lamps: [[500, 300, 320, VIOLET, 0.1], [880, 300, 150, PINK, 0.12]],
+    },
+    {
+      name: 'Pinball', time: '8:00 PM', short: '8P', par: 4,
+      tip: 'Launch it up the plunger lane. The bumpers kick and the flippers flick.',
+      rageName: 'TILT', rageTip: 'The bumpers kick harder, and the flippers have a mind of their own.',
+      roomba: [472, 200],
+      noMirror: true,
+      course: [[[330, 70], [670, 70], [750, 150], [750, 530], [704, 530], [704, 196], [694, 196], [694, 400], [564, 466], [564, 530], [380, 530], [380, 466], [250, 400], [250, 150]]],
+      tee: [727, 500],
+      pins: [[472, 116], [392, 132], [556, 132]],
+      blocks: [
+        { pts: [[268, 300], [268, 372], [330, 404]], kind: 'sling', e: 1.15 },
+        { pts: [[676, 300], [614, 404], [676, 372]], kind: 'sling', e: 1.15 },
+      ],
+      bumpers: [
+        { x: 410, y: 232, r: 22, kind: 'pop', kick: 360, e: 0.9, glow: 'rgba(255,90,200,0.85)' },
+        { x: 534, y: 232, r: 22, kind: 'pop', kick: 360, e: 0.9, glow: 'rgba(60,220,255,0.85)' },
+        { x: 472, y: 320, r: 22, kind: 'pop', kick: 360, e: 0.9, glow: 'rgba(255,212,71,0.85)' },
+      ],
+      zones: [
+        { type: 'slope', pts: rect(250, 70, 500, 460), ax: 0, ay: 95, style: 'tilt' },
+        { type: 'water', style: 'drain', pts: rect(380, 502, 184, 28) },
+      ],
+      movers: [
+        { type: 'spinner', kind: 'flipper', x: 386, y: 466, len: 76, w: 13, a0: 0.42, amp: -0.9, gate: FLIP, delay: 0 },
+        { type: 'spinner', kind: 'flipper', x: 558, y: 466, len: 76, w: 13, a0: Math.PI - 0.42, amp: 0.9, gate: FLIP, delay: 0.95 },
+      ],
+      decor: [{ type: 'neon', x: 500, y: 44, text: 'NINE-TO-FIVE WIZARD', color: '#ffd447' }],
+      lamps: [[472, 250, 220, PINK, 0.12], [472, 440, 160, CYAN, 0.12], [727, 300, 160, GOLD, 0.1], [472, 120, 150, VIOLET, 0.12]],
+    },
+    {
+      name: 'Ball Pit', time: '9:00 PM', short: '9P', par: 3,
+      tip: 'Nothing rolls through the ball pit. Take the slide round the bottom.',
+      rageName: 'Lost Sock', rageTip: 'The ball pit is deeper than it looks. Much deeper.',
+      roomba: [860, 200],
+      course: [chamferRect(80, 90, 840, 420, 60)],
+      tee: [140, 300],
+      pins: [[862, 300], [846, 172], [846, 428]],
+      zones: [
+        { type: 'rough', style: 'balls', mul: 5.5, pts: ellipse(500, 286, 190, 116, 44) },
+        { type: 'conveyor', skin: 'slide', pts: rect(236, 446, 528, 42), dir: [1, 0], accel: 520, max: 330 },
+      ],
+      bumpers: [{ x: 320, y: 150, r: 26, kind: 'beanbag', e: 0.16, tint: '#ff4fb8' }, { x: 668, y: 150, r: 26, kind: 'beanbag', e: 0.16, tint: '#3fe0ff' }],
+      decor: [{ type: 'neon', x: 500, y: 62, text: 'BALL PIT · NO SHOES', color: '#5cf08a' }],
+      lamps: [[500, 286, 260, PINK, 0.12], [200, 300, 160, GOLD, 0.1], [820, 300, 180, CYAN, 0.12]],
+    },
+    {
+      name: 'Pool Table', time: '10:00 PM', short: '10P', par: 3,
+      tip: 'Break the rack. The cup is behind it, and the pockets bite.',
+      rageName: 'Double or Nothing', rageTip: 'Every ball on the table wants to go in every pocket.',
+      roomba: [300, 220],
+      theme: 'pool',
+      course: [chamferRect(150, 150, 700, 300, 14)],
+      tee: [300, 300],
+      pins: [[772, 300], [742, 234], [742, 366]],
+      zones: [
+        { type: 'water', style: 'pocket', pts: ellipse(166, 166, 17, 17, 20) }, { type: 'water', style: 'pocket', pts: ellipse(834, 166, 17, 17, 20) },
+        { type: 'water', style: 'pocket', pts: ellipse(166, 434, 17, 17, 20) }, { type: 'water', style: 'pocket', pts: ellipse(834, 434, 17, 17, 20) },
+        { type: 'water', style: 'pocket', pts: ellipse(500, 158, 15, 15, 20) }, { type: 'water', style: 'pocket', pts: ellipse(500, 442, 15, 15, 20) },
+      ],
+      props: [{ kind: 'rack', x: 636, y: 300, dir: 1 }],
+      decor: [{ type: 'neon', x: 500, y: 112, text: 'EIGHT BALL', color: '#3fe0ff' }, { type: 'stripe', pts: [[300, 158], [300, 442]], color: 'rgba(255,255,255,0.25)', lw: 2 }],
+      lamps: [[380, 300, 220, GOLD, 0.1], [640, 300, 220, GOLD, 0.1]],
+    },
+    {
+      name: 'Bowling', time: '11:00 PM', short: '11P', par: 3,
+      tip: 'Knock the pins down to get to the cup, and mind the gutters.',
+      rageName: 'Seven-Ten Split', rageTip: 'The lane is freshly oiled, and the gutters are hungry.',
+      roomba: [140, 250],
+      course: [[[80, 230], [920, 230], [920, 370], [80, 370]]],
+      tee: [132, 300],
+      pins: [[888, 300], [886, 268], [886, 332]],
+      zones: [
+        { type: 'slick', style: 'lane', mul: 0.45, pts: rect(200, 254, 660, 92), arrows: [340, 300], arrowDir: 1 },
+        { type: 'water', style: 'gutter', pts: rect(200, 232, 660, 22) },
+        { type: 'water', style: 'gutter', pts: rect(200, 346, 660, 22) },
+      ],
+      props: [{ kind: 'pins', x: 742, y: 300, dir: 1 }],
+      decor: [
+        { type: 'stripe', pts: [[200, 232], [200, 368]], color: 'rgba(232,69,58,0.8)', lw: 3 },
+        { type: 'neon', x: 500, y: 196, text: 'LANE 7', color: '#ff4fb8' },
+      ],
+      lamps: [[300, 300, 200, VIOLET, 0.1], [800, 300, 200, PINK, 0.14]],
+    },
+    {
+      name: 'Skee-Ball', time: '12:00 AM', short: '12A', par: 3,
+      tip: 'Climb the ramp, find the gaps in the rings, and roll it into the 100.',
+      rageName: 'Out of Tickets', rageTip: 'The ramp is steeper and the rings are closer together.',
+      roomba: [150, 300],
+      course: [[[80, 240], ...arcPts(770, 300, 150, -2.7303, 2.7303, 44), [80, 360]]],
+      tee: [140, 300],
+      pins: [[770, 300], [776, 294], [764, 306]],
+      blocks: [
+        { pts: arcBand(770, 300, 106, 118, -Math.PI + 0.55, Math.PI - 0.55, 30), kind: 'ring' },
+        { pts: arcBand(770, 300, 50, 60, -Math.PI / 2 + 0.5, Math.PI / 2 - 0.5, 14), kind: 'ring' },
+        { pts: arcBand(770, 300, 50, 60, Math.PI / 2 + 0.5, Math.PI * 1.5 - 0.5, 14), kind: 'ring' },
+      ],
+      zones: [
+        { type: 'slope', style: 'ramp', pts: rect(260, 242, 330, 116), ax: -170, ay: 0 },
+        { type: 'funnel', at: 'cup', r: 48, strength: 200 },
+      ],
+      decor: [
+        { type: 'paint', x: 853, y: 300, text: '50', size: 20, color: 'rgba(255,255,255,0.35)' },
+        { type: 'paint', x: 896, y: 300, text: '10', size: 18, color: 'rgba(255,255,255,0.35)' },
+        { type: 'neon', x: 770, y: 120, text: 'SKEE-BALL', color: '#ffd447' },
+      ],
+      lamps: [[770, 300, 200, GOLD, 0.12], [400, 300, 220, PINK, 0.12]],
+    },
+    {
+      name: 'Last Call', time: '1:00 AM', short: '1A', par: 4,
+      tip: 'The dance floor spins and flings you round. Last putt of the night.',
+      rageName: 'Closing Time', rageTip: 'You don’t have to go home, but you can’t putt here.',
+      roomba: [200, 200],
+      course: [chamferRect(70, 70, 860, 460, 40)],
+      tee: [130, 470],
+      pins: [[858, 142], [700, 122], [880, 300]],
+      blocks: [
+        { pts: rect(420, 70, 160, 40), kind: 'djbooth' }, { pts: rect(370, 74, 40, 40), kind: 'speaker' }, { pts: rect(590, 74, 40, 40), kind: 'speaker' },
+        { pts: rect(640, 490, 260, 40), kind: 'bar' },
+      ],
+      bumpers: [
+        { x: 670, y: 470, r: 11, kind: 'stool' }, { x: 730, y: 470, r: 11, kind: 'stool' }, { x: 790, y: 470, r: 11, kind: 'stool' }, { x: 850, y: 470, r: 11, kind: 'stool' },
+        { x: 230, y: 210, r: 20, kind: 'hightop' }, { x: 790, y: 330, r: 20, kind: 'hightop' },
+      ],
+      zones: [
+        { type: 'dance', pts: rect(340, 160, 320, 280) },
+        { type: 'turntable', x: 500, y: 300, r: 118, w: 1.5 },
+      ],
+      decor: [{ type: 'neon', x: 500, y: 552, text: 'LAST CALL', color: '#ff4fb8' }],
+      lamps: [[500, 300, 260, VIOLET, 0.14], [200, 400, 200, PINK, 0.12], [800, 200, 200, CYAN, 0.12], [770, 490, 160, GOLD, 0.1]],
+    },
+  ];
+  const GAMEROOM_TINTS = [
+    [255, 160, 90, 0.05], [230, 120, 200, 0.05], [190, 100, 230, 0.05], [160, 90, 255, 0.05], [140, 90, 255, 0.05],
+    [120, 90, 255, 0.05], [120, 90, 240, 0.06], [110, 80, 230, 0.06], [100, 70, 220, 0.07],
+  ];
+  const GAMEROOM_DARK = [0.26, 0.3, 0.34, 0.4, 0.42, 0.46, 0.5, 0.52, 0.56];
   // How each building looks: the floor around the course, the putting surface and the rails.
   const THEMES = {
     office: { floor: 'carpet', bg: '#2f3744', felt: '#2e9b58', tee: '#237a47', rail: ['#6c7889', '#c3ccd7', '#e6ebf1'], hazard: false },
     factory: { floor: 'concrete', bg: '#34383e', felt: '#2a8466', tee: '#1f6b52', rail: ['#23272d', '#555e69', '#737d89'], hazard: true },
+    garage: { floor: 'garage', bg: '#2e3238', felt: '#3a8f4d', tee: '#2b6f3b', rail: ['#1c1f23', '#6d737b', '#e2bd3a'], hazard: false },
+    datacenter: { floor: 'raised', bg: '#3b4149', felt: '#2a7d8c', tee: '#1f6571', rail: ['#0f1216', '#2c333c', '#4b5561'], hazard: false, edge: 'rgba(80,220,255,0.75)' },
+    gameroom: { floor: 'arcade', bg: '#15132b', felt: '#4a3db0', tee: '#382e8f', rail: ['#06060b', '#1d1b31', '#2b2846'], hazard: false, edge: 'rgba(255,80,190,0.9)' },
+    pool: { floor: 'arcade', bg: '#15132b', felt: '#1f63a6', tee: '#18508a', rail: ['#1b0f06', '#5a3818', '#8a5a33'], hazard: false },
+    foos: { floor: 'arcade', bg: '#15132b', felt: '#2f9a4f', tee: '#257a3f', rail: ['#0b0b10', '#2a2a36', '#46465a'], hazard: false },
   };
   const theme = h => THEMES[(h && h.theme) || COURSE.theme] || THEMES.office;
   const COURSES = {
     office: { id: 'office', name: 'Head Office', shift: 'Day shift, 9 AM to 5 PM', holes: OFFICE_HOLES, tints: OFFICE_TINTS, lastLabel: 'Clock out', title: 'Nine-to-Five Links', theme: 'office' },
     factory: { id: 'factory', name: 'Factory Floor', shift: 'Second shift, 3 PM to 11 PM', holes: FACTORY_HOLES, tints: FACTORY_TINTS, dark: FACTORY_DARK, lastLabel: 'Clock out', title: 'Nine-to-Five Links', theme: 'factory' },
+    garage: { id: 'garage', name: 'Parking Garage', shift: 'The morning rush, 7 to 9 AM', holes: GARAGE_HOLES, tints: GARAGE_TINTS, dark: GARAGE_DARK, lastLabel: 'Badge in', spills: ['Most puddles', 'Dry shoes all morning', 'Puddles'], title: 'Nine-to-Five Links', theme: 'garage' },
+    gameroom: { id: 'gameroom', name: 'Game Room', shift: 'After hours, 5 PM to 1 AM', holes: GAMEROOM_HOLES, tints: GAMEROOM_TINTS, dark: GAMEROOM_DARK, lastLabel: 'Call it a night', spills: ['Most fouls', 'A clean game all night', 'Fouls'], title: 'Nine-to-Five Links', theme: 'gameroom' },
+    datacenter: { id: 'datacenter', name: 'Data Center', shift: 'Graveyard shift, 11 PM to 7 AM', holes: DATACENTER_HOLES, tints: DATACENTER_TINTS, dark: DATACENTER_DARK, lastLabel: 'Hand over', spills: ['Most incidents', 'No incidents all night', 'Incidents'], title: 'Nine-to-Five Links', theme: 'datacenter' },
   };
   let COURSE = COURSES.office;
   let HOLES = COURSE.holes;
@@ -1314,7 +1967,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     h.course = def.course.map(mpoly);
     h.tee = mpt(def.tee);
     h.cup = mpt(def.pins[(variant ? variant.pin : 0) % def.pins.length]);
-    h.blocks = (def.blocks || []).map(b => { const pts = mpoly(b.pts); return { ...b, pts, bb: bboxOf(pts) }; });
+    h.blocks = (def.blocks || []).map(b => { const pts = mpoly(b.pts); return { ...b, pts, bb: bboxOf(pts), mir: M }; });
     h.bumpers = (def.bumpers || []).map(b => ({ ...b, x: mx(b.x), e: b.e != null ? b.e : 0.8 }));
     h.zones = (def.zones || []).map(z => {
       const o = { ...z };
@@ -1325,6 +1978,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (z.accel) { o.accel = z.accel * PH.conveyor; o.max = z.max * (1 + (PH.conveyor - 1) * 0.75); }
       if (z.strength) o.strength = z.strength * PH.funnel;
       if (z.at === 'cup') { o.x = h.cup[0]; o.y = h.cup[1]; }
+      if (z.type === 'turntable') { o.x = mx(z.x); o.w = (M ? -z.w : z.w) * PH.moverSpeed; }
+      if (z.arrows) { o.arrows = mpt(z.arrows); o.arrowDir = M ? -z.arrowDir : z.arrowDir; }
       return o;
     });
     h.hazards = h.zones.filter(z => z.type === 'water');
@@ -1346,6 +2001,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         if (M) o.a0 = Math.PI - m.a0;
         if (M && m.amp) o.amp = -m.amp;
         o.angle = o.a0; o.av = o.speed;
+        // A gate swings open by amp and back on a timetable: closed, opening, open, closing.
+        if (m.gate) { o.gate = m.gate.map(s => s / PH.moverSpeed); o.gatePer = o.gate.reduce((a, b) => a + b, 0); o.delay = (m.delay || 0) / PH.moverSpeed; o.angle = gateAngle(o, 0); o.av = 0; }
       } else if (m.type === 'slider') {
         o.a = mpt(m.a); o.b = mpt(m.b); o.cx = o.a[0]; o.cy = o.a[1]; o.vx = 0; o.vy = 0;
         o.period = m.period / PH.moverSpeed;
@@ -1367,7 +2024,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       to: mpt(tp.to),
       dir: [M ? -tp.dir[0] : tp.dir[0], tp.dir[1]],
       arrive: M ? [BOX_W - tp.arrive[1], BOX_W - tp.arrive[0], tp.arrive[2]] : tp.arrive.slice(),
-      arriveT: 0,
+      arriveT: 0, style: tp.style,
     }));
     h.decor = (def.decor || []).map(d => {
       const o = { ...d };
@@ -1376,10 +2033,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       else o.x = mx(d.x);
       return o;
     });
-    h.props = buildProps(def, mpt);
+    h.props = buildProps(def, mpt, M);
     // Night shift: how dark the hole is, and where the work lights are. The tee and the cup always get one.
     h.dark = (!defIn && COURSE.dark && COURSE.dark[idx]) || 0;
-    h.lamps = (def.lamps || []).map(([x, y, r]) => [mx(x), y, r]).concat([[h.tee[0], h.tee[1], 120], [h.cup[0], h.cup[1], 130]]);
+    h.lamps = (def.lamps || []).map(([x, y, r, c, k]) => [mx(x), y, r, c, k]).concat([[h.tee[0], h.tee[1], 120], [h.cup[0], h.cup[1], 130]]);
     h.segs = [];
     for (const poly of h.course) pushSegs(h.segs, poly, PH.wallE);
     for (const b of h.blocks) pushSegs(h.segs, b.pts, b.e != null ? b.e : PH.wallE);
@@ -1495,6 +2152,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       cricket() { for (const d of [0, 0.06, 0.12, 0.6, 0.66, 0.72]) tone({ freq: 4200, type: 'square', dur: 0.03, vol: 0.015, delay: d }); },
       deflate() { tone({ freq: 700, to: 140, type: 'sawtooth', dur: 1.1, vol: 0.045 }); noise({ dur: 0.75, vol: 0.05, type: 'bandpass', freq: 1600, to: 500, q: 2 }); },
       rumble() { noise({ dur: 0.75, vol: 0.18, type: 'lowpass', freq: 220, to: 80, q: 0.6 }); },
+      // A pinball pop bumper, and a squeal of tyres on the garage ramp.
+      bumper() { tone({ freq: 1180, to: 1560, type: 'square', dur: 0.07, vol: 0.06 }); tone({ freq: 392, dur: 0.16, vol: 0.12, delay: 0.02 }); noise({ dur: 0.05, vol: 0.12, type: 'highpass', freq: 2400, q: 0.8 }); },
+      squeal() { noise({ dur: 0.55, vol: 0.1, type: 'bandpass', freq: 2600, to: 1900, q: 9 }); },
       // Knocking props around, by what they're made of.
       prop(mat, k) {
         const v = 0.04 + 0.2 * k;
@@ -1505,6 +2165,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         else if (mat === 'cardboard') noise({ dur: 0.09, vol: v, type: 'lowpass', freq: 700, q: 0.8 });
         else if (mat === 'wood') { tone({ freq: 240, to: 160, dur: 0.1, vol: v }); noise({ dur: 0.06, vol: v * 0.5, type: 'bandpass', freq: 900, q: 1.2 }); }
         else if (mat === 'jug') tone({ freq: 300, to: 200, dur: 0.18, vol: v });
+        else if (mat === 'ball') { tone({ freq: 2900, to: 2200, type: 'triangle', dur: 0.05, vol: v * 0.9 }); noise({ dur: 0.03, vol: v * 0.5, type: 'highpass', freq: 3500, q: 0.8 }); }
+        else if (mat === 'pin') { tone({ freq: 620, to: 430, type: 'triangle', dur: 0.12, vol: v }); noise({ dur: 0.08, vol: v * 0.6, type: 'bandpass', freq: 1500, q: 1.5 }); }
         else tone({ freq: 420, to: 300, type: 'triangle', dur: 0.08, vol: v * 0.8 });
       },
       smash(mat) {
@@ -1691,10 +2353,19 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       { x0: mid + half * o, x1: m.x1 + half * o, y0: m.y - m.depth, y1: m.y, vx: half * m.vo },
     ];
   }
+  function gateAngle(m, t) {
+    const per = m.gatePer, u = (((t + m.delay) % per) + per) % per;
+    return m.a0 + m.amp * doorOpenness(u, m.gate);
+  }
   function updateMovers(h, dt, b) {
     h.t += dt;
     for (const m of h.movers) {
       if (m.type === 'spinner') {
+        if (m.gate) {
+          const a = gateAngle(m, h.t);
+          m.av = (a - m.angle) / dt; m.angle = a;
+          continue;
+        }
         // A robot arm sweeps back and forth instead of going all the way round.
         m.angle = m.amp ? m.a0 + m.amp * Math.sin(m.speed * h.t + (m.phase || 0)) : m.a0 + m.speed * h.t;
         m.av = m.amp ? m.amp * m.speed * Math.cos(m.speed * h.t + (m.phase || 0)) : m.speed;
@@ -1720,7 +2391,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         const tx = m.x + Math.cos(m.angle) * m.len, ty = m.y + Math.sin(m.angle) * m.len;
         imp = Math.max(imp, collideSeg(b, m.x, m.y, tx, ty, m.w / 2, 0.6, { x: m.x, y: m.y, speed: m.av }));
       } else if (m.type === 'slider') {
-        imp = Math.max(imp, collideBox(b, m.cx - m.w / 2, m.cy - m.h / 2, m.cx + m.w / 2, m.cy + m.h / 2, 0.7, m.vx, m.vy));
+        if (m.r) imp = Math.max(imp, collideCircle(b, m.cx, m.cy, m.r, 0.8, m.vx, m.vy));
+        else imp = Math.max(imp, collideBox(b, m.cx - m.w / 2, m.cy - m.h / 2, m.cx + m.w / 2, m.cy + m.h / 2, 0.7, m.vx, m.vy));
       } else if (m.type === 'doors') {
         for (const p of doorPanels(m)) imp = Math.max(imp, collideBox(b, p.x0, p.y0, p.x1, p.y1, 0.6, p.vx, 0));
       } else if (m.type === 'roomba') {
@@ -1731,20 +2403,32 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     }
     return imp;
   }
+  // How hard a fan is blowing right now, from 0 to 1. A pulse is [period, seconds on, delay], with a
+  // short spin-up and spin-down either side.
+  function airPower(z, t) {
+    if (!z.pulse) return 1;
+    const [per, on, delay = 0] = z.pulse, ramp = 0.45, u = (((t + delay) % per) + per) % per;
+    if (u < ramp) return smoothstep(u / ramp);
+    if (u < on) return 1;
+    if (u < on + ramp) return 1 - smoothstep((u - on) / ramp);
+    return 0;
+  }
   function surfaceAt(h, x, y) {
-    let fric = 1, slick = 1, ax = 0, ay = 0, conv = null;
+    let fric = 1, slick = 1, ax = 0, ay = 0, conv = null, spin = null;
     for (const z of h.zones) {
       if (z.type === 'rough') { if (inZone(z, x, y)) fric = Math.max(fric, z.mul || 2.6); }
       else if (z.type === 'slick') { if (inZone(z, x, y)) slick = Math.min(slick, z.mul); }
       else if (z.type === 'slope') { if (inZone(z, x, y)) { ax += z.ax; ay += z.ay; } }
+      else if (z.type === 'air') { if (inZone(z, x, y)) { const k = airPower(z, h.t); ax += z.ax * k; ay += z.ay * k; } }
       else if (z.type === 'conveyor') { if (inZone(z, x, y)) conv = z; }
+      else if (z.type === 'turntable') { const dx = x - z.x, dy = y - z.y; if (dx * dx + dy * dy < z.r * z.r) spin = z; }
       else if (z.type === 'funnel') {
         const dx = z.x - x, dy = z.y - y, d = Math.hypot(dx, dy);
         if (d < z.r && d > 0.5) { const k = z.strength * (0.35 + 0.65 * (1 - d / z.r)); ax += (dx / d) * k; ay += (dy / d) * k; }
       }
     }
     // A spill beats a rug: oil on carpet is still oil.
-    return { fric: slick < 1 ? slick : fric, ax, ay, conv };
+    return { fric: slick < 1 ? slick : fric, ax, ay, conv, spin };
   }
 
   // ---------------------------------------------------------------------------
@@ -1766,20 +2450,32 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     barrel: { r: 14, m: 3.5, fric: 600, roll: 150, e: 0.3, tip: 460, mat: 'drum', spill: 'oil' },
     crate: { r: 15, m: 2, fric: 560, e: 0.2, brk: 450, mat: 'wood' },
     plank: { r: 6, m: 0.3, fric: 520, e: 0.3, mat: 'wood', eat: true },
+    pool: { r: 7, m: 1, fric: 140, e: 0.92, mat: 'ball', eat: true },
+    pin: { r: 6.5, m: 0.4, fric: 430, roll: 150, e: 0.5, tip: 80, mat: 'pin', eat: true },
+    tape: { r: 7, m: 0.3, fric: 480, e: 0.3, mat: 'plastic', eat: true },
   };
   const PROP_MAX_SPEED = 900;
   function newProp(kind, x, y, rot = 0) {
     const T = PROP_TYPES[kind];
     return { kind, x, y, vx: 0, vy: 0, r: T.r, m: T.m, rot, vr: 0, fallen: false, alive: true, sleep: true, still: 0 };
   }
-  // Cup and can pyramids come as a triangle of six, apex away from the tee.
-  function buildProps(def, mpt) {
+  // Cup and can pyramids come as a triangle of six, apex away from the tee. A rack of pool balls and a set of
+  // bowling pins are triangles of ten, apex toward the player; dir says which way along x the rows run.
+  function buildProps(def, mpt, M) {
     const out = [];
     for (const d of def.props || []) {
       const [x, y] = mpt([d.x, d.y]);
       if (d.kind === 'cups' || d.kind === 'cans') {
         const k = d.kind === 'cups' ? 'cup' : 'can', s = PROP_TYPES[k].r * 2.1;
         for (let row = 0; row < 3; row++) for (let i = 0; i <= row; i++) out.push(newProp(k, x + (i - row / 2) * s, y + (row - 1) * s * 0.88));
+      } else if (d.kind === 'rack' || d.kind === 'pins') {
+        const k = d.kind === 'rack' ? 'pool' : 'pin', s = d.kind === 'rack' ? 14.2 : 24, dir = (d.dir || 1) * (M ? -1 : 1);
+        let n = 0;
+        for (let row = 0; row < 4; row++) for (let i = 0; i <= row; i++) {
+          const q = newProp(k, x + dir * row * s * 0.87, y + (i - row / 2) * s);
+          q.n = [1, 9, 2, 10, 8, 3, 11, 7, 14, 4][n++];
+          out.push(q);
+        }
       } else out.push(newProp(d.kind, x, y, d.rot || 0));
     }
     return out;
@@ -1866,7 +2562,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function pushPropsByMovers(h, p) {
     for (const m of h.movers) {
       let n = null, wvx = 0, wvy = 0;
-      if (m.type === 'slider') { n = propOffBox(p, m.cx - m.w / 2, m.cy - m.h / 2, m.cx + m.w / 2, m.cy + m.h / 2); wvx = m.vx; wvy = m.vy; }
+      if (m.type === 'slider') { n = m.r ? discOffCircle(p, { x: m.cx, y: m.cy, r: m.r }) : propOffBox(p, m.cx - m.w / 2, m.cy - m.h / 2, m.cx + m.w / 2, m.cy + m.h / 2); wvx = m.vx; wvy = m.vy; }
       else if (m.type === 'spinner') {
         const q = propOffSeg(p, m.x, m.y, m.x + Math.cos(m.angle) * m.len, m.y + Math.sin(m.angle) * m.len, m.w / 2);
         if (q) { n = q; wvx = -m.av * (q[3] - m.y); wvy = m.av * (q[2] - m.x); }
@@ -1947,7 +2643,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         c.x += (nx * pen * ic) / tot; c.y += (ny * pen * ic) / tot;
         const rv = (c.vx - a.vx) * nx + (c.vy - a.vy) * ny;
         if (rv >= 0) continue;
-        const j = (-1.35 * rv) / tot;
+        const j = (-(a.kind === 'pool' && c.kind === 'pool' ? 1.9 : 1.35) * rv) / tot;
         a.vx -= j * nx * ia; a.vy -= j * ny * ia; c.vx += j * nx * ic; c.vy += j * ny * ic;
         if (j > 6) { a.sleep = false; c.sleep = false; a.still = 0; c.still = 0; }
         if (j > 25) out.hits.push({ p: c, j: j * 0.5 });
@@ -1984,6 +2680,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       fric *= 0.6;
       force += c.accel;
     }
+    if (sf.spin) {
+      const z = sf.spin, rx = b.x - z.x, ry = b.y - z.y, k = Math.min(1, 2.6 * dt), w2 = z.w * z.w * 0.7;
+      b.vx += (-z.w * ry - b.vx) * k + rx * w2 * dt; b.vy += (z.w * rx - b.vy) * k + ry * w2 * dt;
+      fric *= 0.35;
+      force += 300;
+    }
     let sp = Math.hypot(b.vx, b.vy);
     if (sp > 0) {
       const drop = (fric + PH.drag * sp) * dt;
@@ -1996,7 +2698,16 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     let imp = 0;
     for (let it = 0; it < 2; it++) {
       for (const s of h.segs) { const i = collideSeg(b, s.ax, s.ay, s.bx, s.by, 0, s.e, null); if (i > imp) imp = i; }
-      for (const c of h.bumpers) { const i = collideCircle(b, c.x, c.y, c.r, c.e); if (i > imp) imp = i; }
+      for (const c of h.bumpers) {
+        const i = collideCircle(b, c.x, c.y, c.r, c.e);
+        if (!c.kick) { if (i > imp) imp = i; }
+        else if (i > 0 && h.t - (c.hitT ?? -1) > 0.06) {
+          // Pop bumper: whatever came in, it goes out at least this fast.
+          const dx = b.x - c.x, dy = b.y - c.y, d = Math.hypot(dx, dy) || 1, nx = dx / d, ny = dy / d, vn = b.vx * nx + b.vy * ny;
+          if (vn < c.kick) { b.vx += nx * (c.kick - vn); b.vy += ny * (c.kick - vn); }
+          c.hitT = h.t; out.pop = c;
+        }
+      }
       const mi = collideMovers(h, b); if (mi > imp) imp = mi;
     }
     for (const p of h.props) if (p.alive) hitProp(h, b, p, out);
@@ -2053,6 +2764,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (!b) return;
     if (out.pushed) { onPushed(out.byRoomba); return; }
     if (out.imp) onImpact(out.imp, b);
+    if (out.pop) onPop(out.pop);
     if (out.oob) { outOfBounds(); return; }
     if (out.sink) { Sound.cup(); return; }
     if (out.splash) { startSplash(out.splash); return; }
@@ -2954,6 +3666,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (G.phase === 'rolling' && G.screen === 'play') curPlayer().stats.bounces++;
     if (imp > 380) burst(b.x, b.y, 'rgba(255,255,255,0.7)', 5, 90, 0.35, 2.2);
   }
+  function onPop(c) {
+    Sound.bumper();
+    ring(c.x, c.y, c.glow || 'rgba(255,90,200,0.85)', c.r, c.r + 24, 0.35, 3);
+  }
   // Sounds and reactions when the ball knocks things around. Only the player's own shots count toward
   // the property damage award.
   let propSoundAt = 0;
@@ -2968,6 +3684,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         if (playing) { curPlayer().stats.smash++; Taunts.say(T.spill ? 'spill' : 'smash'); }
       } else if (tipped) {
         Sound.prop(T.mat, 1);
+        if (p.kind === 'pin' && playing && G.hole.props.filter(q => q.kind === 'pin').every(q => q.fallen || !q.alive) && !G.hole.struck) {
+          G.hole.struck = true;
+          toast('Strike!', 'All ten pins down.', 'hi');
+          Sound.cheer();
+        }
         if (T.spill || T.dump) {
           burst(p.x, p.y, T.spill === 'oil' ? '#2a2d33' : '#ffffff', 10, 150, 0.5, 2.6);
           if (playing) { curPlayer().stats.smash++; Taunts.say(T.spill ? 'spill' : 'smash'); }
@@ -2996,7 +3717,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function startSplash(z) {
     const b = G.ball;
     b.state = 'splash'; b.splashT = 0; b.vx = 0; b.vy = 0;
-    const shred = z.style === 'shredder', pit = z.style === 'pit', back = PH.backToTee;
+    const style = z.style || 'coffee', shred = style === 'shredder', back = PH.backToTee;
     if (G.screen === 'play') {
       G.strokes += 1;
       const st = curPlayer().stats;
@@ -3008,19 +3729,26 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       Sound.shred();
       burst(b.x, b.y, '#f4f4ef', 14, 220, 0.6, 3.2);
       toast('Shredded', penalty, 'bad');
-    } else if (pit) {
-      Sound.thud(); Sound.boom();
-      ring(b.x, b.y, 'rgba(242,183,5,0.8)', 4, 30, 0.6, 3);
-      toast('Over the edge', penalty, 'bad');
+    } else if (style === 'pit' || style === 'tile') {
+      Sound.thud(); if (style === 'pit') Sound.boom(); else Sound.rumble();
+      ring(b.x, b.y, style === 'pit' ? 'rgba(242,183,5,0.8)' : 'rgba(120,220,255,0.8)', 4, 30, 0.6, 3);
+      toast(style === 'pit' ? 'Over the edge' : 'Under the floor', penalty, 'bad');
+    } else if (style === 'pocket' || style === 'gutter' || style === 'drain') {
+      Sound.thud();
+      if (style === 'pocket') Sound.prop('ball', 1); else if (style === 'gutter') Sound.rumble(); else Sound.notes([392, 330, 262, 196], 'square', 0.05, 0.12);
+      ring(b.x, b.y, style === 'drain' ? 'rgba(255,90,200,0.85)' : 'rgba(255,255,255,0.7)', 4, 26, 0.6, 2.5);
+      toast(style === 'pocket' ? 'Scratch' : style === 'gutter' ? 'Gutter ball' : 'Drained', penalty, 'bad');
     } else {
       Sound.splash();
-      ring(b.x, b.y, 'rgba(255,236,210,0.8)', 4, 26, 0.7, 2.5);
-      ring(b.x, b.y, 'rgba(255,236,210,0.55)', 2, 42, 0.9, 1.5);
-      burst(b.x, b.y, z.style === 'oil' ? '#2a2d33' : '#8a5a33', 12, 200, 0.5, 3);
-      toast(z.style === 'oil' ? 'Slipped' : 'Splash', penalty, 'bad');
+      const wet = style === 'puddle' ? '210,235,255' : '255,236,210';
+      ring(b.x, b.y, `rgba(${wet},0.8)`, 4, 26, 0.7, 2.5);
+      ring(b.x, b.y, `rgba(${wet},0.55)`, 2, 42, 0.9, 1.5);
+      burst(b.x, b.y, style === 'oil' ? '#2a2d33' : style === 'puddle' ? '#8fb3cf' : '#8a5a33', 12, 200, 0.5, 3);
+      toast(style === 'oil' ? 'Slipped' : 'Splash', penalty, 'bad');
     }
     if (back) { Sound.sad(); shake(); }
-    Taunts.say(back && Math.random() < 0.5 ? 'tee' : shred ? 'shred' : pit ? 'dock' : 'coffee', true);
+    const line = { shredder: 'shred', pit: 'dock', puddle: 'puddle', tile: 'tile', pocket: 'pocket', gutter: 'gutter', drain: 'drain' }[style] || 'coffee';
+    Taunts.say(back && Math.random() < 0.5 ? 'tee' : line, true);
     Office.incident();
     updateHud();
     netEvent(shred ? 'shred' : 'splash');
@@ -3042,14 +3770,14 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       b.x = G.hole.tee[0]; b.y = G.hole.tee[1]; b.vx = 0; b.vy = 0;
       b.state = 'rest'; b.quiet = true;
       Sound.ding();
-      toast('Wrong floor', COURSE.id === 'factory' ? 'The lift took you back down to the ground floor.' : 'The elevator took you back down to the lobby.', 'bad');
+      toast('Wrong floor', tp.style === 'ramp' ? 'You missed the turn and ended up back at the entrance.' : COURSE.id === 'factory' ? 'The lift took you back down to the ground floor.' : 'The elevator took you back down to the lobby.', 'bad');
       Taunts.say('floor', true);
       shake();
       onBallRest();
       return;
     }
     tp.arriveT = 1.4;
-    Sound.ding();
+    if (tp.style === 'ramp') Sound.squeal(); else Sound.ding();
     ring(b.x, b.y, 'rgba(255,212,71,0.9)', 6, 34, 0.6, 2.5);
   }
   function onBallRest() {
@@ -3293,9 +4021,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const [fx0, fy0, fx1, fy1] = h.frame;
     const fw = fx1 - fx0, fh = fy1 - fy0;
     const sN = Math.min(aw / fw, ah / fh), sR = Math.min(aw / fh, ah / fw);
-    // Only holes that play sideways get turned, and always so the tee ends up at the bottom.
+    // Holes that play sideways get turned, and so do ones much wider than they are tall, always so the tee
+    // ends up toward the bottom.
     const playX = h.cup[0] - h.tee[0], playY = h.cup[1] - h.tee[1];
-    const rot = Math.abs(playX) >= Math.abs(playY) && sR > sN * 1.15;
+    const rot = (Math.abs(playX) >= Math.abs(playY) || fw > fh * 1.5) && sR > sN * 1.15;
     const s = Math.min(rot ? sR : sN, 1.8);
     if (!rot) {
       const ox = ax + (aw - fw * s) / 2, oy = ay + (ah - fh * s) / 2;
@@ -3394,6 +4123,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     g.beginPath(); for (const p of h.course) tracePoly(g, p, sh[0] * 0.5, sh[1] * 0.5);
     g.lineWidth = 9; g.strokeStyle = 'rgba(0,30,10,0.22)'; g.stroke();
     g.restore();
+    if (T.edge) { coursePath(g, h); g.lineWidth = 3; g.strokeStyle = T.edge; g.stroke(); }
   }
   function drawTee(g, h) {
     const [x, y] = h.tee;
@@ -3503,12 +4233,18 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     g.save();
     coursePath(g, h); g.clip();
     for (const z of h.zones) {
-      if (z.type === 'rough') drawRug(g, z);
-      else if (z.type === 'slope') drawSlope(g, z);
+      if (z.type === 'rough') { if (z.style === 'bump') drawSpeedBump(g, z); else if (z.style === 'cables') drawCables(g, z); else if (z.style === 'balls') drawBallPit(g, z); else drawRug(g, z); }
+      else if (z.type === 'slope') { if (z.style === 'ramp') drawGarageRamp(g, z); else if (z.style !== 'tilt') drawSlope(g, z); }
+      else if (z.type === 'air') drawVent(g, z);
       else if (z.type === 'funnel') drawFunnel(g, z);
-      else if (z.type === 'slick') drawSlick(g, z);
+      else if (z.type === 'slick') { if (z.style === 'lane') drawLane(g, z); else if (z.style === 'airhockey') drawAirHockey(g, z); else drawSlick(g, z); }
       else if (z.style === 'coffee') drawCoffee(g, z);
       else if (z.style === 'pit') drawPit(g, z);
+      else if (z.style === 'puddle') drawPuddle(g, z);
+      else if (z.style === 'tile') drawOpenTile(g, z);
+      else if (z.style === 'pocket') drawPocket(g, z);
+      else if (z.style === 'gutter') drawGutter(g, z);
+      else if (z.style === 'drain') drawDrain(g, z);
     }
     g.restore();
   }
@@ -3519,7 +4255,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function drawBlock(g, b, sh) {
     const { x0, y0, x1, y1 } = b.bb, w = x1 - x0, hh = y1 - y0;
     g.save();
-    blockShadow(g, b, sh);
+    if (b.kind !== 'car') blockShadow(g, b, sh);
     g.lineJoin = 'round';
     if (b.kind === 'cabinet') {
       g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#8b97a8'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#566173'; g.stroke();
@@ -3607,6 +4343,136 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       }
       g.fillStyle = '#f07f1e';
       for (let i = 0; i <= n; i++) { const a = (i / n) * (len - 7); if (long) g.fillRect(x0 + a, y0, 7, hh); else g.fillRect(x0, y0 + a, w, 7); }
+    } else if (b.kind === 'car') {
+      // A parked car; face says which way its nose points.
+      const horiz = w >= hh, face = (b.face || 1) * (horiz && b.mir ? -1 : 1);
+      const ang = horiz ? (face > 0 ? 0 : Math.PI) : face > 0 ? Math.PI / 2 : -Math.PI / 2;
+      drawCarTop(g, x0 + w / 2, y0 + hh / 2, ang, b.color || '#8c96a3', horiz ? w : hh, horiz ? hh : w);
+    } else if (b.kind === 'ticket') {
+      g.beginPath(); rr(g, x0, y0, w, hh, 4); g.fillStyle = '#e2bd3a'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#7a5c0a'; g.stroke();
+      g.fillStyle = '#1b1d21'; g.fillRect(x0 + 4, y0 + 4, w - 8, hh * 0.38);
+      g.fillStyle = '#7fe3a0'; g.fillRect(x0 + 6, y0 + 6, w - 12, hh * 0.38 - 4);
+      g.fillStyle = '#1b1d21'; g.fillRect(x0 + w * 0.22, y0 + hh * 0.6, w * 0.56, 3);
+      circle(g, x0 + w / 2, y0 + hh * 0.8, 3.2); g.fillStyle = '#e8453a'; g.fill();
+    } else if (b.kind === 'core') {
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#80868e'; g.fill(); g.lineWidth = 3; g.strokeStyle = '#4e545c'; g.stroke();
+      g.save(); g.clip(); g.strokeStyle = 'rgba(40,44,50,0.22)'; g.lineWidth = 6;
+      for (let k = -hh; k < w + hh; k += 26) { g.beginPath(); g.moveTo(x0 + k, y0); g.lineTo(x0 + k - hh, y1); g.stroke(); }
+      g.restore();
+      if (b.label) { g.fillStyle = 'rgba(245,245,240,0.85)'; g.font = '800 22px ' + DISPLAY_FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; uprightText(g, b.label, x0 + w / 2, y0 + hh / 2); }
+    } else if (b.kind === 'island') {
+      g.beginPath(); rr(g, x0, y0, w, hh, Math.min(w, hh) * 0.35); g.fillStyle = '#e2bd3a'; g.fill();
+      g.beginPath(); rr(g, x0 + 5, y0 + 5, w - 10, hh - 10, Math.min(w, hh) * 0.3); g.fillStyle = '#9ea3a9'; g.fill();
+    } else if (b.kind === 'washwall') {
+      g.beginPath(); rr(g, x0, y0, w, hh, 6); g.fillStyle = '#1d4a86'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#102f5a'; g.stroke();
+      g.fillStyle = '#2f6fd6'; g.fillRect(x0 + 6, y0 + 6, w - 12, hh - 12);
+      g.fillStyle = '#ffd447';
+      for (let x = x0 + 18; x < x1 - 10; x += 34) { circle(g, x, y0 + hh / 2, 4); g.fill(); }
+      g.fillStyle = '#cfe3ff';
+      const face = y0 + hh / 2 < 300 ? y1 - 5 : y0 + 2;
+      for (let x = x0 + 10; x < x1 - 6; x += 16) g.fillRect(x, face, 6, 3);
+    } else if (b.kind === 'server') {
+      // A row of server cabinets: black doors, rack units, and status lights (the blinking ones are drawn live).
+      const long = w >= hh, len = long ? w : hh, n = Math.max(1, Math.round(len / 36));
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#14171c'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#05070a'; g.stroke();
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * len, s2 = len / n;
+        const cx0 = long ? x0 + a : x0, cy0 = long ? y0 : y0 + a, cw2 = long ? s2 : w, ch2 = long ? hh : s2;
+        g.fillStyle = '#1d2229'; g.fillRect(cx0 + 2, cy0 + 2, cw2 - 4, ch2 - 4);
+        g.strokeStyle = 'rgba(120,140,160,0.22)'; g.lineWidth = 1;
+        for (let k = 5; k < (long ? ch2 : cw2) - 3; k += 4) { g.beginPath(); if (long) { g.moveTo(cx0 + 4, cy0 + k); g.lineTo(cx0 + cw2 - 4, cy0 + k); } else { g.moveTo(cx0 + k, cy0 + 4); g.lineTo(cx0 + k, cy0 + ch2 - 4); } g.stroke(); }
+      }
+    } else if (b.kind === 'crac' || b.kind === 'chiller') {
+      g.beginPath(); rr(g, x0, y0, w, hh, 4); g.fillStyle = '#d8dde3'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#8f99a6'; g.stroke();
+      const n = b.kind === 'chiller' ? 2 : 1, long = w >= hh, fr = Math.min(long ? w / (n * 2.3) : w * 0.4, long ? hh * 0.4 : hh / (n * 2.3));
+      for (let i = 0; i < n; i++) {
+        const fx = long ? x0 + (w * (i + 0.5)) / n : x0 + w / 2, fy = long ? y0 + hh / 2 : y0 + (hh * (i + 0.5)) / n;
+        circle(g, fx, fy, fr); g.fillStyle = '#2b3038'; g.fill();
+        g.strokeStyle = '#8f99a6'; g.lineWidth = 1.5;
+        for (let k = 0; k < 5; k++) { const a = (k / 5) * TAU + fx; g.beginPath(); g.moveTo(fx, fy); g.lineTo(fx + Math.cos(a) * fr * 0.9, fy + Math.sin(a) * fr * 0.9); g.stroke(); }
+      }
+      if (b.label) { g.fillStyle = '#2b3038'; g.font = '600 9px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; uprightText(g, b.label, x0 + w / 2, long ? y1 - 6 : y0 + 8); }
+    } else if (b.kind === 'ups') {
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#4d5662'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#2b3038'; g.stroke();
+      const long = w >= hh, len = long ? w : hh, n = Math.max(1, Math.round(len / 48));
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * len, s2 = len / n, cx0 = long ? x0 + a : x0, cy0 = long ? y0 : y0 + a, cw2 = long ? s2 : w, ch2 = long ? hh : s2;
+        g.fillStyle = '#5d6774'; g.fillRect(cx0 + 3, cy0 + 3, cw2 - 6, ch2 - 6);
+        g.fillStyle = '#12151a'; g.fillRect(cx0 + cw2 / 2 - 8, cy0 + ch2 / 2 - 5, 16, 10);
+        g.fillStyle = i % 3 === 1 ? '#ffb020' : '#35d07f'; g.fillRect(cx0 + cw2 / 2 - 6, cy0 + ch2 / 2 - 3, i % 3 === 1 ? 5 : 11, 6);
+      }
+    } else if (b.kind === 'cage') {
+      g.fillStyle = 'rgba(120,140,165,0.28)'; g.fillRect(x0, y0, w, hh);
+      g.save(); g.beginPath(); g.rect(x0, y0, w, hh); g.clip();
+      g.strokeStyle = 'rgba(190,205,225,0.55)'; g.lineWidth = 1;
+      for (let k = -hh; k < w + hh; k += 6) { g.beginPath(); g.moveTo(x0 + k, y0); g.lineTo(x0 + k + hh, y1); g.moveTo(x0 + k, y1); g.lineTo(x0 + k + hh, y0); g.stroke(); }
+      g.restore();
+      g.fillStyle = '#56606e';
+      const long = w >= hh, n = Math.max(1, Math.round((long ? w : hh) / 60));
+      for (let i = 0; i <= n; i++) { const t = i / n; if (long) g.fillRect(x0 + t * (w - 5), y0 - 1, 5, hh + 2); else g.fillRect(x0 - 1, y0 + t * (hh - 5), w + 2, 5); }
+    } else if (b.kind === 'library') {
+      // A tape library: a long cabinet of cartridge slots with coloured labels.
+      g.beginPath(); rr(g, x0, y0, w, hh, 3); g.fillStyle = '#23272e'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#0c0e12'; g.stroke();
+      const rnd = mulberry32(Math.round(x0 + y0 * 3)), cols = ['#f4f4ef', '#ffd447', '#5bc0ff', '#ff7a59', '#35d07f'];
+      for (let x = x0 + 6; x < x1 - 8; x += 9) for (let y = y0 + 6; y < y1 - 8; y += 12) {
+        if (rnd() < 0.15) continue;
+        g.fillStyle = '#3a414b'; g.fillRect(x, y, 7, 10);
+        g.fillStyle = cols[Math.floor(rnd() * cols.length)]; g.fillRect(x + 1, y + 6, 5, 3);
+      }
+    } else if (b.kind === 'pipe') {
+      const long = w >= hh;
+      g.fillStyle = '#3a414b'; g.fillRect(x0, y0, w, hh);
+      for (const [f, col] of [[0.3, '#2f6fd6'], [0.72, '#e8453a']]) {
+        const gr = long ? g.createLinearGradient(0, y0 + hh * (f - 0.18), 0, y0 + hh * (f + 0.18)) : g.createLinearGradient(x0 + w * (f - 0.18), 0, x0 + w * (f + 0.18), 0);
+        gr.addColorStop(0, shade(col, -0.3)); gr.addColorStop(0.45, shade(col, 0.25)); gr.addColorStop(1, shade(col, -0.35));
+        g.fillStyle = gr;
+        if (long) g.fillRect(x0, y0 + hh * (f - 0.18), w, hh * 0.36); else g.fillRect(x0 + w * (f - 0.18), y0, w * 0.36, hh);
+        g.fillStyle = 'rgba(0,0,0,0.3)';
+        for (let k = 40; k < (long ? w : hh); k += 120) { if (long) g.fillRect(x0 + k, y0 + hh * (f - 0.22), 6, hh * 0.44); else g.fillRect(x0 + w * (f - 0.22), y0 + k, w * 0.44, 6); }
+      }
+    } else if (b.kind === 'patch') {
+      g.beginPath(); rr(g, x0, y0, w, hh, 3); g.fillStyle = '#1b1f25'; g.fill(); g.lineWidth = 1.5; g.strokeStyle = '#05070a'; g.stroke();
+      const cols = ['#2f6fd6', '#f2b705', '#ff7a2e', '#35a06a'];
+      for (let x = x0 + 6, i = 0; x < x1 - 4; x += 7, i++) { g.fillStyle = '#0b0d10'; g.fillRect(x, y0 + hh / 2 - 3, 5, 6); g.fillStyle = cols[i % 4]; g.fillRect(x + 1, y0 + hh / 2 + 3, 3, hh / 2 - 5); }
+    } else if (b.kind === 'bar') {
+      // A bar counter: dark wood, a polished top, glasses, and a neon strip underneath.
+      g.beginPath(); rr(g, x0, y0, w, hh, 6); g.fillStyle = '#3a2415'; g.fill(); g.lineWidth = 3; g.strokeStyle = 'rgba(255,80,190,0.8)'; g.stroke();
+      const long = w >= hh, front = long ? (y0 + hh / 2 < 300 ? 'bottom' : 'top') : x0 + w / 2 < 500 ? 'right' : 'left';
+      g.fillStyle = '#6b4226';
+      if (front === 'bottom') g.fillRect(x0 + 4, y1 - 12, w - 8, 8); else if (front === 'top') g.fillRect(x0 + 4, y0 + 4, w - 8, 8); else if (front === 'right') g.fillRect(x1 - 12, y0 + 4, 8, hh - 8); else g.fillRect(x0 + 4, y0 + 4, 8, hh - 8);
+      const rnd = mulberry32(Math.round(x0 * 5 + y0)), cols = ['#ffd447', '#9fd8ff', '#ff7a59', '#5cf08a', '#f4f4ef'];
+      for (let k = 0; k < Math.round((long ? w : hh) / 26); k++) {
+        const u = 12 + rnd() * ((long ? w : hh) - 24), v = 6 + rnd() * ((long ? hh : w) - 22);
+        const px = long ? x0 + u : x0 + v + 4, py = long ? y0 + v + 4 : y0 + u;
+        circle(g, px, py, 3.2); g.fillStyle = cols[k % cols.length]; g.fill(); g.lineWidth = 1; g.strokeStyle = 'rgba(255,255,255,0.5)'; g.stroke();
+      }
+    } else if (b.kind === 'arcade') {
+      const col = b.color || '#ff4fb8';
+      g.beginPath(); rr(g, x0, y0, w, hh, 4); g.fillStyle = '#16151f'; g.fill(); g.lineWidth = 3; g.strokeStyle = col; g.stroke();
+      g.fillStyle = shade(col, -0.2); g.fillRect(x0 + 4, y0 + 4, w - 8, hh * 0.22);
+      g.fillStyle = '#0a0a12'; g.fillRect(x0 + 7, y0 + hh * 0.34, w - 14, hh * 0.36);
+      g.fillStyle = withAlpha(col, 0.55); g.fillRect(x0 + 9, y0 + hh * 0.36, w - 18, hh * 0.32);
+      circle(g, x0 + w * 0.3, y1 - 6, 3); g.fillStyle = '#e8453a'; g.fill(); circle(g, x0 + w * 0.6, y1 - 6, 3); g.fillStyle = '#ffd447'; g.fill();
+    } else if (b.kind === 'sling') {
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#f4f4ef'; g.fill();
+      g.lineWidth = 5; g.strokeStyle = '#e0342b'; g.stroke();
+      const cx = b.pts.reduce((a, p) => a + p[0], 0) / 3, cy = b.pts.reduce((a, p) => a + p[1], 0) / 3;
+      circle(g, cx, cy, 7); g.fillStyle = '#ffd447'; g.fill();
+    } else if (b.kind === 'ring') {
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#8a5a33'; g.fill();
+      g.lineWidth = 2.5; g.strokeStyle = 'rgba(60,220,255,0.85)'; g.stroke();
+    } else if (b.kind === 'speaker') {
+      g.beginPath(); rr(g, x0, y0, w, hh, 4); g.fillStyle = '#121218'; g.fill(); g.lineWidth = 1.5; g.strokeStyle = '#34343f'; g.stroke();
+      const r = Math.min(w, hh) * 0.3;
+      circle(g, x0 + w / 2, y0 + hh / 2, r); g.fillStyle = '#26262f'; g.fill(); g.strokeStyle = '#4a4a58'; g.stroke();
+      circle(g, x0 + w / 2, y0 + hh / 2, r * 0.35); g.fillStyle = '#3a3a46'; g.fill();
+      circle(g, x0 + 5, y0 + 5, 2); g.fillStyle = '#ff4fb8'; g.fill();
+    } else if (b.kind === 'djbooth') {
+      g.beginPath(); rr(g, x0, y0, w, hh, 6); g.fillStyle = '#16151f'; g.fill(); g.lineWidth = 3; g.strokeStyle = 'rgba(60,220,255,0.85)'; g.stroke();
+      for (const u of [0.22, 0.78]) { circle(g, x0 + w * u, y0 + hh / 2, hh * 0.36); g.fillStyle = '#0a0a0e'; g.fill(); g.lineWidth = 1; g.strokeStyle = '#3a3a46'; g.stroke(); circle(g, x0 + w * u, y0 + hh / 2, hh * 0.1); g.fillStyle = '#ff4fb8'; g.fill(); }
+      g.fillStyle = '#2a2a36'; g.fillRect(x0 + w * 0.4, y0 + 6, w * 0.2, hh - 12);
+      const cols = ['#ff4fb8', '#3fe0ff', '#ffd447'];
+      for (let k = 0; k < 3; k++) { g.fillStyle = cols[k]; g.fillRect(x0 + w * 0.42 + k * w * 0.06, y0 + 10 + k * 5, 3, 8); }
     } else if (b.kind === 'trailer') {
       g.fillStyle = '#d9dde3'; g.fillRect(x0, y0, w, hh);
       g.strokeStyle = '#a4acb7'; g.lineWidth = 1.2;
@@ -3674,8 +4540,26 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       g.lineWidth = 1.5; g.strokeStyle = '#1b1d21'; g.stroke();
       g.fillStyle = '#5d6672'; g.fillRect(x - r * 0.62, y - r * 0.5, r * 1.24, r * 0.2); g.fillRect(x - r * 0.62, y + r * 0.3, r * 1.24, r * 0.2);
       g.fillRect(x - r * 0.1, y - r * 0.5, r * 0.2, r);
-    } else if (c.kind === 'hub') {
-      // Drawn above the clock hands, in the moving layer.
+    } else if (c.kind === 'bollard') {
+      circle(g, x, y, r); g.fillStyle = '#e2bd3a'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#7a5c0a'; g.stroke();
+      circle(g, x, y, r * 0.64); g.fillStyle = '#1b1d21'; g.fill();
+      circle(g, x, y, r * 0.44); g.fillStyle = '#f4d35e'; g.fill();
+    } else if (c.kind === 'charger') {
+      circle(g, x, y, r); g.fillStyle = '#eef1f4'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#8f99a6'; g.stroke();
+      circle(g, x, y, r * 0.66); g.lineWidth = 3; g.strokeStyle = '#35d07f'; g.stroke();
+      g.fillStyle = '#2b3038';
+      g.beginPath(); g.moveTo(x + 2, y - r * 0.5); g.lineTo(x - r * 0.3, y + 1); g.lineTo(x, y + 1); g.lineTo(x - 2, y + r * 0.5); g.lineTo(x + r * 0.3, y - 1); g.lineTo(x, y - 1); g.closePath(); g.fill();
+    } else if (c.kind === 'extinguisher') {
+      circle(g, x, y, r); g.fillStyle = '#d6302a'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#7d1720'; g.stroke();
+      circle(g, x - r * 0.25, y - r * 0.25, r * 0.35); g.fillStyle = 'rgba(255,255,255,0.3)'; g.fill();
+      g.fillStyle = '#1b1d21'; g.fillRect(x - 2, y - r - 3, 4, 8); g.fillRect(x - 2, y - r - 3, 9, 3);
+    } else if (c.kind === 'hightop') {
+      circle(g, x, y, r); g.fillStyle = '#1d1b2c'; g.fill(); g.lineWidth = 3; g.strokeStyle = 'rgba(60,220,255,0.8)'; g.stroke();
+      for (const [u, v, col] of [[-0.35, -0.3, '#ffd447'], [0.3, 0.2, '#ff7a59'], [-0.1, 0.45, '#9fd8ff']]) {
+        circle(g, x + u * r, y + v * r, 3.4); g.fillStyle = col; g.fill(); g.lineWidth = 1; g.strokeStyle = 'rgba(255,255,255,0.6)'; g.stroke();
+      }
+    } else if (c.kind === 'hub' || c.kind === 'pop') {
+      // Drawn in the moving layer: the clock's hub above the hands, and pop bumpers so they can flash.
     } else {
       circle(g, x, y, r); g.fillStyle = '#c3cbd5'; g.fill();
     }
@@ -3700,6 +4584,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function drawDecorUnder(g, h) {
     for (const d of h.decor) {
+      if (d.type === 'neon') {
+        g.save();
+        g.font = `800 26px ${DISPLAY_FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+        // Neon hangs on the wall, so it turns with the room on a sideways phone instead of standing upright.
+        g.shadowColor = d.color; g.shadowBlur = 14; g.fillStyle = d.color;
+        g.fillText(d.text, d.x, d.y); g.shadowBlur = 6; g.fillStyle = '#fff6fb'; g.fillText(d.text, d.x, d.y);
+        g.restore();
+        continue;
+      }
       if (d.type === 'shaft') {
         g.save();
         g.fillStyle = '#20262f'; g.fillRect(d.x, d.y, d.w, d.h);
@@ -3736,6 +4629,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         g.beginPath(); d.pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke();
         g.setLineDash([]);
       } else if (d.type === 'clock') drawClockFace(g, d);
+      else if (d.type === 'paint') {
+        g.fillStyle = d.color || 'rgba(240,240,232,0.5)'; g.font = `800 ${d.size || 26}px ${DISPLAY_FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+        uprightText(g, d.text, d.x, d.y);
+      }
       else if (d.type === 'car') {
         g.fillStyle = '#9aa5b3'; g.fillRect(d.x, d.y, d.w, d.h);
         g.strokeStyle = 'rgba(255,255,255,0.18)'; g.lineWidth = 1;
@@ -3746,13 +4643,29 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     g.restore();
     drawTee(g, h);
   }
+  // Things above the playing surface that don't move: the foosball rods.
+  function drawDecorOver(g, h) {
+    for (const d of h.decor) {
+      if (d.type === 'rod') {
+        g.save();
+        g.strokeStyle = 'rgba(6,10,16,0.3)'; g.lineWidth = 6; g.beginPath(); g.moveTo(d.x + 4, d.y0 + 5); g.lineTo(d.x + 4, d.y1 + 5); g.stroke();
+        g.strokeStyle = '#c9d0d8'; g.lineWidth = 5; g.beginPath(); g.moveTo(d.x, d.y0); g.lineTo(d.x, d.y1); g.stroke();
+        g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(d.x - 1, d.y0); g.lineTo(d.x - 1, d.y1); g.stroke();
+        g.fillStyle = '#1b1d21'; g.beginPath(); rr(g, d.x - 6, d.y0 - 18, 12, 24, 5); g.fill(); g.beginPath(); rr(g, d.x - 6, d.y1 - 6, 12, 24, 5); g.fill();
+        g.restore();
+      }
+    }
+  }
   function buildStatic() {
     const g = sctx, h = G.hole;
     g.setTransform(1, 0, 0, 1, 0, 0);
     g.fillStyle = theme(h).bg; g.fillRect(0, 0, staticCanvas.width, staticCanvas.height);
     if (!h) return;
     applyView(g);
-    if (theme(h).floor === 'concrete') drawConcrete(g); else drawCarpet(g);
+    const floor = theme(h).floor;
+    if (floor === 'concrete') drawConcrete(g);
+    else if (floor === 'carpet') drawCarpet(g);
+    else { const r = visibleWorldRect(); g.fillStyle = campusPattern(g, floor); g.fillRect(r.x0, r.y0, r.x1 - r.x0, r.y1 - r.y0); }
     drawDecorUnder(g, h);
     drawCourseBase(g, h);
     drawDecals(g, h);
@@ -3760,6 +4673,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     drawZonesStatic(g, h);
     for (const b of h.blocks) drawBlock(g, b, h.shadow);
     for (const c of h.bumpers) drawBumper(g, c, h.shadow);
+    drawDecorOver(g, h);
     g.setTransform(1, 0, 0, 1, 0, 0);
     const W = staticCanvas.width, H = staticCanvas.height;
     const vg = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.hypot(W, H) * 0.62);
@@ -3824,6 +4738,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         gr.addColorStop(0, c); gr.addColorStop(1, 'rgba(0,0,0,0)');
         g.fillStyle = gr; g.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
       });
+    } else if (z.style === 'suds') {
+      g.fillStyle = 'rgba(225,240,255,0.55)'; g.fill();
+      g.clip();
+      const rnd = mulberry32(Math.round(b.x0 + b.y0 * 5));
+      for (let i = 0; i < ((b.x1 - b.x0) * (b.y1 - b.y0)) / 90; i++) {
+        const x = lerp(b.x0, b.x1, rnd()), y = lerp(b.y0, b.y1, rnd()), r = 2 + rnd() * 6;
+        g.fillStyle = 'rgba(255,255,255,0.55)'; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill();
+        g.strokeStyle = 'rgba(150,190,230,0.5)'; g.lineWidth = 0.8; g.stroke();
+      }
     } else {
       g.fillStyle = 'rgba(150,205,255,0.35)'; g.fill();
       g.strokeStyle = 'rgba(210,235,255,0.5)'; g.lineWidth = 2; g.stroke();
@@ -3842,6 +4765,293 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     gr.addColorStop(0, '#07090c'); gr.addColorStop(1, '#171b21');
     g.fillStyle = gr; g.fill();
     g.lineWidth = 9; g.strokeStyle = hazardPattern(g); g.stroke();
+    g.restore();
+  }
+  // Speed bumps: yellow and black, rounded, with a highlight along the crown.
+  function drawSpeedBump(g, z) {
+    const b = z.bb, w = b.x1 - b.x0, hh = b.y1 - b.y0, horiz = w > hh;
+    g.save();
+    g.beginPath(); rr(g, b.x0, b.y0, w, hh, Math.min(w, hh) / 2);
+    g.fillStyle = hazardPattern(g); g.fill();
+    const gr = horiz ? g.createLinearGradient(0, b.y0, 0, b.y1) : g.createLinearGradient(b.x0, 0, b.x1, 0);
+    gr.addColorStop(0, 'rgba(0,0,0,0.4)'); gr.addColorStop(0.45, 'rgba(255,255,255,0.22)'); gr.addColorStop(1, 'rgba(0,0,0,0.45)');
+    g.fillStyle = gr; g.fill();
+    g.lineWidth = 1.5; g.strokeStyle = 'rgba(0,0,0,0.5)'; g.stroke();
+    g.restore();
+  }
+  // A garage ramp: bare concrete with anti-slip grooves across it and a painted arrow pointing down.
+  function drawGarageRamp(g, z) {
+    const b = z.bb, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2;
+    const l = Math.hypot(z.ax, z.ay) || 1, dx = z.ax / l, dy = z.ay / l, px = -dy, py = dx;
+    const half = (Math.abs(dx) * (b.x1 - b.x0) + Math.abs(dy) * (b.y1 - b.y0)) / 2, span = (Math.abs(px) * (b.x1 - b.x0) + Math.abs(py) * (b.y1 - b.y0)) / 2;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    const gr = g.createLinearGradient(cx - dx * half, cy - dy * half, cx + dx * half, cy + dy * half);
+    gr.addColorStop(0, 'rgba(150,156,164,0.55)'); gr.addColorStop(1, 'rgba(70,76,84,0.6)');
+    g.fillStyle = gr; g.fill();
+    g.clip();
+    g.strokeStyle = 'rgba(20,24,30,0.28)'; g.lineWidth = 2;
+    for (let k = -half; k <= half; k += 12) { g.beginPath(); g.moveTo(cx + dx * k - px * span, cy + dy * k - py * span); g.lineTo(cx + dx * k + px * span, cy + dy * k + py * span); g.stroke(); }
+    // The painted arrow.
+    g.fillStyle = 'rgba(245,245,240,0.75)';
+    const L = Math.min(half * 0.7, 60), W = Math.min(span * 0.5, 22);
+    g.beginPath();
+    g.moveTo(cx + dx * L, cy + dy * L);
+    g.lineTo(cx + dx * (L - 26) + px * W, cy + dy * (L - 26) + py * W);
+    g.lineTo(cx + dx * (L - 26) + px * W * 0.45, cy + dy * (L - 26) + py * W * 0.45);
+    g.lineTo(cx - dx * L + px * W * 0.45, cy - dy * L + py * W * 0.45);
+    g.lineTo(cx - dx * L - px * W * 0.45, cy - dy * L - py * W * 0.45);
+    g.lineTo(cx + dx * (L - 26) - px * W * 0.45, cy + dy * (L - 26) - py * W * 0.45);
+    g.lineTo(cx + dx * (L - 26) - px * W, cy + dy * (L - 26) - py * W);
+    g.closePath(); g.fill();
+    g.restore();
+  }
+  // A puddle deep enough to lose a ball in, with the ceiling lights reflected in it.
+  function drawPuddle(g, z) {
+    const b = z.bb, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2, R = Math.max(b.x1 - b.x0, b.y1 - b.y0) / 2;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    const gr = g.createRadialGradient(cx - R * 0.2, cy - R * 0.2, R * 0.1, cx, cy, R);
+    gr.addColorStop(0, '#2c4458'); gr.addColorStop(1, '#3f5a70');
+    g.fillStyle = gr; g.fill();
+    g.lineWidth = 3; g.strokeStyle = 'rgba(190,220,240,0.45)'; g.stroke();
+    g.clip();
+    g.fillStyle = 'rgba(235,245,255,0.3)';
+    g.beginPath(); g.ellipse(cx - R * 0.15, cy - R * 0.1, R * 0.45, 3.5, 0, 0, TAU); g.fill();
+    g.beginPath(); g.ellipse(cx + R * 0.2, cy + R * 0.25, R * 0.3, 2.5, 0, 0, TAU); g.fill();
+    g.restore();
+  }
+  // Cable spaghetti under an open run of floor.
+  function drawCables(g, z) {
+    const b = z.bb, rnd = mulberry32(Math.round(b.x0 * 7 + b.y0 * 3));
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts); g.fillStyle = '#20252c'; g.fill();
+    g.clip();
+    const cols = ['#2f6fd6', '#f2b705', '#ff7a2e', '#8a939e', '#35a06a', '#e8453a', '#c39bff', '#5bc0ff'];
+    g.lineCap = 'round';
+    for (let i = 0; i < 40; i++) {
+      const x0 = lerp(b.x0 - 20, b.x1 + 20, rnd()), y0 = lerp(b.y0 - 20, b.y1 + 20, rnd()), x1 = lerp(b.x0 - 20, b.x1 + 20, rnd()), y1 = lerp(b.y0 - 20, b.y1 + 20, rnd());
+      g.beginPath(); g.moveTo(x0, y0);
+      g.bezierCurveTo(lerp(x0, x1, 0.3) + (rnd() - 0.5) * 90, lerp(y0, y1, 0.3) + (rnd() - 0.5) * 90, lerp(x0, x1, 0.7) + (rnd() - 0.5) * 90, lerp(y0, y1, 0.7) + (rnd() - 0.5) * 90, x1, y1);
+      g.strokeStyle = 'rgba(0,0,0,0.4)'; g.lineWidth = 5.5; g.stroke();
+      g.strokeStyle = cols[i % cols.length]; g.lineWidth = 3.4; g.stroke();
+    }
+    g.restore();
+    g.save(); g.beginPath(); tracePoly(g, z.pts); g.lineWidth = 3; g.strokeStyle = 'rgba(242,183,5,0.7)'; g.setLineDash([9, 6]); g.stroke(); g.restore();
+  }
+  // A lifted floor tile: a drop into the dark underfloor, with the cable trays down there.
+  function drawOpenTile(g, z) {
+    const b = z.bb, w = b.x1 - b.x0, hh = b.y1 - b.y0;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    g.fillStyle = '#05070a'; g.fill();
+    g.clip();
+    g.strokeStyle = 'rgba(70,110,160,0.45)'; g.lineWidth = 4;
+    for (const f of [0.35, 0.65]) { g.beginPath(); g.moveTo(b.x0, b.y0 + hh * f); g.lineTo(b.x1, b.y0 + hh * f + 6); g.stroke(); }
+    g.strokeStyle = 'rgba(242,183,5,0.35)'; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(b.x0 + w * 0.2, b.y0); g.lineTo(b.x0 + w * 0.3, b.y1); g.stroke();
+    const sh = g.createLinearGradient(b.x0, b.y0, b.x0, b.y0 + hh * 0.5);
+    sh.addColorStop(0, 'rgba(0,0,0,0.8)'); sh.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = sh; g.fillRect(b.x0, b.y0, w, hh);
+    g.restore();
+    g.save(); g.beginPath(); tracePoly(g, z.pts); g.lineWidth = 6; g.strokeStyle = hazardPattern(g); g.stroke(); g.restore();
+  }
+  // Air: a grille where the fan blows through, with arrows showing which way. The moving air is drawn live.
+  function drawVent(g, z) {
+    const b = z.bb, l = Math.hypot(z.ax, z.ay) || 1, dx = z.ax / l, dy = z.ay / l, px = -dy, py = dx;
+    const cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts); g.fillStyle = 'rgba(150,210,255,0.1)'; g.fill();
+    g.clip();
+    g.fillStyle = 'rgba(0,20,30,0.2)';
+    for (let x = Math.floor(b.x0 / 12) * 12; x < b.x1; x += 12) for (let y = Math.floor(b.y0 / 12) * 12; y < b.y1; y += 12) { g.beginPath(); g.arc(x + 6, y + 6, 2, 0, TAU); g.fill(); }
+    g.strokeStyle = 'rgba(190,235,255,0.4)'; g.lineWidth = 3; g.lineCap = 'round'; g.lineJoin = 'round';
+    const n = Math.max(1, Math.round((Math.abs(px) * (b.x1 - b.x0) + Math.abs(py) * (b.y1 - b.y0)) / 70));
+    for (let i = 0; i < n; i++) {
+      const o = (i - (n - 1) / 2) * 70, ox = cx + px * o, oy = cy + py * o;
+      g.beginPath(); g.moveTo(ox - dx * 8 + px * 10, oy - dy * 8 + py * 10); g.lineTo(ox + dx * 6, oy + dy * 6); g.lineTo(ox - dx * 8 - px * 10, oy - dy * 8 - py * 10); g.stroke();
+    }
+    g.restore();
+    g.save(); g.beginPath(); tracePoly(g, z.pts); g.lineWidth = 2; g.strokeStyle = 'rgba(160,220,255,0.4)'; g.setLineDash([6, 5]); g.stroke(); g.restore();
+  }
+  function drawAirLive(g, z, t) {
+    const k = airPower(z, t);
+    if (k < 0.02) return;
+    const b = z.bb, l = Math.hypot(z.ax, z.ay) || 1, dx = z.ax / l, dy = z.ay / l, px = -dy, py = dx;
+    const cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2, R = Math.hypot(b.x1 - b.x0, b.y1 - b.y0) / 2;
+    g.save(); g.beginPath(); tracePoly(g, z.pts); g.clip();
+    g.strokeStyle = `rgba(215,245,255,${(0.42 * k).toFixed(3)})`; g.lineWidth = 2; g.lineCap = 'round';
+    const rnd = mulberry32(Math.round(b.x0 + b.y0 * 7)), speed = 70 + l * 0.6;
+    for (let i = 0; i < 30; i++) {
+      const lane = (rnd() - 0.5) * 2 * R, off = rnd() * 2 * R, len = 16 + rnd() * 28;
+      const s = ((off + t * speed * (0.8 + rnd() * 0.4)) % (2 * R)) - R;
+      const x = cx + px * lane + dx * s, y = cy + py * lane + dy * s;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + dx * len * k, y + dy * len * k); g.stroke();
+    }
+    g.restore();
+  }
+  // A ball pit: hundreds of plastic balls inside a padded rim.
+  function drawBallPit(g, z) {
+    const b = z.bb, rnd = mulberry32(Math.round(b.x0 * 3 + b.y1));
+    const cols = ['#ff4f6d', '#3fa9ff', '#ffd447', '#5cd672', '#b57bff', '#ff9a3c'];
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts); g.fillStyle = '#20183a'; g.fill();
+    g.clip();
+    for (let i = 0; i < ((b.x1 - b.x0) * (b.y1 - b.y0)) / 40; i++) {
+      const x = lerp(b.x0, b.x1, rnd()), y = lerp(b.y0, b.y1, rnd()), c = cols[Math.floor(rnd() * cols.length)];
+      g.fillStyle = shade(c, -0.35); g.beginPath(); g.arc(x + 0.8, y + 1, 5.2, 0, TAU); g.fill();
+      g.fillStyle = c; g.beginPath(); g.arc(x, y, 4.8, 0, TAU); g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.45)'; g.beginPath(); g.arc(x - 1.6, y - 1.6, 1.4, 0, TAU); g.fill();
+    }
+    g.restore();
+    g.save(); g.beginPath(); tracePoly(g, z.pts); g.lineWidth = 7; g.strokeStyle = '#3fa9ff'; g.stroke(); g.lineWidth = 2.5; g.strokeStyle = '#ffd447'; g.stroke(); g.restore();
+  }
+  // A polished wooden lane: maple boards, a foul line and the aiming arrows.
+  function drawLane(g, z) {
+    const b = z.bb, w = b.x1 - b.x0, hh = b.y1 - b.y0, horiz = w >= hh;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    const gr = horiz ? g.createLinearGradient(0, b.y0, 0, b.y1) : g.createLinearGradient(b.x0, 0, b.x1, 0);
+    gr.addColorStop(0, '#caa06a'); gr.addColorStop(0.5, '#e2c08e'); gr.addColorStop(1, '#c79c64');
+    g.fillStyle = gr; g.fill();
+    g.clip();
+    g.strokeStyle = 'rgba(110,70,30,0.22)'; g.lineWidth = 1;
+    const across = horiz ? hh : w, n = Math.max(3, Math.round(across / 8));
+    for (let i = 1; i < n; i++) {
+      g.beginPath();
+      if (horiz) { const y = b.y0 + (i * hh) / n; g.moveTo(b.x0, y); g.lineTo(b.x1, y); } else { const x = b.x0 + (i * w) / n; g.moveTo(x, b.y0); g.lineTo(x, b.y1); }
+      g.stroke();
+    }
+    if (z.arrows) {
+      const [ax, ay] = z.arrows;
+      g.fillStyle = 'rgba(60,30,10,0.55)';
+      for (let i = -2; i <= 2; i++) {
+        const x = horiz ? ax + Math.abs(i) * 14 * z.arrowDir : ax + i * (w / 7), y = horiz ? ay + i * (hh / 7) : ay + Math.abs(i) * 14 * z.arrowDir;
+        g.beginPath();
+        if (horiz) { g.moveTo(x + 9 * z.arrowDir, y); g.lineTo(x - 5 * z.arrowDir, y - 4); g.lineTo(x - 5 * z.arrowDir, y + 4); }
+        else { g.moveTo(x, y + 9 * z.arrowDir); g.lineTo(x - 4, y - 5 * z.arrowDir); g.lineTo(x + 4, y - 5 * z.arrowDir); }
+        g.closePath(); g.fill();
+      }
+    }
+    g.fillStyle = 'rgba(255,255,255,0.14)';
+    if (horiz) g.fillRect(b.x0, b.y0 + hh * 0.2, w, hh * 0.12); else g.fillRect(b.x0 + w * 0.2, b.y0, w * 0.12, hh);
+    g.restore();
+  }
+  // An air hockey table: white, with a grid of air holes, a center line and two creases.
+  function drawAirHockey(g, z) {
+    const b = z.bb, w = b.x1 - b.x0, hh = b.y1 - b.y0, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2, horiz = w >= hh;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts); g.fillStyle = '#e8f1f8'; g.fill();
+    g.clip();
+    g.fillStyle = 'rgba(40,70,110,0.28)';
+    for (let x = b.x0 + 8; x < b.x1; x += 16) for (let y = b.y0 + 8; y < b.y1; y += 16) { g.beginPath(); g.arc(x, y, 1.3, 0, TAU); g.fill(); }
+    g.lineWidth = 3; g.strokeStyle = 'rgba(232,69,58,0.8)';
+    g.beginPath(); if (horiz) { g.moveTo(cx, b.y0); g.lineTo(cx, b.y1); } else { g.moveTo(b.x0, cy); g.lineTo(b.x1, cy); } g.stroke();
+    circle(g, cx, cy, Math.min(w, hh) * 0.18); g.stroke();
+    g.strokeStyle = 'rgba(47,111,214,0.7)';
+    if (horiz) { g.beginPath(); g.arc(b.x0, cy, hh * 0.24, -Math.PI / 2, Math.PI / 2); g.stroke(); g.beginPath(); g.arc(b.x1, cy, hh * 0.24, Math.PI / 2, Math.PI * 1.5); g.stroke(); }
+    else { g.beginPath(); g.arc(cx, b.y0, w * 0.24, 0, Math.PI); g.stroke(); g.beginPath(); g.arc(cx, b.y1, w * 0.24, Math.PI, TAU); g.stroke(); }
+    g.restore();
+  }
+  // A pool table pocket: a dark hole in a leather cup.
+  function drawPocket(g, z) {
+    const b = z.bb, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2, r = (b.x1 - b.x0) / 2;
+    g.save();
+    circle(g, cx, cy, r + 3); g.fillStyle = '#3b2615'; g.fill();
+    const gr = g.createRadialGradient(cx - r * 0.2, cy - r * 0.2, 1, cx, cy, r);
+    gr.addColorStop(0, '#000'); gr.addColorStop(1, '#1a1410');
+    circle(g, cx, cy, r); g.fillStyle = gr; g.fill();
+    g.lineWidth = 1.5; g.strokeStyle = 'rgba(255,220,170,0.25)'; g.beginPath(); g.arc(cx, cy, r + 1.5, -2.6, -0.6); g.stroke();
+    g.restore();
+  }
+  // A bowling gutter: a rounded metal channel.
+  function drawGutter(g, z) {
+    const b = z.bb, w = b.x1 - b.x0, hh = b.y1 - b.y0, horiz = w >= hh;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    const gr = horiz ? g.createLinearGradient(0, b.y0, 0, b.y1) : g.createLinearGradient(b.x0, 0, b.x1, 0);
+    gr.addColorStop(0, '#2a2e36'); gr.addColorStop(0.5, '#10131a'); gr.addColorStop(1, '#2a2e36');
+    g.fillStyle = gr; g.fill();
+    g.strokeStyle = 'rgba(200,210,225,0.35)'; g.lineWidth = 1.5;
+    g.beginPath(); if (horiz) { g.moveTo(b.x0, b.y0 + hh * 0.5); g.lineTo(b.x1, b.y0 + hh * 0.5); } else { g.moveTo(b.x0 + w * 0.5, b.y0); g.lineTo(b.x0 + w * 0.5, b.y1); } g.stroke();
+    g.restore();
+  }
+  // The pinball outhole between the flippers.
+  function drawDrain(g, z) {
+    const b = z.bb;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    const gr = g.createLinearGradient(b.x0, b.y0, b.x0, b.y1);
+    gr.addColorStop(0, '#1a0b1f'); gr.addColorStop(1, '#040205');
+    g.fillStyle = gr; g.fill();
+    g.lineWidth = 3; g.strokeStyle = 'rgba(255,80,190,0.8)'; g.stroke();
+    g.restore();
+  }
+  // Where a garage ramp comes out onto the next level: a dark mouth with chevrons, lit up when a ball arrives.
+  function drawRampMouth(g, x0, x1, y, arriveT) {
+    g.save();
+    const gr = g.createLinearGradient(0, y - 4, 0, y + WALL_T + 6);
+    gr.addColorStop(0, '#565d66'); gr.addColorStop(1, '#1b1e23');
+    g.fillStyle = gr; g.fillRect(x0, y, x1 - x0, WALL_T + 6);
+    g.fillStyle = arriveT > 0 ? '#ffd447' : 'rgba(255,212,71,0.6)';
+    for (let x = x0 + 12; x < x1 - 8; x += 22) { g.beginPath(); g.moveTo(x, y + WALL_T); g.lineTo(x + 7, y + 4); g.lineTo(x + 14, y + WALL_T); g.lineTo(x + 10, y + WALL_T); g.lineTo(x + 7, y + 9); g.lineTo(x + 4, y + WALL_T); g.closePath(); g.fill(); }
+    g.restore();
+  }
+  // Everything on the ground that moves: belts, ripples, the shredder's teeth and moving air.
+  // A dance floor of light-up tiles.
+  function drawDanceFloor(g, z, t) {
+    const b = z.bb, S = 40, cols = ['255,80,190', '60,220,255', '255,212,71', '92,240,138', '160,110,255'];
+    g.save(); g.beginPath(); tracePoly(g, z.pts); g.clip();
+    g.fillStyle = '#0d0c18'; g.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+    for (let x = b.x0, i = 0; x < b.x1; x += S, i++) for (let y = b.y0, j = 0; y < b.y1; y += S, j++) {
+      const k = (i * 7 + j * 13) % 5, on = 0.35 + 0.65 * Math.max(0, Math.sin(t * 2.2 + i * 1.3 + j * 0.7));
+      g.fillStyle = `rgba(${cols[(k + Math.floor(t * 0.8)) % 5]},${(0.55 * on).toFixed(3)})`; g.fillRect(x + 2, y + 2, S - 4, S - 4);
+    }
+    g.restore();
+  }
+  // The spinning floor: a giant record with its label going round.
+  function drawTurntable(g, z, t) {
+    const a = z.w * t;
+    g.save();
+    circle(g, z.x, z.y, z.r + 6); g.fillStyle = '#2a2a36'; g.fill();
+    const gr = g.createRadialGradient(z.x - z.r * 0.3, z.y - z.r * 0.3, z.r * 0.1, z.x, z.y, z.r);
+    gr.addColorStop(0, '#26262e'); gr.addColorStop(1, '#0b0b0f');
+    circle(g, z.x, z.y, z.r); g.fillStyle = gr; g.fill();
+    g.strokeStyle = 'rgba(255,255,255,0.07)'; g.lineWidth = 1;
+    for (let r = z.r * 0.42; r < z.r - 4; r += 6) { circle(g, z.x, z.y, r); g.stroke(); }
+    g.save(); g.translate(z.x, z.y); g.rotate(a);
+    g.fillStyle = 'rgba(255,255,255,0.08)'; g.beginPath(); g.moveTo(0, 0); g.arc(0, 0, z.r - 3, -0.25, 0.25); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(0, 0); g.arc(0, 0, z.r - 3, Math.PI - 0.25, Math.PI + 0.25); g.closePath(); g.fill();
+    circle(g, 0, 0, z.r * 0.36); g.fillStyle = '#ff4fb8'; g.fill();
+    g.fillStyle = '#1b1020'; g.font = `800 ${Math.round(z.r * 0.11)}px ${DISPLAY_FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('NINE-TO-FIVE', 0, -z.r * 0.14); g.fillText('LINKS', 0, z.r * 0.14);
+    g.restore();
+    circle(g, z.x, z.y, 5); g.fillStyle = '#c9d0d8'; g.fill();
+    g.restore();
+  }
+  function drawSlide(g, z, t) {
+    const b = z.bb, horiz = z.dir[0] !== 0;
+    g.save(); g.beginPath(); tracePoly(g, z.pts); g.clip();
+    const gr = horiz ? g.createLinearGradient(0, b.y0, 0, b.y1) : g.createLinearGradient(b.x0, 0, b.x1, 0);
+    gr.addColorStop(0, '#e08a12'); gr.addColorStop(0.5, '#ffd447'); gr.addColorStop(1, '#e08a12');
+    g.fillStyle = gr; g.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+    const k = (t * 0.6) % 1, len = horiz ? b.x1 - b.x0 : b.y1 - b.y0, pos = (z.dir[0] + z.dir[1] > 0 ? k : 1 - k) * len;
+    g.fillStyle = 'rgba(255,255,255,0.3)';
+    if (horiz) g.fillRect(b.x0 + pos - 30, b.y0, 60, b.y1 - b.y0); else g.fillRect(b.x0, b.y0 + pos - 30, b.x1 - b.x0, 60);
+    g.fillStyle = '#e8453a';
+    if (horiz) { g.fillRect(b.x0, b.y0, b.x1 - b.x0, 5); g.fillRect(b.x0, b.y1 - 5, b.x1 - b.x0, 5); } else { g.fillRect(b.x0, b.y0, 5, b.y1 - b.y0); g.fillRect(b.x1 - 5, b.y0, 5, b.y1 - b.y0); }
+    g.restore();
+  }
+  function drawZonesLive(g, h, t) {
+    g.save(); coursePath(g, h); g.clip();
+    for (const z of h.zones) if (z.type === 'dance') drawDanceFloor(g, z, t);
+    for (const z of h.zones) {
+      if (z.type === 'conveyor') { if (z.skin === 'slide') drawSlide(g, z, t); else drawConveyor(g, z, t); }
+      else if (z.type === 'turntable') drawTurntable(g, z, t);
+      else if (z.type === 'air') drawAirLive(g, z, t);
+      else if (z.style === 'coffee') drawRipples(g, z, t);
+    }
+    for (const z of h.zones) if (z.style === 'shredder') drawShredder(g, z, t);
     g.restore();
   }
   // A roller conveyor: slats move with the belt, and yellow guard rails run along both sides.
@@ -3933,13 +5143,13 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function drawGlows(g, h) {
     g.save();
     g.globalCompositeOperation = 'lighter';
-    for (const [x, y, r] of h.lamps) {
+    for (const [x, y, r, col = '255,190,110', k = 0.1] of h.lamps) {
       const gr = g.createRadialGradient(x, y, 0, x, y, r * 0.8);
-      gr.addColorStop(0, 'rgba(255,190,110,0.1)'); gr.addColorStop(1, 'rgba(255,190,110,0)');
+      gr.addColorStop(0, `rgba(${col},${k})`); gr.addColorStop(1, `rgba(${col},0)`);
       g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2);
     }
     for (const m of h.movers) {
-      if (m.type === 'slider' && m.kind === 'forklift') {
+      if (m.type === 'slider' && (m.kind === 'forklift' || m.kind === 'car')) {
         const horiz = Math.abs(m.b[0] - m.a[0]) >= Math.abs(m.b[1] - m.a[1]), L = horiz ? m.w : m.h, a = forkliftAngle(m);
         const fx = m.cx + Math.cos(a) * L * 0.5, fy = m.cy + Math.sin(a) * L * 0.5, reach = 170;
         const gr = g.createRadialGradient(fx, fy, 0, fx, fy, reach);
@@ -4087,6 +5297,36 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       g.fillStyle = '#b98a52'; g.fillRect(-r * 1.4, -r * 0.4, r * 2.8, r * 0.8);
       g.strokeStyle = '#7a5530'; g.lineWidth = 1; g.strokeRect(-r * 1.4, -r * 0.4, r * 2.8, r * 0.8);
     },
+    tape(g, r) {
+      g.fillStyle = '#23272e'; g.fillRect(-r, -r * 0.9, r * 2, r * 1.8);
+      g.fillStyle = '#5bc0ff'; g.fillRect(-r * 0.8, r * 0.3, r * 1.6, r * 0.45);
+      g.fillStyle = '#f4f4ef'; g.fillRect(-r * 0.6, -r * 0.6, r * 1.2, r * 0.5);
+    },
+    // Pool balls: solids, stripes and the eight, numbered.
+    pool(g, r, p) {
+      const n = p.n || 1, cols = ['#f2c12e', '#2f5fd0', '#e0342b', '#6c3fb0', '#f07f1e', '#2a8a4a', '#8a2a2a', '#16171a'];
+      const col = cols[(n - 1) % 8], stripe = n > 8;
+      g.save(); g.rotate(-p.rot);
+      circle(g, 0, 0, r); g.fillStyle = stripe ? '#f7f5ee' : col; g.fill();
+      if (stripe) { g.save(); circle(g, 0, 0, r); g.clip(); g.fillStyle = col; g.fillRect(-r, -r * 0.55, r * 2, r * 1.1); g.restore(); }
+      circle(g, 0, 0, r * 0.46); g.fillStyle = '#f7f5ee'; g.fill();
+      g.fillStyle = '#16171a'; g.font = `700 ${Math.round(r * 0.8)}px "Work Sans", sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(n), 0, 0.5);
+      circle(g, -r * 0.35, -r * 0.4, r * 0.25); g.fillStyle = 'rgba(255,255,255,0.45)'; g.fill();
+      g.restore();
+    },
+    // A bowling pin: from above it's a white disc with red neck stripes; knocked down, you see its side.
+    pin(g, r, p) {
+      if (p.fallen) {
+        g.beginPath(); g.ellipse(-r * 0.3, 0, r * 1.25, r * 0.85, 0, 0, TAU); g.fillStyle = '#f7f5ee'; g.fill();
+        g.beginPath(); g.ellipse(r * 1.1, 0, r * 0.62, r * 0.5, 0, 0, TAU); g.fill();
+        g.fillStyle = '#e0342b'; g.fillRect(r * 0.45, -r * 0.45, r * 0.18, r * 0.9); g.fillRect(r * 0.72, -r * 0.4, r * 0.14, r * 0.8);
+        g.strokeStyle = 'rgba(0,0,0,0.25)'; g.lineWidth = 1; g.beginPath(); g.ellipse(-r * 0.3, 0, r * 1.25, r * 0.85, 0, 0, TAU); g.stroke();
+        return;
+      }
+      circle(g, 0, 0, r); g.fillStyle = '#f7f5ee'; g.fill(); g.lineWidth = 1; g.strokeStyle = 'rgba(0,0,0,0.25)'; g.stroke();
+      circle(g, 0, 0, r * 0.62); g.strokeStyle = '#e0342b'; g.lineWidth = 1.6; g.stroke();
+      circle(g, 0, 0, r * 0.4); g.fillStyle = '#fbfaf4'; g.fill();
+    },
   };
   function drawConveyor(g, z, t) {
     if (z.skin === 'rollers') { drawRollers(g, z, t); return; }
@@ -4146,6 +5386,25 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const sh = h.shadow;
     for (const m of h.movers) {
       if (m.type === 'slider' && m.kind === 'forklift') drawForklift(g, m, sh);
+      else if (m.type === 'slider' && m.kind === 'car') {
+        const horiz = Math.abs(m.b[0] - m.a[0]) >= Math.abs(m.b[1] - m.a[1]);
+        drawCarTop(g, m.cx, m.cy, forkliftAngle(m), m.color || '#e8453a', horiz ? m.w : m.h, horiz ? m.h : m.w);
+      } else if (m.type === 'slider' && (m.kind === 'tapebot' || m.kind === 'crash')) drawBot(g, m, sh);
+      else if (m.type === 'slider' && m.kind === 'mallet') {
+        circle(g, m.cx + sh[0] * 0.7, m.cy + sh[1] * 0.7, m.r); g.fillStyle = 'rgba(6,10,16,0.34)'; g.fill();
+        circle(g, m.cx, m.cy, m.r); g.fillStyle = m.color || '#e8453a'; g.fill(); g.lineWidth = 2; g.strokeStyle = shade(m.color || '#e8453a', -0.4); g.stroke();
+        circle(g, m.cx, m.cy, m.r * 0.5); g.fillStyle = shade(m.color || '#e8453a', 0.2); g.fill(); g.strokeStyle = 'rgba(0,0,0,0.3)'; g.stroke();
+        circle(g, m.cx - m.r * 0.15, m.cy - m.r * 0.15, m.r * 0.18); g.fillStyle = 'rgba(255,255,255,0.45)'; g.fill();
+      } else if (m.type === 'slider' && m.kind === 'foos') {
+        const x0 = m.cx - m.w / 2, y0 = m.cy - m.h / 2, col = m.color || '#e0342b';
+        g.fillStyle = 'rgba(6,10,16,0.3)'; g.fillRect(x0 + sh[0] * 0.6, y0 + sh[1] * 0.6, m.w, m.h);
+        g.beginPath(); rr(g, x0, y0, m.w, m.h, 5); g.fillStyle = col; g.fill(); g.lineWidth = 1.2; g.strokeStyle = shade(col, -0.45); g.stroke();
+        g.fillStyle = shade(col, -0.3); g.fillRect(x0 + 2, m.cy - 2, m.w - 4, 4);
+        circle(g, m.cx, m.cy, 5); g.fillStyle = '#f1c7a5'; g.fill(); g.strokeStyle = 'rgba(0,0,0,0.3)'; g.stroke();
+      } else if (m.type === 'spinner' && m.kind === 'flipper') drawFlipper(g, m, sh);
+      else if (m.type === 'spinner' && m.kind === 'barrier') drawBarrier(g, m, sh);
+      else if (m.type === 'spinner' && m.kind === 'cardoor') drawCarDoor(g, m, sh);
+      else if (m.type === 'spinner' && m.kind === 'brush') drawWashBrush(g, m, sh);
       else if (m.type === 'spinner' && m.kind === 'robot') drawRobotArm(g, m, sh);
       else if (m.type === 'slider') {
         const x0 = m.cx - m.w / 2, y0 = m.cy - m.h / 2;
@@ -4178,7 +5437,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         g.save();
         g.beginPath(); g.rect(m.x0, m.y - m.depth - 2, m.x1 - m.x0, m.depth + 2); g.clip();
         for (const p of doorPanels(m)) {
-          g.fillStyle = m.style === 'gate' ? hazardPattern(g) : '#b3bdc9'; g.fillRect(p.x0, p.y0, p.x1 - p.x0, p.y1 - p.y0);
+          g.fillStyle = m.style === 'gate' ? hazardPattern(g) : m.style === 'glass' ? 'rgba(170,215,240,0.75)' : m.style === 'cage' ? 'rgba(120,140,165,0.8)' : '#b3bdc9';
+          g.fillRect(p.x0, p.y0, p.x1 - p.x0, p.y1 - p.y0);
+          if (m.style === 'cage') { g.strokeStyle = 'rgba(210,222,238,0.6)'; g.lineWidth = 1; for (let x = p.x0 - 12; x < p.x1; x += 6) { g.beginPath(); g.moveTo(x, p.y1); g.lineTo(x + 12, p.y0); g.stroke(); } }
           g.strokeStyle = '#6f7a88'; g.lineWidth = 1.5; g.strokeRect(p.x0 + 0.75, p.y0 + 0.75, p.x1 - p.x0 - 1.5, p.y1 - p.y0 - 1.5);
           g.strokeStyle = 'rgba(255,255,255,0.35)'; g.lineWidth = 1;
           g.beginPath(); g.moveTo(p.x0 + 4, p.y0 + 4); g.lineTo(p.x1 - 4, p.y0 + 4); g.stroke();
@@ -4189,12 +5450,111 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       }
     }
     for (const c of h.bumpers) {
+      if (c.kind === 'pop') { drawPopBumper(g, c, h, sh); continue; }
       if (c.kind !== 'hub') continue;
       g.save();
       circle(g, c.x, c.y, c.r); g.fillStyle = '#141a26'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#d9dee6'; g.stroke();
       circle(g, c.x, c.y, c.r * 0.42); g.fillStyle = '#e2b541'; g.fill();
       g.restore();
     }
+  }
+  // A pinball flipper: a white paddle with a red rubber edge.
+  function drawFlipper(g, m, sh) {
+    const r0 = m.w * 0.62, r1 = m.w * 0.36;
+    const shape = () => { g.beginPath(); g.arc(0, 0, r0, Math.PI / 2, Math.PI * 1.5); g.lineTo(m.len, -r1); g.arc(m.len, 0, r1, -Math.PI / 2, Math.PI / 2); g.closePath(); };
+    g.save();
+    g.save(); g.translate(m.x + sh[0] * 0.8, m.y + sh[1] * 0.8); g.rotate(m.angle); shape(); g.fillStyle = 'rgba(6,10,16,0.34)'; g.fill(); g.restore();
+    g.translate(m.x, m.y); g.rotate(m.angle);
+    shape(); g.fillStyle = '#f4f4ef'; g.fill(); g.lineWidth = 3; g.strokeStyle = '#e0342b'; g.stroke();
+    circle(g, 0, 0, r0 * 0.45); g.fillStyle = '#9aa3ae'; g.fill();
+    g.restore();
+  }
+  // A pinball pop bumper: it lights up when it kicks.
+  function drawPopBumper(g, c, h, sh) {
+    const lit = c.hitT != null && h.t - c.hitT < 0.16, col = c.glow || 'rgba(255,90,200,0.85)';
+    g.save();
+    circle(g, c.x + sh[0] * 0.8, c.y + sh[1] * 0.8, c.r); g.fillStyle = 'rgba(6,10,16,0.34)'; g.fill();
+    if (lit) { const gr = g.createRadialGradient(c.x, c.y, c.r * 0.5, c.x, c.y, c.r * 2.2); gr.addColorStop(0, col); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; circle(g, c.x, c.y, c.r * 2.2); g.fill(); }
+    circle(g, c.x, c.y, c.r); g.fillStyle = '#1b1b24'; g.fill();
+    circle(g, c.x, c.y, c.r * 0.86); g.lineWidth = 4; g.strokeStyle = lit ? '#ffffff' : col; g.stroke();
+    circle(g, c.x, c.y, c.r * 0.55); g.fillStyle = lit ? '#ffffff' : '#f4f4ef'; g.fill();
+    circle(g, c.x, c.y, c.r * 0.3); g.fillStyle = col; g.fill();
+    g.restore();
+  }
+  // A tape library robot, or a crash cart with its monitor and keyboard.
+  function drawBot(g, m, sh) {
+    const x0 = m.cx - m.w / 2, y0 = m.cy - m.h / 2;
+    g.save();
+    g.beginPath(); rr(g, x0 + sh[0] * 0.8, y0 + sh[1] * 0.8, m.w, m.h, 5); g.fillStyle = 'rgba(6,10,16,0.34)'; g.fill();
+    if (m.kind === 'tapebot') {
+      g.beginPath(); rr(g, x0, y0, m.w, m.h, 5); g.fillStyle = '#c9d0d8'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#6f7a88'; g.stroke();
+      g.fillStyle = '#2b3038'; g.fillRect(x0 + m.w * 0.2, y0 + 5, m.w * 0.6, m.h - 10);
+      g.fillStyle = '#3a414b'; g.fillRect(x0 + m.w * 0.3, y0 + m.h / 2 - 3, m.w * 0.4, 6);
+      circle(g, x0 + 7, y0 + 7, 3); g.fillStyle = (G.clock * 2) % 1 < 0.5 ? '#39d0ff' : '#1a6a8a'; g.fill();
+    } else {
+      g.beginPath(); rr(g, x0, y0, m.w, m.h, 4); g.fillStyle = '#56606e'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#2b3038'; g.stroke();
+      g.fillStyle = '#1b1d21'; g.fillRect(x0 + 4, y0 + 4, m.w * 0.5, m.h - 8);
+      g.fillStyle = '#5bc0ff'; g.fillRect(x0 + 6, y0 + 6, m.w * 0.5 - 4, m.h - 12);
+      g.fillStyle = '#d7dbe0'; g.fillRect(x0 + m.w * 0.6, y0 + 5, m.w * 0.32, m.h - 10);
+    }
+    g.restore();
+  }
+  // Status lights on the racks, blinking at their own pace.
+  function drawBlinkers(g, h) {
+    const t = G.clock;
+    for (const b of h.blocks) {
+      if (b.kind !== 'server') continue;
+      const { x0, y0, x1, y1 } = b.bb, long = x1 - x0 >= y1 - y0, len = long ? x1 - x0 : y1 - y0, n = Math.max(1, Math.round(len / 36));
+      for (let i = 0; i < n; i++) {
+        const a = ((i + 0.5) / n) * len;
+        for (let k = 0; k < 3; k++) {
+          const seed = (i * 7 + k * 13 + Math.round(x0)) % 17, on = Math.sin(t * (1.3 + seed * 0.37) + seed) > -0.2;
+          if (!on) continue;
+          const x = long ? x0 + a - 8 + k * 8 : x0 + 5 + ((x1 - x0 - 10) * k) / 2, y = long ? y0 + 5 + ((y1 - y0 - 10) * k) / 2 : y0 + a - 8 + k * 8;
+          g.fillStyle = seed % 5 === 0 ? '#ffb020' : seed % 3 === 0 ? '#39d0ff' : '#35d07f';
+          g.fillRect(x - 1.2, y - 1.2, 2.4, 2.4);
+        }
+      }
+    }
+  }
+  // A parking barrier: a striped arm on a post, with a light that goes green when it's up.
+  function drawBarrier(g, m, sh) {
+    const L = m.len, up = Math.abs(m.angle - m.a0) > Math.abs(m.amp) * 0.9;
+    g.save();
+    g.save(); g.translate(m.x + sh[0], m.y + sh[1]); g.rotate(m.angle); g.fillStyle = 'rgba(6,10,16,0.3)'; g.fillRect(0, -m.w / 2, L, m.w); g.restore();
+    g.save(); g.translate(m.x, m.y); g.rotate(m.angle);
+    g.beginPath(); rr(g, 0, -m.w / 2, L, m.w, m.w / 2); g.fillStyle = '#f4f4ef'; g.fill();
+    g.save(); g.clip(); g.fillStyle = '#e8453a'; for (let x = 18; x < L; x += 30) g.fillRect(x, -m.w, 15, m.w * 2); g.restore();
+    g.lineWidth = 1.2; g.strokeStyle = 'rgba(0,0,0,0.4)'; g.stroke();
+    g.restore();
+    g.beginPath(); rr(g, m.x - 14, m.y - 14, 28, 28, 5); g.fillStyle = '#e2bd3a'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#7a5c0a'; g.stroke();
+    circle(g, m.x, m.y, 5.5); g.fillStyle = up ? '#35d07f' : '#ff4a3d'; g.fill();
+    g.restore();
+  }
+  // Somebody's car door, flung open into the aisle.
+  function drawCarDoor(g, m, sh) {
+    g.save();
+    g.save(); g.translate(m.x + sh[0] * 0.6, m.y + sh[1] * 0.6); g.rotate(m.angle); g.fillStyle = 'rgba(6,10,16,0.3)'; g.fillRect(0, -m.w / 2, m.len, m.w); g.restore();
+    g.translate(m.x, m.y); g.rotate(m.angle);
+    g.beginPath(); rr(g, 0, -m.w / 2, m.len, m.w, 3); g.fillStyle = m.color || '#2f6fb3'; g.fill(); g.lineWidth = 1.2; g.strokeStyle = 'rgba(0,0,0,0.5)'; g.stroke();
+    g.fillStyle = 'rgba(20,30,45,0.8)'; g.fillRect(m.len * 0.12, -m.w / 2 + 1.5, m.len * 0.6, m.w * 0.42);
+    g.fillStyle = '#d7dbe0'; g.fillRect(m.len * 0.78, 0.5, 7, 2.5);
+    g.restore();
+  }
+  // A car wash brush: a boom covered in pink and blue foam strips, turning round a hub.
+  function drawWashBrush(g, m, sh) {
+    g.save();
+    g.save(); g.translate(m.x + sh[0], m.y + sh[1]); g.rotate(m.angle); g.fillStyle = 'rgba(6,10,16,0.28)'; g.fillRect(0, -m.w * 0.6, m.len, m.w * 1.2); g.restore();
+    g.translate(m.x, m.y); g.rotate(m.angle);
+    const n = Math.max(4, Math.round(m.len / 11));
+    for (let i = 0; i < n; i++) {
+      const x = 14 + (i * (m.len - 18)) / (n - 1), wob = Math.sin(G.clock * 9 + i) * 1.5;
+      g.fillStyle = i % 2 ? '#ff5fa2' : '#4fb3ff';
+      g.beginPath(); rr(g, x - 3.5 + wob, -m.w * 0.62, 7, m.w * 1.24, 3); g.fill();
+    }
+    g.fillStyle = '#c9d2dc'; g.fillRect(0, -2.5, m.len, 5);
+    g.restore();
+    circle(g, m.x, m.y, 12); g.fillStyle = '#1d4a86'; g.fill(); g.lineWidth = 3; g.strokeStyle = '#ffd447'; g.stroke();
   }
   function drawRoomba(g, m, sh) {
     const { x, y, r, dir } = m, fx = Math.cos(dir), fy = Math.sin(dir), sx = -fy, sy = fx;
@@ -4219,6 +5579,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function drawArrivals(g, h) {
     for (const tp of h.teleports) {
       const [x0, x1, y] = tp.arrive, w = x1 - x0, mid = (x0 + x1) / 2;
+      if (tp.style === 'ramp') { drawRampMouth(g, x0, x1, y, tp.arriveT); continue; }
       let o = 0;
       if (tp.arriveT > 0) {
         const t = 1.4 - tp.arriveT;
@@ -4369,13 +5730,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (!h) return;
     const t = h.t;
     applyView(g);
-    g.save(); coursePath(g, h); g.clip();
-    for (const z of h.zones) {
-      if (z.type === 'conveyor') drawConveyor(g, z, t);
-      else if (z.style === 'coffee') drawRipples(g, z, t);
-    }
-    for (const z of h.zones) if (z.style === 'shredder') drawShredder(g, z, t);
-    g.restore();
+    drawZonesLive(g, h, t);
+    drawBlinkers(g, h);
     drawArrivals(g, h);
     drawCupHole(g, h);
     drawProps(g, h);
@@ -4509,19 +5865,37 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
 
   // ---------------------------------------------------------------------------
-  // The campus: both buildings and the grounds around them as one living map. Coworkers walk the halls,
+  // The campus: every building and the grounds around them as one living map. Coworkers walk the halls,
   // traffic runs down the street, clouds drift over, and the sun follows your own clock.
   // ---------------------------------------------------------------------------
   const SLOT_W = 1040, SLOT_H = 660, SLOT_GAP = 120, BLD_PAD = 130;
   const BLD_W = BLD_PAD * 2 + SLOT_W * 3 + SLOT_GAP * 2, BLD_H = BLD_PAD * 2 + SLOT_H * 3 + SLOT_GAP * 2;
+  // Front doors are on each building's bottom wall, except in the second row, where they face the lot and the yard.
   const CAMPUS = {
-    w: 9400, h: 4300,
-    bld: { office: { x: 700, y: 440, name: 'HEAD OFFICE' }, factory: { x: 5080, y: 440, name: 'FACTORY FLOOR' } },
+    w: 13800, h: 7700,
+    bld: {
+      office: { x: 700, y: 440, name: 'HEAD OFFICE' }, factory: { x: 5080, y: 440, name: 'FACTORY FLOOR' }, gameroom: { x: 9460, y: 440, name: 'GAME ROOM' },
+      garage: { x: 700, y: 4700, name: 'PARKING GARAGE', door: 'top' }, datacenter: { x: 5080, y: 4700, name: 'DATA CENTER', door: 'top' },
+    },
     street: [4460, 4940],
+    street2: [8840, 9320],
     lot: [900, 3140, 4200, 3900],
     yard: [5200, 3040, 8600, 4100],
     plaza: [2110, 2920, 2910, 3140],
     pond: [330, 1700, 230, 380],
+    patio: [9660, 3060, 12880, 4200],
+    field: [9660, 4700, 13080, 7180],
+    drives: [[2410, 3900, 2610, 4700], [6790, 4100, 6990, 4700]],
+  };
+  // Where trees don't grow: the lot, the yard, paths, the patio, the field and the data center's fenced yard.
+  CAMPUS.paved = [CAMPUS.lot, CAMPUS.yard, CAMPUS.plaza, CAMPUS.patio, CAMPUS.field, ...CAMPUS.drives, [100, 2640, 2110, 2730], [560, 700, 650, 2730], [4940, 3000, 5200, 3400], [260, 720, 600, 1080], [5035, 7180, 8745, 7400], [11170, 2920, 11370, 4760], [9320, 2960, 9660, 3060]];
+  // How each building looks from above: its floor, walls, front door and trim.
+  const BLD_LOOK = {
+    office: { floor: 'carpet', wall: '#c3ccd7', door: '#e6ebf1', windows: true },
+    factory: { floor: 'concrete', wall: '#6b7480', door: '#f2b705', windows: true, trim: 'rgba(242,183,5,0.5)' },
+    gameroom: { floor: 'arcade', wall: '#2b2846', door: '#ff4fb8', windows: true, trim: 'rgba(255,80,190,0.6)' },
+    garage: { floor: 'garage', wall: '#8d9299', door: '#e2bd3a', dash: [150, 70], trim: 'rgba(226,189,58,0.55)' },
+    datacenter: { floor: 'raised', wall: '#3b424c', door: '#39d0ff', trim: 'rgba(80,220,255,0.45)' },
   };
   const OV_Z = 0.22, LIVE_Z = 0.26;
   // Holes run through each building in a snake: left to right, back again, then across once more.
@@ -4572,8 +5946,49 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       for (let i = 0; i <= 4; i++) { x.beginPath(); x.moveTo(0, i * 40); x.lineTo(w, i * 40); x.stroke(); }
       for (let j = 0; j < 4; j++) for (let i = 0; i <= 2; i++) { const ox = (j % 2) * 40 + i * 80; x.beginPath(); x.moveTo(ox, j * 40); x.lineTo(ox, j * 40 + 40); x.stroke(); }
     });
+    else if (kind === 'garage') c = tileCanvas(384, 800, (x, w, h) => {
+      // Two rows of parking bays either side of an aisle, drawn at twice the size.
+      const r = mulberry32(21);
+      for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) { const v = 62 + Math.floor(r() * 7); x.fillStyle = `rgb(${v},${v + 3},${v + 7})`; x.fillRect(i * 96, j * 200, 96, 200); }
+      for (let i = 0; i < 8; i++) { x.fillStyle = 'rgba(8,10,14,0.2)'; x.beginPath(); x.ellipse(48 + (i % 2) * 192 + r() * 40, (i < 4 ? 150 : 650) + r() * 60, 20 + r() * 26, 12 + r() * 14, r() * 3, 0, TAU); x.fill(); }
+      x.fillStyle = 'rgba(238,240,242,0.8)';
+      for (const X of [0, 192]) { x.fillRect(X, 20, 6, 280); x.fillRect(X, 500, 6, 280); }
+      x.fillStyle = '#d8b53a';
+      for (const X of [44, 236]) { x.fillRect(X, 26, 100, 12); x.fillRect(X, 762, 100, 12); }
+      x.fillStyle = 'rgba(216,181,58,0.55)';
+      for (let X = 20; X < w; X += 120) x.fillRect(X, 396, 60, 8);
+    });
+    else if (kind === 'raised') c = tileCanvas(240, 240, (x, w) => {
+      // Raised floor: 60 cm tiles, with a perforated one letting cold air up.
+      for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) { x.fillStyle = (i + j) % 2 ? '#8b949e' : '#858e98'; x.fillRect(i * 120, j * 120, 120, 120); }
+      x.fillStyle = '#434a54';
+      for (let i = 0; i < 9; i++) for (let j = 0; j < 9; j++) { x.beginPath(); x.arc(132 + i * 12, 12 + j * 12, 3, 0, TAU); x.fill(); }
+      x.strokeStyle = '#5a626d'; x.lineWidth = 4;
+      for (let i = 0; i <= 2; i++) { x.beginPath(); x.moveTo(i * 120, 0); x.lineTo(i * 120, w); x.moveTo(0, i * 120); x.lineTo(w, i * 120); x.stroke(); }
+      x.strokeStyle = 'rgba(255,255,255,0.12)'; x.lineWidth = 2;
+      for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) x.strokeRect(i * 120 + 4, j * 120 + 4, 112, 112);
+    });
+    else if (kind === 'arcade') c = tileCanvas(480, 480, (x, w) => {
+      // Bowling-alley carpet: dark, with neon squiggles, stars and triangles.
+      x.fillStyle = '#17153a'; x.fillRect(0, 0, w, w);
+      const r = mulberry32(8), cols = ['#ff4fb8', '#3fe0ff', '#ffd447', '#5cf08a', '#9b6bff'];
+      x.lineWidth = 5; x.lineCap = 'round'; x.lineJoin = 'round';
+      for (let i = 0; i < 26; i++) {
+        const cx = r() * w, cy = r() * w, col = cols[i % cols.length], k = r(), a = r() * TAU;
+        x.globalAlpha = 0.55; x.strokeStyle = col; x.fillStyle = col;
+        x.save(); x.translate(cx, cy); x.rotate(a);
+        if (k < 0.35) { x.beginPath(); for (let j = 0; j < 5; j++) x.lineTo(-30 + j * 15, j % 2 ? 10 : -10); x.stroke(); }
+        else if (k < 0.6) { x.beginPath(); x.moveTo(0, -14); x.lineTo(13, 10); x.lineTo(-13, 10); x.closePath(); x.stroke(); }
+        else if (k < 0.8) { x.beginPath(); x.arc(0, 0, 10, 0, TAU); x.stroke(); }
+        else { x.beginPath(); x.moveTo(-18, 0); x.bezierCurveTo(-8, -18, 8, 18, 18, 0); x.stroke(); }
+        x.restore();
+      }
+      x.globalAlpha = 1;
+      for (let i = 0; i < 90; i++) { x.fillStyle = cols[i % cols.length]; x.globalAlpha = 0.5; x.beginPath(); x.arc(r() * w, r() * w, 2.5, 0, TAU); x.fill(); }
+      x.globalAlpha = 1;
+    });
     const p = g.createPattern(c, 'repeat');
-    const scale = kind === 'carpet' || kind === 'paving' ? 0.5 : 1;
+    const scale = kind === 'carpet' || kind === 'paving' || kind === 'garage' || kind === 'raised' || kind === 'arcade' ? 0.5 : 1;
     if (p.setTransform && typeof DOMMatrix === 'function') p.setTransform(new DOMMatrix().scaleSelf(scale, scale));
     m[kind] = p;
     return p;
@@ -4643,7 +6058,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     ready: false, holes: [], nodes: [], npcs: [], cars: [], parked: [], trees: [], lamps: [], ducks: [], clouds: [], birds: [],
     cam: { x: 4700, y: 2100, z: 0.12, rot: 0 }, goal: null, drag: null, pointers: new Map(), idle: 0, sel: null, mins: 0,
     overview: null, lightMap: null, flight: null, prevScreen: null, lastSay: 0,
-    // Builds every hole of both buildings with today's pins, plus the grounds, the walkways and the people.
+    // Builds every hole of every building with today's pins, plus the grounds, the walkways and the people.
     build() {
       if (this.ready) return;
       const keepCourse = COURSE.id, keepMode = PH;
@@ -4674,80 +6089,114 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       return changed;
     },
     buildGrounds() {
-      const rnd = mulberry32(2024);
-      // Trees along the top lawn, around the pond, and down both sides of the street.
-      for (let x = 150; x < CAMPUS.w; x += 260 + rnd() * 120) this.trees.push([x, 180 + rnd() * 120, 60 + rnd() * 30]);
+      const rnd = mulberry32(2024), W = CAMPUS.w, H = CAMPUS.h;
+      const clear = (x, y, r) => !Object.values(CAMPUS.bld).some(b => x > b.x - r - 40 && x < b.x + BLD_W + r + 40 && y > b.y - r - 40 && y < b.y + BLD_H + r + 40)
+        && !CAMPUS.paved.some(([x0, y0, x1, y1]) => x > x0 - r && x < x1 + r && y > y0 - r && y < y1 + r);
+      // Trees along the top and bottom lawns, round the pond, down both sides of each street, and between the rows.
+      for (let x = 150; x < W; x += 260 + rnd() * 120) { this.trees.push([x, 180 + rnd() * 120, 60 + rnd() * 30]); this.trees.push([x + 70, H - 190 - rnd() * 120, 60 + rnd() * 30]); }
       for (let i = 0; i < 16; i++) this.trees.push([80 + rnd() * 500, 500 + rnd() * 3500, 50 + rnd() * 35]);
-      for (let y = 600; y < 2900; y += 420) { this.trees.push([4390, y, 48]); this.trees.push([5010, y + 200, 48]); }
+      for (let i = 0; i < 12; i++) this.trees.push([80 + rnd() * 500, 4400 + rnd() * 2900, 50 + rnd() * 35]);
+      for (const [sx0, sx1] of [CAMPUS.street, CAMPUS.street2]) for (let y = 600; y < H - 300; y += 420) {
+        if (Math.abs(y - 3010) < 240 || Math.abs(y - 4400) < 240 || Math.abs(y + 200 - 3010) < 240 || Math.abs(y + 200 - 4400) < 240) continue;
+        this.trees.push([sx0 - 70, y, 48]); this.trees.push([sx1 + 70, y + 200, 48]);
+      }
+      for (let x = 900; x < 4300; x += 280 + rnd() * 140) this.trees.push([x, 4150 + rnd() * 330, 50 + rnd() * 28]);
+      for (let x = 5200; x < 8700; x += 280 + rnd() * 140) this.trees.push([x, 4280 + rnd() * 200, 50 + rnd() * 28]);
       this.trees = this.trees.filter(([x, y, r]) => {
         const [px, py, rx, ry] = CAMPUS.pond;
-        return ((x - px) / (rx + r)) ** 2 + ((y - py) / (ry + r)) ** 2 > 1;
+        return ((x - px) / (rx + r)) ** 2 + ((y - py) / (ry + r)) ** 2 > 1 && clear(x, y, r);
       });
       const cols = ['#e8453a', '#f4f1ea', '#2f6fb3', '#1b1d21', '#8c96a3', '#ffd447', '#35a06a', '#c39bff'];
       const [lx0, ly0, lx1, ly1] = CAMPUS.lot;
       for (let x = lx0 + 60; x < lx1 - 40; x += 72) {
+        if (x > 2370 && x < 2650) continue;
         if (rnd() < 0.8) this.parked.push([x, ly0 + 110, Math.PI / 2, cols[Math.floor(rnd() * cols.length)]]);
         if (rnd() < 0.7) this.parked.push([x, ly1 - 110, -Math.PI / 2, cols[Math.floor(rnd() * cols.length)]]);
       }
-      for (let y = 200; y < CAMPUS.h; y += 420) { this.lamps.push([4420, y, 260]); this.lamps.push([4980, y + 210, 260]); }
+      for (const [sx0, sx1] of [CAMPUS.street, CAMPUS.street2]) for (let y = 200; y < H; y += 420) { this.lamps.push([sx0 - 40, y, 260]); this.lamps.push([sx1 + 40, y + 210, 260]); }
       for (let x = lx0 + 200; x < lx1; x += 600) this.lamps.push([x, (ly0 + ly1) / 2, 320]);
       for (const id of Object.keys(CAMPUS.bld)) for (let i = 0; i < 9; i++) { const s = slotRect(id, i); this.lamps.push([s.cx, s.cy, 700]); }
-      this.lamps.push([2510, 3030, 300], [6890, 3300, 380], [7800, 3500, 380]);
+      this.lamps.push([2510, 3030, 300], [6890, 3300, 380], [7800, 3500, 380], [2510, 4300, 260], [6890, 4400, 260]);
+      // String lights over the patio, and floodlights on the sports field.
+      const [qx0, qy0, qx1, qy1] = CAMPUS.patio;
+      for (let x = qx0 + 200; x < qx1; x += 420) for (let y = qy0 + 180; y < qy1; y += 380) this.lamps.push([x, y, 240]);
+      const [fx0, fy0, fx1, fy1] = CAMPUS.field;
+      for (const [x, y] of [[fx0, fy0], [fx1, fy0], [fx0, fy1], [fx1, fy1]]) this.lamps.push([x, y, 1100]);
     },
     buildPeople() {
       const rnd = mulberry32(99), nodes = this.nodes, add = (x, y, zone) => { nodes.push({ x, y, zone, n: [] }); return nodes.length - 1; };
       const link = (a, b) => { nodes[a].n.push(b); nodes[b].n.push(a); };
       const doors = {};
       for (const id of Object.keys(CAMPUS.bld)) {
-        const b = CAMPUS.bld[id];
+        const b = CAMPUS.bld[id], front = b.door === 'top' ? 0 : 3;
         const xs = [b.x + BLD_PAD / 2, b.x + BLD_PAD + SLOT_W + SLOT_GAP / 2, b.x + BLD_PAD + 2 * SLOT_W + 1.5 * SLOT_GAP, b.x + BLD_W - BLD_PAD / 2];
         const ys = [b.y + BLD_PAD / 2, b.y + BLD_PAD + SLOT_H + SLOT_GAP / 2, b.y + BLD_PAD + 2 * SLOT_H + 1.5 * SLOT_GAP, b.y + BLD_H - BLD_PAD / 2];
         const grid = ys.map(y => xs.map(x => add(x, y, id)));
-        for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) { if (c < 3 && r !== 3) link(grid[r][c], grid[r][c + 1]); if (r < 3) link(grid[r][c], grid[r + 1][c]); }
-        // The bottom hallway has the front door in the middle.
-        const mid = add(b.x + BLD_W / 2, ys[3], id);
-        link(grid[3][0], grid[3][1]); link(grid[3][1], mid); link(mid, grid[3][2]); link(grid[3][2], grid[3][3]);
-        doors[id] = add(b.x + BLD_W / 2, b.y + BLD_H + 90, 'out');
+        for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) { if (c < 3 && r !== front) link(grid[r][c], grid[r][c + 1]); if (r < 3) link(grid[r][c], grid[r + 1][c]); }
+        // The front hallway has the door in the middle: at the bottom, or at the top for the buildings in the second row.
+        const mid = add(b.x + BLD_W / 2, ys[front], id);
+        link(grid[front][0], grid[front][1]); link(grid[front][1], mid); link(mid, grid[front][2]); link(grid[front][2], grid[front][3]);
+        doors[id] = add(b.x + BLD_W / 2, front ? b.y + BLD_H + 90 : b.y - 90, 'out');
         link(mid, doors[id]);
       }
+      const chain = (...ids) => { for (let i = 1; i < ids.length; i++) link(ids[i - 1], ids[i]); };
       const west = add(4400, 3010, 'out'), east = add(5000, 3010, 'out');
-      link(doors.office, west); link(west, east); link(east, doors.factory);
+      chain(doors.office, west, east, doors.factory);
+      chain(doors.factory, add(8780, 3010, 'out'), add(9380, 3010, 'out'), doors.gameroom);
       const lot = [1500, 2500, 3500].map(x => add(x, (CAMPUS.lot[1] + CAMPUS.lot[3]) / 2, 'out'));
       link(doors.office, lot[1]); link(lot[0], lot[1]); link(lot[1], lot[2]);
+      const drive = add(2510, 4250, 'out');
+      chain(lot[1], drive, doors.garage);
       const bench = add(560, 2700, 'out'), pond = add(660, 1700, 'out'), cafe = add(420, 900, 'out');
-      link(lot[0], bench); link(bench, pond); link(pond, cafe);
+      chain(lot[0], bench, pond, cafe);
       const yard = add(6890, 3400, 'out'), yard2 = add(8000, 3400, 'out');
-      link(doors.factory, yard); link(yard, yard2);
+      chain(doors.factory, yard, yard2);
+      const dcDrive = add(6890, 4400, 'out');
+      chain(yard, dcDrive, doors.datacenter);
+      chain(drive, add(4400, 4400, 'out'), add(5000, 4400, 'out'), dcDrive);
+      // The patio outside the game room, and a running track round the sports field.
+      const [qx0, qy0, qx1, qy1] = CAMPUS.patio, patio = [add((qx0 + qx1) / 2, qy0 + 300, 'out'), add(qx0 + 500, (qy0 + qy1) / 2, 'out'), add(qx1 - 500, (qy0 + qy1) / 2, 'out'), add((qx0 + qx1) / 2, qy1 - 200, 'out')];
+      chain(doors.gameroom, patio[0], patio[1], patio[3], patio[2], patio[0]);
+      const [fx0, fy0, fx1, fy1] = CAMPUS.field, tcx = (fx0 + fx1) / 2, tcy = (fy0 + fy1) / 2, trx = (fx1 - fx0) / 2 - 170, try2 = (fy1 - fy0) / 2 - 150;
+      const track = Array.from({ length: 12 }, (_, i) => add(tcx + Math.cos((i / 12) * TAU) * trx, tcy + Math.sin((i / 12) * TAU) * try2, 'out'));
+      for (let i = 0; i < 12; i++) link(track[i], track[(i + 1) % 12]);
+      chain(patio[3], track[9]);
+      chain(dcDrive, add(8780, 4400, 'out'), add(9380, 4400, 'out'), track[6]);
       const skins = ['#f1c7a5', '#d9a47c', '#b07a52', '#7d4f33', '#5a3825', '#f6d7c3'];
       const hairs = ['#1b1d21', '#4a3020', '#8a5a2a', '#c9a15a', '#6b6b6b', '#2a2a40'];
       const shirts = ['#3f63d4', '#e8453a', '#35a06a', '#f4f1ea', '#c39bff', '#ff8fc7', '#2b3038', '#5bc0ff', '#ffd447'];
-      for (let i = 0; i < 34; i++) {
-        const zone = i < 16 ? 'office' : i < 28 ? 'factory' : 'out';
-        const pool = nodes.map((nd, k) => k).filter(k => nodes[k].zone === zone);
+      const plan = [['office', 16], ['factory', 12], ['gameroom', 10], ['garage', 6], ['datacenter', 6], ['out', 10]];
+      let i = 0;
+      for (const [zone, count] of plan) for (let k = 0; k < count; k++, i++) {
+        const pool = nodes.map((nd, j) => j).filter(j => nodes[j].zone === zone);
         const at = pool[Math.floor(rnd() * pool.length)], [name, dept] = COWORKERS[i % COWORKERS.length];
         this.npcs.push({
           x: nodes[at].x, y: nodes[at].y, node: at, next: at, prev: -1, dir: rnd() * TAU, speed: 38 + rnd() * 30, pause: rnd() * 3, phase: rnd() * 6,
           skin: skins[Math.floor(rnd() * skins.length)], hair: hairs[Math.floor(rnd() * hairs.length)], shirt: shirts[Math.floor(rnd() * shirts.length)],
-          hat: zone === 'factory' && rnd() < 0.8, vest: zone === 'factory' && rnd() < 0.6, name, dept, say: '', sayT: 0,
+          hat: zone === 'factory' && rnd() < 0.8, vest: (zone === 'factory' && rnd() < 0.6) || (zone === 'garage' && rnd() < 0.3), name, dept, say: '', sayT: 0,
         });
       }
       const carCols = ['#e8453a', '#f4f1ea', '#2f6fb3', '#ffd447', '#35a06a', '#1b1d21', '#c39bff'];
-      for (let i = 0; i < 7; i++) this.cars.push({ lane: i % 2, y: rnd() * CAMPUS.h, speed: 170 + rnd() * 90, color: carCols[i % carCols.length] });
-      // Things in the halls: plants where the office hallways cross, and stock and drums on the factory floor.
+      for (let k = 0; k < 12; k++) {
+        const [sx0, sx1] = k < 7 ? CAMPUS.street : CAMPUS.street2, down = k % 2 === 1;
+        this.cars.push({ x: down ? sx0 + 120 : sx1 - 120, dir: down ? 1 : -1, y: rnd() * CAMPUS.h, speed: 170 + rnd() * 90, color: carCols[k % carCols.length] });
+      }
+      // Things in the halls: plants in the office, stock and drums on the factory floor, parked cars in the garage,
+      // racks in the data center, and arcade cabinets in the game room.
       this.decor = [];
       for (const nd of nodes) {
-        if (nd.zone === 'office' && rnd() < 0.7) this.decor.push({ k: 'plant', x: nd.x + (rnd() < 0.5 ? -44 : 44), y: nd.y + (rnd() < 0.5 ? -44 : 44) });
-        if (nd.zone === 'factory' && rnd() < 0.55) {
-          const x = nd.x + (rnd() < 0.5 ? -52 : 52), y = nd.y + (rnd() < 0.5 ? -52 : 52);
-          if (rnd() < 0.5) this.decor.push({ k: 'pallet', x, y });
-          else this.decor.push({ k: 'drums', x, y });
-        }
+        const ox = rnd() < 0.5 ? -52 : 52, oy = rnd() < 0.5 ? -52 : 52, roll = rnd();
+        if (nd.zone === 'office' && roll < 0.7) this.decor.push({ k: 'plant', x: nd.x + (ox > 0 ? 44 : -44), y: nd.y + (oy > 0 ? 44 : -44) });
+        else if (nd.zone === 'factory' && roll < 0.55) this.decor.push({ k: rnd() < 0.5 ? 'pallet' : 'drums', x: nd.x + ox, y: nd.y + oy });
+        else if (nd.zone === 'garage' && roll < 0.6) this.decor.push({ k: 'car', x: nd.x + ox * 1.2, y: nd.y + oy * 0.4, c: carCols[Math.floor(rnd() * carCols.length)], a: rnd() < 0.5 ? 0 : Math.PI });
+        else if (nd.zone === 'datacenter' && roll < 0.6) this.decor.push({ k: 'rack', x: nd.x + ox, y: nd.y + oy });
+        else if (nd.zone === 'gameroom' && roll < 0.65) this.decor.push({ k: 'arcade', x: nd.x + ox, y: nd.y + oy, c: ['#ff4fb8', '#3fe0ff', '#ffd447', '#9b6bff'][Math.floor(rnd() * 4)] });
       }
       const ob = CAMPUS.bld.office;
       this.decor.push({ k: 'desk', x: ob.x + BLD_W / 2, y: ob.y + BLD_H - 70 });
       const [px, py, rx, ry] = CAMPUS.pond;
-      for (let i = 0; i < 3; i++) this.ducks.push({ a: rnd() * TAU, r: 0.4 + rnd() * 0.4, speed: (0.05 + rnd() * 0.05) * (rnd() < 0.5 ? -1 : 1), px, py, rx, ry, bob: rnd() * 6 });
-      for (let i = 0; i < 6; i++) this.clouds.push({ x: rnd() * CAMPUS.w, y: rnd() * CAMPUS.h, s: 5 + rnd() * 6, speed: 18 + rnd() * 14 });
+      for (let k = 0; k < 3; k++) this.ducks.push({ a: rnd() * TAU, r: 0.4 + rnd() * 0.4, speed: (0.05 + rnd() * 0.05) * (rnd() < 0.5 ? -1 : 1), px, py, rx, ry, bob: rnd() * 6 });
+      for (let k = 0; k < 9; k++) this.clouds.push({ x: rnd() * CAMPUS.w, y: rnd() * CAMPUS.h, s: 5 + rnd() * 6, speed: 18 + rnd() * 14 });
       this.forklift = { t: 0 };
     },
     // Hours past midnight, from your clock at open, then running a minute a second.
@@ -4756,31 +6205,68 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       const h = this.hour(), c = Math.cos(((h - 12) / 24) * TAU);
       return clamp((-c + 0.3) / 1.3, 0, 1) * 0.66;
     },
-    // Staticworld: the ground, roads, buildings and every hole's fixed parts.
+    // Static world: the ground, roads, buildings and every hole's fixed parts.
     drawStatic(g, vis) {
       const W = CAMPUS.w, H = CAMPUS.h;
       g.fillStyle = campusPattern(g, 'grass'); g.fillRect(-2000, -2000, W + 4000, H + 4000);
+      // Two streets run top to bottom, with a crossing at each row of front doors.
+      for (const [x0, x1] of [CAMPUS.street, CAMPUS.street2]) {
+        g.fillStyle = '#9d9a92'; g.fillRect(x0 - 140, -2000, x1 - x0 + 280, H + 4000);
+        g.fillStyle = campusPattern(g, 'asphalt'); g.fillRect(x0, -2000, x1 - x0, H + 4000);
+        g.strokeStyle = '#f2d24b'; g.lineWidth = 6; g.setLineDash([60, 50]);
+        g.beginPath(); g.moveTo((x0 + x1) / 2, -2000); g.lineTo((x0 + x1) / 2, H + 2000); g.stroke(); g.setLineDash([]);
+        g.fillStyle = 'rgba(255,255,255,0.85)';
+        for (const cy of [3010, 4400]) for (let x = x0 + 10; x < x1 - 10; x += 44) g.fillRect(x, cy - 50, 24, 100);
+      }
       const [sx0, sx1] = CAMPUS.street;
-      g.fillStyle = '#9d9a92'; g.fillRect(sx0 - 140, -2000, sx1 - sx0 + 280, H + 4000);
-      g.fillStyle = campusPattern(g, 'asphalt'); g.fillRect(sx0, -2000, sx1 - sx0, H + 4000);
-      g.strokeStyle = '#f2d24b'; g.lineWidth = 6; g.setLineDash([60, 50]);
-      g.beginPath(); g.moveTo((sx0 + sx1) / 2, -2000); g.lineTo((sx0 + sx1) / 2, H + 2000); g.stroke(); g.setLineDash([]);
-      g.fillStyle = 'rgba(255,255,255,0.85)';
-      for (let x = sx0 + 10; x < sx1 - 10; x += 44) g.fillRect(x, 2960, 24, 100);
       const [lx0, ly0, lx1, ly1] = CAMPUS.lot;
       g.fillStyle = campusPattern(g, 'asphalt'); g.fillRect(lx0, ly0, lx1 - lx0, ly1 - ly0);
       g.strokeStyle = 'rgba(255,255,255,0.7)'; g.lineWidth = 4;
       g.beginPath();
-      for (let x = lx0 + 24; x < lx1; x += 72) { g.moveTo(x, ly0 + 40); g.lineTo(x, ly0 + 180); g.moveTo(x, ly1 - 40); g.lineTo(x, ly1 - 180); }
+      for (let x = lx0 + 24; x < lx1; x += 72) { if (x > 2380 && x < 2640) continue; g.moveTo(x, ly0 + 40); g.lineTo(x, ly0 + 180); g.moveTo(x, ly1 - 40); g.lineTo(x, ly1 - 180); }
       g.stroke();
       const [yx0, yy0, yx1, yy1] = CAMPUS.yard;
       g.fillStyle = campusPattern(g, 'concrete'); g.fillRect(yx0, yy0, yx1 - yx0, yy1 - yy0);
       g.fillStyle = '#9d9a92'; g.fillRect(sx1, 3000, yx0 - sx1, 400);
       g.fillStyle = campusPattern(g, 'asphalt'); g.fillRect(sx1, 3040, yx0 - sx1 + 20, 320);
+      // Driveways down to the garage and the data center.
+      for (const [x0, y0, x1, y1] of CAMPUS.drives) {
+        g.fillStyle = '#9d9a92'; g.fillRect(x0 - 30, y0, x1 - x0 + 60, y1 - y0);
+        g.fillStyle = campusPattern(g, 'asphalt'); g.fillRect(x0, y0, x1 - x0, y1 - y0);
+        g.fillStyle = 'rgba(242,210,75,0.8)'; for (let y = y0 + 30; y < y1 - 40; y += 110) g.fillRect((x0 + x1) / 2 - 3, y, 6, 60);
+      }
       const [pl0, pt0, pl1, pt1] = CAMPUS.plaza;
       g.fillStyle = campusPattern(g, 'paving'); g.fillRect(pl0, pt0, pl1 - pl0, pt1 - pt0); g.fillRect(4320, 2920, 140, 200); g.fillRect(2410, 3140, 200, 240);
-      g.fillStyle = campusPattern(g, 'paving');
       g.fillRect(100, 2640, 2010, 90); g.fillRect(560, 700, 90, 2030);
+      // The patio outside the game room: picnic tables under string lights, and a taco truck.
+      const [qx0, qy0, qx1, qy1] = CAMPUS.patio;
+      g.fillRect(qx0, qy0, qx1 - qx0, qy1 - qy0); g.fillRect(11170, 2920, 200, qy0 - 2920); g.fillRect(CAMPUS.street2[1] + 140, 2960, qx0 - CAMPUS.street2[1] - 140, 100);
+      g.fillRect(11170, qy1, 200, CAMPUS.field[1] - qy1 + 60);
+      for (let x = qx0 + 320; x < qx1 - 700; x += 460) for (let y = qy0 + 260; y < qy1 - 150; y += 340) {
+        g.fillStyle = 'rgba(0,0,0,0.25)'; g.fillRect(x - 66, y - 20, 140, 56);
+        g.fillStyle = '#a0703f'; g.fillRect(x - 70, y - 24, 140, 48);
+        g.fillStyle = '#7a5530'; g.fillRect(x - 70, y - 50, 140, 16); g.fillRect(x - 70, y + 34, 140, 16);
+      }
+      g.fillStyle = 'rgba(0,0,0,0.3)'; g.fillRect(qx1 - 560, qy0 + 250, 340, 150);
+      g.fillStyle = '#f4f1ea'; g.fillRect(qx1 - 570, qy0 + 240, 340, 140);
+      g.fillStyle = '#ff8f2e'; for (let i = 0; i < 8; i++) g.fillRect(qx1 - 570 + i * 42, qy0 + 380, 26, 30);
+      g.fillStyle = '#2b3038'; g.font = '900 44px ' + DISPLAY_FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('TACOS', qx1 - 400, qy0 + 310);
+      // The sports field: a pitch inside a running track.
+      const [fx0, fy0, fx1, fy1] = CAMPUS.field, fcx = (fx0 + fx1) / 2, fcy = (fy0 + fy1) / 2, orx = (fx1 - fx0) / 2 - 60, ory = (fy1 - fy0) / 2 - 60;
+      g.strokeStyle = '#c4553b'; g.lineWidth = 180; g.beginPath(); g.ellipse(fcx, fcy, orx - 90, ory - 90, 0, 0, TAU); g.stroke();
+      g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = 4;
+      for (const k of [-90, -45, 0, 45, 90]) { g.beginPath(); g.ellipse(fcx, fcy, orx - 90 + k, ory - 90 + k, 0, 0, TAU); g.stroke(); }
+      const pw = 2200, ph = 1340, px0 = fcx - pw / 2, py0 = fcy - ph / 2;
+      for (let i = 0; i < 10; i++) { g.fillStyle = i % 2 ? 'rgba(255,255,255,0.05)' : 'rgba(0,40,0,0.06)'; g.fillRect(px0 + (i * pw) / 10, py0, pw / 10, ph); }
+      g.strokeStyle = 'rgba(255,255,255,0.8)'; g.lineWidth = 8;
+      g.strokeRect(px0, py0, pw, ph);
+      g.beginPath(); g.moveTo(fcx, py0); g.lineTo(fcx, py0 + ph); g.stroke();
+      circle(g, fcx, fcy, 180); g.stroke();
+      for (const s of [-1, 1]) {
+        const gx = s < 0 ? px0 : px0 + pw;
+        g.strokeRect(s < 0 ? gx : gx - 330, fcy - 400, 330, 800); g.strokeRect(s < 0 ? gx : gx - 110, fcy - 180, 110, 360);
+        g.fillStyle = '#f4f1ea'; g.fillRect(s < 0 ? gx - 40 : gx, fcy - 70, 40, 140);
+      }
       // The pond, with a stone rim.
       const [px, py, rx, ry] = CAMPUS.pond;
       g.fillStyle = '#9d9a92'; g.beginPath(); g.ellipse(px, py, rx + 16, ry + 16, 0, 0, TAU); g.fill();
@@ -4797,25 +6283,35 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       for (const [tx, ty] of [[280, 1000], [420, 1040], [540, 980]]) { g.fillStyle = '#f4f1ea'; circle(g, tx, ty, 26); g.fill(); g.fillStyle = '#ffd447'; circle(g, tx, ty, 8); g.fill(); }
       for (const [x, y, a, c] of this.parked) drawCarTop(g, x, y, a, c);
       for (let i = 0; i < 3; i++) drawTrailer(g, 5500 + i * 900, 2960, 200, 700);
-      // The buildings: an outside wall with windows, and inside, carpet or concrete.
+      // The buildings: outside walls, and inside, each one's own floor.
       for (const id of Object.keys(CAMPUS.bld)) {
-        const b = CAMPUS.bld[id];
-        g.fillStyle = 'rgba(0,0,0,0.35)'; g.fillRect(b.x + 30, b.y + 36, BLD_W, BLD_H);
-        g.fillStyle = campusPattern(g, id === 'office' ? 'carpet' : 'concrete'); g.fillRect(b.x, b.y, BLD_W, BLD_H);
-        g.strokeStyle = id === 'office' ? '#c3ccd7' : '#6b7480'; g.lineWidth = 26; g.strokeRect(b.x, b.y, BLD_W, BLD_H);
-        g.strokeStyle = 'rgba(140,200,240,0.8)'; g.lineWidth = 8; g.setLineDash([90, 50]);
-        g.strokeRect(b.x, b.y, BLD_W, BLD_H); g.setLineDash([]);
-        g.fillStyle = id === 'office' ? '#e6ebf1' : '#f2b705'; g.fillRect(b.x + BLD_W / 2 - 90, b.y + BLD_H - 16, 180, 32);
-        if (id === 'factory') {
-          g.strokeStyle = 'rgba(242,183,5,0.5)'; g.lineWidth = 6;
-          g.strokeRect(b.x + 30, b.y + 30, BLD_W - 60, BLD_H - 60);
+        const b = CAMPUS.bld[id], look = BLD_LOOK[id] || BLD_LOOK.office, top = b.door === 'top';
+        if (id === 'datacenter') {
+          // A security fence, and the backup generators inside it.
+          g.strokeStyle = 'rgba(200,210,222,0.75)'; g.lineWidth = 6; g.setLineDash([26, 12]);
+          g.strokeRect(b.x - 45, b.y - 45, BLD_W + 90, BLD_H + 245); g.setLineDash([]);
+          for (let k = 0; k < 4; k++) {
+            const gx = b.x + 420 + k * 760, gy = b.y + BLD_H + 60;
+            g.fillStyle = 'rgba(0,0,0,0.3)'; g.fillRect(gx + 10, gy + 12, 360, 90);
+            g.fillStyle = '#d8dde3'; g.fillRect(gx, gy, 360, 90); g.strokeStyle = '#8f99a6'; g.lineWidth = 3; g.strokeRect(gx, gy, 360, 90);
+            for (const u of [70, 180, 290]) { circle(g, gx + u, gy + 45, 32); g.fillStyle = '#2b3038'; g.fill(); }
+          }
         }
+        g.fillStyle = 'rgba(0,0,0,0.35)'; g.fillRect(b.x + 30, b.y + 36, BLD_W, BLD_H);
+        g.fillStyle = campusPattern(g, look.floor); g.fillRect(b.x, b.y, BLD_W, BLD_H);
+        g.strokeStyle = look.wall; g.lineWidth = 26; g.setLineDash(look.dash || []); g.strokeRect(b.x, b.y, BLD_W, BLD_H); g.setLineDash([]);
+        if (look.windows) { g.strokeStyle = 'rgba(140,200,240,0.8)'; g.lineWidth = 8; g.setLineDash([90, 50]); g.strokeRect(b.x, b.y, BLD_W, BLD_H); g.setLineDash([]); }
+        g.fillStyle = look.door; g.fillRect(b.x + BLD_W / 2 - 90, top ? b.y - 16 : b.y + BLD_H - 16, 180, 32);
+        if (look.trim) { g.strokeStyle = look.trim; g.lineWidth = 6; g.strokeRect(b.x + 30, b.y + 30, BLD_W - 60, BLD_H - 60); }
       }
       for (const d of this.decor || []) {
         if (vis && (d.x < vis.x0 - 80 || d.x > vis.x1 + 80 || d.y < vis.y0 - 80 || d.y > vis.y1 + 80)) continue;
         if (d.k === 'plant') drawBumper(g, { x: d.x, y: d.y, r: 20, kind: 'planter' }, [4, 5]);
         else if (d.k === 'pallet') { const pts = rect(d.x - 34, d.y - 30, 68, 60); drawBlock(g, { pts, bb: bboxOf(pts), kind: 'pallet' }, [5, 6]); }
         else if (d.k === 'drums') for (const [ox, oy] of [[-15, -15], [15, -15], [0, 12]]) { g.save(); g.translate(d.x + ox, d.y + oy); PROP_ART.barrel(g, 14, { fallen: false }); g.restore(); }
+        else if (d.k === 'car') drawCarTop(g, d.x, d.y, d.a, d.c);
+        else if (d.k === 'rack') { const pts = rect(d.x - 20, d.y - 54, 40, 108); drawBlock(g, { pts, bb: bboxOf(pts), kind: 'server' }, [4, 5]); }
+        else if (d.k === 'arcade') { const pts = rect(d.x - 24, d.y - 20, 48, 40); drawBlock(g, { pts, bb: bboxOf(pts), kind: 'arcade', color: d.c }, [4, 5]); }
         else if (d.k === 'desk') {
           g.fillStyle = 'rgba(0,0,0,0.3)'; g.beginPath(); rr(g, d.x - 146, d.y - 26, 300, 60, 26); g.fill();
           g.fillStyle = '#b8854f'; g.beginPath(); rr(g, d.x - 150, d.y - 30, 300, 56, 26); g.fill();
@@ -4849,16 +6345,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       drawDecorUnder(g, h); drawCourseBase(g, h); drawDecals(g, h); drawZonesStatic(g, h);
       for (const b of h.blocks) drawBlock(g, b, h.shadow);
       for (const c of h.bumpers) drawBumper(g, c, h.shadow);
+      drawDecorOver(g, h);
       g.restore();
     },
     holeFor(wh) { return (this.flight && this.flight.swap && this.flight.swap[wh.course + wh.idx]) || wh.h; },
     drawHoleLive(g, wh) {
       const h = this.holeFor(wh), t = h.t;
       g.save(); g.translate(wh.ox, wh.oy);
-      g.save(); coursePath(g, h); g.clip();
-      for (const z of h.zones) { if (z.type === 'conveyor') drawConveyor(g, z, t); else if (z.style === 'coffee') drawRipples(g, z, t); }
-      for (const z of h.zones) if (z.style === 'shredder') drawShredder(g, z, t);
-      g.restore();
+      drawZonesLive(g, h, t);
+      drawBlinkers(g, h);
       drawArrivals(g, h); drawCupHole(g, h); drawProps(g, h); drawMovers(g, h);
       drawFlag(g, h, G.clock);
       g.restore();
@@ -4937,11 +6432,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         const near = this.npcs.filter(p => p.x > vis.x0 && p.x < vis.x1 && p.y > vis.y0 && p.y < vis.y1 && p.sayT <= 0);
         if (near.length) {
           const p = pick(near), zone = this.nodes[p.node].zone;
-          p.say = pick(CHATTER[zone === 'factory' ? 'factory' : 'office']); p.sayT = 4.2;
+          p.say = pick(CHATTER[zone] || CHATTER.office); p.sayT = 4.2;
           this.lastSay = G.clock;
         }
       }
-      for (const c of this.cars) { c.y += (c.lane ? 1 : -1) * c.speed * dt; if (c.y > CAMPUS.h + 300) c.y = -300; if (c.y < -300) c.y = CAMPUS.h + 300; }
+      for (const c of this.cars) { c.y += c.dir * c.speed * dt; if (c.y > CAMPUS.h + 300) c.y = -300; if (c.y < -300) c.y = CAMPUS.h + 300; }
       for (const d of this.ducks) { d.a += d.speed * dt; d.bob += dt; }
       for (const c of this.clouds) { c.x += c.speed * dt; if (c.x > CAMPUS.w + 1600) c.x = -1600; }
       this.forklift.t += dt;
@@ -4959,7 +6454,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       // Left alone, the camera takes itself on a slow tour.
       if (this.idle > 9 && !this.drag) {
         if (!this.goal || this.goal.t >= 1) {
-          const spots = this.holes.map(w => [w.slot.cx, w.slot.cy, 0.42]).concat([[2510, 3030, 0.5], [330, 1700, 0.45], [4700, 2000, 0.3], [6890, 3400, 0.4], [4700, 2150, 0.1]]);
+          const spots = this.holes.map(w => [w.slot.cx, w.slot.cy, 0.42]).concat([[2510, 3030, 0.5], [330, 1700, 0.45], [4700, 2000, 0.3], [6890, 3400, 0.4], [4700, 2150, 0.1], [11270, 3500, 0.45], [11370, 5940, 0.16], [9080, 4400, 0.3]]);
           const s = pick(spots);
           this.goal = { from: { ...this.cam }, to: { x: s[0], y: s[1], z: s[2] * (0.8 + Math.random() * 0.5), rot: 0 }, t: 0, dur: 7 };
         }
@@ -5029,10 +6524,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       // The yard forklift loops between the trailers.
       const ft = this.forklift.t * 0.08, fx = 5700 + (Math.sin(ft) * 0.5 + 0.5) * 2200, fy = 3560 + Math.sin(ft * 2) * 120;
       drawForklift(g, { cx: fx, cy: fy, a: [0, 0], b: [1, 0], w: 70, h: 42, face: Math.cos(ft) > 0 ? 1 : -1 }, [6, 8]);
-      for (const c of this.cars) {
-        const x = c.lane ? 4580 : 4820;
-        if (c.y > vis.y0 - 200 && c.y < vis.y1 + 200) drawCarTop(g, x, c.y, c.lane ? Math.PI / 2 : -Math.PI / 2, c.color);
-      }
+      for (const c of this.cars) if (c.x > vis.x0 - 200 && c.x < vis.x1 + 200 && c.y > vis.y0 - 200 && c.y < vis.y1 + 200) drawCarTop(g, c.x, c.y, c.dir > 0 ? Math.PI / 2 : -Math.PI / 2, c.color);
       for (const p of this.npcs) if (p.x > vis.x0 - 40 && p.x < vis.x1 + 40 && p.y > vis.y0 - 40 && p.y < vis.y1 + 40) drawPerson(g, p);
       if (ONLINE.on) this.drawPlayers(g);
       const cs = getCloudSprite();
@@ -5069,7 +6561,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       // Headlights and warm lamp glow.
       g.globalCompositeOperation = 'lighter';
       for (const c of this.cars) {
-        const x = c.lane ? 4580 : 4820, dir = c.lane ? 1 : -1, y = c.y + dir * 44;
+        const x = c.x, dir = c.dir, y = c.y + dir * 44;
         const gr = g.createRadialGradient(x, y, 0, x, y, 300);
         gr.addColorStop(0, `rgba(255,240,200,${(0.35 * d / 0.66).toFixed(3)})`); gr.addColorStop(1, 'rgba(255,240,200,0)');
         g.fillStyle = gr; g.beginPath(); g.moveTo(x, y); g.arc(x, y, 300, (dir > 0 ? Math.PI / 2 : -Math.PI / 2) - 0.35, (dir > 0 ? Math.PI / 2 : -Math.PI / 2) + 0.35); g.closePath(); g.fill();
@@ -5083,7 +6575,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (cam.z < 0.2 && !this.flight) {
         for (const id of Object.keys(CAMPUS.bld)) {
           const b = CAMPUS.bld[id], [x, y] = P(b.x + BLD_W / 2, b.y - 150);
-          g.font = `900 ${Math.round(clamp(cam.z * 160, 14, 30))}px ${DISPLAY_FONT}`;
+          // Big enough to read, but never wider than the building, so neighbours don't run together.
+          g.font = `900 ${Math.round(Math.min(clamp(cam.z * 160, 14, 30), (BLD_W * cam.z * 1.5) / b.name.length))}px ${DISPLAY_FONT}`;
           g.fillStyle = 'rgba(0,0,0,0.45)'; g.fillText(b.name, x + 1, y + 2);
           g.fillStyle = '#fff8e0'; g.fillText(b.name, x, y);
         }
@@ -5254,21 +6747,37 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     couch: { name: 'Couch', cat: 'Walls', cost: 8, make: p => ({ blocks: [{ pts: wsTurn(chamferRect(-80, -30, 160, 60, 12), p.x, p.y, p.r), kind: 'couch' }] }) },
     pallet: { name: 'Pallet', cat: 'Walls', cost: 5, make: p => ({ blocks: [{ pts: wsTurn(wsBox(70, 70), p.x, p.y, p.r), kind: 'pallet' }] }) },
     rack: { name: 'Pallet rack', cat: 'Walls', cost: 9, make: p => ({ blocks: [{ pts: wsTurn(wsBox(280, 40), p.x, p.y, p.r), kind: 'rack' }] }) },
+    parked: { name: 'Parked car', cat: 'Walls', cost: 5, make: p => ({ blocks: [{ pts: wsTurn(wsBox(88, 44), p.x, p.y, p.r), kind: 'car', color: ['#e8453a', '#2f6fb3', '#f4f1ea', '#35a06a'][p.r & 3] }] }) },
+    servers: { name: 'Server racks', cat: 'Walls', cost: 7, make: p => ({ blocks: [{ pts: wsTurn(wsBox(216, 40), p.x, p.y, p.r), kind: 'server' }] }) },
+    bar: { name: 'Bar counter', cat: 'Walls', cost: 7, make: p => ({ blocks: [{ pts: wsTurn(wsBox(200, 34), p.x, p.y, p.r), kind: 'bar' }] }) },
     planter: { name: 'Planter', cat: 'Bumpers', cost: 3, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 17, kind: 'planter' }] }) },
     pillar: { name: 'Steel pillar', cat: 'Bumpers', cost: 3, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 18, kind: 'pillar' }] }) },
     beanbag: { name: 'Beanbag', cat: 'Bumpers', cost: 4, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 28, kind: 'beanbag', e: 0.16, tint: ['#7c4ddb', '#f08a24', '#2f8f6a', '#e8453a'][p.r & 3] }] }) },
     table: { name: 'Round table', cat: 'Bumpers', cost: 8, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 58, kind: 'table', e: 0.78 }] }) },
+    bollard: { name: 'Bollard', cat: 'Bumpers', cost: 2, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 12, kind: 'bollard' }] }) },
+    hightop: { name: 'High-top table', cat: 'Bumpers', cost: 4, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 20, kind: 'hightop' }] }) },
+    pop: { name: 'Pop bumper', cat: 'Bumpers', cost: 6, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 22, kind: 'pop', kick: 360, e: 0.9, glow: ['rgba(255,90,200,0.85)', 'rgba(60,220,255,0.85)', 'rgba(255,212,71,0.85)', 'rgba(92,240,138,0.85)'][p.r & 3] }] }) },
     rug: { name: 'Shag rug', cat: 'Floors', cost: 6, make: p => ({ zones: [{ type: 'rough', style: 'rug', pts: wsTurn(ellipse(0, 0, 150, 90, 40), p.x, p.y, p.r), mul: 2.7 }] }) },
     oil: { name: 'Oil slick', cat: 'Floors', cost: 6, make: p => ({ zones: [{ type: 'slick', style: 'oil', mul: 0.12, pts: wsBlob(p, 95, 70) }] }) },
     ramp: { name: 'Ramp', cat: 'Floors', cost: 8, make: p => { const [dx, dy] = wsDir(p.r); return { zones: [{ type: 'slope', pts: wsTurn(wsBox(150, 150), p.x, p.y, 0), ax: dx * 330, ay: dy * 330 }] }; } },
     conveyor: { name: 'Conveyor', cat: 'Floors', cost: 9, make: (p, style) => { const [dx, dy] = wsDir(p.r); return { zones: [{ type: 'conveyor', skin: style === 'factory' ? 'rollers' : undefined, pts: wsTurn(wsBox(240, 56), p.x, p.y, p.r), dir: [dx, dy], accel: 700, max: 380 }] }; } },
     bowl: { name: 'Bowl', cat: 'Floors', cost: 6, make: p => ({ zones: [{ type: 'funnel', x: p.x, y: p.y, r: 80, strength: 260 }] }) },
+    bump: { name: 'Speed bump', cat: 'Floors', cost: 4, make: p => ({ zones: [{ type: 'rough', style: 'bump', pts: wsTurn(wsBox(24, 150), p.x, p.y, p.r), mul: 6 }] }) },
+    fan: { name: 'Cooling fan', cat: 'Floors', cost: 8, make: p => { const [dx, dy] = wsDir(p.r); return { zones: [{ type: 'air', pts: wsTurn(wsBox(160, 160), p.x, p.y, 0), ax: dx * 330, ay: dy * 330, pulse: [4.2, 2] }] }; } },
+    ballpit: { name: 'Ball pit', cat: 'Floors', cost: 7, make: p => ({ zones: [{ type: 'rough', style: 'balls', pts: wsTurn(ellipse(0, 0, 120, 80, 36), p.x, p.y, p.r), mul: 5.5 }] }) },
+    spin: { name: 'Spinning floor', cat: 'Floors', cost: 10, make: p => ({ zones: [{ type: 'turntable', x: p.x, y: p.y, r: 100, w: p.r & 1 ? -1.5 : 1.5 }] }) },
     coffee: { name: 'Coffee spill', cat: 'Hazards', cost: 10, make: p => ({ zones: [{ type: 'water', style: 'coffee', pts: wsBlob(p, 75, 48) }] }) },
     pit: { name: 'Service pit', cat: 'Hazards', cost: 12, make: p => ({ zones: [{ type: 'water', style: 'pit', pts: wsTurn(wsBox(60, 100), p.x, p.y, p.r) }] }) },
     shredder: { name: 'Shredder', cat: 'Hazards', cost: 12, make: p => ({ zones: [{ type: 'water', style: 'shredder', pts: wsTurn(wsBox(64, 64), p.x, p.y, 0) }] }) },
+    puddle: { name: 'Puddle', cat: 'Hazards', cost: 10, make: p => ({ zones: [{ type: 'water', style: 'puddle', pts: wsBlob(p, 62, 44) }] }) },
+    tile: { name: 'Open floor tile', cat: 'Hazards', cost: 8, make: p => ({ zones: [{ type: 'water', style: 'tile', pts: wsTurn(wsBox(52, 52), p.x, p.y, 0) }] }) },
+    pocket: { name: 'Pool pocket', cat: 'Hazards', cost: 8, make: p => ({ zones: [{ type: 'water', style: 'pocket', pts: ellipse(p.x, p.y, 17, 17, 20) }] }) },
     spinner: { name: 'Clock hand', cat: 'Movers', cost: 14, make: p => ({ bumpers: [{ x: p.x, y: p.y, r: 12, kind: 'hub' }], movers: [{ type: 'spinner', kind: 'minute', x: p.x, y: p.y, len: 105, w: 9, speed: p.r & 1 ? -1.1 : 1.1, a0: (p.r * Math.PI) / 2 }] }) },
     robot: { name: 'Robot arm', cat: 'Movers', cost: 14, make: p => ({ movers: [{ type: 'spinner', kind: 'robot', x: p.x, y: p.y, len: 115, w: 14, speed: 1.5, a0: (p.r * Math.PI) / 2, amp: 0.9 }] }) },
     cart: { name: 'Mail cart', cat: 'Movers', cost: 12, make: p => { const [dx, dy] = wsDir(p.r); return { movers: [{ type: 'slider', kind: 'cart', a: [p.x - dx * 100, p.y - dy * 100], b: [p.x + dx * 100, p.y + dy * 100], w: dx ? 48 : 34, h: dx ? 34 : 48, period: 2.8, phase: 0 }] }; } },
+    car: { name: 'Moving car', cat: 'Movers', cost: 14, make: p => { const [dx, dy] = wsDir(p.r); return { movers: [{ type: 'slider', kind: 'car', a: [p.x - dx * 150, p.y - dy * 150], b: [p.x + dx * 150, p.y + dy * 150], w: dx ? 88 : 44, h: dx ? 44 : 88, period: 5, phase: 0, face: 1, color: '#ff8f2e' }] }; } },
+    barrier: { name: 'Barrier arm', cat: 'Movers', cost: 12, make: p => ({ movers: [{ type: 'spinner', kind: 'barrier', x: p.x, y: p.y, len: 130, w: 10, a0: (p.r * Math.PI) / 2, amp: Math.PI / 2, gate: [1.7, 0.8, 1.4, 0.8] }] }) },
+    tapebot: { name: 'Tape robot', cat: 'Movers', cost: 12, make: p => { const [dx, dy] = wsDir(p.r); return { movers: [{ type: 'slider', kind: 'tapebot', a: [p.x - dx * 150, p.y - dy * 150], b: [p.x + dx * 150, p.y + dy * 150], w: dx ? 56 : 40, h: dx ? 40 : 56, period: 5.4, phase: 0 }] }; } },
     forklift: { name: 'Forklift', cat: 'Movers', cost: 14, make: p => { const [dx, dy] = wsDir(p.r); return { movers: [{ type: 'slider', kind: 'forklift', a: [p.x - dx * 150, p.y - dy * 150], b: [p.x + dx * 150, p.y + dy * 150], w: dx ? 64 : 38, h: dx ? 38 : 64, period: 3.4, phase: 0 }] }; } },
     cone: { name: 'Cone', ...wsProp('cone', 1) },
     cups: { name: 'Cup pyramid', ...wsProp('cups', 2) },
@@ -5277,8 +6786,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     jug: { name: 'Water jug', ...wsProp('jug', 2) },
     barrel: { name: 'Oil drum', ...wsProp('barrel', 2) },
     crate: { name: 'Crate', ...wsProp('crate', 2) },
+    tapes: { name: 'Tape cartridge', ...wsProp('tape', 1) },
+    pins: { name: 'Bowling pins', cat: 'Props', cost: 3, make: p => ({ props: [{ kind: 'pins', x: p.x, y: p.y, dir: p.r & 2 ? -1 : 1 }] }) },
+    poolrack: { name: 'Pool rack', cat: 'Props', cost: 3, make: p => ({ props: [{ kind: 'rack', x: p.x, y: p.y, dir: p.r & 2 ? -1 : 1 }] }) },
   };
   const WS_CATS = ['Walls', 'Bumpers', 'Floors', 'Hazards', 'Movers', 'Props'];
+  const WS_LOOKS = ['office', 'factory', 'garage', 'gameroom', 'datacenter'];
   COURSES.workshop = { id: 'workshop', name: 'The Workshop', shift: 'Holes your team built', holes: [], tints: [], lastLabel: 'Done', title: 'Nine-to-Five Links', theme: 'office' };
 
   // How far a point is from anything a piece puts on the course (0 if it's on top of it).
@@ -5302,7 +6815,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (m.type === 'spinner') d = Math.min(d, Math.max(0, Math.hypot(x - m.x, y - m.y) - m.len - m.w));
       else d = Math.min(d, Math.max(0, segDist(x, y, m.a[0], m.a[1], m.b[0], m.b[1]) - Math.max(m.w, m.h) / 2));
     }
-    for (const q of parts.props || []) d = Math.min(d, Math.max(0, Math.hypot(x - q.x, y - q.y) - (q.kind === 'cups' ? 14 : (PROP_TYPES[q.kind] || { r: 10 }).r)));
+    for (const q of parts.props || []) d = Math.min(d, Math.max(0, Math.hypot(x - q.x, y - q.y) - (q.kind === 'cups' ? 14 : q.kind === 'pins' || q.kind === 'rack' ? 48 : (PROP_TYPES[q.kind] || { r: 10 }).r)));
     return d;
   }
   // Walking distance to the cup over a grid, around walls, blocks, bumpers and hazards.
@@ -5429,7 +6942,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     clean(o) {
       if (!o || typeof o !== 'object' || typeof o.i !== 'string' || o.i.length > 16 || !Number.isInteger(o.v) || o.v < 0 || typeof o.b !== 'string' || o.b.length > 24) return null;
       const d = o.d === true || o.d === 1;
-      if (o.t === 'hole') return WS_HOLE_IDS.includes(o.i) ? { i: o.i, t: 'hole', s: WS_SHAPES[o.s] ? o.s : 'room', st: o.st === 'factory' ? 'factory' : 'office', v: o.v, b: o.b, d } : null;
+      if (o.t === 'hole') return WS_HOLE_IDS.includes(o.i) ? { i: o.i, t: 'hole', s: WS_SHAPES[o.s] ? o.s : 'room', st: WS_LOOKS.includes(o.st) ? o.st : 'office', v: o.v, b: o.b, d } : null;
       if (!WS_HOLE_IDS.includes(o.h) || !Number.isFinite(o.x) || !Number.isFinite(o.y)) return null;
       const x = clamp(Math.round(o.x), 0, 1000), y = clamp(Math.round(o.y), 0, 600);
       if (o.t === 'tee' || o.t === 'cup') return o.i === o.h + ':' + o.t ? { i: o.i, t: o.t, h: o.h, x, y, v: o.v, b: o.b, d: false } : null;
@@ -6415,12 +7928,14 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const aces = [];
     ps.forEach(p => p.stats.aces.forEach(i => aces.push(`${p.name} on ${holeName(i)}`)));
     const best = key => ps.reduce((a, b) => (b.stats[key] > a.stats[key] ? b : a), ps[0]);
+    // What each building calls a trip into a hazard.
+    const spillWords = COURSE.spills || ['Most coffee spills', 'A clean floor all day', 'Coffee spills'];
     if (ps.length > 1) {
       add('Hole in one', aces.length ? aces.slice(0, 3).join(', ') + (aces.length > 3 ? ` and ${aces.length - 3} more` : '') : 'Nobody today');
       const lp = best('longest');
       add('Longest putt', lp.stats.longest > 0 ? `${lp.name}, ${Math.round(lp.stats.longest)} ft` : 'Nobody sank one');
       const sp = best('spills');
-      add('Most coffee spills', sp.stats.spills > 0 ? `${sp.name}, ${sp.stats.spills}` : 'A clean floor all day');
+      add(spillWords[0], sp.stats.spills > 0 ? `${sp.name}, ${sp.stats.spills}` : spillWords[1]);
       const wb = best('bounces');
       add('Wall banger', `${wb.name}, ${wb.stats.bounces} bounces`);
       const lo = best('lips');
@@ -6435,7 +7950,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       const p = ps[0];
       add('Holes in one', p.stats.aces.length ? p.stats.aces.map(i => holeName(i)).join(', ') : 'None today');
       add('Longest putt', p.stats.longest > 0 ? `${Math.round(p.stats.longest)} ft` : 'None');
-      add('Coffee spills', String(p.stats.spills));
+      add(spillWords[2], String(p.stats.spills));
       add('Wall bounces', String(p.stats.bounces));
       if (p.stats.lips) add('Lip-outs', String(p.stats.lips));
       if (p.stats.tees) add('Trips back to the tee', String(p.stats.tees));
