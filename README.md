@@ -14,9 +14,9 @@ Everyone can pick a department. When at least two departments are playing, the r
 
 ## Controls
 
-- **Aim:** press and drag anywhere on the course to turn the putter toward that spot, or use the arrow keys (Shift for fine steps).
-- **Swing:** hold **Swing** (or Space) to draw the putter back. The meter's marks show how far a putt rolls on a flat green of medium speed. Hold too long and the putter comes forward again. Let go to start the stroke, then tap again as the needle crosses the green zone. Tap early and the putt pushes right; tap late and it pulls left. Miss the tap entirely and you shank it. Esc cancels a swing.
-- **Read the green:** every green slopes a little, and chevrons point downhill, so putts curve that way as they slow down. The swing meter shows the distance to the pin and the green's speed. Fast greens roll out further, and slow ones come up short.
+- **Mouse or touch:** press anywhere on the course, drag back like a slingshot, and let go. The farther you pull, the harder you hit. Slide back to where you started to cancel.
+- **Keyboard:** arrow keys aim and set power (Shift for fine control), Space or Enter putts, Esc opens the menu.
+- **Read the green:** every green slopes a little, and chevrons point downhill, so putts curve that way as they slow down. Greens vary in speed too; the bar at the top of the screen flags a fast or slow green. Fast greens roll out further, and slow ones come up short.
 
 ## Rules
 
@@ -26,7 +26,7 @@ Everyone can pick a department. When at least two departments are playing, the r
 
 ## Rage mode
 
-Turn it on from the setup card, or from the clubhouse for an online room. Floors are waxed, walls are bouncier, the cup is smaller, greens tilt more, and everything moves faster. The swing meter speeds up and its sweet spot shrinks. Your aim wobbles and there's no aim guide. A Roomba roams each hole and bumps your ball. Hazards send you back to the tee, and the elevator sometimes takes you to the wrong floor. The holes get new names to match, like Badge Declined, Lunch (Stolen) and Mandatory Overtime. It's ten strokes max per hole.
+Turn it on from the setup card, or from the clubhouse for an online room. Floors are waxed, walls are bouncier, the cup is smaller, greens tilt more, and everything moves faster. Your aim wobbles and there's no aim guide. A Roomba roams each hole and bumps your ball. Hazards send you back to the tee, and the elevator sometimes takes you to the wrong floor. The holes get new names to match, like Badge Declined, Lunch (Stolen) and Mandatory Overtime. It's ten strokes max per hole.
 
 ## Taunts and office life
 

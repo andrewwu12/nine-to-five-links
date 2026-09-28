@@ -340,19 +340,6 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
 .map-hint { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); margin: 0; padding: 6px 12px; border-radius: 999px; background: rgba(15, 20, 28, .6); color: var(--on-floor); font: 500 12px var(--body); white-space: nowrap; pointer-events: none; }
 .map-card:not([hidden]) ~ .map-hint { display: none; }
 
-/* The swing button; its meter is drawn on the canvas just above it */
-.swing {
-  position: absolute; left: 50%; bottom: 68px; transform: translateX(-50%); z-index: 6;
-  min-width: 200px; min-height: 58px; padding: 0 28px; border: 0; border-radius: 999px; cursor: pointer; white-space: nowrap;
-  background: var(--hi); color: var(--hi-ink); font: 800 22px/1 var(--display); letter-spacing: .05em; text-transform: uppercase;
-  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .18), 0 10px 26px rgba(0, 0, 0, .38);
-  touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
-}
-.swing.back { background: #fff; color: var(--ink); }
-.swing.down { background: #35d07f; color: #062414; }
-.swing:disabled { opacity: .45; cursor: default; }
-@media (max-width: 620px) { .swing { bottom: 62px; min-width: 170px; min-height: 54px; } }
-
 /* Taunt menu */
 .taunt-pop { position: absolute; left: 16px; bottom: 64px; width: min(340px, calc(100% - 32px)); max-height: calc(100% - 150px); overflow-y: auto; display: grid; gap: 4px; padding: 8px; background: var(--paper); border-radius: 14px; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); z-index: 9; }
 .taunt-pop .eyebrow { padding: 4px 6px 2px; }
@@ -375,6 +362,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   .plate { padding: 7px 11px 8px; }
   .plate-meta { gap: 7px; font-size: 10px; }
   .plate-meta span + span::before { margin-right: 7px; }
+  /* When a fast or slow green is flagged, the clock time makes way for it. */
+  .plate-meta:has(#hudGreen:not([hidden])) #hudTime, .plate-meta:has(#hudGreen:not([hidden])) .hole-word { display: none; }
+  .plate-meta:has(#hudGreen:not([hidden])) #hudHole::before { content: none; margin: 0; }
   .badge { padding: 7px 11px 7px 8px; gap: 8px; }
   .badge-name { font-size: 14px; max-width: 9ch; }
   .badge-meta { font-size: 11px; }
@@ -400,7 +390,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
 
   <header class="hud hud-top" id="hudTop" hidden>
     <div class="plate">
-      <div class="plate-meta"><span id="hudTime">9:00 AM</span><span id="hudHole">Hole 1/9</span><span id="hudPar">Par 2</span><span class="rage-tag" id="hudRage" hidden>Rage</span></div>
+      <div class="plate-meta"><span id="hudTime">9:00 AM</span><span id="hudHole">Hole 1/9</span><span id="hudPar">Par 2</span><span id="hudGreen" hidden></span><span class="rage-tag" id="hudRage" hidden>Rage</span></div>
       <div class="plate-name" id="hudName">Badge In</div>
     </div>
     <div class="board" id="board" hidden></div>
@@ -420,7 +410,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       <button class="btn btn-floor" id="tauntBtn" type="button" aria-haspopup="menu" aria-expanded="false">Heckle</button>
       <button class="btn btn-floor" id="wsReturnBtn" type="button" hidden>Back to workshop</button>
     </div>
-    <p class="hint" id="hint">Drag on the course to aim. Hold Swing, let go, then hit as the needle crosses the green zone. Arrows and Space work too.</p>
+    <p class="hint" id="hint">Press anywhere, drag back, and let go to putt. Arrow keys and Space work too.</p>
     <button class="btn btn-floor" id="soundBtn" type="button" aria-pressed="true">Sound on</button>
   </footer>
 
@@ -473,7 +463,6 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   </div>
   <div class="pings" id="pings" aria-live="polite"></div>
   <div class="taunt-pop" id="tauntPop" role="menu" aria-label="Taunts" hidden></div>
-  <button class="swing" id="swingBtn" type="button" hidden>Hold to swing</button>
   <div class="wait" id="waitPanel" hidden>
     <div class="wait-text"><b id="waitTitle"></b><span id="waitSub"></span></div>
     <button class="btn btn-hi" id="waitNext" type="button">Next hole</button>
@@ -658,12 +647,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       <div class="eyebrow">Orientation</div>
       <h2>How to play</h2>
       <dl class="rules">
-        <dt>Aim</dt>
-        <dd>Press and drag anywhere on the course to turn the putter toward that spot, or use the arrow keys (Shift for fine steps).</dd>
-        <dt>Swing</dt>
-        <dd>Hold Swing (or Space) to draw the putter back. The meter's marks show how far a putt rolls on a flat, medium green. Hold too long and it comes forward again. Let go to start the stroke, then tap again as the needle crosses the green zone. Tap early and the putt pushes right; tap late and it pulls left. Miss the tap entirely and you shank it. Esc cancels.</dd>
+        <dt>Putt</dt>
+        <dd>Press anywhere on the course and drag back, like a slingshot. The farther you pull, the harder you hit. Let go to putt, or slide back to where you started to cancel.</dd>
+        <dt>Keyboard</dt>
+        <dd>Arrow keys aim and set power. Hold Shift for fine control. Space or Enter putts.</dd>
         <dt>Read the green</dt>
-        <dd>Every green slopes a little, and the chevrons point downhill, so putts curve that way as they slow down. The swing meter also shows the green's speed: fast greens roll out further, slow ones come up short.</dd>
+        <dd>Every green slopes a little, and the chevrons point downhill, so putts curve that way as they slow down. Greens vary in speed too, and the bar at the top says when one is fast or slow: fast greens roll out further, slow ones come up short.</dd>
         <dt>Turns</dt>
         <dd>On one screen, each player finishes the hole, then hands over. Whoever scored best on the last hole tees off first.</dd>
         <dt>Online</dt>
@@ -1408,7 +1397,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     h.shadow = [Math.cos(th) * 6.5 * len, Math.sin(th) * 6.5 * len + 2];
     const tc = (!defIn && COURSE.tints[idx]) || [0, 0, 0, 0];
     h.tint = tc[3] > 0 ? `rgba(${tc[0]},${tc[1]},${tc[2]},${tc[3]})` : null;
-    // The green: a gentle tilt that bends every putt, and a speed shown on the swing meter like a stimp reading.
+    // The green: a gentle tilt that bends every putt, and a speed like a stimp reading. The top bar flags fast and slow greens.
     const tilt = (variant && variant.tilt ? variant.tilt : 0) * PH.slope, ta = variant && variant.tiltA ? variant.tiltA : 0;
     h.tilt = [Math.cos(ta) * tilt, Math.sin(ta) * tilt];
     h.fm = variant && variant.speed ? variant.speed : 1;
@@ -1491,7 +1480,6 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       },
       ooh() { tone({ freq: 560, to: 300, type: 'triangle', dur: 0.55, vol: 0.12 }); },
       blip() { tone({ freq: 880, dur: 0.07, vol: 0.06 }); tone({ freq: 1320, dur: 0.1, vol: 0.05, delay: 0.07 }); },
-      tick() { tone({ freq: 1800, type: 'square', dur: 0.02, vol: 0.03 }); },
       // For the celebrations.
       boom() { noise({ dur: 0.7, vol: 0.3, type: 'lowpass', freq: 900, to: 90, q: 0.7 }); tone({ freq: 110, to: 45, dur: 0.4, vol: 0.2 }); },
       whistle() { tone({ freq: 700, to: 1900, dur: 0.55, vol: 0.04 }); },
@@ -1576,6 +1564,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function rollDistance(v) {
     const a = MODES.normal.friction, k = MODES.normal.drag;
     return v / k - (a / (k * k)) * Math.log(1 + (k * v) / a);
+  }
+  // The power that rolls a putt about this many feet on a flat green of medium speed. The test bot uses it.
+  function rollFeetToMeter(ft) {
+    const want = ft * UNITS_PER_FT, t = Math.pow(clamp((want - MIN_ROLL) / (MAX_ROLL - MIN_ROLL), 0, 1), 2 / 3);
+    return 0.03 + 0.97 * t;
   }
   function shotSpeed(power) {
     const t = clamp((power - 0.03) / 0.97, 0, 1);
@@ -2992,7 +2985,6 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function onPushed(byRoomba) {
     if (drag) { drag = null; canvas.classList.remove('dragging'); }
-    Swing.cancel();
     if (G.phase === 'aim') G.phase = 'rolling';
     Sound.thud();
     if (byRoomba && G.screen === 'play') {
@@ -3173,9 +3165,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     G.order = G.order.slice().sort((a, b) => G.players[a].scores[prev] - G.players[b].scores[prev]);
     Campus.fly(prev, prev + 1, () => { loadHole(prev + 1); startTurn(0, true); });
   }
-  function shoot(angle, power, mul = 1) {
+  function shoot(angle, power, fromKeyboard) {
     if (!canAim()) return;
-    const b = G.ball, sp = shotSpeed(power) * mul;
+    const b = G.ball, sp = shotSpeed(power);
     G.lastShot = [b.x, b.y];
     b.vx = Math.cos(angle) * sp; b.vy = Math.sin(angle) * sp;
     b.state = 'rolling'; b.slowT = 0; b.rollT = 0; b.trail.length = 0;
@@ -3184,6 +3176,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     Office.putt();
     G.strokes += 1;
     G.phase = 'rolling';
+    kbAim.angle = angle; kbAim.power = power;
+    if (!fromKeyboard) kbAim.active = false;
     Sound.putt(power);
     ring(b.x, b.y, 'rgba(255,255,255,0.75)', BALL_R, BALL_R + 16, 0.3, 2);
     if (!G.firstShotDone) { G.firstShotDone = true; $('hint').hidden = true; }
@@ -3281,8 +3275,6 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     let t = 12, bm = 12;
     if (!top.hidden) t = top.getBoundingClientRect().bottom - r.top + 6;
     if (!bot.hidden) bm = r.bottom - bot.getBoundingClientRect().top + 6;
-    const sw = $('swingBtn');
-    if (!sw.hidden) bm = Math.max(bm, r.bottom - sw.getBoundingClientRect().top + 60);
     if (!$('wsUi').hidden) {
       t = Math.max(...['wsTop', 'wsBar', 'wsIssues'].map(id => ($(id).hidden ? 0 : $(id).getBoundingClientRect().bottom - r.top + 8)));
       bm = r.bottom - Math.min(...['wsSel', 'wsPalette'].map(id => ($(id).hidden ? r.bottom : $(id).getBoundingClientRect().top))) + 8;
@@ -4303,8 +4295,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function currentAim() {
     const b = G.ball;
     if (!canAim() || !b) return null;
-    const power = Swing.phase === 'back' ? Swing.power : Swing.phase === 'down' ? Swing.locked : 0;
-    return { angle: kbAim.angle + wobble(), power, x: b.x, y: b.y };
+    if (drag) {
+      const dx = drag.sx - drag.cx, dy = drag.sy - drag.cy;
+      const power = clamp(Math.hypot(dx, dy) / pullMax(), 0, 1);
+      if (power < 0.03) return { angle: 0, power, cancel: true, x: b.x, y: b.y };
+      const w = screenVecToWorld(dx, dy);
+      return { angle: Math.atan2(w.y, w.x) + wobble(), power, x: b.x, y: b.y };
+    }
+    if (kbAim.active) return { angle: kbAim.angle + wobble(), power: kbAim.power, x: b.x, y: b.y };
+    return null;
   }
   function powerColor(p) {
     if (p < 0.5) { const k = p / 0.5; return `rgb(255,${Math.round(lerp(255, 212, k))},${Math.round(lerp(255, 71, k))})`; }
@@ -4312,6 +4311,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   function drawAim(g, aim) {
     const { x, y, angle, power } = aim;
+    if (aim.cancel) {
+      g.save(); g.strokeStyle = 'rgba(255,255,255,0.45)'; g.setLineDash([3, 4]); g.lineWidth = 1.5;
+      circle(g, x, y, BALL_R + 9); g.stroke(); g.restore();
+      return;
+    }
     const dx = Math.cos(angle), dy = Math.sin(angle);
     g.save();
     if (PH.guide) {
@@ -4323,7 +4327,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       }
       g.globalAlpha = 1;
     }
-    const col = powerColor(power), L = 20 + power * 110;
+    const col = powerColor(power), L = 16 + power * 110;
     const sx = x + dx * (BALL_R + 5), sy = y + dy * (BALL_R + 5), ex = sx + dx * L, ey = sy + dy * L;
     g.lineCap = 'round';
     g.strokeStyle = 'rgba(0,0,0,0.3)'; g.lineWidth = 8; g.beginPath(); g.moveTo(sx + 1, sy + 2); g.lineTo(ex + 1, ey + 2); g.stroke();
@@ -4389,64 +4393,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (aim) drawAim(g, aim);
     drawFx(g);
     if (ghosts.length) drawGhostLabels(g, ghosts);
-    drawSwingMeter(g);
     Party.draw(g);
-  }
-  // The swing meter, in screen pixels just above the swing button.
-  function rollFeetToMeter(ft) {
-    const want = ft * UNITS_PER_FT, t = Math.pow(clamp((want - MIN_ROLL) / (MAX_ROLL - MIN_ROLL), 0, 1), 2 / 3);
-    return 0.03 + 0.97 * t;
-  }
-  function drawSwingMeter(g) {
-    const b = G.ball, h = G.hole;
-    if (swingBtn.hidden || !h) return;
-    const aiming = canAim() && b;
-    if (!aiming && Swing.labelT <= 0) return;
-    const r = swingBtn.getBoundingClientRect(), app = canvas.getBoundingClientRect();
-    const W = Math.min(400, cw - 40), H = 14, x0 = (cw - W) / 2, y0 = r.top - app.top - 32;
-    const P = Swing.P, IMP = 0.2;
-    const X = v => (v >= 0 ? x0 + W * (IMP + (1 - IMP) * Math.min(v, 1)) : x0 + W * IMP * (1 + Math.max(v, P.shank) / -P.shank));
-    g.save();
-    g.setTransform(dpr, 0, 0, dpr, 0, 0);
-    if (aiming) {
-      g.beginPath(); rr(g, x0 - 6, y0 - 22, W + 12, H + 38, 10); g.fillStyle = 'rgba(15,20,28,0.62)'; g.fill();
-      g.beginPath(); rr(g, x0, y0, W, H, 7); g.fillStyle = 'rgba(247,249,251,0.14)'; g.fill();
-      g.fillStyle = 'rgba(255,212,71,0.55)'; g.fillRect(X(-P.good), y0, X(P.good) - X(-P.good), H);
-      g.fillStyle = '#35d07f'; g.fillRect(X(-P.perfect), y0, X(P.perfect) - X(-P.perfect), H);
-      g.fillStyle = 'rgba(247,249,251,0.85)'; g.fillRect(X(0) - 1, y0 - 3, 2, H + 6);
-      g.font = '600 10px "IBM Plex Mono", monospace'; g.textBaseline = 'top'; g.textAlign = 'center';
-      for (const ft of [5, 10, 20, 30]) {
-        const x = X(rollFeetToMeter(ft));
-        g.fillStyle = 'rgba(247,249,251,0.35)'; g.fillRect(x - 0.5, y0 + H - 5, 1, 5);
-        if (Swing.phase !== 'down') { g.fillStyle = 'rgba(247,249,251,0.6)'; g.fillText(`${ft}'`, x, y0 + H + 2); }
-      }
-      if (Swing.phase === 'down') {
-        g.fillStyle = 'rgba(247,249,251,0.6)';
-        g.textAlign = 'right'; g.fillText('PULL', X(-P.good) - 4, y0 + H + 2);
-        g.textAlign = 'left'; g.fillText('PUSH', X(P.good) + 4, y0 + H + 2);
-      }
-      if (Swing.phase === 'back') {
-        g.fillStyle = 'rgba(255,255,255,0.85)';
-        g.fillRect(X(0), y0 + 3, X(Swing.power) - X(0), H - 6);
-      } else if (Swing.phase === 'down') {
-        const lx = X(Swing.locked);
-        g.fillStyle = '#ffffff'; g.beginPath(); g.moveTo(lx, y0 - 1); g.lineTo(lx - 5, y0 - 8); g.lineTo(lx + 5, y0 - 8); g.fill();
-        const nx = X(Swing.needle);
-        g.fillStyle = '#ff5a4e'; g.fillRect(nx - 1.5, y0 - 4, 3, H + 8);
-      }
-      const dist = Math.hypot(b.x - h.cup[0], b.y - h.cup[1]) / UNITS_PER_FT;
-      g.font = '600 11px "IBM Plex Mono", monospace'; g.textBaseline = 'bottom';
-      g.fillStyle = '#eef2f7'; g.textAlign = 'left'; g.fillText(`PIN ${dist < 10 ? dist.toFixed(1) : Math.round(dist)} FT`, x0, y0 - 5);
-      g.textAlign = 'right'; g.fillText(`GREEN ${h.stimp >= 11 ? 'FAST' : h.stimp <= 9 ? 'SLOW' : 'MEDIUM'} (${h.stimp})`, x0 + W, y0 - 5);
-    }
-    if (Swing.labelT > 0) {
-      const a = Math.min(1, Swing.labelT / 0.4);
-      g.globalAlpha = a;
-      g.font = '800 24px "Big Shoulders Display", "Arial Narrow", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'bottom';
-      g.fillStyle = Swing.tone === 'hi' ? '#35d07f' : Swing.tone === 'bad' ? '#ffb1a8' : '#eef2f7';
-      g.fillText(Swing.label.toUpperCase(), cw / 2, y0 - 26);
-    }
-    g.restore();
   }
   // Other players in an online room who are on the same hole as you.
   function visibleGhosts() {
@@ -4535,12 +4482,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       }
     }
     updateFx(dt);
-    Swing.update(dt);
     Party.update(dt);
     if (G.screen === 'map' || Campus.flight) Campus.update(dt);
     Workshop.tick();
     if (G.screen === 'map' && Math.floor(G.clock) !== Math.floor(G.clock - dt)) Campus.syncClock();
-    syncSwingBtn();
     if (canAim() && !G.idleSaid && G.clock - (G.aimSince || 0) > 25) { G.idleSaid = true; Taunts.say('idle'); }
     Office.tick();
     if (ONLINE.on) onlineFrame(dt);
@@ -5924,26 +5869,34 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   // ---------------------------------------------------------------------------
   // Input
   // ---------------------------------------------------------------------------
+  const pullMax = () => clamp(Math.min(cw, ch) * 0.3, 110, 230);
   function localPoint(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
-  // Aim by pointing: press and drag anywhere on the course, and the putter turns to face your finger.
-  function aimAt(pt) {
-    const b = G.ball;
-    if (!b) return;
-    const w = screenToWorld(pt.x, pt.y), dx = w.x - b.x, dy = w.y - b.y;
-    if (dx * dx + dy * dy > 64) kbAim.angle = Math.atan2(dy, dx);
-  }
   canvas.addEventListener('pointerdown', e => {
     Sound.unlock();
-    if (!canAim() || Swing.phase !== 'idle') return;
+    if (!canAim()) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     e.preventDefault();
     try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-    drag = { id: e.pointerId };
-    aimAt(localPoint(e));
+    const p = localPoint(e);
+    drag = { id: e.pointerId, sx: p.x, sy: p.y, cx: p.x, cy: p.y, t: performance.now() };
+    kbAim.active = false;
     canvas.classList.add('dragging');
   });
-  canvas.addEventListener('pointermove', e => { if (drag && e.pointerId === drag.id && Swing.phase === 'idle') aimAt(localPoint(e)); });
-  const endAim = () => { drag = null; canvas.classList.remove('dragging'); };
+  canvas.addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const p = localPoint(e); drag.cx = p.x; drag.cy = p.y;
+  });
+  canvas.addEventListener('pointerup', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const p = localPoint(e); drag.cx = p.x; drag.cy = p.y;
+    const aim = currentAim();
+    const quick = performance.now() - drag.t < 260;
+    drag = null;
+    canvas.classList.remove('dragging');
+    if (aim && !aim.cancel) shoot(aim.angle, aim.power, false);
+    else if (aim && quick) toast('Drag to putt', 'Press, pull back away from where you want to go, then let go.', '');
+  });
+  canvas.addEventListener('pointercancel', () => { drag = null; canvas.classList.remove('dragging'); });
   // The campus map: drag to look around, pinch or scroll to zoom, tap a hole to see it. A tap during a
   // flight between holes skips the flight.
   const mapPtrs = new Map();
@@ -6028,110 +5981,32 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     Campus.idle = -20;
     Campus.clampCam();
   }
-  canvas.addEventListener('pointerup', endAim);
-  canvas.addEventListener('pointercancel', endAim);
 
-  // The swing: hold to draw the putter back (hold too long and it swings forward again), let go to start
-  // the stroke, then hit as the needle crosses the green zone. The needle always sweeps in from the far end,
-  // so every stroke has the same tempo. Hit early and the face is still open, pushing it right; hit late and
-  // it has closed, pulling it left. No hit at all is a shank.
-  const SWING = {
-    normal: { up: 1.15, down: 1.25, perfect: 0.055, good: 0.13, shank: -0.32 },
-    rage: { up: 0.8, down: 1.7, perfect: 0.04, good: 0.1, shank: -0.26 },
-  };
-  const Swing = {
-    phase: 'idle', t: 0, power: 0, locked: 0, needle: 0, label: '', labelT: 0, tone: '',
-    get P() { return PH.rage ? SWING.rage : SWING.normal; },
-    press() {
-      if (this.phase === 'idle') {
-        if (!canAim()) return;
-        this.phase = 'back'; this.t = 0; this.power = 0; this.labelT = 0;
-        endAim();
-        Sound.tick();
-      } else if (this.phase === 'down') this.strike(false);
-    },
-    release() {
-      if (this.phase !== 'back') return;
-      this.locked = Math.max(0.03, this.power);
-      this.needle = 1;
-      this.phase = 'down';
-      this.t = 0;
-    },
-    cancel() { this.phase = 'idle'; },
-    update(dt) {
-      if (this.labelT > 0) this.labelT -= dt;
-      if (this.phase === 'idle') return;
-      if (!canAim()) { this.cancel(); return; }
-      this.t += dt;
-      if (this.phase === 'back') {
-        const u = (this.t / this.P.up) % 2;
-        this.power = u <= 1 ? u : 2 - u;
-      } else if ((this.needle -= this.P.down * dt) < this.P.shank) this.strike(true);
-    },
-    strike(missed) {
-      const P = this.P, o = missed ? P.shank : this.needle, a = Math.abs(o);
-      let err = 0, mul = 1, label, tone = '';
-      if (missed) {
-        err = (Math.random() < 0.5 ? -1 : 1) * (0.2 + Math.random() * 0.12);
-        mul = 0.6; label = 'Shanked'; tone = 'bad';
-      } else if (a <= P.perfect) {
-        label = 'Perfect'; tone = 'hi';
-      } else if (a <= P.good) {
-        err = Math.sign(o) * (a - P.perfect) * 0.35; label = 'Good';
-      } else {
-        err = Math.sign(o) * Math.min(0.26, (P.good - P.perfect) * 0.35 + (a - P.good) * 0.9);
-        if (a > 0.2) mul = 0.92;
-        label = `${o > 0 ? 'Pushed' : 'Pulled'} ${Math.max(1, Math.round((Math.abs(err) * 180) / Math.PI))}° ${o > 0 ? 'right' : 'left'}`;
-        tone = 'bad';
-      }
-      this.phase = 'idle';
-      this.label = label; this.labelT = 1.8; this.tone = tone;
-      shoot(kbAim.angle + wobble() + err, this.locked, mul);
-    },
-  };
-  const swingBtn = $('swingBtn');
-  swingBtn.addEventListener('pointerdown', e => {
-    if (e.pointerType === 'mouse' && e.button !== 0) return;
-    e.preventDefault();
-    Sound.unlock();
-    try { swingBtn.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
-    Swing.press();
-  });
-  swingBtn.addEventListener('pointerup', e => { e.preventDefault(); Swing.release(); });
-  swingBtn.addEventListener('pointercancel', () => Swing.release());
-  swingBtn.addEventListener('contextmenu', e => e.preventDefault());
-  function syncSwingBtn() {
-    const show = G.screen === 'play' && !$('hudBottom').hidden && ONLINE.status !== 'wait' && !(Campus.flight && !Campus.flight.landed);
-    if (swingBtn.hidden === show) { swingBtn.hidden = !show; layoutView(); }
-    if (!show) return;
-    const cls = 'swing' + (Swing.phase === 'back' ? ' back' : Swing.phase === 'down' ? ' down' : '');
-    if (swingBtn.className !== cls) swingBtn.className = cls;
-    const text = Swing.phase === 'back' ? 'Let go' : Swing.phase === 'down' ? 'Hit!' : 'Hold to swing';
-    if (swingBtn.textContent !== text) swingBtn.textContent = text;
-    const off = Swing.phase === 'idle' && !canAim();
-    if (swingBtn.disabled !== off) swingBtn.disabled = off;
-  }
   window.addEventListener('keydown', e => {
     const tag = e.target && e.target.tagName;
     if (G.screen === 'map' && tag !== 'INPUT' && tag !== 'BUTTON') { mapKey(e); return; }
     if (G.screen === 'build') { if (tag !== 'INPUT' && tag !== 'SELECT' && tag !== 'BUTTON') Workshop.key(e); return; }
     if (Campus.flight) { if (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); Campus.skipFlight(); } return; }
-    if (e.key === 'Escape') { if (Swing.phase !== 'idle') { Swing.cancel(); return; } handleEscape(); return; }
+    if (e.key === 'Escape') { handleEscape(); return; }
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-    if (tag === 'BUTTON' && e.target !== swingBtn && (e.key === ' ' || e.key === 'Enter')) return;
-    if (e.key === ' ' || e.key === 'Enter') {
-      e.preventDefault();
-      if (!e.repeat) { Sound.unlock(); Swing.press(); }
-      return;
+    if (tag === 'BUTTON' && (e.key === ' ' || e.key === 'Enter')) return;
+    if (!canAim()) return;
+    const fine = e.shiftKey;
+    const deg = Math.PI / 180;
+    switch (e.key) {
+      case 'ArrowLeft': kbAim.angle -= (fine ? 0.4 : 2.5) * deg; break;
+      case 'ArrowRight': kbAim.angle += (fine ? 0.4 : 2.5) * deg; break;
+      case 'ArrowUp': kbAim.power = clamp(kbAim.power + (fine ? 0.01 : 0.04), 0.03, 1); break;
+      case 'ArrowDown': kbAim.power = clamp(kbAim.power - (fine ? 0.01 : 0.04), 0.03, 1); break;
+      case ' ': case 'Enter':
+        Sound.unlock();
+        if (kbAim.active) shoot(kbAim.angle + wobble(), kbAim.power, true);
+        break;
+      default: return;
     }
-    if (!canAim() || Swing.phase !== 'idle') return;
-    const deg = Math.PI / 180, step = (e.shiftKey ? 0.4 : 2.5) * deg;
-    if (e.key === 'ArrowLeft') kbAim.angle -= step;
-    else if (e.key === 'ArrowRight') kbAim.angle += step;
-    else return;
+    kbAim.active = true;
     e.preventDefault();
   });
-  window.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') Swing.release(); });
 
   // ---------------------------------------------------------------------------
   // HUD, overlays and screens
@@ -6250,8 +6125,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (G.screen !== 'play' || !G.hole) return;
     const def = HOLES[G.holeIdx], p = curPlayer();
     $('hudTime').textContent = def.time;
-    $('hudHole').textContent = `Hole ${G.holeIdx + 1}/${HOLES.length}`;
+    $('hudHole').textContent = '';
+    $('hudHole').append(el('span', 'hole-word', 'Hole '), document.createTextNode(`${G.holeIdx + 1}/${HOLES.length}`));
     $('hudPar').textContent = `Par ${def.par}`;
+    const s = G.hole.stimp || 10;
+    $('hudGreen').hidden = s > 9 && s < 11;
+    $('hudGreen').textContent = s >= 11 ? 'Fast green' : 'Slow green';
     $('hudName').textContent = G.hole.name;
     $('hudRage').hidden = !PH.rage;
     if (!p) return;
@@ -7418,7 +7297,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   window.addEventListener('pagehide', () => { if (ONLINE.on) Net.send({ k: 'bye' }); });
   if (urlParams.has('debug')) {
     window.n2fDebug = {
-      G, ONLINE, Net, Swing, Party, Campus, Workshop, view,
+      G, ONLINE, Net, Party, Campus, Workshop, view,
       // Jumps to a hole of the current game, for testing.
       jump(i) { loadHole(i); startTurn(0, true); },
       // The pieces the course checker needs to play shots without touching the game.
