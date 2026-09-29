@@ -31,8 +31,8 @@ Turn it on from the setup card, or from the clubhouse for an online room. Floors
 ## Stars, the Locker and the Daily Hole
 
 - **Stars:** every hole pays stars for your best score on it: one for par, two for a birdie, three for a hole in one or an eagle. They're saved in your browser, and on a shared screen they go to the first player.
-- **Career:** stars promote you from Intern to Associate (10 stars), Senior Associate (25), Manager (45), Director (70), Vice President (95) and CEO (125). The setup card shows your stars, your title and your Daily Hole streak.
-- **The Locker:** stars also unlock balls (a stress ball at 5, a coffee bean at 14, an eight ball at 30, a tennis ball at 40, a disco ball at 62, an eyeball at 88, solid gold at 115) and trails (a chalk line at 9, confetti at 22, neon at 50, flames at 75, a rainbow at 130). Open the Locker on the setup card to pick what to wear.
+- **Career:** stars promote you from Intern to Associate (10 stars), Senior Associate (25), Manager (45), Director (70), Vice President (95), CEO (125), Chair of the Board (165), Founder (220) and Legend (300), with a fanfare for each promotion. The setup card shows your stars, your title and your Daily Hole streak, and the Locker button says when there's new gear to look at.
+- **The Locker:** stars also unlock balls (a stress ball at 5, a coffee bean at 14, an eight ball at 30, a tennis ball at 40, a disco ball at 62, an eyeball at 88, solid gold at 115, a moonshot at 150, world domination at 210) and trails (a chalk line at 9, confetti at 22, neon at 50, flames at 75, a rainbow at 130, a bonus check at 175, lightning at 250). Open the Locker on the setup card to pick what to wear.
 - **Daily Hole:** one hole a day from the five buildings, with a twist: a tiny or a huge cup, an icy floor or shag carpet, bouncy walls, rush hour (everything that moves goes faster), a steep green, or shaky hands. Everyone gets the same hole and twist that day. You get three tries and the best one counts; a try counts from its first putt. Then copy a card for the team chat:
 
   ```
@@ -46,6 +46,19 @@ Turn it on from the setup card, or from the clubhouse for an online room. Floors
   Play one every workday to build a streak. Weekends never break it. The next Daily Hole opens at midnight on your own clock.
 - **Ghosts:** play a hole again on the same layout (in practice, on your second and third Daily Hole tries, or in another round on the same pins) and a faint ball replays your best run on it, stroke by stroke.
 - **The penthouse:** at 100 stars, your badge opens the CEO's private elevator. See below.
+
+## More to chase
+
+- **Daily goals:** three a day, the same for everyone: one easy (like *Take 25 putts*), one medium (like *Hole out off a wall*) and one hard (like *Get on fire: two birdies in a row*). Each pays a bonus star, and finishing all three pays one more. They're on the setup card, and the hole summary says which one is next.
+- **Bonus stars:** daily goals, secrets and golden balls pay stars on top of your hole stars. They count toward titles and unlocks, so everyday play keeps you climbing after every hole has three stars.
+- **Stars within reach:** the Locker and the results screen list the easiest stars you're missing, each with a **Practice** button. In practice, **Retry** (or R) sends you back to the tee at any time.
+- **Near misses:** when a putt for an ace, an eagle or a birdie stops within a foot, the office tells you by how many inches.
+- **Hot streaks:** two holes under par in a row sets you on fire: a flaming ball, a new sound on every putt, and a tag on the scoreboard until you make a bogey. Par keeps it going.
+- **Golden balls:** about one hole in 40 of a regular round, your ball turns gold. Sink it at par or better for a bonus star.
+- **Trick shots:** hole out off a wall, a bumper or something that moves, and the shot gets called: *Bank shot!*, *Double bank!*, *Off the forklift!*, *Sushi express!*, *Pinball wizard!* and more.
+- **Secrets:** fifteen things to find around the buildings and the campus, each worth a bonus star. The Locker drops hints; they aren't listed here.
+- **Challenge links:** after a round, **Challenge a coworker** copies a message with a link that carries your round: the building, the pins, the mode and your score on each hole. Whoever opens it gets a challenge on the setup card, plays the same layout, sees your score on each hole as they go, and gets a verdict at the end with a link to send it back. Everything is in the link, so it needs no server.
+- **Head to head:** the game keeps your win–loss record against each coworker, from challenges and from full rounds played together on one screen or in an online room. It shows on the results, in the Locker and in the clubhouse.
 
 ## Taunts and office life
 

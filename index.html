@@ -119,6 +119,38 @@ button { font: inherit; color: inherit; }
 .daily-sub { font-size: 13px; color: var(--on-floor-2); }
 .daily .btn { flex: 0 0 auto; }
 .sum-row.best { background: var(--hi-soft); }
+.challenge { display: flex; align-items: center; gap: 10px; padding: 12px 8px 12px 14px; border-radius: 14px; background: linear-gradient(135deg, #3b1f6e, #8a2a7f); color: #fff; }
+.challenge .eyebrow { color: rgba(255, 255, 255, .78); }
+.challenge-name { font: 800 26px/1 var(--display); text-transform: uppercase; margin: 3px 0 2px; }
+.challenge-sub { font-size: 13px; color: rgba(255, 255, 255, .82); }
+.challenge .btn { flex: 0 0 auto; }
+.challenge .icon-btn { color: rgba(255, 255, 255, .75); }
+.challenge .icon-btn:hover { background: rgba(255, 255, 255, .15); color: #fff; }
+.goals { border: 1.5px solid var(--line); border-radius: 14px; padding: 10px 12px; display: grid; gap: 7px; }
+.goals-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.goals-pay { font: 500 11px/1.2 var(--mono); color: var(--ink-2); }
+.goal { display: grid; grid-template-columns: 20px 1fr auto; gap: 8px; align-items: center; font-size: 14px; line-height: 1.3; }
+.goal i { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--ink-3); display: grid; place-items: center; font: 700 11px/1 var(--body); font-style: normal; }
+.goal.done i { background: #2e9b58; border-color: transparent; color: #fff; }
+.goal.done span { color: var(--ink-3); text-decoration: line-through; }
+.goal small { font: 600 12px/1 var(--mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.sum-goals { margin: -4px 0 12px; font-size: 13px; color: var(--ink-2); }
+.sum-goals .news { display: block; margin-bottom: 4px; color: #8a5a00; }
+.verdict { margin: 12px 0; padding: 12px 14px; border-radius: 12px; background: var(--hi-soft); font-size: 14px; }
+.verdict b { display: block; font: 800 26px/1.05 var(--display); text-transform: uppercase; margin-bottom: 3px; }
+.h2h { margin-top: 10px; }
+.reach { display: grid; gap: 6px; margin: 8px 0 14px; }
+.reach-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 8px 8px 8px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; }
+.reach-row b { display: block; font-size: 14px; }
+.reach-row small { display: block; font-size: 12px; line-height: 1.35; color: var(--ink-2); }
+.secrets { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px; margin: 8px 0 16px; }
+.secret { padding: 8px 10px; border-radius: 10px; background: var(--paper-2); font-size: 13px; line-height: 1.35; }
+.secret b { display: block; }
+.secret small { color: var(--ink-2); }
+.secret.found { background: var(--hi-soft); }
+.rivals { list-style: none; margin: 8px 0 16px; padding: 0; }
+.rivals li { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.rivals li span { font: 600 13px var(--mono); font-variant-numeric: tabular-nums; }
 .sum-mark { color: #c98a00; font-size: 16px; text-align: center; }
 .sum-stars { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
 .sum-stars .st { color: #c98a00; font-size: 17px; letter-spacing: 1px; margin-right: 6px; }
@@ -228,6 +260,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 .toast-big { font: 900 clamp(40px, 9vw, 78px)/.9 var(--display); text-transform: uppercase; color: #fff; letter-spacing: .01em; text-shadow: 0 4px 0 rgba(0, 0, 0, .22), 0 10px 30px rgba(0, 0, 0, .35); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .toast-small { margin: 8px auto 0; max-width: 46ch; font: 600 14px/1.4 var(--body); color: var(--on-floor); text-shadow: 0 2px 8px rgba(0, 0, 0, .6); }
 .toast.tone-hi .toast-big { color: var(--hi); }
+.toast-big.long { font-size: clamp(30px, 6.4vw, 56px); line-height: .95; white-space: normal; }
 .toast.tone-bad .toast-big { color: #ffb1a8; }
 @keyframes toast {
   0% { opacity: 0; transform: translate(-50%, -38%) scale(.94); }
@@ -305,6 +338,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 .switch-row input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .switch-row:has(input:checked) { border-color: var(--signal); background: #fff3f1; }
 .rage-tag { background: var(--signal); color: #fff; border-radius: 4px; padding: 1px 5px; letter-spacing: .08em; }
+.fire-tag { background: linear-gradient(90deg, #ff4d1a, #ffb020); }
 #stage.shake { animation: shake .38s linear; }
 @keyframes shake {
   0%, 100% { transform: translate(0, 0); }
@@ -418,7 +452,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 
   <header class="hud hud-top" id="hudTop" hidden>
     <div class="plate">
-      <div class="plate-meta"><span id="hudTime">9:00 AM</span><span id="hudHole">Hole 1/9</span><span id="hudPar">Par 2</span><span id="hudGreen" hidden></span><span class="rage-tag" id="hudRage" hidden>Rage</span></div>
+      <div class="plate-meta"><span id="hudTime">9:00 AM</span><span id="hudHole">Hole 1/9</span><span id="hudPar">Par 2</span><span id="hudGreen" hidden></span><span class="rage-tag" id="hudRage" hidden>Rage</span><span class="rage-tag fire-tag" id="hudFire" hidden>On fire</span></div>
       <div class="plate-name" id="hudName">Badge In</div>
     </div>
     <div class="board" id="board" hidden></div>
@@ -437,6 +471,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       <button class="btn btn-floor" id="menuBtn" type="button">Menu</button>
       <button class="btn btn-floor" id="tauntBtn" type="button" aria-haspopup="menu" aria-expanded="false">Heckle</button>
       <button class="btn btn-floor" id="wsReturnBtn" type="button" hidden>Back to workshop</button>
+      <button class="btn btn-floor" id="retryBtn" type="button" hidden title="Start the hole again (R)">Retry</button>
     </div>
     <p class="hint" id="hint">Press anywhere, drag back, and let go to putt. Arrow keys and Space work too.</p>
     <button class="btn btn-floor" id="soundBtn" type="button" aria-pressed="true">Sound on</button>
@@ -506,7 +541,9 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         <div class="career" id="careerChips"></div>
       </div>
       <div class="pass-body">
+        <div class="challenge" id="challengeBox" hidden></div>
         <div class="daily" id="dailyBox"></div>
+        <div class="goals" id="goalsBox"></div>
         <div class="tabs" role="tablist" aria-label="How you're playing">
           <button class="tab" role="tab" id="tabLocal" aria-selected="true" aria-controls="paneLocal" type="button">Same screen</button>
           <button class="tab" role="tab" id="tabOnline" aria-selected="false" aria-controls="paneOnline" type="button">Online room</button>
@@ -601,6 +638,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       <p class="sheet-sub" id="sumPar">Par</p>
       <ul class="sum-list" id="sumList"></ul>
       <p class="sum-stars" id="sumStars" hidden></p>
+      <p class="sum-goals" id="sumGoals" hidden></p>
       <p class="sheet-sub" id="sumNext"></p>
       <p class="memo" id="sumMemo"></p>
       <div class="row wrap" style="margin-top: 16px">
@@ -616,13 +654,17 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       <h2>End of day</h2>
       <p class="sheet-sub" id="resCourse"></p>
       <p class="sum-stars" id="resStars" hidden></p>
+      <div class="verdict" id="resVerdict" hidden></div>
       <ol class="standings" id="standings"></ol>
+      <p class="sheet-sub h2h" id="resH2H" hidden></p>
       <div class="dept-cup" id="deptCup" hidden></div>
       <div class="awards" id="awards"></div>
+      <div id="resReachBox" hidden><p class="field-label">Stars within reach</p><div class="reach" id="resReach"></div></div>
       <label class="field-label" for="shareText">Paste into your team chat</label>
       <textarea id="shareText" rows="5" readonly></textarea>
       <div class="row wrap">
         <button class="btn btn-hi btn-big" id="copyBtn" type="button">Copy results</button>
+        <button class="btn btn-hi" id="chalBtn" type="button" hidden>Challenge a coworker</button>
         <button class="btn btn-paper" id="againBtn" type="button">Play again</button>
         <button class="btn btn-paper" id="resCardBtn" type="button">Scorecard</button>
         <button class="btn btn-paper" id="newBtn" type="button">New game</button>
@@ -687,13 +729,18 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       <p class="sheet-sub" id="lockerSub"></p>
       <div class="locker-bar" aria-hidden="true"><i id="lockerFill"></i></div>
       <p class="ladder" id="lockerLadder"></p>
+      <p class="sheet-sub" id="lockerBonus"></p>
+      <div id="lockerReachBox"><p class="field-label" style="margin-top: 14px">Stars within reach</p><div class="reach" id="lockerReach"></div></div>
       <p class="field-label">Balls</p>
       <div class="gear" id="gearBalls"></div>
       <p class="field-label">Trails</p>
       <div class="gear" id="gearTrails"></div>
       <p class="field-label">Buildings</p>
       <div class="gear" id="gearBuildings"></div>
-      <p class="note">Earn stars on every hole: one for par, two for a birdie, three for a hole in one or an eagle. Your best score on each hole counts, in any building except the Workshop, in normal or Rage mode. Stars are saved on this device; on one screen, they go to the first player.</p>
+      <p class="field-label">Secrets <span id="secretCount"></span></p>
+      <div class="secrets" id="lockerSecrets"></div>
+      <div id="rivalsBox" hidden><p class="field-label">Head to head</p><ul class="rivals" id="lockerRivals"></ul></div>
+      <p class="note">Earn stars on every hole: one for par, two for a birdie, three for a hole in one or an eagle. Your best score on each hole counts, in any building except the Workshop, in normal or Rage mode. Daily goals, secrets and golden balls pay bonus stars on top. Stars are saved on this device; on one screen, they go to the first player.</p>
     </div>
   </section>
 
@@ -734,9 +781,23 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         <dt>Scoring</dt>
         <dd>Seven strokes max per hole. Hazards cost a stroke, and you play again from where you hit: coffee spills, the shredder, the loading dock, the service pit, puddles, open floor tiles, pool pockets, gutters, the pinball drain and the CEO’s koi pond.</dd>
         <dt>Stars</dt>
-        <dd>Every hole pays stars for your best score on it: one for par, two for a birdie, three for a hole in one or an eagle. Stars build your career from Intern to CEO, and the chips on the setup card show where you stand. On a shared screen, the first player earns them.</dd>
+        <dd>Every hole pays stars for your best score on it: one for par, two for a birdie, three for a hole in one or an eagle. Stars build your career from Intern to CEO and beyond, with a fanfare for each promotion, and the chips on the setup card show where you stand. On a shared screen, the first player earns them.</dd>
         <dt>The Locker</dt>
-        <dd>Stars unlock balls and trails: a stress ball, a coffee bean, an eight ball, confetti, neon, flames, solid gold and more. Open the Locker on the setup card to see what’s next and pick what to wear.</dd>
+        <dd>Stars unlock balls and trails: a stress ball, a coffee bean, an eight ball, confetti, neon, flames, solid gold and more. Open the Locker on the setup card to see what’s next, pick what to wear, and find the stars within easiest reach, each one tap from practice.</dd>
+        <dt>Daily goals</dt>
+        <dd>Three goals a day, the same for everyone, like “Make 2 birdies” or “Hole out off a wall”. Each pays a bonus star, and finishing all three pays one more. Bonus stars count toward your title and unlocks.</dd>
+        <dt>Hot streaks</dt>
+        <dd>Two holes under par in a row sets you on fire: a flaming ball until you make a bogey. Par keeps it going.</dd>
+        <dt>Golden balls</dt>
+        <dd>About once in 40 holes of a regular round, your ball turns gold. Sink it at par or better for a bonus star.</dd>
+        <dt>Trick shots</dt>
+        <dd>Hole out off a wall, a bumper, a forklift, a conveyor or a pinball bumper and the office calls the shot: bank shot, double bank, off the forklift, sushi express and more.</dd>
+        <dt>Secrets</dt>
+        <dd>Fifteen things to find around the buildings and the campus, each worth a bonus star. The Locker drops hints.</dd>
+        <dt>Practice</dt>
+        <dd>Tap a hole on the campus map, or a star within reach in the Locker, to play it on its own. Press Retry, or R, to start again from the tee.</dd>
+        <dt>Challenges</dt>
+        <dd>After a round, Challenge a coworker copies a link with your scores. Whoever opens it plays the same pins and greens, sees what you shot on each hole, and gets a verdict at the end, with a link to send it back. The game keeps your head-to-head record against each coworker, from challenges and from rounds played together.</dd>
         <dt>Daily Hole</dt>
         <dd>One hole a day from the five buildings, with a twist: a tiny cup, an icy floor, bouncy walls and so on. Everyone gets the same hole and twist that day. You get three tries and the best one counts, then share your result with your team. Play one every workday to build a streak. Weekends never break it.</dd>
         <dt>Your ghost</dt>
@@ -2207,10 +2268,10 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   // ---------------------------------------------------------------------------
   // Building a playable hole from its definition and the day's variant
   // ---------------------------------------------------------------------------
-  function pushSegs(segs, pts, e) {
+  function pushSegs(segs, pts, e, blk) {
     for (let i = 0; i < pts.length; i++) {
       const a = pts[i], b = pts[(i + 1) % pts.length];
-      segs.push({ ax: a[0], ay: a[1], bx: b[0], by: b[1], e });
+      segs.push({ ax: a[0], ay: a[1], bx: b[0], by: b[1], e, blk });
     }
   }
   function buildHole(idx, variant, defIn) {
@@ -2295,7 +2356,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     h.lamps = (def.lamps || []).map(([x, y, r, c, k]) => [mx(x), y, r, c, k]).concat([[h.tee[0], h.tee[1], 120], [h.cup[0], h.cup[1], 130]]);
     h.segs = [];
     for (const poly of h.course) pushSegs(h.segs, poly, PH.wallE);
-    for (const b of h.blocks) pushSegs(h.segs, b.pts, b.e != null ? b.e : PH.wallE);
+    for (const b of h.blocks) pushSegs(h.segs, b.pts, b.e != null ? b.e : PH.wallE, b);
     if (def.frame) {
       const f = def.frame;
       h.frame = M ? [BOX_W - f[2], f[1], BOX_W - f[0], f[3]] : f.slice();
@@ -2411,6 +2472,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       // A pinball pop bumper, and a squeal of tyres on the garage ramp.
       bumper() { tone({ freq: 1180, to: 1560, type: 'square', dur: 0.07, vol: 0.06 }); tone({ freq: 392, dur: 0.16, vol: 0.12, delay: 0.02 }); noise({ dur: 0.05, vol: 0.12, type: 'highpass', freq: 2400, q: 0.8 }); },
       squeal() { noise({ dur: 0.55, vol: 0.1, type: 'bandpass', freq: 2600, to: 1900, q: 9 }); },
+      fire() { noise({ dur: 0.8, vol: 0.22, type: 'bandpass', freq: 380, to: 1900, q: 0.9 }); tone({ freq: 220, to: 660, type: 'sawtooth', dur: 0.45, vol: 0.05 }); [523, 784, 1047].forEach((f, i) => tone({ freq: f, type: 'triangle', dur: 0.25, vol: 0.1, delay: 0.25 + i * 0.08 })); },
       // Knocking props around, by what they're made of.
       prop(mat, k) {
         const v = 0.04 + 0.2 * k;
@@ -2499,7 +2561,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     return (lo + hi) / 2;
   }
 
-  const emptyStats = () => ({ aces: [], spills: 0, bounces: 0, longest: 0, lips: 0, tees: 0, bumps: 0, smash: 0 });
+  const emptyStats = () => ({ aces: [], spills: 0, bounces: 0, longest: 0, lips: 0, tees: 0, bumps: 0, smash: 0, tricks: 0, fires: 0, near: 0 });
   const holeName = i => (PH.rage ? HOLES[i].rageName : HOLES[i].name);
   // A Daily Hole's twist is normal play with a few numbers changed.
   function setMode(rage, twist) { PH = twist && twist.ph ? { ...MODES.normal, ...twist.ph } : rage ? MODES.rage : MODES.normal; G.rage = !!rage; }
@@ -2516,7 +2578,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   const starsFor = (score, par) => (score == null || score > par ? 0 : score === 1 || score <= par - 2 ? 3 : score <= par - 1 ? 2 : 1);
   const starText = n => '★'.repeat(n) + '☆'.repeat(3 - n);
   const STAR_COURSES = ['office', 'factory', 'garage', 'gameroom', 'datacenter', 'penthouse'];
-  const TITLES = [[0, 'Intern'], [10, 'Associate'], [25, 'Senior Associate'], [45, 'Manager'], [70, 'Director'], [95, 'Vice President'], [125, 'CEO']];
+  const TITLES = [[0, 'Intern'], [10, 'Associate'], [25, 'Senior Associate'], [45, 'Manager'], [70, 'Director'], [95, 'Vice President'], [125, 'CEO'], [165, 'Chair of the Board'], [220, 'Founder'], [300, 'Legend']];
   const GEAR = [
     { id: 'classic', kind: 'ball', name: 'Company issue', stars: 0 },
     { id: 'none', kind: 'trail', name: 'Standard', stars: 0 },
@@ -2533,6 +2595,10 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     { id: 'penthouse', kind: 'building', name: 'The CEO’s Penthouse', stars: 100 },
     { id: 'gold', kind: 'ball', name: 'Solid gold', stars: 115 },
     { id: 'rainbow', kind: 'trail', name: 'Rainbow', stars: 130 },
+    { id: 'moon', kind: 'ball', name: 'Moonshot', stars: 150 },
+    { id: 'money', kind: 'trail', name: 'Bonus check', stars: 175 },
+    { id: 'globe', kind: 'ball', name: 'World domination', stars: 210 },
+    { id: 'bolt', kind: 'trail', name: 'Lightning', stars: 250 },
   ];
   const Career = {
     data: null,
@@ -2545,6 +2611,11 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         ball: ok && typeof d.ball === 'string' ? d.ball : 'classic',
         trail: ok && typeof d.trail === 'string' ? d.trail : 'none',
         seen: ok && Number.isFinite(d.seen) ? d.seen : 0,
+        bonus: { goals: ok && d.bonus && Number.isFinite(d.bonus.goals) ? d.bonus.goals : 0, gold: ok && d.bonus && Number.isFinite(d.bonus.gold) ? d.bonus.gold : 0 },
+        secrets: ok && d.secrets && typeof d.secrets === 'object' ? d.secrets : {},
+        today: ok && d.today && typeof d.today === 'object' && typeof d.today.key === 'string' ? d.today : null,
+        h2h: ok && d.h2h && typeof d.h2h === 'object' ? d.h2h : {},
+        rank: ok && Number.isInteger(d.rank) ? d.rank : null,
       };
       return this;
     },
@@ -2554,13 +2625,18 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     courseStars(course) { const c = COURSES[course]; return c ? c.holes.reduce((s, _, i) => s + this.stars(course, i), 0) : 0; },
     // The penthouse's stars only count once you can get in, and you can only earn them there.
     courses() { return STAR_COURSES.filter(id => COURSES[id] && COURSES[id].holes.length && (id !== 'penthouse' || this.has('penthouse'))); },
-    total() { return STAR_COURSES.reduce((s, id) => s + this.courseStars(id), 0); },
+    holeStars() { return STAR_COURSES.reduce((s, id) => s + this.courseStars(id), 0); },
+    // Bonus stars: one per daily goal (two for the last of the day), one per secret, one per golden ball.
+    bonusStars() { const b = this.data.bonus; return b.goals + b.gold + Object.keys(this.data.secrets).length; },
+    total() { return this.holeStars() + this.bonusStars(); },
     max() { return this.courses().reduce((s, id) => s + COURSES[id].holes.length * 3, 0); },
     title(n = this.total()) { return TITLES.filter(([k]) => n >= k).pop()[1]; },
     has(id) { const g = GEAR.find(x => x.id === id); return !!g && this.total() >= g.stars; },
     // What you're wearing. Anything still locked (say, from a save made elsewhere) falls back to the standard issue.
     wearing(kind) { const id = this.data[kind], g = GEAR.find(x => x.id === id && x.kind === kind); return g && this.total() >= g.stars ? id : kind === 'ball' ? 'classic' : 'none'; },
     next() { const n = this.total(); return GEAR.find(g => g.stars > n) || null; },
+    // Changes that pay bonus stars go through here, so anything they unlock gets announced.
+    grant(fn) { const before = this.total(); fn(this.data); this.save(); const after = this.total(); return GEAR.filter(g => g.stars > before && g.stars <= after); },
     // A finished hole: keeps your best and says what changed, so the game can make a fuss about it.
     record(course, idx, score) {
       if (!STAR_COURSES.includes(course) || !COURSES[course].holes[idx]) return null;
@@ -2574,6 +2650,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     },
   };
   Career.load();
+  // Titles you already had before promotions were announced don't get announced now.
+  if (Career.data.rank == null) Career.data.rank = TITLES.findIndex(([, t]) => t === Career.title());
 
   // The Daily Hole: one hole a day from the five buildings, with a twist, the same for everyone that day.
   // Three tries, and the best one counts. A try counts from its first putt, so reloading doesn't reroll it.
@@ -2726,6 +2804,250 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   };
 
   // ---------------------------------------------------------------------------
+  // More to chase: daily goals, secrets, golden balls, hot streaks, trick shots, challenges and rivals
+  // ---------------------------------------------------------------------------
+  // You, as opposed to someone else taking their turn on the same screen.
+  const isMe = () => G.screen === 'play' && G.players.length > 0 && curPlayer() === G.players[0];
+  // Three goals a day, the same for everyone: one easy, one medium and one hard. Each pays a bonus star, and
+  // finishing all three pays one more. `on` is the event that moves a goal along, and `ok` filters those events.
+  const GOALS = {
+    easy: [
+      { id: 'putts', text: 'Take 25 putts', n: 25, on: 'putt' },
+      { id: 'topple', text: 'Knock over 6 things', n: 6, on: 'topple' },
+      { id: 'holes', text: 'Finish 9 holes', n: 9, on: 'hole' },
+      { id: 'daily', text: 'Play the Daily Hole', n: 1, on: 'daily' },
+      { id: 'pars', text: 'Make par or better on 4 holes', n: 4, on: 'hole', ok: e => e.diff <= 0 },
+    ],
+    medium: [
+      { id: 'birdies', text: 'Make 2 birdies', n: 2, on: 'hole', ok: e => e.diff < 0 },
+      { id: 'long15', text: 'Sink a putt from 15 feet or more', n: 1, on: 'sink', ok: e => e.ft >= 15 },
+      { id: 'bank', text: 'Hole out off a wall', n: 1, on: 'sink', ok: e => e.walls >= 1 },
+      { id: 'stars2', text: 'Earn 2 new stars', n: 2, on: 'stars', can: () => Career.holeStars() < Career.max() - 6 },
+      { id: 'smash', text: 'Break or spill 2 things', n: 2, on: 'smash' },
+      { id: 'round', text: 'Finish a full round', n: 1, on: 'round' },
+      { id: 'rage', text: 'Par or better on a Rage mode hole', n: 1, on: 'hole', ok: e => e.rage && e.diff <= 0 },
+    ],
+    hard: [
+      { id: 'fire', text: 'Get on fire: two birdies in a row', n: 1, on: 'fire' },
+      { id: 'under', text: 'Finish a round under par', n: 1, on: 'round', ok: e => e.rel < 0 },
+      { id: 'long30', text: 'Sink a putt from 30 feet or more', n: 1, on: 'sink', ok: e => e.ft >= 30 },
+      { id: 'eagle', text: 'Make an eagle or a hole in one', n: 1, on: 'hole', ok: e => e.score === 1 || e.diff <= -2 },
+      { id: 'dry', text: 'Finish a round without a hazard', n: 1, on: 'round', ok: e => e.spills === 0 },
+      { id: 'double', text: 'Hole out off two walls', n: 1, on: 'sink', ok: e => e.walls >= 2 },
+      { id: 'birdies3', text: 'Make 3 birdies in one round', n: 1, on: 'round', ok: e => e.birdies >= 3 },
+    ],
+  };
+  const goalById = id => GOALS.easy.concat(GOALS.medium, GOALS.hard).find(g => g.id === id);
+  const Goals = {
+    today() {
+      const key = todayKey(), t = Career.data.today;
+      if (t && t.key === key && Array.isArray(t.ids) && t.ids.length === 3 && t.ids.every(goalById)) {
+        if (!t.prog || typeof t.prog !== 'object') t.prog = {};
+        if (!Array.isArray(t.done)) t.done = [];
+        return t;
+      }
+      const r = mulberry32(hashStr('goals#' + key)), ids = [];
+      for (const tier of ['easy', 'medium', 'hard']) {
+        const all = GOALS[tier], start = Math.floor(r() * all.length);
+        // Everyone gets the same pick, unless it's one you can't do any more.
+        for (let k = 0; k < all.length; k++) { const g = all[(start + k) % all.length]; if (!g.can || g.can()) { ids.push(g.id); break; } }
+      }
+      Career.data.today = { key, ids, prog: {}, done: [] };
+      Career.save();
+      return Career.data.today;
+    },
+    list() {
+      const t = this.today();
+      return t.ids.map(id => { const g = goalById(id); return { ...g, prog: Math.min(t.prog[id] || 0, g.n), done: t.done.includes(id) }; });
+    },
+    note(on, ev = {}) {
+      const t = this.today();
+      let moved = false;
+      for (const id of t.ids) {
+        const g = goalById(id);
+        if (g.on !== on || t.done.includes(id) || (g.ok && !g.ok(ev))) continue;
+        t.prog[id] = (t.prog[id] || 0) + (ev.count || 1);
+        moved = true;
+        if (t.prog[id] < g.n) continue;
+        t.done.push(id);
+        const all = t.done.length === 3, un = Career.grant(d => { d.bonus.goals += all ? 2 : 1; });
+        bonusNews(`Goal done: ${g.text}.${all ? ' That’s all three today, so here’s one more.' : ''}`, all ? 2 : 1, un);
+      }
+      if (moved) Career.save();
+    },
+  };
+  // A bonus star or two, announced by a ping from your career, with any unlock it brings.
+  // Hole news: what you earned during this hole, written up on the hole summary too.
+  function holeNews(text, n) { if (G.screen === 'play' && G.holeNews) G.holeNews.push(`${text} ★ +${n}`); }
+  function bonusNews(text, n, unlocked, noted) {
+    if (!noted) holeNews(text, n);
+    ping({ from: 'Your career', initials: '★', color: '#c98a00', text: `${text} ★ +${n}`, tag: 'bonus' });
+    Sound.soft();
+    if (G.screen === 'play' && G.ball && G.ball.state !== 'hidden' && G.ball.state !== 'sunk') starBurst(G.ball.x, G.ball.y, n);
+    if (unlocked && unlocked.length) announceUnlock(unlocked[unlocked.length - 1], 1.6);
+    checkPromotion(3);
+    if (!overlays.setup.hidden) renderCareer();
+  }
+  // A better title is a promotion, announced once.
+  function checkPromotion(delay) {
+    const i = TITLES.findIndex(([, t]) => t === Career.title());
+    if (i <= Career.data.rank) return;
+    Career.data.rank = i;
+    Career.save();
+    const t = TITLES[i][1];
+    if (G.screen === 'play' && G.holeNews) G.holeNews.push(`Promoted to ${t}!`);
+    after(delay, () => {
+      toast('Promoted!', `You’re now ${/^[AEIOU]/.test(t) ? 'an' : 'a'} ${t}.`, 'hi');
+      Sound.cheer();
+      if (G.screen === 'play' && G.hole) confetti(G.hole.cup[0], G.hole.cup[1], 70);
+    });
+  }
+  function announceUnlock(g, delay) {
+    after(delay, () => {
+      toast('Unlocked!', g.kind === 'building' ? `${g.name}: your badge now opens the private elevator. Pick it on the setup card.` : `${g.name}. Wear it from the Locker on the setup card.`, 'hi');
+      Sound.cheer();
+    });
+  }
+  // Secrets: small things to find, each worth a bonus star. The Locker drops hints.
+  const SECRETS = [
+    { id: 'soda', name: 'Free soda', hint: 'The vending machines in the factory break room owe you a can.' },
+    { id: 'strike', name: 'Strike!', hint: 'Bowl a perfect frame in the Game Room.' },
+    { id: 'scratch', name: 'Wrong game', hint: 'Pool balls belong in pockets. Help one get there.' },
+    { id: 'sweep', name: 'Clean sweep', hint: 'Knock down a whole pyramid with one putt.' },
+    { id: 'early', name: 'Leaving early', hint: 'A hole in one on the last hole of the day.' },
+    { id: 'albatross', name: 'Albatross', hint: 'A hole in one on a par 4.' },
+    { id: 'buzzer', name: 'Buzzer beater', hint: 'Sink it with your last allowed stroke.' },
+    { id: 'kevin', name: 'Meet Kevin', hint: 'The Roomba has a name. Let it say hello.' },
+    { id: 'scenic', name: 'Scenic route', hint: 'In Rage mode, the elevator has ideas of its own.' },
+    { id: 'heckler', name: 'Glutton for punishment', hint: 'Ask the office what it thinks. Then keep asking.' },
+    { id: 'ducks', name: 'Duck, duck, putt', hint: 'Say hello to the ducks on the campus pond.' },
+    { id: 'night', name: 'Graveyard shift', hint: 'Finish a hole in the small hours.' },
+    { id: 'sushi', name: 'Conveyor-belt sushi', hint: 'Ride the whole loop at the penthouse lunch.', ph: true },
+    { id: 'chopped', name: 'Chopped', hint: 'Get a little too close to the helicopter.', ph: true },
+    { id: 'koi', name: 'Fish food', hint: 'The CEO’s koi are always hungry.', ph: true },
+  ];
+  const Secrets = {
+    found(id) { return !!Career.data.secrets[id]; },
+    count() { return SECRETS.filter(s => this.found(s.id)).length; },
+    // Only your own play finds them, except on the campus map.
+    find(id, delay = 0.5, anyone = false) {
+      const s = SECRETS.find(x => x.id === id);
+      if (!s || this.found(id) || (!anyone && !isMe())) return;
+      const un = Career.grant(d => { d.secrets[id] = todayKey(); });
+      holeNews(`Secret found: ${s.name}.`, 1);
+      after(delay, () => { toast('Secret found!', `${s.name}. ${this.count()} of ${SECRETS.length} found.`, 'hi'); Sound.cheer(); });
+      after(delay + 0.3, () => bonusNews(`Secret found: ${s.name}.`, 1, un, true));
+    },
+  };
+  // A golden ball turns up on about one hole in 40 of a regular round. Sink it at par or better for a bonus star.
+  const GOLD_ODDS = 1 / 40;
+  // Trick shots: what the putt that dropped touched on the way. Movers and belts beat banks, which beat bumpers.
+  const MOVER_TRICKS = {
+    forklift: 'Off the forklift!', car: 'Off a moving car!', cart: 'Off the mail cart!', crash: 'Off the crash cart!', tapebot: 'Robot assist!',
+    robot: 'Robot assist!', mallet: 'Off the mallet!', foos: 'Foosball assist!', flipper: 'Flipper shot!', barrier: 'Off the barrier arm!',
+    cardoor: 'Door ding!', brush: 'Car-wash assist!', minute: 'Off the clock hands!', hour: 'Off the clock hands!', rotor: 'Off the rotor!',
+    vaultdoor: 'Off the vault door!', roomba: 'Kevin assist!', doors: 'Off the doors!',
+  };
+  const BELT_TRICKS = { sushi: 'Sushi express!', treadmill: 'Treadmill assist!', rollers: 'Off the line!', slide: 'Down the slide!' };
+  const BUMPER_NAMES = {
+    planter: 'planter', table: 'table', stool: 'bar stool', beanbag: 'beanbag', pillar: 'pillar', bollard: 'bollard', charger: 'charger',
+    extinguisher: 'extinguisher', hightop: 'high-top', palm: 'palm', globe: 'globe', trophy: 'trophy', hub: 'clock',
+  };
+  const newTricks = () => ({ walls: 0, bumps: 0, pops: 0, movers: [], belts: [], spin: false, air: false, wallT: -1, bumpT: -1, bumper: null });
+  function trickFor(tk, ft) {
+    if (!tk || ft < 4) return null;
+    const bumper = `the ${BUMPER_NAMES[tk.bumper] || 'bumper'}`;
+    if (tk.pops) return 'Pinball wizard!';
+    if (tk.movers.length) return MOVER_TRICKS[tk.movers[0]] || 'Special delivery!';
+    if (tk.belts.length) { const z = tk.belts.find(b => b.skin) || tk.belts[0]; return BELT_TRICKS[z.skin] || 'Conveyor assist!'; }
+    if (tk.spin) return 'Off the dance floor!';
+    if (tk.air) return 'Wind-assisted!';
+    if (tk.walls >= 4) return 'Off every wall!';
+    if (tk.walls === 3) return 'Triple bank!';
+    if (tk.walls === 2) return 'Double bank!';
+    if (tk.walls === 1) return tk.bumps ? `Bank shot off ${bumper}!` : 'Bank shot!';
+    if (tk.bumps) return `Off ${bumper}!`;
+    return null;
+  }
+  // What a putt touched on its way. Contacts closer together than a tenth of a second are the same bounce.
+  function noteContacts(h, b, wall, wallI, bump, bumpI, sf) {
+    const tk = b.tk, t = b.rollT;
+    if (wall && wallI > 45 && t - tk.wallT > 0.1) {
+      tk.walls++; tk.wallT = t;
+      if (wall.blk && wall.blk.kind === 'vending') h.vend = (h.vend || 0) + 1;
+    }
+    if (bump && bumpI > 45 && t - tk.bumpT > 0.1) { tk.bumps++; tk.bumpT = t; tk.bumper = bump.kind || null; }
+    const m = h.hitMover;
+    if (m) { const k = m.kind || m.type; if (!tk.movers.includes(k)) tk.movers.push(k); }
+    if (sf.conv && !tk.belts.includes(sf.conv)) tk.belts.push(sf.conv);
+    if (sf.spin) tk.spin = true;
+    if (sf.air) tk.air = true;
+  }
+  // The easiest stars you don't have yet: holes you've never finished or are one good score from the next star.
+  // Holes in the building you name come first.
+  function starsWithinReach(n = 3, here = null) {
+    const out = [];
+    Career.courses().forEach((c, ci) => COURSES[c].holes.forEach((def, i) => {
+      const best = Career.best(c, i), st = starsFor(best, def.par);
+      if (st >= 3) return;
+      const target = st === 0 ? def.par : st === 1 ? def.par - 1 : Math.max(1, def.par - 2);
+      const need = best == null ? 0.5 : best - target;
+      out.push({ course: c, idx: i, def, best, st, target, need, order: ci * 10 + i });
+    }));
+    out.sort((a, b) => (b.course === here) - (a.course === here) || a.need - b.need || a.order - b.order);
+    return out.slice(0, n);
+  }
+  function reachText(r) {
+    if (r.best == null) return 'Not played yet. Par gets you a star.';
+    const next = r.st === 0 ? 'Par gets you a star' : r.st === 1 ? 'A birdie gets you a second star' : r.target === 1 ? 'A hole in one gets you the third' : 'An eagle gets you the third';
+    return `Your best: ${r.best} on a par ${r.def.par}. ${next}.`;
+  }
+  // Challenge links: your round, packed into the link itself, so a coworker can play the same pins and try to beat
+  // you. No server needed.
+  const Challenge = {
+    pending: null,
+    encode(o) {
+      const s = unescape(encodeURIComponent(JSON.stringify(o)));
+      return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    },
+    decode(t) {
+      try {
+        const b = String(t).replace(/-/g, '+').replace(/_/g, '/'), o = JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4)))));
+        const c = o && COURSES[o.c];
+        if (!c || o.c === 'workshop' || !c.holes.length || typeof o.k !== 'string' || o.k.length > 80 || !Array.isArray(o.s) || o.s.length !== c.holes.length) return null;
+        if (!o.s.every(v => Number.isInteger(v) && v >= 1 && v <= MAX_CAP)) return null;
+        const n = cleanName(o.n);
+        return n ? { n, c: o.c, k: o.k, r: !!o.r, s: o.s.slice(), d: typeof o.d === 'string' ? o.d.slice(0, 10) : '' } : null;
+      } catch (e) { return null; }
+    },
+    link(o) { return `${PUBLIC_URL}#vs=${this.encode(o)}`; },
+    // Read a challenge from the address bar, then tidy the address so a reload doesn't offer it again.
+    fromUrl() {
+      const m = /[#&]vs=([A-Za-z0-9_-]+)/.exec(location.hash || '');
+      if (!m) return;
+      this.pending = this.decode(m[1]);
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* ignore */ }
+    },
+    total(o) { return o.s.reduce((a, v) => a + v, 0); },
+    par(o) { return COURSES[o.c].holes.reduce((a, h) => a + h.par, 0); },
+  };
+  // Head-to-head records against each coworker, from challenges and from rounds played together.
+  const Rivals = {
+    key: name => cleanName(name).toLowerCase(),
+    add(name, mine, theirs) {
+      const n = cleanName(name);
+      if (!n || /^Player \d+$/.test(n)) return;
+      const k = this.key(n), r = Career.data.h2h[k] || { n, w: 0, l: 0, t: 0 };
+      r.n = n;
+      if (mine < theirs) r.w++; else if (mine > theirs) r.l++; else r.t++;
+      Career.data.h2h[k] = r;
+    },
+    of(name) { return Career.data.h2h[this.key(name)] || null; },
+    text(r) { return `${r.w}–${r.l}${r.t ? `–${r.t}` : ''}`; },
+    list() { return Object.values(Career.data.h2h).sort((a, b) => b.w + b.l + b.t - (a.w + a.l + a.t)); },
+  };
+
+  // ---------------------------------------------------------------------------
   // Physics
   // ---------------------------------------------------------------------------
   function respond(b, nx, ny, e, wvx, wvy) {
@@ -2865,19 +3187,21 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   function collideMovers(h, b) {
     let imp = 0;
     for (const m of h.movers) {
+      let i = 0;
       if (m.type === 'spinner') {
         const tx = m.x + Math.cos(m.angle) * m.len, ty = m.y + Math.sin(m.angle) * m.len;
-        imp = Math.max(imp, collideSeg(b, m.x, m.y, tx, ty, m.w / 2, 0.6, { x: m.x, y: m.y, speed: m.av }));
+        i = collideSeg(b, m.x, m.y, tx, ty, m.w / 2, 0.6, { x: m.x, y: m.y, speed: m.av });
       } else if (m.type === 'slider') {
-        if (m.r) imp = Math.max(imp, collideCircle(b, m.cx, m.cy, m.r, 0.8, m.vx, m.vy));
-        else imp = Math.max(imp, collideBox(b, m.cx - m.w / 2, m.cy - m.h / 2, m.cx + m.w / 2, m.cy + m.h / 2, 0.7, m.vx, m.vy));
+        i = m.r ? collideCircle(b, m.cx, m.cy, m.r, 0.8, m.vx, m.vy) : collideBox(b, m.cx - m.w / 2, m.cy - m.h / 2, m.cx + m.w / 2, m.cy + m.h / 2, 0.7, m.vx, m.vy);
       } else if (m.type === 'doors') {
-        for (const p of doorPanels(m)) imp = Math.max(imp, collideBox(b, p.x0, p.y0, p.x1, p.y1, 0.6, p.vx, 0));
+        for (const p of doorPanels(m)) i = Math.max(i, collideBox(b, p.x0, p.y0, p.x1, p.y1, 0.6, p.vx, 0));
       } else if (m.type === 'roomba') {
-        const i = collideCircle(b, m.x, m.y, m.r, 0.75, m.vx, m.vy);
+        i = collideCircle(b, m.x, m.y, m.r, 0.75, m.vx, m.vy);
         if (i > 0) h.bumpedByRoomba = true;
-        imp = Math.max(imp, i);
       }
+      // Whatever the ball bounced off hardest, for trick shots.
+      if (i > 45) h.hitMover = m;
+      imp = Math.max(imp, i);
     }
     return imp;
   }
@@ -2892,12 +3216,12 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     return 0;
   }
   function surfaceAt(h, x, y) {
-    let fric = 1, slick = 1, ax = 0, ay = 0, conv = null, spin = null;
+    let fric = 1, slick = 1, ax = 0, ay = 0, conv = null, spin = null, air = false;
     for (const z of h.zones) {
       if (z.type === 'rough') { if (inZone(z, x, y)) fric = Math.max(fric, z.mul || 2.6); }
       else if (z.type === 'slick') { if (inZone(z, x, y)) slick = Math.min(slick, z.mul); }
       else if (z.type === 'slope') { if (inZone(z, x, y)) { ax += z.ax; ay += z.ay; } }
-      else if (z.type === 'air') { if (inZone(z, x, y)) { const k = airPower(z, h.t); ax += z.ax * k; ay += z.ay * k; } }
+      else if (z.type === 'air') { if (inZone(z, x, y)) { const k = airPower(z, h.t); ax += z.ax * k; ay += z.ay * k; if (k > 0.3) air = true; } }
       else if (z.type === 'conveyor') { if (inZone(z, x, y)) conv = z; }
       else if (z.type === 'turntable') { const dx = x - z.x, dy = y - z.y; if (dx * dx + dy * dy < z.r * z.r) spin = z; }
       else if (z.type === 'funnel') {
@@ -2906,7 +3230,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       }
     }
     // A spill beats a rug: oil on carpet is still oil.
-    return { fric: slick < 1 ? slick : fric, ax, ay, conv, spin };
+    return { fric: slick < 1 ? slick : fric, ax, ay, conv, spin, air };
   }
 
   // ---------------------------------------------------------------------------
@@ -2947,8 +3271,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     for (const d of def.props || []) {
       const [x, y] = mpt([d.x, d.y]);
       if (d.kind === 'cups' || d.kind === 'cans' || d.kind === 'glasses') {
-        const k = { cups: 'cup', cans: 'can', glasses: 'glass' }[d.kind], s = PROP_TYPES[k].r * 2.1;
-        for (let row = 0; row < 3; row++) for (let i = 0; i <= row; i++) out.push(newProp(k, x + (i - row / 2) * s, y + (row - 1) * s * 0.88));
+        const k = { cups: 'cup', cans: 'can', glasses: 'glass' }[d.kind], s = PROP_TYPES[k].r * 2.1, grp = 'g' + out.length;
+        for (let row = 0; row < 3; row++) for (let i = 0; i <= row; i++) { const q = newProp(k, x + (i - row / 2) * s, y + (row - 1) * s * 0.88); q.grp = grp; out.push(q); }
       } else if (d.kind === 'rack' || d.kind === 'pins') {
         const k = d.kind === 'rack' ? 'pool' : 'pin', s = d.kind === 'rack' ? 14.2 : 24, dir = (d.dir || 1) * (M ? -1 : 1);
         let n = 0;
@@ -3176,21 +3500,24 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     if (sp > MAX_SPEED) { const k = MAX_SPEED / sp; b.vx *= k; b.vy *= k; }
     b.x += b.vx * dt; b.y += b.vy * dt;
 
-    let imp = 0;
+    let imp = 0, wall = null, wallI = 0, bump = null, bumpI = 0;
+    h.hitMover = null;
     for (let it = 0; it < 2; it++) {
-      for (const s of h.segs) { const i = collideSeg(b, s.ax, s.ay, s.bx, s.by, 0, s.e, null); if (i > imp) imp = i; }
+      for (const s of h.segs) { const i = collideSeg(b, s.ax, s.ay, s.bx, s.by, 0, s.e, null); if (i > imp) imp = i; if (i > wallI) { wallI = i; wall = s; } }
       for (const c of h.bumpers) {
         const i = collideCircle(b, c.x, c.y, c.r, c.e);
-        if (!c.kick) { if (i > imp) imp = i; }
+        if (!c.kick) { if (i > imp) imp = i; if (i > bumpI) { bumpI = i; bump = c; } }
         else if (i > 0 && h.t - (c.hitT ?? -1) > 0.06) {
           // Pop bumper: whatever came in, it goes out at least this fast.
           const dx = b.x - c.x, dy = b.y - c.y, d = Math.hypot(dx, dy) || 1, nx = dx / d, ny = dy / d, vn = b.vx * nx + b.vy * ny;
           if (vn < c.kick) { b.vx += nx * (c.kick - vn); b.vy += ny * (c.kick - vn); }
           c.hitT = h.t; out.pop = c;
+          if (b.tk) b.tk.pops++;
         }
       }
       const mi = collideMovers(h, b); if (mi > imp) imp = mi;
     }
+    if (b.tk) noteContacts(h, b, wall, wallI, bump, bumpI, sf);
     for (const p of h.props) if (p.alive) hitProp(h, b, p, out);
     if (imp > 45) { out.imp = Math.max(out.imp || 0, imp); b.hits = (b.hits || 0) + 1; }
 
@@ -3243,6 +3570,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     if (b) stepBall(h, b, dt, out);
     if (out.hits.length) onPropHits(out.hits);
     if (!b) return;
+    if (b.tk && G.screen === 'play') rollSecrets(h, b);
     if (out.pushed) { onPushed(out.byRoomba); return; }
     if (out.imp) onImpact(out.imp, b);
     if (out.pop) onPop(out.pop);
@@ -3253,6 +3581,16 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     if (out.rest && b.state === 'rest') onBallRest();
   }
 
+  function rollSecrets(h, b) {
+    if (h.vend >= 3 && !h.sodaOut) {
+      h.sodaOut = true;
+      const v = h.blocks.find(k => k.kind === 'vending');
+      if (v) { const q = newProp('can', (v.bb.x0 + v.bb.x1) / 2, v.bb.y1 + 16); q.vy = 160; q.sleep = false; h.props.push(q); Sound.prop('can', 1); }
+      Secrets.find('soda');
+    }
+    if (b.tk.belts.filter(z => z.skin === 'sushi').length >= 4) Secrets.find('sushi');
+    if (b.tk.movers.includes('rotor')) Secrets.find('chopped');
+  }
   function raySeg(x, y, dx, dy, ax, ay, bx, by) {
     const ex = bx - ax, ey = by - ay, den = dx * ey - dy * ex;
     if (Math.abs(den) < 1e-9) return null;
@@ -3290,6 +3628,11 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       const a = (i / (n * 4)) * TAU + Math.random() * 0.4, s = 90 + Math.random() * 120;
       fxList.push({ k: 'star', x, y, vx: Math.cos(a) * s + view.up[0] * 160, vy: Math.sin(a) * s + view.up[1] * 160, life: 1.3, max: 1.3, size: 5 + Math.random() * 4, rot: Math.random() * TAU });
     }
+  }
+  function fireBurst(x, y) {
+    burst(x, y, '#ff7a1a', 26, 280, 0.8, 3.4);
+    burst(x, y, '#ffd447', 18, 200, 0.7, 2.6);
+    ring(x, y, 'rgba(255,140,40,0.9)', PH.cupR, 80, 0.8, 4);
   }
   function confetti(x, y, n) {
     if (reduceMotion) return;
@@ -4164,32 +4507,40 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     const now = performance.now(), playing = G.screen === 'play' && G.phase === 'rolling';
     for (const { p, j, tipped, broke, eaten, sunk } of hits) {
       const T = PROP_TYPES[p.kind];
+      if ((broke || tipped) && playing) { p.downAt = G.strokeId; if (isMe()) Goals.note('topple'); if (p.grp) sweepCheck(p); }
       if (broke) {
         Sound.smash(T.mat);
         burst(p.x, p.y, p.kind === 'jug' ? '#9fd8ff' : p.kind === 'glass' ? '#eef7fb' : p.kind === 'crate' ? '#b98a52' : '#d2a46a', 14, 220, 0.55, 3);
         if (!reduceMotion) shake();
-        if (playing) { curPlayer().stats.smash++; Taunts.say(T.spill ? 'spill' : 'smash'); }
+        if (playing) { curPlayer().stats.smash++; Taunts.say(T.spill ? 'spill' : 'smash'); if (isMe()) Goals.note('smash'); }
       } else if (tipped) {
         Sound.prop(T.mat, 1);
         if (p.kind === 'pin' && playing && G.hole.props.filter(q => q.kind === 'pin').every(q => q.fallen || !q.alive) && !G.hole.struck) {
           G.hole.struck = true;
           toast('Strike!', 'All ten pins down.', 'hi');
           Sound.cheer();
+          Secrets.find('strike', 1.8);
         }
         if (T.spill || T.dump) {
           burst(p.x, p.y, T.spill === 'oil' ? '#2a2d33' : '#ffffff', 10, 150, 0.5, 2.6);
-          if (playing) { curPlayer().stats.smash++; Taunts.say(T.spill ? 'spill' : 'smash'); }
+          if (playing) { curPlayer().stats.smash++; Taunts.say(T.spill ? 'spill' : 'smash'); if (isMe()) Goals.note('smash'); }
         }
       } else if (eaten) {
         Sound.blip();
         ring(p.x, p.y, 'rgba(255,255,255,0.7)', 3, 16, 0.4, 2);
       } else if (sunk) {
         ring(p.x, p.y, sunk.style === 'coffee' ? 'rgba(255,236,210,0.7)' : 'rgba(242,183,5,0.7)', 3, 18, 0.5, 2);
+        if (p.kind === 'pool' && sunk.style === 'pocket' && playing) Secrets.find('scratch', 0.8);
       } else if (j > 30 && now - propSoundAt > 55) {
         propSoundAt = now;
         Sound.prop(T.mat, clamp(j / 400, 0.1, 1));
       }
     }
+  }
+  // A whole pyramid down with one putt.
+  function sweepCheck(p) {
+    const all = G.hole.props.filter(q => q.grp === p.grp);
+    if (all.length >= 6 && all.every(q => (q.fallen || !q.alive) && q.downAt === G.strokeId)) Secrets.find('sweep', 0.8);
   }
   function onPushed(byRoomba) {
     if (drag) { drag = null; canvas.classList.remove('dragging'); }
@@ -4198,11 +4549,13 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     if (byRoomba && G.screen === 'play') {
       curPlayer().stats.bumps++;
       Taunts.say('roomba', true);
+      Secrets.find('kevin', 1.4);
       shake();
     }
   }
   function startSplash(z) {
     const b = G.ball;
+    if (z.style === 'koi') Secrets.find('koi', 1.4);
     b.state = 'splash'; b.splashT = 0; b.vx = 0; b.vy = 0;
     const style = z.style || 'coffee', shred = style === 'shredder', back = PH.backToTee;
     if (G.screen === 'play') {
@@ -4259,6 +4612,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       Sound.ding();
       toast('Wrong floor', tp.style === 'ramp' ? 'You missed the turn and ended up back at the entrance.' : COURSE.id === 'factory' ? 'The lift took you back down to the ground floor.' : 'The elevator took you back down to the lobby.', 'bad');
       Taunts.say('floor', true);
+      Secrets.find('scenic', 1.4);
       shake();
       onBallRest();
       return;
@@ -4284,11 +4638,17 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   function reactToRest(b, h) {
     const st = curPlayer().stats, from = G.lastShot || h.tee;
     const toCup = Math.hypot(from[0] - h.cup[0], from[1] - h.cup[1]), moved = Math.hypot(b.x - from[0], b.y - from[1]);
+    const chance = G.strokes === 1 ? 'an ace' : G.strokes <= h.par - 2 ? 'an eagle' : G.strokes === h.par - 1 ? 'a birdie' : null;
+    const inches = Math.max(1, Math.round((Math.max(0, Math.hypot(b.x - h.cup[0], b.y - h.cup[1]) - PH.cupR) / UNITS_PER_FT) * 12));
     if (b.minCup < PH.cupR) {
       st.lips++;
       Sound.ooh();
-      toast('Lipped out', 'It was right there.', 'bad');
+      toast('Lipped out', chance ? `That was nearly ${chance === 'an ace' ? 'a hole in one' : chance}.` : 'It was right there.', 'bad');
       Taunts.say('lipout', true);
+    } else if (chance && inches <= 12 && toCup > 60) {
+      st.near++;
+      Sound.ooh();
+      toast(`${inches} inch${inches === 1 ? '' : 'es'} from ${chance}!`, G.practice != null ? 'So close. Press R or Retry to go again from the tee.' : 'So close. Tap it in.', '');
     } else if (b.minCup < PH.cupR + 7) Taunts.say('lipout');
     else if (b.hits >= 6) Taunts.say('walls');
     else if (toCup > 180 && moved < toCup * 0.25) Taunts.say('short');
@@ -4302,8 +4662,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     const p = curPlayer(), h = G.hole;
     const score = Math.min(G.strokes, PH.cap);
     p.scores[G.holeIdx] = score;
-    const rec = p === G.players[0] && !G.daily ? Career.record(COURSE.id, G.holeIdx, score) : null;
-    if (p === G.players[0]) G.lastStars = rec;
+    const me = p === G.players[0], rec = me && !G.daily ? Career.record(COURSE.id, G.holeIdx, score) : null;
+    if (me) G.lastStars = rec;
     if (rec && rec.gained > 0) G.starGain += rec.gained;
     if (p === G.players[0]) Ghost.finish(score);
     const ls = G.lastShot || h.tee;
@@ -4316,15 +4676,34 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     if (score === 1) { Sound.cheer(); confetti(cx, cy, 90); ring(cx, cy, 'rgba(255,212,71,0.95)', PH.cupR, 90, 0.9, 4); }
     else if (diff < 0) { Sound.soft(); confetti(cx, cy, 36); ring(cx, cy, 'rgba(255,255,255,0.9)', PH.cupR, 60, 0.7, 3); }
     else ring(cx, cy, 'rgba(255,255,255,0.8)', PH.cupR, 40, 0.5, 2.5);
-    const who = G.players.length > 1 ? `${p.name}: ` : '';
-    const detail = score === 1 ? `${who}first stroke, straight in.` : `${who}${score} strokes on a par ${h.par}.`;
+    const tk = G.ball && G.ball.tk, trick = trickFor(tk, dist);
+    if (trick) p.stats.tricks++;
+    // Hot streaks: two holes under par in a row sets you on fire, and a bogey puts it out. Par keeps it going.
+    const wasFire = !!p.fire;
+    if (diff < 0) { p.heat = (p.heat || 0) + 1; if (p.heat >= 2) p.fire = true; } else if (diff > 0) { p.heat = 0; p.fire = false; }
+    const heatNote = p.fire && !wasFire ? '' : diff < 0 && p.heat === 1 ? ' Heating up.' : wasFire && !p.fire ? ' Fire’s out.' : '';
+    const who = G.players.length > 1 ? `${p.name}: ` : '', term = termFor(score, h.par);
+    const detail = score === 1 ? `${who}${trick ? 'a hole in one.' : 'first stroke, straight in.'}` : `${who}${trick ? `${term}, ` : ''}${score} strokes on a par ${h.par}.`;
     const starNote = rec && rec.stars ? ` ${starText(rec.stars)}${rec.gained > 0 ? ' New best!' : ''}` : '';
-    toast(termFor(score, h.par), detail + starNote, diff < 0 ? 'hi' : '');
-    if (rec && rec.gained > 0) starBurst(cx, cy, rec.gained);
+    toast(trick || term, detail + starNote + heatNote, diff < 0 || trick ? 'hi' : '');
+    if (trick) Sound.whistle();
+    if (rec && rec.gained > 0) { starBurst(cx, cy, rec.gained); checkPromotion(3.4); }
+    if (p.fire && !wasFire) {
+      p.stats.fires++;
+      after(1.2, () => { toast('On fire!', `${G.players.length > 1 ? p.name + ' has made' : 'You made'} two birdies in a row. A bogey puts it out.`, 'hi'); Sound.fire(); fireBurst(cx, cy); });
+    }
     // In practice the next toast would bury this, so practiceAgain shows it instead.
-    if (rec && rec.unlocked.length && G.practice == null) {
-      const g = rec.unlocked[rec.unlocked.length - 1];
-      after(2.4, () => { toast('Unlocked!', g.kind === 'building' ? `${g.name}: your badge now opens the private elevator. Pick it on the setup card.` : `${g.name}. Wear it from the Locker on the setup card.`, 'hi'); Sound.cheer(); });
+    if (rec && rec.unlocked.length && G.practice == null) announceUnlock(rec.unlocked[rec.unlocked.length - 1], 2.4);
+    if (me) {
+      Goals.note('hole', { score, diff, rage: PH.rage });
+      Goals.note('sink', { ft: dist, walls: tk ? tk.walls : 0 });
+      if (rec && rec.gained > 0) Goals.note('stars', { count: rec.gained });
+      if (p.fire && !wasFire) Goals.note('fire');
+      if (G.ball && G.ball.golden && diff <= 0) { const un = Career.grant(d => { d.bonus.gold++; }); holeNews('You sank the golden ball.', 1); after(1.4, () => bonusNews('You sank the golden ball.', 1, un, true)); }
+      if (score === 1 && G.holeIdx === HOLES.length - 1 && STAR_COURSES.includes(COURSE.id)) Secrets.find('early', 2.6);
+      if (score === 1 && h.par >= 4) Secrets.find('albatross', 2.6);
+      if (G.strokes >= PH.cap && G.strokes > 1) Secrets.find('buzzer', 2.6);
+      if (new Date().getHours() < 5) Secrets.find('night', 2.6);
     }
     updateHud();
     netState();
@@ -4338,6 +4717,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   function pickUp() {
     const p = curPlayer();
     p.scores[G.holeIdx] = PH.cap;
+    p.heat = 0; p.fire = false;
+    if (isMe()) Goals.note('hole', { score: PH.cap, diff: PH.cap - HOLES[G.holeIdx].par, rage: PH.rage });
     if (p === G.players[0]) G.lastStars = !G.daily ? Career.record(COURSE.id, G.holeIdx, PH.cap) : null;
     G.phase = 'done';
     if (G.ball) G.ball.state = 'hidden';
@@ -4359,6 +4740,9 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     const p = curPlayer(), h = G.hole;
     G.ball = newBall(h.tee[0], h.tee[1], p.color);
     G.ball.mine = p === G.players[0];
+    G.ball.fire = !!p.fire;
+    G.ball.golden = G.ball.mine && !ONLINE.on && !G.daily && G.practice == null && STAR_COURSES.includes(COURSE.id) && (G.forceGold || Math.random() < GOLD_ODDS);
+    G.forceGold = false;
     G.lastShot = h.tee.slice();
     G.phase = 'aim';
     G.aimSince = G.clock;
@@ -4372,9 +4756,11 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     let small = `Hole ${G.holeIdx + 1}, par ${h.par}.`;
     if (firstOfHole) small += ' ' + h.tip;
     else if (multi) small = `You're up. ${small}`;
+    if (G.challenge && p === G.players[0]) small += ` ${G.challenge.n} shot ${G.challenge.s[G.holeIdx]} here.`;
     toast(multi ? p.name : h.name, small, PH.rage ? 'bad' : '');
     $('hint').hidden = G.firstShotDone;
     if (PH.rage && firstOfHole && G.holeIdx === 0 && turnIdx === 0) after(1.2, () => Taunts.say('rage', true));
+    if (G.ball.golden) { const gb = G.ball; after(2.3, () => { if (G.ball === gb && gb.state !== 'sunk') { toast('Golden ball!', 'Sink it at par or better for a bonus star.', 'hi'); Sound.clink(); } }); }
     Ghost.begin();
     netState();
   }
@@ -4401,12 +4787,15 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     G.lastShot = [b.x, b.y];
     b.vx = Math.cos(angle) * sp; b.vy = Math.sin(angle) * sp;
     b.state = 'rolling'; b.slowT = 0; b.rollT = 0; b.trail.length = 0;
-    b.minCup = Infinity; b.hits = 0;
+    b.minCup = Infinity; b.hits = 0; b.tk = newTricks();
+    G.strokeId = (G.strokeId || 0) + 1;
     G.idleSaid = false;
     Office.putt();
     G.strokes += 1;
     if (G.daily && G.strokes === 1) Daily.begin(G.daily.key);
     Ghost.stroke();
+    if (isMe()) Goals.note('putt');
+    if (b.fire) Sound.whoosh();
     G.phase = 'rolling';
     kbAim.angle = angle; kbAim.power = power;
     if (!fromKeyboard) kbAim.active = false;
@@ -4423,6 +4812,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     const v = (variants || G.variants || variantsFor('day:' + todayKey()))[idx];
     G.holeIdx = idx;
     G.hole = buildHole(idx, v);
+    G.holeNews = [];
     fxList.length = 0;
     layoutView();
     canvas.setAttribute('aria-label', `Mini golf course, hole ${idx + 1}: ${holeName(idx)}`);
@@ -4432,7 +4822,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     G.timers.length = 0;
     G.practice = Number.isInteger(opts.practice) ? opts.practice : null;
     G.daily = opts.daily || null;
-    G.starGain = 0;
+    G.challenge = opts.challenge || null;
+    G.starGain = 0; G.heckles = 0; G.h2hDone = false;
     Party.clear();
     setCourse(opts.courseId || 'office');
     setMode(!!opts.rage, G.daily && G.daily.twist);
@@ -4457,6 +4848,13 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     setCourse(courseId);
     startGame([{ name, dept: setupDepts[0] ?? -1 }], { kind: 'practice', key: `day:${todayKey()}:${courseId}`, label: `Practice · ${HOLES[idx].name}` }, { courseId, rage: !!store.get('rage', false), practice: idx });
   }
+  // Practice: straight back to the tee, whenever you like.
+  function retryPractice() {
+    if (G.practice == null || G.screen !== 'play' || G.phase === 'done' || anyOverlayOpen()) return;
+    Sound.unlock(); Sound.whoosh();
+    loadHole(G.practice);
+    startTurn(0, true);
+  }
   // Practice keeps your best score and sends you straight back to the tee.
   function practiceAgain() {
     const p = G.players[0], s = p.scores[G.holeIdx], st = Career.stars(COURSE.id, G.holeIdx);
@@ -4466,7 +4864,19 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     else toast(`${s} ${s === 1 ? 'stroke' : 'strokes'}`, `Practice. Your best here: ${Career.best(COURSE.id, G.holeIdx) ?? p.best}${st ? ' ' + starText(st) : ''}. Go again.`, s <= HOLES[G.holeIdx].par ? 'hi' : '');
     after(g ? 2.2 : 1.4, () => { if (G.practice == null || G.screen !== 'play') return; loadHole(G.practice); startTurn(0, true); });
   }
+  function roundEnd() {
+    const me = G.players[0];
+    if (!me || G.practice != null || G.daily || G.h2hDone || !me.scores.every(v => v != null)) return;
+    G.h2hDone = true;
+    const mine = totalOf(me);
+    if (COURSE.id !== 'workshop') Goals.note('round', { rel: mine - PAR_TOTAL, spills: me.stats.spills, birdies: me.scores.filter((v, i) => v < HOLES[i].par).length });
+    if (G.challenge) Rivals.add(G.challenge.n, mine, Challenge.total(G.challenge));
+    else if (ONLINE.on) { for (const r of onlineRows()) if (!r.me && r.played === HOLES.length) Rivals.add(r.name, mine, r.tot); }
+    else for (const p of G.players.slice(1)) if (p.scores.every(v => v != null)) Rivals.add(p.name, mine, totalOf(p));
+    Career.save();
+  }
   function showResults() {
+    roundEnd();
     G.screen = 'results';
     G.phase = 'idle';
     G.ball = null;
@@ -6614,11 +7024,16 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     let alpha = 1, scale = b.scale;
     if (b.state === 'splash') { alpha = Math.max(0, 1 - b.splashT / 0.25); scale = 1 - 0.3 * Math.min(1, b.splashT / 0.25); }
     if (alpha <= 0) return;
-    const skin = b.mine ? Career.wearing('ball') : 'classic';
-    if (b.trail.length > 1 && b.state === 'rolling') drawTrail(g, b, b.mine ? Career.wearing('trail') : 'none');
+    const skin = b.golden ? 'gold' : b.mine ? Career.wearing('ball') : 'classic';
+    if (b.trail.length > 1 && b.state === 'rolling') drawTrail(g, b, b.fire ? 'flame' : b.golden ? 'sparkle' : b.mine ? Career.wearing('trail') : 'none');
     const r = BALL_R * scale, sh = h.shadow, up = view.up, side = [-up[1], up[0]];
     g.save();
     g.globalAlpha = alpha;
+    if (b.fire || b.golden) {
+      const k = b.fire ? 3 + 0.35 * Math.sin(G.clock * 19) + 0.2 * Math.sin(G.clock * 31) : 2.8, gl = g.createRadialGradient(b.x, b.y, r * 0.5, b.x, b.y, r * k);
+      gl.addColorStop(0, b.fire ? 'rgba(255,130,30,0.5)' : 'rgba(255,215,90,0.42)'); gl.addColorStop(1, 'rgba(255,130,30,0)');
+      circle(g, b.x, b.y, r * k); g.fillStyle = gl; g.fill();
+    }
     if (b.state !== 'sinking') {
       g.beginPath(); g.ellipse(b.x + sh[0] * 0.4, b.y + sh[1] * 0.4, r * 1.02, r * 0.95, 0, 0, TAU);
       g.fillStyle = 'rgba(6,10,16,0.35)'; g.fill();
@@ -6682,6 +7097,21 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       circle(g, ix, iy, r * 0.46); g.fillStyle = '#2f7fd6'; g.fill();
       circle(g, ix, iy, r * 0.22); g.fillStyle = '#0b0d12'; g.fill();
       circle(g, ix - r * 0.12, iy - r * 0.12, r * 0.08); g.fillStyle = '#ffffff'; g.fill();
+    } else if (id === 'moon') {
+      g.fillStyle = '#c9ccd3'; g.fillRect(x - r, y - r, r * 2, r * 2);
+      rot(() => {
+        for (const [u, v, k] of [[-0.35, -0.3, 0.26], [0.3, 0.2, 0.2], [-0.1, 0.45, 0.14], [0.45, -0.4, 0.12]]) {
+          circle(g, u * r, v * r, k * r); g.fillStyle = '#9ea3ad'; g.fill();
+          circle(g, u * r - k * r * 0.2, v * r - k * r * 0.2, k * r * 0.7); g.fillStyle = '#b3b7bf'; g.fill();
+        }
+      });
+    } else if (id === 'globe') {
+      g.fillStyle = '#2f7fd6'; g.fillRect(x - r, y - r, r * 2, r * 2);
+      rot(() => {
+        g.fillStyle = '#4fb35a';
+        for (const [u, v, a, b2, t] of [[-0.35, -0.2, 0.42, 0.3, 0.4], [0.35, 0.3, 0.3, 0.42, -0.3], [0.15, -0.72, 0.32, 0.14, 0]]) { g.beginPath(); g.ellipse(u * r, v * r, a * r, b2 * r, t, 0, TAU); g.fill(); }
+        g.fillStyle = 'rgba(255,255,255,0.55)'; g.fillRect(-r * 0.7, r * 0.05, r * 0.5, r * 0.1); g.fillRect(r * 0.1, -r * 0.35, r * 0.45, r * 0.08);
+      });
     } else if (id === 'gold') {
       const gr = g.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.05, x, y, r);
       gr.addColorStop(0, '#fff6c8'); gr.addColorStop(0.35, '#f2c230'); gr.addColorStop(1, '#8a5a00');
@@ -6728,6 +7158,28 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         circle(g, x, y, BALL_R * (0.35 + 0.85 * k) * fl);
         g.fillStyle = `rgba(255,${Math.round(90 + 150 * k)},${Math.round(40 * k)},${(0.12 + 0.4 * k).toFixed(3)})`; g.fill();
       }
+    } else if (id === 'sparkle') {
+      g.lineWidth = 1.4;
+      for (let i = 0; i < n; i += 2) {
+        const [x, y] = pts[i], k = i / n, tw = 0.5 + 0.5 * Math.sin(G.clock * 12 + i * 1.7), s = (1.5 + 3 * k) * tw;
+        g.strokeStyle = `rgba(255,${200 + Math.round(40 * tw)},90,${(0.25 + 0.7 * k).toFixed(3)})`;
+        g.beginPath(); g.moveTo(x - s, y); g.lineTo(x + s, y); g.moveTo(x, y - s); g.lineTo(x, y + s); g.stroke();
+      }
+    } else if (id === 'money') {
+      for (let i = 0; i < n; i += 2) {
+        const [x, y] = pts[i], k = i / n;
+        g.save(); g.translate(x + Math.sin(i * 2.1) * 6, y + Math.cos(i * 1.3) * 6); g.rotate(Math.sin(i * 1.7 + G.clock * 6) * 0.8);
+        g.globalAlpha = 0.3 + 0.7 * k; g.fillStyle = '#86c77f'; g.fillRect(-5, -2.6, 10, 5.2);
+        g.strokeStyle = '#2f6b2f'; g.lineWidth = 0.8; g.strokeRect(-5, -2.6, 10, 5.2);
+        circle(g, 0, 0, 1.3); g.fillStyle = '#2f6b2f'; g.fill();
+        g.restore();
+      }
+    } else if (id === 'bolt') {
+      g.globalCompositeOperation = 'lighter';
+      const tick = Math.floor(G.clock * 20);
+      const jag = () => { g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < n; i++) { const j = Math.sin(i * 12.9 + tick * 3.1) * 4; g.lineTo(pts[i][0] + j, pts[i][1] - j); } };
+      jag(); g.strokeStyle = 'rgba(120,170,255,0.35)'; g.lineWidth = 7; g.stroke();
+      jag(); g.strokeStyle = 'rgba(235,245,255,0.95)'; g.lineWidth = 1.8; g.stroke();
     } else if (id === 'rainbow') {
       for (let i = 1; i < n; i++) {
         const k = i / n;
@@ -6917,7 +7369,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     if (h) for (const tp of h.teleports) if (tp.arriveT > 0) tp.arriveT = Math.max(0, tp.arriveT - dt);
     if (b) {
       if (b.state === 'rolling') {
-        const last = b.trail[b.trail.length - 1], keep = b.mine && Career.wearing('trail') !== 'none' ? 26 : 16;
+        const last = b.trail[b.trail.length - 1], keep = b.fire || b.golden || (b.mine && Career.wearing('trail') !== 'none') ? 26 : 16;
         if (!last || Math.hypot(last[0] - b.x, last[1] - b.y) > 3) { b.trail.push([b.x, b.y]); if (b.trail.length > keep) b.trail.shift(); }
         const sp = Math.hypot(b.vx, b.vy);
         b.spin = (b.spin || 0) + (sp * dt) / BALL_R;
@@ -7801,6 +8253,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       this.goal = { from: { ...this.cam }, to: { x: wh.slot.cx, y: wh.slot.cy + SLOT_H * 0.08, z: Math.min(cw / (SLOT_W * 1.15), ch / (SLOT_H * 1.6)), rot: 0 }, t: 0, dur: 0.9 };
       this.idle = -30;
     },
+    duckAt(x, y) { return this.ducks.some(d => Math.hypot(d.px + Math.cos(d.a) * d.rx * d.r - x, d.py + Math.sin(d.a) * d.ry * d.r - y) < 50); },
     // Flying from one hole to the next during a round, from the current view to the next hole's view.
     fly(fromIdx, toIdx, done) {
       if (reduceMotion || ONLINE.on) { done(); return; }
@@ -8584,7 +9037,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     const gs = mapGesture;
     if (gs && gs.kind === 'pan' && !gs.moved && G.screen === 'map') {
       const w = Campus.toWorld(Campus.cam, gs.start.x, gs.start.y);
-      Campus.select(Campus.holes.find(h => w.x > h.slot.x && w.x < h.slot.x + h.slot.w && w.y > h.slot.y && w.y < h.slot.y + h.slot.h) || null);
+      if (Campus.duckAt(w.x, w.y)) { Sound.unlock(); Sound.quack(); Secrets.find('ducks', 0.3, true); }
+      else Campus.select(Campus.holes.find(h => w.x > h.slot.x && w.x < h.slot.x + h.slot.w && w.y > h.slot.y && w.y < h.slot.y + h.slot.h) || null);
     }
     if (mapPtrs.size === 1) { const [p] = [...mapPtrs.values()]; mapGesture = { kind: 'pan', start: p, cam: { ...Campus.cam }, moved: true }; }
     else if (!mapPtrs.size) mapGesture = null;
@@ -8634,6 +9088,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     if (Campus.flight) { if (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); Campus.skipFlight(); } return; }
     if (e.key === 'Escape') { handleEscape(); return; }
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey && G.practice != null) { e.preventDefault(); retryPractice(); return; }
     if (tag === 'BUTTON' && (e.key === ' ' || e.key === 'Enter')) return;
     if (!canAim()) return;
     const fine = e.shiftKey;
@@ -8680,6 +9135,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     $('hudTop').hidden = !on;
     $('hudBottom').hidden = !on;
     $('wsReturnBtn').hidden = !(on && G.practice != null && COURSE.id === 'workshop');
+    $('retryBtn').hidden = !(on && G.practice != null);
     if (!on) closeTauntPop();
     syncTauntBtn();
     syncTauntsBtn();
@@ -8759,6 +9215,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   function toast(big, small, tone) {
     const t = $('toast');
     $('toastBig').textContent = big;
+    $('toastBig').classList.toggle('long', big.length > 10);
     $('toastSmall').textContent = small || '';
     t.className = 'toast' + (tone ? ' tone-' + tone : '');
     void t.offsetWidth;
@@ -8778,11 +9235,15 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     $('hudGreen').textContent = s >= 11 ? 'Fast green' : 'Slow green';
     $('hudName').textContent = G.hole.name;
     $('hudRage').hidden = !PH.rage;
+    $('hudFire').hidden = !(p && p.fire);
+    if (G.challenge) renderBoard();
     if (!p) return;
     $('hudDot').style.setProperty('--c', p.color);
     $('hudPlayer').textContent = p.name;
-    const rel = totalOf(p) - parThrough(p);
-    $('hudStrokes').textContent = `Strokes ${G.strokes} · Day ${relStr(rel)}`;
+    const rel = totalOf(p) - parThrough(p), c = G.challenge;
+    // In a challenge, where you stand against your rival over the holes you've both finished.
+    const d = c && p === G.players[0] ? c.s.reduce((a, v, i) => a + (p.scores[i] != null ? v - p.scores[i] : 0), 0) : null;
+    $('hudStrokes').textContent = d == null ? `Strokes ${G.strokes} · Day ${relStr(rel)}` : `Strokes ${G.strokes} · ${d > 0 ? `Up ${d}` : d < 0 ? `Down ${-d}` : 'Level'} on ${c.n.split(' ')[0]}`;
   }
   function openMenu() {
     if (G.screen !== 'play') return;
@@ -8822,14 +9283,76 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   }
   // Your career on the course pass: stars, title and streak, and today's Daily Hole.
   function renderCareer() {
-    const n = Career.total(), max = Career.max(), streak = Daily.streak();
+    const n = Career.total(), streak = Daily.streak();
     const chips = $('careerChips');
     chips.textContent = '';
     const chip = (text, strong) => { const c = el('span', 'chip'); if (strong) c.append(el('b', '', strong), document.createTextNode(' ')); c.append(document.createTextNode(text)); chips.append(c); };
-    chip(`of ${max} stars`, `★ ${n}`);
+    chip('stars', `★ ${n}`);
     chip(Career.title(n));
     if (streak > 0) chip('streak', `🔥 ${streak}-day`);
     renderDailyBox();
+    renderGoals();
+    renderChallengeBox();
+    const fresh = GEAR.filter(g => g.kind !== 'building' && g.stars > (Career.data.seen || 0) && g.stars <= n).length;
+    $('lockerBtn').textContent = fresh ? `Locker · ${fresh} new` : 'Locker';
+  }
+  function dateLabel(key) {
+    const [y, m, d] = String(key).split('-').map(Number);
+    try { return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }); } catch (e) { return key; }
+  }
+  function renderGoals() {
+    const box = $('goalsBox'), list = Goals.list(), done = list.filter(g => g.done).length;
+    box.textContent = '';
+    const head = el('div', 'goals-head');
+    head.append(el('span', 'field-label', `Today’s goals · ${done} of 3`), el('span', 'goals-pay', done === 3 ? 'All done. New ones tomorrow.' : '★ +1 each, +1 more for all three'));
+    box.append(head);
+    for (const g of list) {
+      const row = el('div', 'goal' + (g.done ? ' done' : ''));
+      row.append(el('i', '', g.done ? '✓' : ''), el('span', '', g.text), el('small', '', g.n > 1 ? `${g.prog}/${g.n}` : g.done ? 'Done' : ''));
+      box.append(row);
+    }
+  }
+  function renderChallengeBox() {
+    const box = $('challengeBox'), c = Challenge.pending;
+    box.hidden = !c;
+    if (!c) return;
+    box.textContent = '';
+    const tot = Challenge.total(c), text = el('div', 'daily-text');
+    text.append(
+      el('div', 'eyebrow', `Challenge from ${c.n} · ${COURSES[c.c].name}${c.r ? ' · Rage' : ''}`),
+      el('div', 'challenge-name', `Beat ${tot} (${relStr(tot - Challenge.par(c))})`),
+      el('div', 'challenge-sub', `Same pins and greens as ${c.n}’s round${c.d ? ` on ${dateLabel(c.d)}` : ''}.`),
+    );
+    const go = el('button', 'btn btn-hi', 'Accept');
+    go.type = 'button';
+    go.id = 'challengeGo';
+    go.addEventListener('click', () => { Sound.unlock(); startChallenge(); });
+    const x = el('button', 'icon-btn', '×');
+    x.type = 'button';
+    x.setAttribute('aria-label', 'Turn down the challenge');
+    x.addEventListener('click', () => { Challenge.pending = null; renderChallengeBox(); });
+    box.append(text, go, x);
+  }
+  function startChallenge() {
+    const c = Challenge.pending;
+    if (!c) return;
+    Challenge.pending = null;
+    const name = (String(setupPlayers[0] || '').trim() || 'You').slice(0, 16);
+    startGame([{ name, dept: setupDepts[0] ?? -1 }], { kind: 'challenge', key: c.k, label: `Challenge from ${c.n} · ${COURSES[c.c].name}${c.r ? ' · Rage mode' : ''}` }, { courseId: c.c, rage: c.r, challenge: c });
+    toast(`Beat ${c.n}`, `${c.n} shot ${Challenge.total(c)}. You’ll see what they shot on each hole as you go.`, 'hi');
+  }
+  // A list of holes with stars to be had, each with a button to go and practice it.
+  function renderReach(box, rows) {
+    box.textContent = '';
+    for (const r of rows) {
+      const row = el('div', 'reach-row'), text = el('div');
+      text.append(el('b', '', `${r.def.name} · ${COURSES[r.course].name}`), el('small', '', reachText(r)));
+      const btn = el('button', 'btn btn-paper', 'Practice');
+      btn.type = 'button';
+      btn.addEventListener('click', () => { Sound.unlock(); if (!ONLINE.on) startPractice(r.course, r.idx); });
+      row.append(text, btn);
+      box.append(row);
+    }
   }
   function untilTomorrow() {
     const m = Math.ceil(Daily.msLeft() / 60000), hh = Math.floor(m / 60), mm = m % 60;
@@ -8859,6 +9382,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   // After each try: how it went, the tries so far, and once it's done, the share line and your streak.
   function dailyTryDone() {
     Daily.finish(G.players[0].scores[G.holeIdx], G.daily.key);
+    Goals.note('daily');
     G.phase = 'between';
     G.ball = null;
     renderDaily();
@@ -8897,11 +9421,31 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   }
   // The locker: what your stars have unlocked, and what you're wearing.
   function renderLocker() {
-    const n = Career.total(), max = Career.max(), nx = Career.next();
-    $('lockerEyebrow').textContent = `${Career.title(n)} · ★ ${n} of ${max}`;
+    const n = Career.total(), nx = Career.next();
+    if (Career.data.seen !== n) { Career.data.seen = n; Career.save(); }
+    $('lockerBtn').textContent = 'Locker';
+    $('lockerEyebrow').textContent = `${Career.title(n)} · ★ ${n}`;
     const prev = [...GEAR].reverse().find(g => g.stars <= n), from = prev ? prev.stars : 0;
     $('lockerFill').style.width = `${nx ? Math.round(((n - from) / Math.max(1, nx.stars - from)) * 100) : 100}%`;
     $('lockerSub').textContent = nx ? `${nx.stars - n} more ${nx.stars - n === 1 ? 'star' : 'stars'} to unlock ${nx.name}.` : 'You’ve unlocked everything. The corner office is yours.';
+    const bn = Career.data.bonus, sc = Secrets.count();
+    $('lockerBonus').textContent = `${Career.holeStars()} from holes, ${bn.goals} from daily goals, ${sc} from secrets${bn.gold ? `, ${bn.gold} from golden balls` : ''}.`;
+    const reach = starsWithinReach(3);
+    $('lockerReachBox').hidden = !reach.length;
+    renderReach($('lockerReach'), reach);
+    $('secretCount').textContent = `${sc} of ${SECRETS.length}`;
+    const sb = $('lockerSecrets');
+    sb.textContent = '';
+    for (const x of SECRETS) {
+      const f = Secrets.found(x.id), upstairs = x.ph && !f && !Career.has('penthouse');
+      const d = el('div', 'secret' + (f ? ' found' : ''));
+      d.append(el('b', '', f ? `★ ${x.name}` : '???'), el('small', '', f ? `Found ${dateLabel(Career.data.secrets[x.id])}.` : upstairs ? 'Somewhere upstairs.' : x.hint));
+      sb.append(d);
+    }
+    const rl = Rivals.list(), ul = $('lockerRivals');
+    $('rivalsBox').hidden = !rl.length;
+    ul.textContent = '';
+    for (const r of rl.slice(0, 8)) { const li = el('li', '', r.n); li.append(el('span', '', Rivals.text(r))); ul.append(li); }
     const ladder = $('lockerLadder');
     ladder.textContent = '';
     TITLES.forEach(([k, t], i) => {
@@ -9070,6 +9614,11 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     const memo = $('sumMemo');
     memo.textContent = '';
     memo.append(el('b', '', `Memo · ${Office.sinceIncident} putt${Office.sinceIncident === 1 ? '' : 's'} since the last incident`), document.createTextNode(Office.memo()));
+    const gl = Goals.list(), left = gl.filter(g => !g.done), sg = $('sumGoals');
+    sg.hidden = false;
+    sg.textContent = '';
+    for (const line of G.holeNews || []) sg.append(el('b', 'news', line));
+    sg.append(document.createTextNode(left.length ? `Today’s goals: ${3 - left.length} of 3 done. Next up: ${left[0].text}${left[0].n > 1 ? ` (${left[0].prog} of ${left[0].n})` : ''}.` : 'Today’s goals: all three done. ★'));
   }
 
   // Scorecard
@@ -9151,8 +9700,41 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     rs.textContent = '';
     rs.append(el('span', 'st', '★'), document.createTextNode(`${Career.courseStars(COURSE.id)} of ${HOLES.length * 3} stars here${G.starGain ? `, ${G.starGain} new this round` : ''}. ${Career.title()}, with ${Career.total()} stars in all.`));
   }
+  function renderResultExtras() {
+    const c = G.challenge, me = G.players[0], v = $('resVerdict');
+    v.hidden = !c || !me;
+    if (c && me) {
+      const mine = totalOf(me), theirs = Challenge.total(c), d = theirs - mine;
+      v.textContent = '';
+      v.append(el('b', '', d > 0 ? `You beat ${c.n}` : d < 0 ? `${c.n} wins` : 'Dead heat'), document.createTextNode(
+        d > 0 ? `${mine} to ${theirs}, by ${d} stroke${d === 1 ? '' : 's'}. Send it back and see if they can take it off you.`
+          : d < 0 ? `${theirs} to your ${mine}. You were ${-d} stroke${d === -1 ? '' : 's'} off. Play again for another go on the same pins.`
+            : `You both shot ${mine}. Send it back for the decider.`));
+    }
+    const names = c ? [c.n] : ONLINE.on ? onlineRows().filter(r => !r.me).map(r => r.name) : G.players.slice(1).map(p => p.name);
+    const recs = names.map(n => Rivals.of(n)).filter(Boolean), hh = $('resH2H');
+    hh.hidden = !recs.length;
+    hh.textContent = recs.length ? `Head to head: ${recs.map(r => `${Rivals.text(r)} against ${r.n}`).join(' · ')}.` : '';
+    const reach = !ONLINE.on && STAR_COURSES.includes(COURSE.id) ? starsWithinReach(3, COURSE.id) : [];
+    $('resReachBox').hidden = !reach.length;
+    renderReach($('resReach'), reach);
+    $('chalBtn').hidden = !(me && G.course && COURSE.id !== 'workshop' && G.practice == null && !G.daily && me.scores.every(x => x != null));
+    $('chalBtn').textContent = c ? 'Send it back' : 'Challenge a coworker';
+  }
+  // A link that sends your round to a coworker. The text goes in the share box too, in case copying is blocked.
+  function copyChallenge() {
+    const me = G.players[0];
+    if (!me || !G.course) return;
+    const name = /^Player \d+$/.test(me.name) ? 'A coworker' : cleanName(me.name) || 'A coworker';
+    const day = /\d{4}-\d{2}-\d{2}/.exec(G.course.key);
+    const o = { v: 1, n: name, c: COURSE.id, k: G.course.key, r: PH.rage ? 1 : 0, s: me.scores.slice(), d: day ? day[0] : todayKey() };
+    const tot = totalOf(me), label = G.challenge ? 'Send it back' : 'Challenge a coworker';
+    $('shareText').value = `${G.challenge ? `Your move, ${G.challenge.n}. ` : ''}I shot ${tot} (${relStr(tot - PAR_TOTAL)}) in the ${COURSES[COURSE.id].name}${PH.rage ? ' on Rage mode' : ''} on Nine-to-Five Links. Same pins, same greens. Beat it:\n${Challenge.link(o)}`;
+    copyShare('shareText', 'chalBtn', label);
+  }
   function renderResults() {
     renderResultStars();
+    renderResultExtras();
     if (ONLINE.on) { renderOnlineResults(); return; }
     $('againBtn').textContent = 'Play again';
     $('newBtn').textContent = 'New game';
@@ -9813,7 +10395,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     const deptOf = d => (d >= 0 ? ` · ${DEPTS[d]}` : '');
     addRow(COLORS[ONLINE.me.color], `${ONLINE.me.name} (you)${deptOf(ONLINE.me.dept)}`, 'In the clubhouse');
     const peers = [...ONLINE.peers.values()].sort((a, b) => a.n.localeCompare(b.n));
-    for (const p of peers) addRow(COLORS[p.c], `${p.n}${deptOf(p.d)}`, peerStateLabel(p));
+    for (const p of peers) { const r = Rivals.of(p.n); addRow(COLORS[p.c], `${p.n}${deptOf(p.d)}${r ? ` · you’re ${Rivals.text(r)}` : ''}`, peerStateLabel(p)); }
     $('rageClub').checked = ONLINE.settings.rage;
     $('rageClubNote').textContent = ONLINE.settingsBy
       ? `${ONLINE.settingsBy === 'You' ? 'You' : ONLINE.settingsBy} set this for the room. Applies from the next tee-off.`
@@ -9947,6 +10529,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   }
   function renderBoard() {
     const b = $('board');
+    if (G.challenge && !ONLINE.on && G.screen === 'play') { renderChallengeBoard(b); return; }
     if (!ONLINE.on || G.screen !== 'play') { b.hidden = true; return; }
     b.hidden = false;
     b.textContent = '';
@@ -9962,6 +10545,19 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     }
     const waiting = [...ONLINE.peers.values()].filter(p => p.p === 'club').length;
     if (waiting) b.append(el('span', 'chip dim', `${waiting} in the clubhouse`));
+    const hh = $('hudTop').offsetHeight;
+    if (hh !== ONLINE.hudH) { ONLINE.hudH = hh; layoutView(); }
+  }
+  // During a challenge: how your rival stood after the holes you've played, and what they shot on this one.
+  function renderChallengeBoard(b) {
+    const c = G.challenge, me = G.players[0];
+    if (!me) return;
+    const rel = c.s.reduce((a, v, i) => a + (me.scores[i] != null ? v - HOLES[i].par : 0), 0);
+    b.hidden = false;
+    b.textContent = '';
+    const chip = el('span', 'chip');
+    chip.append(el('span', '', `vs ${c.n}`), el('span', 'chip-rel', relStr(rel)));
+    b.append(chip, el('span', 'chip dim', `${c.s[G.holeIdx]} here`));
     const hh = $('hudTop').offsetHeight;
     if (hh !== ONLINE.hudH) { ONLINE.hudH = hh; layoutView(); }
   }
@@ -9999,6 +10595,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   }
 
   // Wiring
+  $('chalBtn').addEventListener('click', copyChallenge);
   $('addPlayer').addEventListener('click', () => {
     if (setupPlayers.length >= MAX_PLAYERS) return;
     setupPlayers.push(`Player ${setupPlayers.length + 1}`);
@@ -10062,7 +10659,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   $('dailyGo').addEventListener('click', dailyAgain);
   $('dailyCopy').addEventListener('click', () => copyShare('dailyShare', 'dailyCopy', 'Copy'));
   $('dailyDone').addEventListener('click', () => { closeOverlay('daily'); if (G.screen === 'play') showSetup(); else renderCareer(); });
-  $('againBtn').addEventListener('click', () => (ONLINE.on ? backToClubhouse() : startGame(G.players.map(p => ({ name: p.name, dept: p.dept })), G.course, { rage: G.rage, courseId: COURSE.id })));
+  $('againBtn').addEventListener('click', () => (ONLINE.on ? backToClubhouse() : startGame(G.players.map(p => ({ name: p.name, dept: p.dept })), G.course, { rage: G.rage, courseId: COURSE.id, challenge: G.challenge })));
   $('resCardBtn').addEventListener('click', openScorecard);
   $('newBtn').addEventListener('click', () => (ONLINE.on ? leaveRoom() : showSetup()));
   $('tabLocal').addEventListener('click', () => selectTab(false));
@@ -10096,7 +10693,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   window.addEventListener('pagehide', () => { if (ONLINE.on) Net.send({ k: 'bye' }); });
   if (urlParams.has('debug')) {
     window.n2fDebug = {
-      G, ONLINE, Net, Party, Campus, Workshop, view, Career, Daily, Ghost, COURSES,
+      G, ONLINE, Net, Party, Campus, Workshop, view, Career, Daily, Ghost, COURSES, Goals, Secrets, SECRETS, Challenge, Rivals, starsWithinReach,
+      gold() { G.forceGold = true; }, trickFor, retryPractice, startPractice,
       // Jumps to a hole of the current game, for testing.
       jump(i) { loadHole(i); startTurn(0, true); },
       // The pieces the course checker needs to play shots without touching the game.
@@ -10160,12 +10758,14 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     clearInterval(tauntTimer);
     tauntTimer = setInterval(() => { syncTauntBtn(); if (Date.now() - tauntAt >= 6000) clearInterval(tauntTimer); }, 500);
   }
+  $('retryBtn').addEventListener('click', retryPractice);
   $('tauntBtn').addEventListener('click', () => {
     Sound.unlock();
     if (!ONLINE.on) {
       if (G.clock - heckleAt < 2.5) return;
       heckleAt = G.clock;
       Taunts.say('heckle', true);
+      if (++G.heckles >= 10) Secrets.find('heckler', 1);
       return;
     }
     const pop = $('tauntPop');
@@ -10202,7 +10802,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     G.course = s.course;
     G.variants = variantsFor(s.course.key);
     G.firstShotDone = !!s.firstShotDone;
-    if (s.screen === 'results') { loadHole(HOLES.length - 1); showResults(); return true; }
+    if (s.screen === 'results') { G.h2hDone = true; loadHole(HOLES.length - 1); showResults(); return true; }
     G.screen = 'play';
     G.order = Array.isArray(s.order) ? s.order : G.players.map((_, i) => i);
     showHud(true);
@@ -10225,12 +10825,18 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   function start(data) {
     if (booted) return;
     booted = true;
+    try { Challenge.fromUrl(); } catch (e) { /* ignore a mangled link */ }
     try { Workshop.use(false); Workshop.refresh(); } catch (e) { /* a broken saved design shouldn't stop the game */ }
     let ok = false;
     try { if (data && data.game) ok = restore(data.game); } catch (e) { ok = false; }
     if (!ok) showSetup();
     requestAnimationFrame(loop);
   }
+  // A challenge link pasted into a tab that already has the game open only changes the hash.
+  window.addEventListener('hashchange', () => {
+    try { Challenge.fromUrl(); } catch (e) { return; }
+    if (Challenge.pending && G.screen === 'setup') renderChallengeBox();
+  });
   resize();
   if (window.ResizeObserver) new ResizeObserver(() => resize()).observe(app);
   else window.addEventListener('resize', resize);
