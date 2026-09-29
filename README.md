@@ -1,6 +1,6 @@
 # Nine-to-Five Links
 
-Office mini golf for the whole team: five buildings of nine holes each, round the clock from the morning rush in the parking garage to the graveyard shift in the data center.
+Office mini golf for the whole team: five buildings of nine holes each, round the clock from the morning rush in the parking garage to the graveyard shift in the data center. Earn enough stars and a sixth, secret floor opens up.
 
 **Play it:** https://andrewwu12.github.io/nine-to-five-links/
 
@@ -21,12 +21,31 @@ Everyone can pick a department. When at least two departments are playing, the r
 ## Rules
 
 - Seven strokes max per hole.
-- Hazards cost one stroke, and you play again from where you hit: coffee spills, the shredder, the loading dock, the service pit, puddles, open floor tiles, pool pockets, gutters and the pinball drain.
-- Par is 26 at Head Office and on the Factory Floor, 27 in the Parking Garage and the Data Center, and 28 in the Game Room. Online standings compare each player against par for the holes they've played.
+- Hazards cost one stroke, and you play again from where you hit: coffee spills, the shredder, the loading dock, the service pit, puddles, open floor tiles, pool pockets, gutters, the pinball drain and the CEO's koi pond.
+- Par is 26 at Head Office and on the Factory Floor, 27 in the Parking Garage and the Data Center, and 28 in the Game Room and the CEO's Penthouse. Online standings compare each player against par for the holes they've played.
 
 ## Rage mode
 
 Turn it on from the setup card, or from the clubhouse for an online room. Floors are waxed, walls are bouncier, the cup is smaller, greens tilt more, and everything moves faster. Your aim wobbles and there's no aim guide. A Roomba roams each hole and bumps your ball. Hazards send you back to the tee, and the elevator and the garage ramp sometimes take you to the wrong floor. The holes get new names to match, like Badge Declined, Lunch (Stolen) and Mandatory Overtime. It's ten strokes max per hole.
+
+## Stars, the Locker and the Daily Hole
+
+- **Stars:** every hole pays stars for your best score on it: one for par, two for a birdie, three for a hole in one or an eagle. They're saved in your browser, and on a shared screen they go to the first player.
+- **Career:** stars promote you from Intern to Associate (10 stars), Senior Associate (25), Manager (45), Director (70), Vice President (95) and CEO (125). The setup card shows your stars, your title and your Daily Hole streak.
+- **The Locker:** stars also unlock balls (a stress ball at 5, a coffee bean at 14, an eight ball at 30, a tennis ball at 40, a disco ball at 62, an eyeball at 88, solid gold at 115) and trails (a chalk line at 9, confetti at 22, neon at 50, flames at 75, a rainbow at 130). Open the Locker on the setup card to pick what to wear.
+- **Daily Hole:** one hole a day from the five buildings, with a twist: a tiny or a huge cup, an icy floor or shag carpet, bouncy walls, rush hour (everything that moves goes faster), a steep green, or shaky hands. Everyone gets the same hole and twist that day. You get three tries and the best one counts; a try counts from its first putt. Then copy a card for the team chat:
+
+  ```
+  Nine-to-Five Links · Daily Hole #1
+  Inbox (Head Office) · Icy floor · Par 3
+  🟨 ⬜ 🟩  Best: 2 (Birdie)
+  🔥 4-day streak
+  https://andrewwu12.github.io/nine-to-five-links/
+  ```
+
+  Play one every workday to build a streak. Weekends never break it. The next Daily Hole opens at midnight on your own clock.
+- **Ghosts:** play a hole again on the same layout (in practice, on your second and third Daily Hole tries, or in another round on the same pins) and a faint ball replays your best run on it, stroke by stroke.
+- **The penthouse:** at 100 stars, your badge opens the CEO's private elevator. See below.
 
 ## Taunts and office life
 
@@ -58,7 +77,7 @@ Worth knowing:
 
 ## The holes
 
-There are five buildings of nine holes each. Pick one on the setup card, or in the clubhouse for an online room.
+There are five buildings of nine holes each, and a sixth for those who earn it. Pick one on the setup card, or in the clubhouse for an online room.
 
 ### Head Office: day shift, 9 AM to 5 PM
 
@@ -136,6 +155,22 @@ The lights go down and the neon comes up as the night goes on.
 | 6:00 AM | Cooling Plant | 3 | Chiller fans that blast across the room in turns, over puddles |
 | 7:00 AM | Five Nines | 4 | Racks, a crash cart, fans, and a cage door guarding the cup |
 
+### The CEO's Penthouse: executive hours, 10 AM to 2 PM
+
+It isn't on the campus map, and it isn't in the building list until you have 100 stars. Its holes pay stars too. In an online room, a host who has it can take the whole room up.
+
+| Time | Hole | Par | What's on it |
+| --- | --- | --- | --- |
+| 10:00 AM | Private Elevator | 2 | Out of the elevator and across a polished marble lobby that speeds the ball up |
+| 10:30 AM | Corner Office | 3 | Round the corner to the CEO's desk, over a Persian rug |
+| 11:00 AM | Boardroom | 3 | Bank round the boardroom table and its wheeled chairs |
+| 11:30 AM | Aquarium | 3 | Round a floor-to-ceiling fish tank, past the koi pond |
+| 12:00 PM | Sushi Lunch | 3 | A sushi belt loops the counter; ride it or cross it, past a champagne tower |
+| 12:30 PM | Private Gym | 3 | Rows of treadmills running back at you, or the long way over the yoga mats |
+| 1:00 PM | Helipad | 4 | Time your putt through the helicopter's turning rotor, or go round it |
+| 1:30 PM | The Vault | 3 | A round strongroom whose door swings open and shut; the cup is inside with the gold |
+| 2:00 PM | Golden Parachute | 4 | The rooftop green: bunkers, a pond, a hill that runs back to it, and a soft landing round the cup |
+
 ## The campus
 
 All five buildings sit on one campus map, with a pond, a coffee kiosk, two streets, the parking lot, the loading yard, a patio with a taco truck, and a sports field with a running track. Open it with **Explore the campus** on the setup card, or **Campus map** in the pause menu.
@@ -166,7 +201,7 @@ Once a hole passes, **Test drive** plays it on its own, and **The Workshop** sho
 
 ## Things to knock over
 
-Cones, cup pyramids, boxes, office chairs, bins, water jugs, oil drums, tape cartridges, pool balls and bowling pins all move when the ball hits them, and they stay where they land for the next player. Knock down all ten pins for a strike. Hit a box, crate or water jug hard enough and it breaks. A burst jug or a tipped oil drum leaves a slippery spill, and a tipped bin scatters paper. The results give a *Property damage* award to whoever broke the most.
+Cones, cup pyramids, boxes, office chairs, bins, water jugs, oil drums, tape cartridges, pool balls, bowling pins, champagne glasses, gold bars and medicine balls all move when the ball hits them, and they stay where they land for the next player. Knock down all ten pins for a strike. Hit a box, crate or water jug hard enough and it breaks, and a champagne glass shatters. A burst jug or a tipped oil drum leaves a slippery spill, and a tipped bin scatters paper. The results give a *Property damage* award to whoever broke the most.
 
 Each day, each group code, and each online room picks every hole's pin position, slope and green speed, and flips some holes left to right (all except the office's Clock Out and the game room's Pinball).
 

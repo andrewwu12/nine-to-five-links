@@ -108,6 +108,34 @@ button { font: inherit; color: inherit; }
 .note { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
 .memo { margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--hi-soft); font-size: 13px; line-height: 1.45; }
 .memo b { font: 600 11px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; display: block; margin-bottom: 3px; }
+/* Your career on the course pass, and today's Daily Hole */
+.career { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.chip { display: inline-flex; align-items: baseline; gap: 4px; padding: 5px 10px; border-radius: 999px; background: rgba(37, 29, 0, .1); font: 600 12px/1.2 var(--mono); font-variant-numeric: tabular-nums; }
+.chip b { font-weight: 700; }
+.daily { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 14px; border-radius: 14px; background: var(--ink); color: var(--on-floor); }
+.daily-text { flex: 1 1 auto; min-width: 0; }
+.daily .eyebrow { color: var(--on-floor-2); }
+.daily-name { font: 800 26px/1 var(--display); text-transform: uppercase; margin: 3px 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.daily-sub { font-size: 13px; color: var(--on-floor-2); }
+.daily .btn { flex: 0 0 auto; }
+.sum-row.best { background: var(--hi-soft); }
+.sum-mark { color: #c98a00; font-size: 16px; text-align: center; }
+.sum-stars { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.sum-stars .st { color: #c98a00; font-size: 17px; letter-spacing: 1px; margin-right: 6px; }
+.sum-stars .unl { display: block; margin-top: 4px; color: #8a5a00; }
+/* The locker */
+.locker-bar { height: 10px; border-radius: 6px; background: var(--paper-3); overflow: hidden; margin: 12px 0 6px; }
+.locker-bar i { display: block; height: 100%; width: 0; background: var(--hi); transition: width .4s; }
+.ladder { margin: 10px 0 14px; font-size: 13px; line-height: 1.6; color: var(--ink-2); }
+.ladder b { color: var(--ink); background: var(--hi-soft); border-radius: 6px; padding: 1px 5px; }
+.gear { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; margin: 8px 0 16px; }
+.gear-item { display: grid; justify-items: center; gap: 3px; padding: 10px 6px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); font: inherit; cursor: pointer; }
+.gear-item canvas { width: 56px; height: 56px; }
+.gear-item b { font: 700 13px/1.2 var(--body); text-align: center; }
+.gear-item small { font: 500 11px/1.2 var(--mono); color: var(--ink-2); }
+.gear-item[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); background: var(--hi-soft); }
+.gear-item:disabled { cursor: not-allowed; opacity: .55; }
+.gear-item:disabled canvas { filter: grayscale(1) brightness(.8); }
 .dept-cup { margin: -4px 0 16px; padding: 12px 14px; border-radius: 12px; background: var(--paper-2); }
 .dept-cup ol { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 3px; }
 .dept-cup li { font-weight: 600; }
@@ -164,7 +192,7 @@ button { font: inherit; color: inherit; }
 .award { background: var(--paper-2); border-radius: 12px; padding: 10px 12px; }
 .award-k { font: 600 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
 .award-v { font-weight: 600; margin-top: 2px; }
-textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font: 500 13px/1.5 var(--mono); color: var(--ink); background: #fff; }
+textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font: 500 13px/1.5 var(--mono); color: var(--ink); background: #fff; }
 
 /* Scorecard: a time card */
 .table-wrap { overflow-x: auto; margin: 14px -6px 0; padding: 0 6px 4px; }
@@ -475,8 +503,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         <div class="pass-eyebrow">Course pass · Valid 9:00 to 5:00</div>
         <h1 class="pass-title"><span class="nowrap">Nine-to-Five</span> Links</h1>
         <p class="pass-sub">Office mini golf for the whole team. Nine holes, one for every hour of the workday.</p>
+        <div class="career" id="careerChips"></div>
       </div>
       <div class="pass-body">
+        <div class="daily" id="dailyBox"></div>
         <div class="tabs" role="tablist" aria-label="How you're playing">
           <button class="tab" role="tab" id="tabLocal" aria-selected="true" aria-controls="paneLocal" type="button">Same screen</button>
           <button class="tab" role="tab" id="tabOnline" aria-selected="false" aria-controls="paneOnline" type="button">Online room</button>
@@ -524,6 +554,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
           <div class="pass-actions">
             <button class="btn btn-hi btn-big" id="startBtn" type="button">Tee off</button>
             <button class="btn btn-paper" id="exploreBtn" type="button">Explore the campus</button>
+            <button class="btn btn-paper" id="lockerBtn" type="button">Locker</button>
             <button class="btn btn-paper" id="buildBtn" type="button">Build a course</button>
             <button class="btn btn-paper" id="helpBtn" type="button">How to play</button>
           </div>
@@ -569,6 +600,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       <h2 id="sumTitle">Hole</h2>
       <p class="sheet-sub" id="sumPar">Par</p>
       <ul class="sum-list" id="sumList"></ul>
+      <p class="sum-stars" id="sumStars" hidden></p>
       <p class="sheet-sub" id="sumNext"></p>
       <p class="memo" id="sumMemo"></p>
       <div class="row wrap" style="margin-top: 16px">
@@ -583,6 +615,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       <div class="eyebrow">5:00 PM · Clocked out</div>
       <h2>End of day</h2>
       <p class="sheet-sub" id="resCourse"></p>
+      <p class="sum-stars" id="resStars" hidden></p>
       <ol class="standings" id="standings"></ol>
       <div class="dept-cup" id="deptCup" hidden></div>
       <div class="awards" id="awards"></div>
@@ -642,6 +675,47 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     </div>
   </section>
 
+  <section class="overlay" id="locker" hidden>
+    <div class="card wide">
+      <div class="row between">
+        <div>
+          <div class="eyebrow" id="lockerEyebrow">Career</div>
+          <h2>Locker</h2>
+        </div>
+        <button class="icon-btn" id="lockerClose" type="button" aria-label="Close locker">×</button>
+      </div>
+      <p class="sheet-sub" id="lockerSub"></p>
+      <div class="locker-bar" aria-hidden="true"><i id="lockerFill"></i></div>
+      <p class="ladder" id="lockerLadder"></p>
+      <p class="field-label">Balls</p>
+      <div class="gear" id="gearBalls"></div>
+      <p class="field-label">Trails</p>
+      <div class="gear" id="gearTrails"></div>
+      <p class="field-label">Buildings</p>
+      <div class="gear" id="gearBuildings"></div>
+      <p class="note">Earn stars on every hole: one for par, two for a birdie, three for a hole in one or an eagle. Your best score on each hole counts, in any building except the Workshop, in normal or Rage mode. Stars are saved on this device; on one screen, they go to the first player.</p>
+    </div>
+  </section>
+
+  <section class="overlay" id="daily" hidden>
+    <div class="card">
+      <div class="eyebrow" id="dailyEyebrow">Daily Hole</div>
+      <h2 id="dailyTitle">Daily Hole</h2>
+      <p class="sheet-sub" id="dailySub"></p>
+      <ol class="sum-list" id="dailyTries"></ol>
+      <p class="sheet-sub" id="dailyStreak"></p>
+      <div id="dailyShareBox" hidden>
+        <label class="field-label" for="dailyShare" style="margin-top: 14px">Paste into your team chat</label>
+        <textarea id="dailyShare" rows="5" readonly></textarea>
+      </div>
+      <div class="row wrap" style="margin-top: 16px">
+        <button class="btn btn-hi btn-big" id="dailyGo" type="button">Try again</button>
+        <button class="btn btn-hi btn-big" id="dailyCopy" type="button" hidden>Copy</button>
+        <button class="btn btn-paper" id="dailyDone" type="button">Done</button>
+      </div>
+    </div>
+  </section>
+
   <section class="overlay" id="help" hidden>
     <div class="card">
       <div class="eyebrow">Orientation</div>
@@ -658,7 +732,17 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         <dt>Online</dt>
         <dd>Choose Online room and send your coworkers the invite link. Everyone plays the same hole at the same time on their own device and sees each other's balls. The next hole starts when everyone has finished, or you can go on ahead.</dd>
         <dt>Scoring</dt>
-        <dd>Seven strokes max per hole. Hazards cost a stroke, and you play again from where you hit: coffee spills, the shredder, the loading dock, the service pit, puddles, open floor tiles, pool pockets, gutters and the pinball drain.</dd>
+        <dd>Seven strokes max per hole. Hazards cost a stroke, and you play again from where you hit: coffee spills, the shredder, the loading dock, the service pit, puddles, open floor tiles, pool pockets, gutters, the pinball drain and the CEO’s koi pond.</dd>
+        <dt>Stars</dt>
+        <dd>Every hole pays stars for your best score on it: one for par, two for a birdie, three for a hole in one or an eagle. Stars build your career from Intern to CEO, and the chips on the setup card show where you stand. On a shared screen, the first player earns them.</dd>
+        <dt>The Locker</dt>
+        <dd>Stars unlock balls and trails: a stress ball, a coffee bean, an eight ball, confetti, neon, flames, solid gold and more. Open the Locker on the setup card to see what’s next and pick what to wear.</dd>
+        <dt>Daily Hole</dt>
+        <dd>One hole a day from the five buildings, with a twist: a tiny cup, an icy floor, bouncy walls and so on. Everyone gets the same hole and twist that day. You get three tries and the best one counts, then share your result with your team. Play one every workday to build a streak. Weekends never break it.</dd>
+        <dt>Your ghost</dt>
+        <dd>Play a hole again on the same layout and a faint ball replays your best run on it, stroke by stroke, so you can see where you gained or lost.</dd>
+        <dt>The penthouse</dt>
+        <dd>There’s a sixth building, and it isn’t on the campus map. Earn 100 stars and your badge opens the CEO’s private elevator: nine executive holes from 10 AM to 2 PM, with a vault, a helipad and a koi pond, and stars of their own. In an online room, a host who has it can take everyone up.</dd>
         <dt>Rage mode</dt>
         <dd>Waxed floors, bouncy walls, a smaller cup, faster everything, shaky hands and no aim guide. A Roomba roams the course and bumps your ball, hazards send you back to the tee, and the elevator and the garage ramp sometimes take you to the wrong floor. Ten strokes max per hole.</dd>
         <dt>Taunts</dt>
@@ -670,7 +754,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         <dt>The workshop</dt>
         <dd>Build your own holes with Build a course on the setup card, or build them together from an online room's clubhouse, where everyone edits the same holes live and sees each other's cursors. Pick a shape, then place walls, bumpers, rugs, ramps, conveyors, spills, movers and props. Each hole has a 60-point budget, limits on hazards, movers and props, and a clear space around the tee and the cup. A test bot plays every design; once it finishes, the hole is playable and gets its par, and The Workshop appears as a building you can play.</dd>
         <dt>Knock things over</dt>
-        <dd>Cones, cup pyramids, boxes, chairs, bins, water jugs, oil drums, tape cartridges, pool balls and bowling pins all move when you hit them. Hit a box, crate or water jug hard enough and it breaks. A burst jug or a tipped oil drum leaves the floor slippery. Knock down all ten pins for a strike.</dd>
+        <dd>Cones, cup pyramids, boxes, chairs, bins, water jugs, oil drums, tape cartridges, pool balls, bowling pins, champagne glasses, gold bars and medicine balls all move when you hit them. Hit a box, crate or water jug hard enough and it breaks, and a champagne glass shatters. A burst jug or a tipped oil drum leaves the floor slippery. Knock down all ten pins for a strike.</dd>
         <dt>Course</dt>
         <dd>Pin positions change every day. Everyone on today's pins, or on the same group code, plays the same layout, so scores compare fairly across devices.</dd>
       </dl>
@@ -809,6 +893,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     drain: [
       ['it', 'Ball drained. Insert a coin to continue.'], ['intern', 'Tilt!'], ['fin', 'That was our last quarter.'],
     ],
+    koi: [
+      ['ceo', 'Those koi cost more than your car.'], ['fac', 'Please don’t putt into the CEO’s koi pond.'],
+      ['fin', 'Each of those fish is a line item.'], ['intern', 'I named that one Kevin too.'],
+    ],
     heckle: [
       ['mgr', 'Quick question: are you planning to putt today?'], ['hr', 'Reminder that effort is part of your review.'],
       ['fin', 'Every stroke is billable.'], ['it', 'Please don’t blame the hardware.'],
@@ -850,6 +938,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       'Winner stays on!', 'Who’s got next?', 'That was a scratch!', 'I’m on a heater!', 'Rematch?', 'Karaoke at ten!',
       'Who ordered the nachos?', 'Best of seven.', 'No spinning the rods!', 'The claw machine is rigged.', 'One more game.', 'Last call is at one.',
     ],
+    penthouse: [
+      'Has anyone seen the CEO’s reading glasses?', 'The helicopter is booked for lunch.', 'Is the koi pond heated?', 'Who ordered omakase for twelve?',
+      'The board meets at eleven. Look busy.', 'Polish the trophies before the investors come up.', 'Is it too early for champagne?',
+      'The elevator only stops here if you have the key.', 'The CEO’s tee time moved to two.', 'Nobody touch the thermostat.', 'The vault code changed again.',
+    ],
   };
   const MEMOS = {
     office: [
@@ -876,6 +969,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       'The pool table is first come, first served.', 'Please return the ping-pong paddles.', 'Karaoke night is Thursday.',
       'The claw machine is rigged. We checked.', 'Happy hour ends at seven. Mostly.', 'No food in the ball pit.',
       'The foosball table is not a stress ball.', 'The tournament bracket is on the board.', 'Last call is at one. For real this time.',
+    ],
+    penthouse: [
+      'Executive hours are 10 AM to 2 PM. Strictly.', 'Please don’t tap on the aquarium glass.', 'The helipad is closed during putting.',
+      'The champagne tower is decorative. Mostly.', 'Sushi is served at noon. The belt waits for no one.', 'The gym is for executives and their trainers.',
+      'Gold bars are counted at close of business.', 'The koi are not to be fed golf balls.', 'Congratulations on your promotion. Please keep it quiet.',
     ],
   };
   // What you can send coworkers in an online room. Only these travel over the wire, as numbers.
@@ -1901,6 +1999,160 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     [120, 90, 255, 0.05], [120, 90, 240, 0.06], [110, 80, 230, 0.06], [100, 70, 220, 0.07],
   ];
   const GAMEROOM_DARK = [0.26, 0.3, 0.34, 0.4, 0.42, 0.46, 0.5, 0.52, 0.56];
+  // ---------------------------------------------------------------------------
+  // The CEO's Penthouse: executive hours, 10 AM to 2 PM. It's not on the campus map; your badge only opens the
+  // private elevator once you've earned 100 stars.
+  // ---------------------------------------------------------------------------
+  const GOLDLAMP = '255,214,140';
+  const PENTHOUSE_HOLES = [
+    {
+      name: 'Private Elevator', time: '10:00 AM', short: '10:00', par: 2,
+      tip: 'Step out of the private elevator. The marble is fast.',
+      rageName: 'Wrong Floor, Wrong Salary', rageTip: 'The elevator plays smooth jazz, and somebody polished the marble.',
+      roomba: [700, 300],
+      course: [[[70, 250], [190, 250], [190, 200], [920, 200], [920, 400], [190, 400], [190, 350], [70, 350]]],
+      tee: [128, 300],
+      pins: [[862, 300], [852, 242], [852, 358]],
+      blocks: [{ pts: rect(520, 200, 180, 36), kind: 'reception' }],
+      bumpers: [{ x: 360, y: 246, r: 16, kind: 'palm' }, { x: 360, y: 354, r: 16, kind: 'palm' }, { x: 770, y: 352, r: 16, kind: 'palm' }],
+      zones: [{ type: 'slick', style: 'marble', mul: 0.6, pts: rect(420, 250, 300, 100) }],
+      decor: [{ type: 'car', x: 70, y: 250, w: 120, h: 100 }, { type: 'sign', x: 130, y: 226, text: 'PH', style: 'amber' }, { type: 'sign', x: 555, y: 430, text: 'EXECUTIVE FLOOR', style: 'floor' }],
+    },
+    {
+      name: 'Corner Office', time: '10:30 AM', short: '10:30', par: 3,
+      tip: 'Round the corner to the CEO’s desk. Don’t scuff the rug.',
+      rageName: 'Performance Review', rageTip: 'The CEO is in. Knock first.',
+      roomba: [300, 200],
+      course: [[[80, 90], [920, 90], [920, 510], [560, 510], [560, 330], [80, 330]]],
+      tee: [140, 210],
+      pins: [[740, 452], [622, 470], [858, 462]],
+      blocks: [{ pts: rect(640, 150, 170, 64), kind: 'ceodesk' }, { pts: rect(300, 90, 130, 26), kind: 'books' }, { pts: rect(894, 250, 26, 170), kind: 'books' }],
+      bumpers: [{ x: 500, y: 150, r: 18, kind: 'globe' }, { x: 620, y: 300, r: 16, kind: 'palm' }],
+      zones: [{ type: 'rough', style: 'persian', mul: 2.2, pts: rect(600, 250, 260, 150) }],
+      props: [{ kind: 'chair', x: 726, y: 236 }],
+      decor: [{ type: 'sign', x: 320, y: 360, text: 'OFFICE OF THE CEO', style: 'floor' }],
+    },
+    {
+      name: 'Boardroom', time: '11:00 AM', short: '11:00', par: 3,
+      tip: 'Bank round the boardroom table. The chairs are on wheels.',
+      rageName: 'Hostile Takeover', rageTip: 'The board is in session, and every chair is on wheels.',
+      roomba: [500, 150],
+      course: [chamferRect(80, 110, 840, 380, 30)],
+      tee: [140, 300],
+      pins: [[842, 300], [806, 170], [806, 430]],
+      blocks: [{ pts: chamferRect(260, 250, 480, 100, 40), kind: 'boardtable' }, { pts: rect(894, 230, 26, 140), kind: 'screen' }],
+      props: [
+        { kind: 'chair', x: 330, y: 222 }, { kind: 'chair', x: 430, y: 222 }, { kind: 'chair', x: 530, y: 222 }, { kind: 'chair', x: 630, y: 222 },
+        { kind: 'chair', x: 330, y: 378 }, { kind: 'chair', x: 430, y: 378 }, { kind: 'chair', x: 530, y: 378 }, { kind: 'chair', x: 630, y: 378 },
+      ],
+      decor: [{ type: 'sign', x: 500, y: 88, text: 'BOARDROOM · IN SESSION', style: 'amber' }],
+    },
+    {
+      name: 'Aquarium', time: '11:30 AM', short: '11:30', par: 3,
+      tip: 'Go round the aquarium, and keep out of the koi pond.',
+      rageName: 'Shark Tank', rageTip: 'The koi have been swapped for something with more teeth.',
+      roomba: [250, 160],
+      course: [chamferRect(80, 90, 840, 420, 40)],
+      tee: [140, 300],
+      pins: [[858, 300], [840, 162], [840, 440]],
+      blocks: [{ pts: rect(420, 170, 160, 260), kind: 'aquarium' }],
+      zones: [{ type: 'water', style: 'koi', pts: smoothClosed([[612, 392], [680, 368], [760, 380], [790, 430], [744, 478], [656, 480], [604, 446]]) }],
+      bumpers: [{ x: 300, y: 150, r: 16, kind: 'palm' }, { x: 300, y: 450, r: 16, kind: 'palm' }, { x: 700, y: 170, r: 16, kind: 'palm' }],
+    },
+    {
+      name: 'Sushi Lunch', time: '12:00 PM', short: '12:00', par: 3,
+      tip: 'The sushi belt goes round and round. Ride it, or cross it with pace.',
+      rageName: 'Expense Account', rageTip: 'The belt is on turbo, and the champagne is flowing.',
+      roomba: [160, 160],
+      course: [chamferRect(80, 90, 840, 420, 30)],
+      tee: [140, 300],
+      pins: [[862, 300], [850, 160], [850, 440]],
+      blocks: [{ pts: rect(340, 230, 320, 140), kind: 'sushibar' }],
+      zones: [
+        { type: 'conveyor', skin: 'sushi', pts: rect(300, 190, 400, 40), dir: [1, 0], accel: 520, max: 280 },
+        { type: 'conveyor', skin: 'sushi', pts: rect(660, 230, 40, 180), dir: [0, 1], accel: 520, max: 280 },
+        { type: 'conveyor', skin: 'sushi', pts: rect(300, 370, 360, 40), dir: [-1, 0], accel: 520, max: 280 },
+        { type: 'conveyor', skin: 'sushi', pts: rect(300, 190, 40, 180), dir: [0, -1], accel: 520, max: 280 },
+      ],
+      props: [{ kind: 'glasses', x: 800, y: 210 }, { kind: 'glasses', x: 800, y: 390 }],
+      decor: [{ type: 'sign', x: 500, y: 68, text: 'OMAKASE · MARKET PRICE', style: 'amber' }],
+    },
+    {
+      name: 'Private Gym', time: '12:30 PM', short: '12:30', par: 3,
+      tip: 'Power across the treadmills, or take the long way over the yoga mats.',
+      rageName: 'Leg Day', rageTip: 'Every treadmill is on the steepest setting.',
+      roomba: [500, 450],
+      course: [chamferRect(80, 110, 840, 380, 30)],
+      tee: [140, 250],
+      pins: [[862, 250], [846, 172], [846, 420]],
+      blocks: [{ pts: rect(420, 110, 160, 30), kind: 'dumbbells' }],
+      zones: [
+        { type: 'conveyor', skin: 'treadmill', pts: rect(300, 150, 70, 230), dir: [-1, 0], accel: 640, max: 330 },
+        { type: 'conveyor', skin: 'treadmill', pts: rect(460, 150, 70, 230), dir: [-1, 0], accel: 640, max: 330 },
+        { type: 'conveyor', skin: 'treadmill', pts: rect(620, 150, 70, 230), dir: [-1, 0], accel: 640, max: 330 },
+        { type: 'rough', style: 'mat', mul: 2.4, pts: rect(290, 400, 420, 70) },
+      ],
+      props: [{ kind: 'medball', x: 240, y: 430 }, { kind: 'medball', x: 760, y: 440 }, { kind: 'medball', x: 780, y: 170 }],
+      decor: [{ type: 'sign', x: 500, y: 88, text: 'EXECUTIVE WELLNESS CENTER', style: 'amber' }],
+    },
+    {
+      name: 'Helipad', time: '1:00 PM', short: '1:00', par: 4,
+      tip: 'Mind the rotor. Time your shot through it, or go round the edge.',
+      rageName: 'Emergency Exit', rageTip: 'The chopper is leaving, with or without you.',
+      roomba: [200, 150],
+      theme: 'roof',
+      course: [chamferRect(80, 70, 840, 460, 60)],
+      tee: [140, 470],
+      pins: [[858, 132], [858, 468], [500, 110]],
+      blocks: [{ pts: chamferRect(452, 276, 96, 48, 18), kind: 'heli' }],
+      movers: [
+        { type: 'spinner', kind: 'rotor', x: 500, y: 300, len: 164, w: 9, speed: 3.4, a0: 0 },
+        { type: 'spinner', kind: 'rotor', x: 500, y: 300, len: 164, w: 9, speed: 3.4, a0: Math.PI },
+      ],
+      decor: [{ type: 'helipad', x: 500, y: 300, r: 200 }, { type: 'sign', x: 500, y: 48, text: 'HELIPAD · STAY CLEAR OF ROTORS', style: 'amber' }],
+    },
+    {
+      name: 'The Vault', time: '1:30 PM', short: '1:30', par: 3,
+      tip: 'The vault door swings open and shut. Time it, and roll in among the gold.',
+      rageName: 'Audit', rageTip: 'Finance is counting the gold bars. The door is not waiting for you.',
+      roomba: [300, 150],
+      course: [chamferRect(80, 90, 840, 420, 30)],
+      tee: [150, 300],
+      pins: [[722, 300], [702, 256], [702, 344]],
+      blocks: [{ pts: arcBand(690, 300, 98, 126, -Math.PI + 0.44, Math.PI - 0.44, 30), kind: 'vaultwall' }],
+      movers: [{ type: 'spinner', kind: 'vaultdoor', x: 690 - 112 * Math.cos(0.44), y: 300 - 112 * Math.sin(0.44), len: 2 * 112 * Math.sin(0.44) + 6, w: 16, a0: Math.PI / 2, amp: Math.PI / 2, gate: [1.6, 0.9, 1.5, 0.9] }],
+      bumpers: [{ x: 380, y: 190, r: 14, kind: 'trophy' }, { x: 380, y: 410, r: 14, kind: 'trophy' }, { x: 862, y: 140, r: 14, kind: 'trophy' }, { x: 862, y: 460, r: 14, kind: 'trophy' }],
+      props: [
+        { kind: 'goldbar', x: 766, y: 262 }, { kind: 'goldbar', x: 772, y: 300 }, { kind: 'goldbar', x: 766, y: 338 },
+        { kind: 'goldbar', x: 470, y: 150 }, { kind: 'goldbar', x: 492, y: 170 }, { kind: 'goldbar', x: 470, y: 450 },
+      ],
+      decor: [{ type: 'vaultfloor', x: 690, y: 300, r: 98 }, { type: 'sign', x: 500, y: 546, text: 'TREASURY · AUTHORIZED ONLY', style: 'floor' }],
+    },
+    {
+      name: 'Golden Parachute', time: '2:00 PM', short: '2:00', par: 4,
+      tip: 'The CEO’s own green. Bunkers, a pond, a hill that runs back to it, and a soft landing round the cup.',
+      rageName: 'Severance Package', rageTip: 'The CEO wants the green back by two. Clock’s ticking.',
+      roomba: [300, 300],
+      theme: 'roof',
+      course: [smoothClosed([[90, 330], [140, 150], [320, 90], [560, 110], [760, 80], [910, 170], [920, 380], [820, 510], [560, 500], [360, 530], [150, 500]])],
+      tee: [150, 430],
+      pins: [[806, 170], [760, 300], [846, 420]],
+      zones: [
+        { type: 'rough', style: 'sand', mul: 4.2, pts: smoothClosed([[400, 150], [470, 130], [520, 160], [500, 210], [430, 220], [390, 190]]) },
+        { type: 'rough', style: 'sand', mul: 4.2, pts: smoothClosed([[600, 380], [680, 360], [720, 400], [690, 450], [610, 452], [580, 420]]) },
+        { type: 'water', style: 'koi', pts: smoothClosed([[300, 300], [360, 250], [450, 270], [480, 330], [430, 390], [340, 390], [296, 350]]) },
+        { type: 'slope', pts: rect(520, 250, 110, 200), ax: -220, ay: 0 },
+        { type: 'funnel', at: 'cup', r: 70, strength: 300 },
+      ],
+      bumpers: [{ x: 620, y: 230, r: 16, kind: 'palm' }],
+      decor: [{ type: 'sign', x: 500, y: 562, text: 'PRIVATE GREEN · MEMBERS ONLY', style: 'floor' }],
+    },
+  ];
+  // Late-morning light, then a long golden lunch.
+  const PENTHOUSE_TINTS = [
+    [255, 244, 220, 0.03], [255, 240, 210, 0.03], [255, 236, 200, 0.03], [255, 232, 190, 0.04], [255, 226, 180, 0.04],
+    [255, 222, 170, 0.04], [255, 214, 160, 0.05], [255, 206, 150, 0.05], [255, 196, 130, 0.06],
+  ];
   // How each building looks: the floor around the course, the putting surface and the rails.
   const THEMES = {
     office: { floor: 'carpet', bg: '#2f3744', felt: '#2e9b58', tee: '#237a47', rail: ['#6c7889', '#c3ccd7', '#e6ebf1'], hazard: false },
@@ -1910,6 +2162,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     gameroom: { floor: 'arcade', bg: '#15132b', felt: '#4a3db0', tee: '#382e8f', rail: ['#06060b', '#1d1b31', '#2b2846'], hazard: false, edge: 'rgba(255,80,190,0.9)' },
     pool: { floor: 'arcade', bg: '#15132b', felt: '#1f63a6', tee: '#18508a', rail: ['#1b0f06', '#5a3818', '#8a5a33'], hazard: false },
     foos: { floor: 'arcade', bg: '#15132b', felt: '#2f9a4f', tee: '#257a3f', rail: ['#0b0b10', '#2a2a36', '#46465a'], hazard: false },
+    penthouse: { floor: 'marble', bg: '#1f2023', felt: '#1d6b47', tee: '#15573a', rail: ['#4a3408', '#b8912f', '#f0d27a'], hazard: false },
+    roof: { floor: 'deck', bg: '#5a4632', felt: '#2f8a4c', tee: '#236b3a', rail: ['#4a3408', '#b8912f', '#f0d27a'], hazard: false },
   };
   const theme = h => THEMES[(h && h.theme) || COURSE.theme] || THEMES.office;
   const COURSES = {
@@ -1918,6 +2172,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     garage: { id: 'garage', name: 'Parking Garage', shift: 'The morning rush, 7 to 9 AM', holes: GARAGE_HOLES, tints: GARAGE_TINTS, dark: GARAGE_DARK, lastLabel: 'Badge in', spills: ['Most puddles', 'Dry shoes all morning', 'Puddles'], title: 'Nine-to-Five Links', theme: 'garage' },
     gameroom: { id: 'gameroom', name: 'Game Room', shift: 'After hours, 5 PM to 1 AM', holes: GAMEROOM_HOLES, tints: GAMEROOM_TINTS, dark: GAMEROOM_DARK, lastLabel: 'Call it a night', spills: ['Most fouls', 'A clean game all night', 'Fouls'], title: 'Nine-to-Five Links', theme: 'gameroom' },
     datacenter: { id: 'datacenter', name: 'Data Center', shift: 'Graveyard shift, 11 PM to 7 AM', holes: DATACENTER_HOLES, tints: DATACENTER_TINTS, dark: DATACENTER_DARK, lastLabel: 'Hand over', spills: ['Most incidents', 'No incidents all night', 'Incidents'], title: 'Nine-to-Five Links', theme: 'datacenter' },
+    // Not on the campus map: the private elevator only opens for 100 stars.
+    penthouse: { id: 'penthouse', name: 'The CEO’s Penthouse', shift: 'Executive hours, 10 AM to 2 PM', holes: PENTHOUSE_HOLES, tints: PENTHOUSE_TINTS, lastLabel: 'Take the rest of the day off', spills: ['Most koi fed', 'The koi went hungry', 'Koi fed'], title: 'Nine-to-Five Links', theme: 'penthouse' },
   };
   let COURSE = COURSES.office;
   let HOLES = COURSE.holes;
@@ -2158,8 +2414,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       // Knocking props around, by what they're made of.
       prop(mat, k) {
         const v = 0.04 + 0.2 * k;
-        if (mat === 'metal' || mat === 'drum' || mat === 'can') {
-          const f = mat === 'can' ? 1800 : mat === 'drum' ? 260 : 520;
+        if (mat === 'metal' || mat === 'drum' || mat === 'can' || mat === 'gold') {
+          const f = mat === 'can' ? 1800 : mat === 'drum' ? 260 : mat === 'gold' ? 880 : 520;
           tone({ freq: f, to: f * 0.75, type: 'triangle', dur: 0.22, vol: v * 0.7 }); tone({ freq: f * 1.75, dur: 0.28, vol: v * 0.3 });
         } else if (mat === 'paper') noise({ dur: 0.05, vol: v * 0.6, type: 'highpass', freq: 2500, q: 0.7 });
         else if (mat === 'cardboard') noise({ dur: 0.09, vol: v, type: 'lowpass', freq: 700, q: 0.8 });
@@ -2167,11 +2423,14 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         else if (mat === 'jug') tone({ freq: 300, to: 200, dur: 0.18, vol: v });
         else if (mat === 'ball') { tone({ freq: 2900, to: 2200, type: 'triangle', dur: 0.05, vol: v * 0.9 }); noise({ dur: 0.03, vol: v * 0.5, type: 'highpass', freq: 3500, q: 0.8 }); }
         else if (mat === 'pin') { tone({ freq: 620, to: 430, type: 'triangle', dur: 0.12, vol: v }); noise({ dur: 0.08, vol: v * 0.6, type: 'bandpass', freq: 1500, q: 1.5 }); }
+        else if (mat === 'glass') { tone({ freq: 3300, to: 3200, dur: 0.3, vol: v * 0.45 }); tone({ freq: 5200, dur: 0.2, vol: v * 0.2 }); }
+        else if (mat === 'rubber') { noise({ dur: 0.08, vol: v * 0.9, type: 'lowpass', freq: 380, q: 0.8 }); tone({ freq: 130, to: 90, dur: 0.1, vol: v * 0.6 }); }
         else tone({ freq: 420, to: 300, type: 'triangle', dur: 0.08, vol: v * 0.8 });
       },
       smash(mat) {
         if (mat === 'jug') { noise({ dur: 0.5, vol: 0.3, type: 'lowpass', freq: 2400, to: 300, q: 0.6 }); tone({ freq: 380, to: 120, dur: 0.3, vol: 0.14 }); }
         else if (mat === 'wood') { noise({ dur: 0.3, vol: 0.3, type: 'bandpass', freq: 800, q: 0.9 }); tone({ freq: 180, to: 70, dur: 0.25, vol: 0.2 }); }
+        else if (mat === 'glass') { for (let i = 0; i < 4; i++) tone({ freq: 2600 + i * 900, to: 2400 + i * 700, type: 'triangle', dur: 0.12, vol: 0.05, delay: i * 0.03 }); noise({ dur: 0.18, vol: 0.18, type: 'highpass', freq: 3500, q: 0.7 }); }
         else { noise({ dur: 0.25, vol: 0.28, type: 'lowpass', freq: 900, to: 200, q: 0.7 }); tone({ freq: 140, to: 60, dur: 0.2, vol: 0.16 }); }
       },
     };
@@ -2183,7 +2442,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   const G = {
     screen: 'boot', players: [], course: null, variants: null,
     holeIdx: 8, order: [], turn: 0, strokes: 0, hole: null, ball: null, lastShot: null,
-    phase: 'idle', clock: 0, timers: [], firstShotDone: false,
+    phase: 'idle', clock: 0, timers: [], firstShotDone: false, daily: null, starGain: 0,
   };
   const ONLINE = {
     on: false, code: '', me: { id: '', name: '', color: 0 }, peers: new Map(),
@@ -2242,10 +2501,229 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
 
   const emptyStats = () => ({ aces: [], spills: 0, bounces: 0, longest: 0, lips: 0, tees: 0, bumps: 0, smash: 0 });
   const holeName = i => (PH.rage ? HOLES[i].rageName : HOLES[i].name);
-  function setMode(rage) { PH = rage ? MODES.rage : MODES.normal; G.rage = !!rage; }
+  // A Daily Hole's twist is normal play with a few numbers changed.
+  function setMode(rage, twist) { PH = twist && twist.ph ? { ...MODES.normal, ...twist.ph } : rage ? MODES.rage : MODES.normal; G.rage = !!rage; }
   function newBall(x, y, color) {
     return { x, y, vx: 0, vy: 0, state: 'rest', color, scale: 1, trail: [], slowT: 0, rollT: 0, sinkT: 0, splashT: 0, sx: x, sy: y };
   }
+
+
+  // ---------------------------------------------------------------------------
+  // Your career, saved on this device: your best score and stars on every hole, a job title, the gear the
+  // stars unlock, the Daily Hole and your streak. On one screen, the first player is you.
+  // ---------------------------------------------------------------------------
+  // Stars: one for par, two for a birdie, three for a hole in one or an eagle.
+  const starsFor = (score, par) => (score == null || score > par ? 0 : score === 1 || score <= par - 2 ? 3 : score <= par - 1 ? 2 : 1);
+  const starText = n => '★'.repeat(n) + '☆'.repeat(3 - n);
+  const STAR_COURSES = ['office', 'factory', 'garage', 'gameroom', 'datacenter', 'penthouse'];
+  const TITLES = [[0, 'Intern'], [10, 'Associate'], [25, 'Senior Associate'], [45, 'Manager'], [70, 'Director'], [95, 'Vice President'], [125, 'CEO']];
+  const GEAR = [
+    { id: 'classic', kind: 'ball', name: 'Company issue', stars: 0 },
+    { id: 'none', kind: 'trail', name: 'Standard', stars: 0 },
+    { id: 'stress', kind: 'ball', name: 'Stress ball', stars: 5 },
+    { id: 'chalk', kind: 'trail', name: 'Chalk line', stars: 9 },
+    { id: 'bean', kind: 'ball', name: 'Coffee bean', stars: 14 },
+    { id: 'confetti', kind: 'trail', name: 'Confetti', stars: 22 },
+    { id: 'eight', kind: 'ball', name: 'Eight ball', stars: 30 },
+    { id: 'tennis', kind: 'ball', name: 'Tennis ball', stars: 40 },
+    { id: 'neon', kind: 'trail', name: 'Neon', stars: 50 },
+    { id: 'disco', kind: 'ball', name: 'Disco ball', stars: 62 },
+    { id: 'flame', kind: 'trail', name: 'Flames', stars: 75 },
+    { id: 'eye', kind: 'ball', name: 'Eyeball', stars: 88 },
+    { id: 'penthouse', kind: 'building', name: 'The CEO’s Penthouse', stars: 100 },
+    { id: 'gold', kind: 'ball', name: 'Solid gold', stars: 115 },
+    { id: 'rainbow', kind: 'trail', name: 'Rainbow', stars: 130 },
+  ];
+  const Career = {
+    data: null,
+    load() {
+      const d = store.get('career', null), ok = d && typeof d === 'object';
+      this.data = {
+        best: ok && d.best && typeof d.best === 'object' ? d.best : {},
+        daily: ok && d.daily && typeof d.daily === 'object' ? d.daily : {},
+        ghosts: ok && d.ghosts && typeof d.ghosts === 'object' ? d.ghosts : {},
+        ball: ok && typeof d.ball === 'string' ? d.ball : 'classic',
+        trail: ok && typeof d.trail === 'string' ? d.trail : 'none',
+        seen: ok && Number.isFinite(d.seen) ? d.seen : 0,
+      };
+      return this;
+    },
+    save() { store.set('career', this.data); },
+    best(course, idx) { const v = this.data.best[course + ':' + idx]; return Number.isInteger(v) ? v : null; },
+    stars(course, idx) { const def = COURSES[course] && COURSES[course].holes[idx]; return def ? starsFor(this.best(course, idx), def.par) : 0; },
+    courseStars(course) { const c = COURSES[course]; return c ? c.holes.reduce((s, _, i) => s + this.stars(course, i), 0) : 0; },
+    // The penthouse's stars only count once you can get in, and you can only earn them there.
+    courses() { return STAR_COURSES.filter(id => COURSES[id] && COURSES[id].holes.length && (id !== 'penthouse' || this.has('penthouse'))); },
+    total() { return STAR_COURSES.reduce((s, id) => s + this.courseStars(id), 0); },
+    max() { return this.courses().reduce((s, id) => s + COURSES[id].holes.length * 3, 0); },
+    title(n = this.total()) { return TITLES.filter(([k]) => n >= k).pop()[1]; },
+    has(id) { const g = GEAR.find(x => x.id === id); return !!g && this.total() >= g.stars; },
+    // What you're wearing. Anything still locked (say, from a save made elsewhere) falls back to the standard issue.
+    wearing(kind) { const id = this.data[kind], g = GEAR.find(x => x.id === id && x.kind === kind); return g && this.total() >= g.stars ? id : kind === 'ball' ? 'classic' : 'none'; },
+    next() { const n = this.total(); return GEAR.find(g => g.stars > n) || null; },
+    // A finished hole: keeps your best and says what changed, so the game can make a fuss about it.
+    record(course, idx, score) {
+      if (!STAR_COURSES.includes(course) || !COURSES[course].holes[idx]) return null;
+      const par = COURSES[course].holes[idx].par, was = this.best(course, idx), before = this.total();
+      const oldStars = starsFor(was, par);
+      if (was == null || score < was) this.data.best[course + ':' + idx] = score;
+      const stars = starsFor(this.best(course, idx), par), after = this.total();
+      this.save();
+      const unlocked = GEAR.filter(g => g.stars > before && g.stars <= after);
+      return { stars, gained: stars - oldStars, newBest: was == null || score < was, was, total: after, unlocked };
+    },
+  };
+  Career.load();
+
+  // The Daily Hole: one hole a day from the five buildings, with a twist, the same for everyone that day.
+  // Three tries, and the best one counts. A try counts from its first putt, so reloading doesn't reroll it.
+  const DAILY_EPOCH = Date.UTC(2026, 8, 29);
+  const DAILY_COURSES = ['office', 'factory', 'garage', 'gameroom', 'datacenter'];
+  const TWISTS = [
+    { id: 'tiny', name: 'Tiny cup', tip: 'The cup is two sizes too small.', ph: { cupR: 9, capFast: 300 } },
+    { id: 'huge', name: 'Big cup', tip: 'Somebody ordered the jumbo cup. Treat yourself.', ph: { cupR: 19, capFast: 380 } },
+    { id: 'ice', name: 'Icy floor', tip: 'The floors were waxed overnight. Everything slides.', ph: { friction: 150, drag: 0.3 } },
+    { id: 'shag', name: 'Shag carpet', tip: 'New carpet. The ball barely wants to roll.', ph: { friction: 360, drag: 0.55 } },
+    { id: 'bouncy', name: 'Bouncy walls', tip: 'Facilities put rubber on every wall.', ph: { wallE: 0.96 } },
+    { id: 'rush', name: 'Rush hour', tip: 'Everything that moves is moving faster.', ph: { moverSpeed: 1.7, conveyor: 1.4 }, needs: 'movers' },
+    { id: 'steep', name: 'Steep green', tip: 'The whole floor tilts. Read the chevrons.', tilt: 46 },
+    { id: 'shaky', name: 'Shaky hands', tip: 'Too much coffee. Your aim wobbles, and there’s no guide.', ph: { wobble: true, guide: false } },
+  ];
+  const Daily = {
+    // Days since the first Daily Hole, counted on your own calendar.
+    number(key = todayKey()) { const [y, m, d] = key.split('-').map(Number); return Math.round((Date.UTC(y, m - 1, d) - DAILY_EPOCH) / 86400000) + 1; },
+    pick(key = todayKey()) {
+      const r = mulberry32(hashStr('daily#' + key));
+      const course = DAILY_COURSES[Math.floor(r() * DAILY_COURSES.length)], holes = COURSES[course].holes, idx = Math.floor(r() * holes.length), def = holes[idx];
+      const busy = (def.movers && def.movers.length) || (def.zones || []).some(z => z.type === 'conveyor' || z.type === 'turntable');
+      const order = TWISTS.map((t, i) => [r(), i]).sort((a, b) => a[0] - b[0]).map(([, i]) => TWISTS[i]);
+      const twist = order.find(t => t.needs !== 'movers' || busy);
+      return { key, n: this.number(key), course, idx, twist };
+    },
+    entry(key = todayKey()) { const e = Career.data.daily[key]; return e && Array.isArray(e.tries) ? e : { tries: [] }; },
+    // Scores so far, with a try that was started and never finished counting as a pick-up.
+    tries(key = todayKey()) { return this.entry(key).tries.map(v => (Number.isInteger(v) ? v : MODES.normal.cap)); },
+    best(key = todayKey()) { const t = this.tries(key); return t.length ? Math.min(...t) : null; },
+    done(key = todayKey()) { const t = this.tries(key); return t.length >= 3 || t.includes(1); },
+    begin(key = todayKey()) { const e = this.entry(key); e.tries.push(null); Career.data.daily[key] = e; Career.save(); },
+    finish(score, key = todayKey()) {
+      const e = this.entry(key), i = e.tries.lastIndexOf(null);
+      if (i >= 0) e.tries[i] = score; else e.tries.push(score);
+      Career.data.daily[key] = e; Career.save();
+    },
+    // Workdays in a row with a Daily Hole played. Weekends never break it, and today still counts until midnight.
+    streak(key = todayKey()) {
+      const played = k => this.entry(k).tries.length > 0, day = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+      const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+      let dt = day(key), n = 0;
+      if (!played(key)) dt.setDate(dt.getDate() - 1);
+      for (let i = 0; i < 800; i++, dt.setDate(dt.getDate() - 1)) {
+        if (played(fmt(dt))) n++;
+        else if (dt.getDay() !== 0 && dt.getDay() !== 6) break;
+      }
+      return n;
+    },
+    bestStreak() {
+      const keys = Object.keys(Career.data.daily).filter(k => this.entry(k).tries.length).sort();
+      let best = 0;
+      for (const k of keys) best = Math.max(best, this.streak(k));
+      return best;
+    },
+    msLeft() { const now = new Date(), next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); return next - now; },
+    shareText(key = todayKey()) {
+      const p = this.pick(key), def = COURSES[p.course].holes[p.idx], tries = this.tries(key), best = this.best(key), s = this.streak(key);
+      return [
+        `Nine-to-Five Links · Daily Hole #${p.n}`,
+        `${def.name} (${COURSES[p.course].name}) · ${p.twist.name} · Par ${def.par}`,
+        `${tries.map(v => emojiFor(v, def.par)).join(' ')}  Best: ${best} (${termFor(best, def.par)})`,
+        s > 1 ? `🔥 ${s}-day streak` : '',
+        PUBLIC_URL,
+      ].filter(Boolean).join('\n');
+    },
+  };
+
+  // Your best run of a hole, replayed as a faint ball. Each of its strokes starts when you take the same
+  // stroke, so you can see where your best run was at every point. Runs are kept per layout, since pins,
+  // flips and slopes change from day to day.
+  const GHOST_HZ = 20, GHOST_KEEP = 60;
+  const Ghost = {
+    rec: null, run: null, k: -1, t: 0,
+    keyFor(h) {
+      const v = (G.variants || [])[h.idx] || {};
+      const mode = G.daily ? 'd' + G.daily.twist.id : PH.rage ? 'r' : 'n';
+      return [COURSE.id, h.idx, v.pin, v.mirror ? 1 : 0, v.tilt, Math.round((v.tiltA || 0) * 100), Math.round((v.speed || 1) * 100), mode].join(':');
+    },
+    // Only you, and only on the built-in buildings and the Daily Hole.
+    mine() { return G.players.length > 0 && curPlayer() === G.players[0] && (STAR_COURSES.includes(COURSE.id) || !!G.daily); },
+    begin() {
+      this.rec = null; this.run = null; this.k = -1; this.t = 0;
+      if (!G.hole || !this.mine()) return;
+      const key = this.keyFor(G.hole), saved = Career.data.ghosts[key];
+      this.rec = { key, strokes: [] };
+      if (saved && Array.isArray(saved.s) && saved.s.length) this.run = saved;
+    },
+    stroke() {
+      if (!this.rec || !G.ball) return;
+      this.rec.strokes.push([Math.round(G.ball.x), Math.round(G.ball.y)]);
+      this.acc = 0;
+      if (this.run) { this.k = Math.min(G.strokes - 1, this.run.s.length); this.t = 0; }
+    },
+    frame(dt) {
+      if (this.run && this.k >= 0) this.t += dt;
+      const b = G.ball, cur = this.rec && this.rec.strokes[this.rec.strokes.length - 1];
+      if (!cur || !b || (b.state !== 'rolling' && b.state !== 'sinking')) return;
+      this.acc += dt;
+      if (this.acc >= 1 / GHOST_HZ) { this.acc -= 1 / GHOST_HZ; cur.push(Math.round(b.x), Math.round(b.y)); }
+    },
+    // Holed out: keep this run if it's your best on this layout.
+    finish(score) {
+      if (!this.rec || !G.hole) return;
+      const cur = this.rec.strokes[this.rec.strokes.length - 1];
+      if (cur) cur.push(Math.round(G.hole.cup[0]), Math.round(G.hole.cup[1]));
+      const all = Career.data.ghosts, old = all[this.rec.key];
+      if (!old || score < old.score) {
+        all[this.rec.key] = { score, s: this.rec.strokes, at: Date.now() };
+        const keys = Object.keys(all);
+        if (keys.length > GHOST_KEEP) keys.sort((a, b) => (all[a].at || 0) - (all[b].at || 0)).slice(0, keys.length - GHOST_KEEP).forEach(k => delete all[k]);
+        Career.save();
+      }
+      this.rec = null;
+    },
+    // Where the best run's ball is now, or null once it has dropped.
+    pos() {
+      const run = this.run;
+      if (!run || !G.hole) return null;
+      if (this.k < 0) return { x: run.s[0][0], y: run.s[0][1] };
+      if (this.k >= run.s.length) return null;
+      const pts = run.s[this.k], n = pts.length / 2, f = this.t * GHOST_HZ, i = Math.floor(f);
+      if (i >= n - 1) return this.k === run.s.length - 1 ? null : { x: pts[pts.length - 2], y: pts[pts.length - 1] };
+      const u = f - i;
+      return { x: lerp(pts[i * 2], pts[i * 2 + 2], u), y: lerp(pts[i * 2 + 1], pts[i * 2 + 3], u) };
+    },
+    draw(g) {
+      if (G.screen !== 'play' || !this.run || !this.mine()) return;
+      const p = this.pos();
+      if (!p) return;
+      g.save();
+      g.globalAlpha = 0.5;
+      circle(g, p.x, p.y, BALL_R); g.fillStyle = 'rgba(255,255,255,0.35)'; g.fill();
+      g.setLineDash([3, 3]); g.lineWidth = 1.6; g.strokeStyle = '#ffffff'; g.stroke();
+      g.restore();
+    },
+    // The label goes on in screen pixels, like the other name tags.
+    label(g) {
+      if (G.screen !== 'play' || !this.run || !this.mine()) return;
+      const p = this.pos(), b = G.ball;
+      if (!p || (b && Math.hypot(b.x - p.x, b.y - p.y) < 14)) return;
+      const sx = view.a * p.x + view.c * p.y + view.e, sy = view.b * p.x + view.d * p.y + view.f, txt = `Your best: ${this.run.score}`;
+      g.save(); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.font = '600 11px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle';
+      const w = g.measureText(txt).width + 12, ly = sy - BALL_R * view.s - 15;
+      g.globalAlpha = 0.85; g.fillStyle = 'rgba(15,20,28,0.7)'; g.beginPath(); rr(g, sx - w / 2, ly - 9, w, 18, 9); g.fill();
+      g.fillStyle = '#eef2f7'; g.fillText(txt, sx, ly + 0.5);
+      g.restore();
+    },
+  };
 
   // ---------------------------------------------------------------------------
   // Physics
@@ -2453,20 +2931,23 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     pool: { r: 7, m: 1, fric: 140, e: 0.92, mat: 'ball', eat: true },
     pin: { r: 6.5, m: 0.4, fric: 430, roll: 150, e: 0.5, tip: 80, mat: 'pin', eat: true },
     tape: { r: 7, m: 0.3, fric: 480, e: 0.3, mat: 'plastic', eat: true },
+    glass: { r: 5, m: 0.1, fric: 320, e: 0.5, tip: 1, brk: 45, mat: 'glass', eat: true },
+    goldbar: { r: 9, m: 2.6, fric: 620, e: 0.2, mat: 'gold' },
+    medball: { r: 11, m: 3, fric: 200, e: 0.35, mat: 'rubber' },
   };
   const PROP_MAX_SPEED = 900;
   function newProp(kind, x, y, rot = 0) {
     const T = PROP_TYPES[kind];
     return { kind, x, y, vx: 0, vy: 0, r: T.r, m: T.m, rot, vr: 0, fallen: false, alive: true, sleep: true, still: 0 };
   }
-  // Cup and can pyramids come as a triangle of six, apex away from the tee. A rack of pool balls and a set of
+  // Cup, can and champagne pyramids come as a triangle of six, apex away from the tee. A rack of pool balls and a set of
   // bowling pins are triangles of ten, apex toward the player; dir says which way along x the rows run.
   function buildProps(def, mpt, M) {
     const out = [];
     for (const d of def.props || []) {
       const [x, y] = mpt([d.x, d.y]);
-      if (d.kind === 'cups' || d.kind === 'cans') {
-        const k = d.kind === 'cups' ? 'cup' : 'can', s = PROP_TYPES[k].r * 2.1;
+      if (d.kind === 'cups' || d.kind === 'cans' || d.kind === 'glasses') {
+        const k = { cups: 'cup', cans: 'can', glasses: 'glass' }[d.kind], s = PROP_TYPES[k].r * 2.1;
         for (let row = 0; row < 3; row++) for (let i = 0; i <= row; i++) out.push(newProp(k, x + (i - row / 2) * s, y + (row - 1) * s * 0.88));
       } else if (d.kind === 'rack' || d.kind === 'pins') {
         const k = d.kind === 'rack' ? 'pool' : 'pin', s = d.kind === 'rack' ? 14.2 : 24, dir = (d.dir || 1) * (M ? -1 : 1);
@@ -2804,6 +3285,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     }
   }
   function ring(x, y, color, r0, r1, life, w) { fxList.push({ k: 'ring', x, y, r0, r1, life, max: life, color, w }); }
+  function starBurst(x, y, n) {
+    for (let i = 0; i < n * 4; i++) {
+      const a = (i / (n * 4)) * TAU + Math.random() * 0.4, s = 90 + Math.random() * 120;
+      fxList.push({ k: 'star', x, y, vx: Math.cos(a) * s + view.up[0] * 160, vy: Math.sin(a) * s + view.up[1] * 160, life: 1.3, max: 1.3, size: 5 + Math.random() * 4, rot: Math.random() * TAU });
+    }
+  }
   function confetti(x, y, n) {
     if (reduceMotion) return;
     const cols = ['#ffd447', '#ff7a59', '#5bc0ff', '#c39bff', '#ff8fc7', '#ffffff'];
@@ -2817,7 +3304,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       const f = fxList[i];
       f.life -= dt;
       if (f.life <= 0) { fxList.splice(i, 1); continue; }
-      if (f.k === 'dot') { f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= 1 - 3 * dt; f.vy *= 1 - 3 * dt; }
+      if (f.k === 'dot' || f.k === 'star') { f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= 1 - 3 * dt; f.vy *= 1 - 3 * dt; if (f.k === 'star') f.rot += dt * 3; }
       else if (f.k === 'conf') {
         f.vx += view.down[0] * 520 * dt; f.vy += view.down[1] * 520 * dt;
         f.vx *= 1 - 1.6 * dt; f.vy *= 1 - 1.6 * dt;
@@ -3679,7 +4166,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       const T = PROP_TYPES[p.kind];
       if (broke) {
         Sound.smash(T.mat);
-        burst(p.x, p.y, p.kind === 'jug' ? '#9fd8ff' : p.kind === 'crate' ? '#b98a52' : '#d2a46a', 14, 220, 0.55, 3);
+        burst(p.x, p.y, p.kind === 'jug' ? '#9fd8ff' : p.kind === 'glass' ? '#eef7fb' : p.kind === 'crate' ? '#b98a52' : '#d2a46a', 14, 220, 0.55, 3);
         if (!reduceMotion) shake();
         if (playing) { curPlayer().stats.smash++; Taunts.say(T.spill ? 'spill' : 'smash'); }
       } else if (tipped) {
@@ -3740,14 +4227,14 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       toast(style === 'pocket' ? 'Scratch' : style === 'gutter' ? 'Gutter ball' : 'Drained', penalty, 'bad');
     } else {
       Sound.splash();
-      const wet = style === 'puddle' ? '210,235,255' : '255,236,210';
+      const wet = style === 'puddle' ? '210,235,255' : style === 'koi' ? '200,245,235' : '255,236,210';
       ring(b.x, b.y, `rgba(${wet},0.8)`, 4, 26, 0.7, 2.5);
       ring(b.x, b.y, `rgba(${wet},0.55)`, 2, 42, 0.9, 1.5);
-      burst(b.x, b.y, style === 'oil' ? '#2a2d33' : style === 'puddle' ? '#8fb3cf' : '#8a5a33', 12, 200, 0.5, 3);
-      toast(style === 'oil' ? 'Slipped' : 'Splash', penalty, 'bad');
+      burst(b.x, b.y, style === 'oil' ? '#2a2d33' : style === 'puddle' ? '#8fb3cf' : style === 'koi' ? '#3d8f86' : '#8a5a33', 12, 200, 0.5, 3);
+      toast(style === 'oil' ? 'Slipped' : style === 'koi' ? 'Fed the koi' : 'Splash', penalty, 'bad');
     }
     if (back) { Sound.sad(); shake(); }
-    const line = { shredder: 'shred', pit: 'dock', puddle: 'puddle', tile: 'tile', pocket: 'pocket', gutter: 'gutter', drain: 'drain' }[style] || 'coffee';
+    const line = { shredder: 'shred', pit: 'dock', puddle: 'puddle', tile: 'tile', pocket: 'pocket', gutter: 'gutter', drain: 'drain', koi: 'koi' }[style] || 'coffee';
     Taunts.say(back && Math.random() < 0.5 ? 'tee' : line, true);
     Office.incident();
     updateHud();
@@ -3815,6 +4302,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const p = curPlayer(), h = G.hole;
     const score = Math.min(G.strokes, PH.cap);
     p.scores[G.holeIdx] = score;
+    const rec = p === G.players[0] && !G.daily ? Career.record(COURSE.id, G.holeIdx, score) : null;
+    if (p === G.players[0]) G.lastStars = rec;
+    if (rec && rec.gained > 0) G.starGain += rec.gained;
+    if (p === G.players[0]) Ghost.finish(score);
     const ls = G.lastShot || h.tee;
     const dist = Math.hypot(ls[0] - h.cup[0], ls[1] - h.cup[1]) / UNITS_PER_FT;
     if (dist > p.stats.longest) p.stats.longest = dist;
@@ -3827,7 +4318,14 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     else ring(cx, cy, 'rgba(255,255,255,0.8)', PH.cupR, 40, 0.5, 2.5);
     const who = G.players.length > 1 ? `${p.name}: ` : '';
     const detail = score === 1 ? `${who}first stroke, straight in.` : `${who}${score} strokes on a par ${h.par}.`;
-    toast(termFor(score, h.par), detail, diff < 0 ? 'hi' : '');
+    const starNote = rec && rec.stars ? ` ${starText(rec.stars)}${rec.gained > 0 ? ' New best!' : ''}` : '';
+    toast(termFor(score, h.par), detail + starNote, diff < 0 ? 'hi' : '');
+    if (rec && rec.gained > 0) starBurst(cx, cy, rec.gained);
+    // In practice the next toast would bury this, so practiceAgain shows it instead.
+    if (rec && rec.unlocked.length && G.practice == null) {
+      const g = rec.unlocked[rec.unlocked.length - 1];
+      after(2.4, () => { toast('Unlocked!', g.kind === 'building' ? `${g.name}: your badge now opens the private elevator. Pick it on the setup card.` : `${g.name}. Wear it from the Locker on the setup card.`, 'hi'); Sound.cheer(); });
+    }
     updateHud();
     netState();
     if (score === 1) netEvent('ace'); else if (diff <= -2) netEvent('eagle'); else if (diff === -1) netEvent('birdie');
@@ -3840,6 +4338,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function pickUp() {
     const p = curPlayer();
     p.scores[G.holeIdx] = PH.cap;
+    if (p === G.players[0]) G.lastStars = !G.daily ? Career.record(COURSE.id, G.holeIdx, PH.cap) : null;
     G.phase = 'done';
     if (G.ball) G.ball.state = 'hidden';
     toast('Picked up', `${G.players.length > 1 ? p.name + ' takes' : 'You take'} a ${PH.cap} on this one.`, 'bad');
@@ -3859,6 +4358,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     G.strokes = 0;
     const p = curPlayer(), h = G.hole;
     G.ball = newBall(h.tee[0], h.tee[1], p.color);
+    G.ball.mine = p === G.players[0];
     G.lastShot = h.tee.slice();
     G.phase = 'aim';
     G.aimSince = G.clock;
@@ -3875,10 +4375,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     toast(multi ? p.name : h.name, small, PH.rage ? 'bad' : '');
     $('hint').hidden = G.firstShotDone;
     if (PH.rage && firstOfHole && G.holeIdx === 0 && turnIdx === 0) after(1.2, () => Taunts.say('rage', true));
+    Ghost.begin();
     netState();
   }
   function holeComplete() {
     if (ONLINE.on) { enterWait(); return; }
+    if (G.daily) { dailyTryDone(); return; }
     if (G.practice != null) { practiceAgain(); return; }
     G.phase = 'between';
     G.ball = null;
@@ -3903,6 +4405,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     G.idleSaid = false;
     Office.putt();
     G.strokes += 1;
+    if (G.daily && G.strokes === 1) Daily.begin(G.daily.key);
+    Ghost.stroke();
     G.phase = 'rolling';
     kbAim.angle = angle; kbAim.power = power;
     if (!fromKeyboard) kbAim.active = false;
@@ -3923,13 +4427,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     layoutView();
     canvas.setAttribute('aria-label', `Mini golf course, hole ${idx + 1}: ${holeName(idx)}`);
   }
-  // players: [{ name, dept }]; opts: { rage, courseId, practice }
+  // players: [{ name, dept }]; opts: { rage, courseId, practice, daily }
   function startGame(players, course, opts = {}) {
     G.timers.length = 0;
     G.practice = Number.isInteger(opts.practice) ? opts.practice : null;
+    G.daily = opts.daily || null;
+    G.starGain = 0;
     Party.clear();
     setCourse(opts.courseId || 'office');
-    setMode(!!opts.rage);
+    setMode(!!opts.rage, G.daily && G.daily.twist);
     G.players = players.map((p, i) => ({
       name: p.name, dept: Number.isInteger(p.dept) ? p.dept : -1, color: COLORS[i % COLORS.length],
       scores: Array(HOLES.length).fill(null), stats: emptyStats(),
@@ -3937,11 +4443,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     G.course = course;
     Office.startRound();
     G.variants = variantsFor(course.key);
+    if (G.daily && G.daily.twist.tilt) G.variants[G.daily.idx] = { ...G.variants[G.daily.idx], tilt: G.daily.twist.tilt };
     G.order = G.players.map((_, i) => i);
     G.screen = 'play';
     closeAllOverlays();
     showHud(true);
-    loadHole(G.practice != null ? G.practice : 0);
+    loadHole(G.practice != null ? G.practice : G.daily ? G.daily.idx : 0);
     startTurn(0, true);
     try { canvas.focus({ preventScroll: true }); } catch (e) { /* ignore */ }
   }
@@ -3952,10 +4459,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   }
   // Practice keeps your best score and sends you straight back to the tee.
   function practiceAgain() {
-    const p = G.players[0], s = p.scores[G.holeIdx];
+    const p = G.players[0], s = p.scores[G.holeIdx], st = Career.stars(COURSE.id, G.holeIdx);
     p.best = Math.min(p.best || 99, s);
-    toast(`${s} ${s === 1 ? 'stroke' : 'strokes'}`, `Practice. Your best here: ${p.best}. Go again.`, s <= HOLES[G.holeIdx].par ? 'hi' : '');
-    after(1.4, () => { if (G.practice == null || G.screen !== 'play') return; loadHole(G.practice); startTurn(0, true); });
+    const un = G.lastStars ? G.lastStars.unlocked : [], g = un[un.length - 1];
+    if (g) { toast('Unlocked!', g.kind === 'building' ? `${g.name}: your badge now opens the private elevator.` : `${g.name}. It’s in the Locker.`, 'hi'); Sound.cheer(); }
+    else toast(`${s} ${s === 1 ? 'stroke' : 'strokes'}`, `Practice. Your best here: ${Career.best(COURSE.id, G.holeIdx) ?? p.best}${st ? ' ' + starText(st) : ''}. Go again.`, s <= HOLES[G.holeIdx].par ? 'hi' : '');
+    after(g ? 2.2 : 1.4, () => { if (G.practice == null || G.screen !== 'play') return; loadHole(G.practice); startTurn(0, true); });
   }
   function showResults() {
     G.screen = 'results';
@@ -3973,7 +4482,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     closeAllOverlays();
     showHud(false);
     $('tauntPop').hidden = true;
-    showBackdrop(store.get('building', 'office'));
+    showBackdrop(pickedBuilding());
     renderSetup();
     renderOnlineSetup();
     openOverlay('setup');
@@ -4233,7 +4742,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     g.save();
     coursePath(g, h); g.clip();
     for (const z of h.zones) {
-      if (z.type === 'rough') { if (z.style === 'bump') drawSpeedBump(g, z); else if (z.style === 'cables') drawCables(g, z); else if (z.style === 'balls') drawBallPit(g, z); else drawRug(g, z); }
+      if (z.type === 'rough') { if (z.style === 'bump') drawSpeedBump(g, z); else if (z.style === 'cables') drawCables(g, z); else if (z.style === 'balls') drawBallPit(g, z); else if (z.style === 'persian') drawPersian(g, z); else if (z.style === 'sand') drawSand(g, z); else if (z.style === 'mat') drawMats(g, z); else drawRug(g, z); }
       else if (z.type === 'slope') { if (z.style === 'ramp') drawGarageRamp(g, z); else if (z.style !== 'tilt') drawSlope(g, z); }
       else if (z.type === 'air') drawVent(g, z);
       else if (z.type === 'funnel') drawFunnel(g, z);
@@ -4245,6 +4754,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       else if (z.style === 'pocket') drawPocket(g, z);
       else if (z.style === 'gutter') drawGutter(g, z);
       else if (z.style === 'drain') drawDrain(g, z);
+      else if (z.style === 'koi') drawKoiPond(g, z);
     }
     g.restore();
   }
@@ -4481,6 +4991,146 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       else for (let y = y0 + 6; y < y1; y += 10) { g.moveTo(x0, y); g.lineTo(x1, y); }
       g.stroke();
       g.strokeStyle = '#6b7480'; g.lineWidth = 2; g.strokeRect(x0, y0, w, hh);
+    } else if (b.kind === 'reception') {
+      // The penthouse reception: walnut, a marble top, brass trim, a bell, a monitor and an orchid.
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#5a3a22'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#2e1c0f'; g.stroke();
+      g.beginPath(); rr(g, x0 + 4, y0 + 4, w - 8, hh - 8, 3); g.fillStyle = '#efeae1'; g.fill();
+      g.save(); g.clip(); drawVeins(g, x0, y0, w, hh, Math.round(x0 + y0)); g.restore();
+      g.beginPath(); rr(g, x0 + 4, y0 + 4, w - 8, hh - 8, 3); g.strokeStyle = '#c9a44a'; g.lineWidth = 2; g.stroke();
+      circle(g, x0 + w * 0.18, y0 + hh / 2, 5.5); g.fillStyle = '#d9b44a'; g.fill(); g.lineWidth = 1; g.strokeStyle = '#8a6a1a'; g.stroke();
+      circle(g, x0 + w * 0.18, y0 + hh / 2, 1.6); g.fillStyle = '#8a6a1a'; g.fill();
+      g.beginPath(); rr(g, x0 + w * 0.42, y0 + hh * 0.28, w * 0.16, hh * 0.44, 2); g.fillStyle = '#1b1f26'; g.fill();
+      for (let i = 0; i < 5; i++) { const a = (i / 5) * TAU; circle(g, x1 - w * 0.16 + Math.cos(a) * 5, y0 + hh / 2 + Math.sin(a) * 5, 3.4); g.fillStyle = i % 2 ? '#f3d6ec' : '#e7b3d6'; g.fill(); }
+      circle(g, x1 - w * 0.16, y0 + hh / 2, 2); g.fillStyle = '#c64f8e'; g.fill();
+    } else if (b.kind === 'ceodesk') {
+      // The CEO's desk: mahogany, a green leather blotter, a brass nameplate, a laptop, a lamp and a signed memo.
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#5b2415'; g.fill(); g.lineWidth = 2.5; g.strokeStyle = '#2d0f07'; g.stroke();
+      g.beginPath(); rr(g, x0 + 5, y0 + 5, w - 10, hh - 10, 3); g.strokeStyle = 'rgba(255,200,160,0.18)'; g.lineWidth = 1.5; g.stroke();
+      g.beginPath(); rr(g, x0 + w * 0.3, y0 + hh * 0.3, w * 0.4, hh * 0.52, 3); g.fillStyle = '#23523a'; g.fill(); g.strokeStyle = '#c9a44a'; g.lineWidth = 1.2; g.stroke();
+      g.fillStyle = '#d9b44a'; g.fillRect(x0 + w / 2 - 18, y0 + 4, 36, 10);
+      g.fillStyle = '#3a2408'; g.font = '700 7px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle';
+      uprightText(g, 'CEO', x0 + w / 2, y0 + 9.2);
+      g.beginPath(); rr(g, x0 + w * 0.76, y0 + hh * 0.36, w * 0.16, hh * 0.44, 2); g.fillStyle = '#c3c9d1'; g.fill();
+      g.fillStyle = '#2b3038'; g.fillRect(x0 + w * 0.775, y0 + hh * 0.4, w * 0.13, hh * 0.26);
+      circle(g, x0 + w * 0.12, y0 + hh * 0.34, 9); g.fillStyle = '#e8d9a8'; g.fill(); g.strokeStyle = '#8a6a1a'; g.lineWidth = 1.2; g.stroke();
+      circle(g, x0 + w * 0.12, y0 + hh * 0.34, 2.4); g.fillStyle = '#8a6a1a'; g.fill();
+      g.save(); g.translate(x0 + w * 0.15, y0 + hh * 0.74); g.rotate(-0.15); g.fillStyle = '#fbfbf7'; g.fillRect(-8, -5, 16, 11); g.restore();
+    } else if (b.kind === 'books') {
+      // A built-in bookcase from above: a walnut frame and a row of spines.
+      g.fillStyle = '#4a2f1b'; g.fillRect(x0, y0, w, hh);
+      const long = w >= hh, len = long ? w : hh, depth = long ? hh : w, rnd = mulberry32(Math.round(x0 * 3 + y0));
+      const cols = ['#7a1f2b', '#1f3f6b', '#2f5a3a', '#c9a44a', '#5b3a6b', '#e8e2d4', '#8a4b1f', '#24303f'];
+      for (let a = 4; a < len - 5;) {
+        const bw = 5 + rnd() * 6, bd = depth * (0.55 + rnd() * 0.3), k = Math.min(bw, len - 4 - a) - 1, o = (depth - bd) / 2;
+        g.fillStyle = cols[Math.floor(rnd() * cols.length)];
+        if (long) g.fillRect(x0 + a, y0 + o, k, bd); else g.fillRect(x0 + o, y0 + a, bd, k);
+        a += bw;
+      }
+      g.strokeStyle = '#2a1a0e'; g.lineWidth = 2; g.strokeRect(x0 + 1, y0 + 1, w - 2, hh - 2);
+    } else if (b.kind === 'boardtable') {
+      // The boardroom table: polished walnut with a brass inlay, notepads, water glasses and a conference phone.
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#6b3d1f'; g.fill();
+      g.save(); g.clip();
+      const gr = g.createLinearGradient(x0, y0, x0, y1);
+      gr.addColorStop(0, 'rgba(255,220,180,0.16)'); gr.addColorStop(0.5, 'rgba(255,220,180,0)'); gr.addColorStop(1, 'rgba(0,0,0,0.14)');
+      g.fillStyle = gr; g.fillRect(x0, y0, w, hh);
+      g.beginPath(); tracePoly(g, b.pts); g.lineWidth = 22; g.strokeStyle = '#c9a44a'; g.stroke(); g.lineWidth = 18; g.strokeStyle = '#4e2a12'; g.stroke();
+      g.restore();
+      g.beginPath(); tracePoly(g, b.pts); g.lineWidth = 2; g.strokeStyle = '#2d1608'; g.stroke();
+      const long = w >= hh, n = Math.max(2, Math.round((long ? w : hh) / 100));
+      for (let i = 0; i < n; i++) {
+        const u = (i + 0.5) / n;
+        for (const side of [0.24, 0.76]) {
+          g.save(); g.translate(long ? x0 + w * u : x0 + w * side, long ? y0 + hh * side : y0 + hh * u); if (!long) g.rotate(Math.PI / 2);
+          g.fillStyle = '#fbfbf7'; g.fillRect(-9, -6, 13, 12);
+          circle(g, 10, 0, 3.4); g.fillStyle = 'rgba(170,210,240,0.9)'; g.fill();
+          g.restore();
+        }
+      }
+      const cx = x0 + w / 2, cy = y0 + hh / 2;
+      g.beginPath(); g.moveTo(cx, cy - 9); g.lineTo(cx + 9, cy + 6); g.lineTo(cx - 9, cy + 6); g.closePath(); g.fillStyle = '#1b1f26'; g.fill();
+    } else if (b.kind === 'screen') {
+      // A wall of screens showing the quarter's numbers. They only go up.
+      g.fillStyle = '#0d1117'; g.fillRect(x0, y0, w, hh);
+      const gr = g.createLinearGradient(x0, y0, x1, y1);
+      gr.addColorStop(0, 'rgba(70,140,255,0.5)'); gr.addColorStop(1, 'rgba(40,200,170,0.35)');
+      g.fillStyle = gr; g.fillRect(x0 + 3, y0 + 3, w - 6, hh - 6);
+      const long = w >= hh, len = long ? w : hh, dep = long ? hh : w, n = 5;
+      g.fillStyle = 'rgba(255,255,255,0.75)';
+      for (let i = 0; i < n; i++) {
+        const a = 8 + (i * (len - 16)) / n, bl = ((i + 1) / n) * (dep - 12), bw = (len - 16) / n - 4;
+        if (long) g.fillRect(x0 + a, y1 - 6 - bl, bw, bl); else g.fillRect(x0 + 6, y0 + a, bl, bw);
+      }
+      g.strokeStyle = '#3a414b'; g.lineWidth = 2; g.strokeRect(x0 + 1, y0 + 1, w - 2, hh - 2);
+    } else if (b.kind === 'aquarium') {
+      // A fish tank the size of a room: a steel frame, blue water, sand, rocks and weed. The fish swim in the live layer.
+      g.fillStyle = '#20262e'; g.fillRect(x0, y0, w, hh);
+      const gr = g.createLinearGradient(x0, y0, x1, y1);
+      gr.addColorStop(0, '#46b3d6'); gr.addColorStop(1, '#1b6d93');
+      g.fillStyle = gr; g.fillRect(x0 + 6, y0 + 6, w - 12, hh - 12);
+      const rnd = mulberry32(Math.round(x0 + y0 * 7));
+      g.fillStyle = 'rgba(236,214,160,0.55)';
+      for (let i = 0; i < 26; i++) { circle(g, x0 + 10 + rnd() * (w - 20), y0 + 10 + rnd() * (hh - 20), 1.5 + rnd() * 2.5); g.fill(); }
+      for (let i = 0; i < 5; i++) {
+        const px = x0 + 16 + rnd() * (w - 32), py = y0 + 16 + rnd() * (hh - 32);
+        g.fillStyle = i % 2 ? '#5f6a73' : '#7a848c'; g.beginPath(); g.ellipse(px, py, 7 + rnd() * 8, 5 + rnd() * 6, rnd() * 3, 0, TAU); g.fill();
+      }
+      g.strokeStyle = 'rgba(60,170,90,0.75)'; g.lineWidth = 2.5; g.lineCap = 'round';
+      for (let i = 0; i < 7; i++) { const px = x0 + 14 + rnd() * (w - 28), py = y0 + 22 + rnd() * (hh - 36); g.beginPath(); g.moveTo(px, py); g.quadraticCurveTo(px + 8, py - 8, px + 2, py - 16); g.stroke(); }
+      g.strokeStyle = 'rgba(255,255,255,0.45)'; g.lineWidth = 2; g.strokeRect(x0 + 6, y0 + 6, w - 12, hh - 12);
+      g.fillStyle = 'rgba(255,255,255,0.14)';
+      g.beginPath(); g.moveTo(x0 + 8, y0 + 8); g.lineTo(x0 + w * 0.45, y0 + 8); g.lineTo(x0 + 8, y0 + hh * 0.4); g.closePath(); g.fill();
+    } else if (b.kind === 'sushibar') {
+      // The sushi counter: pale hinoki round a steel prep station, and the chef in the middle.
+      g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#e2c79a'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#8a6a3f'; g.stroke();
+      g.strokeStyle = 'rgba(138,106,63,0.25)'; g.lineWidth = 1;
+      for (let y = y0 + 6; y < y1; y += 7) { g.beginPath(); g.moveTo(x0 + 3, y); g.lineTo(x1 - 3, y); g.stroke(); }
+      g.beginPath(); rr(g, x0 + 22, y0 + 22, w - 44, hh - 44, 4); g.fillStyle = '#b9c1ca'; g.fill(); g.strokeStyle = '#7d8793'; g.lineWidth = 1.5; g.stroke();
+      const cx = x0 + w / 2, cy = y0 + hh / 2;
+      g.fillStyle = '#d9b77f'; g.fillRect(cx - 74, cy - 14, 42, 28);
+      g.fillStyle = '#ff8f6b'; g.beginPath(); g.ellipse(cx - 53, cy, 14, 6, 0.1, 0, TAU); g.fill();
+      g.beginPath(); g.ellipse(cx, cy + 2, 17, 11, 0, 0, TAU); g.fillStyle = '#f4f4ef'; g.fill(); g.strokeStyle = 'rgba(0,0,0,0.2)'; g.lineWidth = 1; g.stroke();
+      circle(g, cx, cy, 9); g.fillStyle = '#ffffff'; g.fill(); g.strokeStyle = '#c9ccd1'; g.stroke();
+      g.beginPath(); for (let i = 0; i < 6; i++) { const a = (i / 6) * TAU; g.moveTo(cx, cy); g.lineTo(cx + Math.cos(a) * 9, cy + Math.sin(a) * 9); } g.stroke();
+      for (const [u, col] of [[0.7, '#2f6fb3'], [0.78, '#e0342b'], [0.86, '#d9b44a']]) { circle(g, x0 + w * u, cy, 7); g.fillStyle = col; g.fill(); circle(g, x0 + w * u, cy, 4); g.fillStyle = '#f7f5ee'; g.fill(); }
+    } else if (b.kind === 'dumbbells') {
+      // A dumbbell rack, lightest to heaviest.
+      g.fillStyle = '#2b3038'; g.fillRect(x0, y0, w, hh); g.strokeStyle = '#111317'; g.lineWidth = 2; g.strokeRect(x0 + 1, y0 + 1, w - 2, hh - 2);
+      const long = w >= hh, len = long ? w : hh, depth = long ? hh : w, n = Math.max(3, Math.floor(len / 22));
+      for (let i = 0; i < n; i++) {
+        const a = ((i + 0.5) / n) * len, k = 0.55 + (0.45 * i) / (n - 1), hw = depth * 0.3 * k;
+        g.save(); g.translate(long ? x0 + a : x0 + depth / 2, long ? y0 + depth / 2 : y0 + a); if (!long) g.rotate(Math.PI / 2);
+        g.fillStyle = '#9aa3ae'; g.fillRect(-1.5, -depth * 0.36, 3, depth * 0.72);
+        for (const s of [-1, 1]) {
+          g.beginPath();
+          for (let j = 0; j < 6; j++) { const aa = (j / 6) * TAU, px = Math.cos(aa) * hw, py = s * depth * 0.28 + Math.sin(aa) * hw * 0.5; if (j) g.lineTo(px, py); else g.moveTo(px, py); }
+          g.closePath(); g.fillStyle = '#1b1d21'; g.fill(); g.strokeStyle = '#5d6672'; g.lineWidth = 1; g.stroke();
+        }
+        g.restore();
+      }
+    } else if (b.kind === 'heli') {
+      // The company helicopter, parked on the H. The rotor turns overhead.
+      const cx = x0 + w / 2, cy = y0 + hh / 2;
+      g.save(); g.translate(cx, cy); g.scale(b.mir ? -1 : 1, 1);
+      g.strokeStyle = '#3a414b'; g.lineWidth = 3; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(-w * 0.16, -hh * 0.42); g.lineTo(w * 0.38, -hh * 0.42); g.moveTo(-w * 0.16, hh * 0.42); g.lineTo(w * 0.38, hh * 0.42); g.stroke();
+      g.beginPath(); rr(g, -w * 0.5, -3, w * 0.44, 6, 3); g.fillStyle = '#1f2733'; g.fill();
+      g.strokeStyle = '#8a929c'; g.lineWidth = 2; g.beginPath(); g.moveTo(-w * 0.46, -hh * 0.3); g.lineTo(-w * 0.46, hh * 0.3); g.stroke();
+      g.beginPath(); g.ellipse(w * 0.1, 0, w * 0.32, hh * 0.36, 0, 0, TAU); g.fillStyle = '#1f2733'; g.fill(); g.lineWidth = 1.5; g.strokeStyle = '#0b0e12'; g.stroke();
+      g.beginPath(); g.ellipse(w * 0.28, 0, w * 0.13, hh * 0.26, 0, 0, TAU); g.fillStyle = '#6fb6e8'; g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.4)'; g.beginPath(); g.ellipse(w * 0.31, -hh * 0.1, w * 0.05, hh * 0.07, 0, 0, TAU); g.fill();
+      g.fillStyle = '#c9a44a'; g.fillRect(-w * 0.22, -2, w * 0.3, 4);
+      g.restore();
+    } else if (b.kind === 'vaultwall') {
+      // The strongroom: a ring of brushed steel, a foot thick.
+      g.beginPath(); tracePoly(g, b.pts);
+      const gr = g.createLinearGradient(x0, y0, x1, y1);
+      gr.addColorStop(0, '#aeb6c0'); gr.addColorStop(0.5, '#7b8591'); gr.addColorStop(1, '#5c6571');
+      g.fillStyle = gr; g.fill(); g.lineWidth = 2.5; g.strokeStyle = '#2f353d'; g.stroke();
+      g.save(); g.clip();
+      g.lineWidth = 1; g.strokeStyle = 'rgba(255,255,255,0.16)';
+      for (let k = -hh; k < w; k += 9) { g.beginPath(); g.moveTo(x0 + k, y0); g.lineTo(x0 + k + hh, y1); g.stroke(); }
+      g.restore();
     } else {
       g.beginPath(); tracePoly(g, b.pts); g.fillStyle = '#9aa6b5'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#5d6878'; g.stroke();
     }
@@ -4558,6 +5208,41 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       for (const [u, v, col] of [[-0.35, -0.3, '#ffd447'], [0.3, 0.2, '#ff7a59'], [-0.1, 0.45, '#9fd8ff']]) {
         circle(g, x + u * r, y + v * r, 3.4); g.fillStyle = col; g.fill(); g.lineWidth = 1; g.strokeStyle = 'rgba(255,255,255,0.6)'; g.stroke();
       }
+    } else if (c.kind === 'palm') {
+      // A potted palm: a glazed pot with a brass rim, and fronds spilling over it.
+      circle(g, x, y, r); g.fillStyle = '#1f2a33'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#c9a44a'; g.stroke();
+      circle(g, x, y, r * 0.72); g.fillStyle = '#3b2a1c'; g.fill();
+      for (let i = 0; i < 7; i++) {
+        const a = (i / 7) * TAU + (x + y) * 0.01, L = r * (1.25 + 0.12 * (((i * 7) % 3) / 2)), bend = 0.35 * (i % 2 ? 1 : -1);
+        g.save(); g.translate(x, y); g.rotate(a);
+        g.beginPath(); g.moveTo(0, 0);
+        g.bezierCurveTo(L * 0.3, -r * 0.62, L * 0.8, -r * 0.3 + bend * r, L, bend * r);
+        g.bezierCurveTo(L * 0.8, r * 0.3 + bend * r, L * 0.3, r * 0.62, 0, 0);
+        g.fillStyle = i % 2 ? '#2e7d3c' : '#43a152'; g.fill();
+        g.strokeStyle = 'rgba(220,255,200,0.35)'; g.lineWidth = 1; g.beginPath(); g.moveTo(r * 0.2, 0); g.quadraticCurveTo(L * 0.6, bend * r * 0.4, L * 0.92, bend * r * 0.95); g.stroke();
+        g.restore();
+      }
+      circle(g, x, y, r * 0.22); g.fillStyle = '#5a3d22'; g.fill();
+    } else if (c.kind === 'globe') {
+      // An antique globe in a brass meridian.
+      circle(g, x, y, r); g.fillStyle = '#2d5d8a'; g.fill();
+      g.save(); circle(g, x, y, r); g.clip();
+      g.fillStyle = '#c9b27a';
+      for (const [u, v, a, b2] of [[-0.35, -0.3, 0.42, 0.3], [0.3, 0.1, 0.3, 0.48], [-0.2, 0.45, 0.28, 0.2], [0.45, -0.5, 0.2, 0.16]]) { g.beginPath(); g.ellipse(x + u * r, y + v * r, a * r, b2 * r, u * 2, 0, TAU); g.fill(); }
+      g.strokeStyle = 'rgba(255,255,255,0.22)'; g.lineWidth = 1;
+      g.beginPath(); g.ellipse(x, y, r * 0.45, r, 0, 0, TAU); g.moveTo(x - r, y); g.lineTo(x + r, y); g.moveTo(x - r, y - r * 0.5); g.lineTo(x + r, y - r * 0.5); g.moveTo(x - r, y + r * 0.5); g.lineTo(x + r, y + r * 0.5); g.stroke();
+      g.restore();
+      circle(g, x, y, r - 1); g.lineWidth = 2.5; g.strokeStyle = '#c9a44a'; g.stroke();
+      circle(g, x - r * 0.35, y - r * 0.35, r * 0.18); g.fillStyle = 'rgba(255,255,255,0.35)'; g.fill();
+    } else if (c.kind === 'trophy') {
+      // A trophy on a plinth: company golf day, every year since 1987.
+      g.beginPath(); rr(g, x - r * 0.8, y - r * 0.8, r * 1.6, r * 1.6, r * 0.3); g.fillStyle = '#2b2f36'; g.fill();
+      for (const s of [-1, 1]) { g.beginPath(); g.arc(x + s * r * 0.66, y, r * 0.24, 0, TAU); g.lineWidth = 2.5; g.strokeStyle = '#b8912f'; g.stroke(); }
+      const gr = g.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r * 0.8);
+      gr.addColorStop(0, '#fff1b8'); gr.addColorStop(1, '#b8912f');
+      circle(g, x, y, r * 0.62); g.fillStyle = gr; g.fill(); g.lineWidth = 1.5; g.strokeStyle = '#8a6a1a'; g.stroke();
+      circle(g, x, y, r * 0.38); g.fillStyle = '#8a6a1a'; g.fill();
+      circle(g, x - r * 0.2, y - r * 0.25, r * 0.12); g.fillStyle = 'rgba(255,255,255,0.7)'; g.fill();
     } else if (c.kind === 'hub' || c.kind === 'pop') {
       // Drawn in the moving layer: the clock's hub above the hands, and pop bumpers so they can flash.
     } else {
@@ -4632,6 +5317,23 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       else if (d.type === 'paint') {
         g.fillStyle = d.color || 'rgba(240,240,232,0.5)'; g.font = `800 ${d.size || 26}px ${DISPLAY_FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle';
         uprightText(g, d.text, d.x, d.y);
+      }
+      else if (d.type === 'helipad') {
+        circle(g, d.x, d.y, d.r); g.lineWidth = 10; g.strokeStyle = 'rgba(255,214,90,0.75)'; g.stroke();
+        g.setLineDash([18, 12]); circle(g, d.x, d.y, d.r - 22); g.lineWidth = 3; g.strokeStyle = 'rgba(255,255,255,0.5)'; g.stroke(); g.setLineDash([]);
+        const s = d.r * 0.34;
+        g.fillStyle = 'rgba(255,255,255,0.55)';
+        g.fillRect(d.x - s * 0.8, d.y - s, s * 0.34, s * 2); g.fillRect(d.x + s * 0.46, d.y - s, s * 0.34, s * 2); g.fillRect(d.x - s * 0.8, d.y - s * 0.16, s * 1.6, s * 0.32);
+      }
+      else if (d.type === 'vaultfloor') {
+        // Steel diamond plate inside the vault.
+        g.save();
+        circle(g, d.x, d.y, d.r); g.fillStyle = '#5f6873'; g.fill(); g.clip();
+        g.fillStyle = 'rgba(255,255,255,0.14)';
+        for (let yy = d.y - d.r, row = 0; yy < d.y + d.r; yy += 10, row++) {
+          for (let xx = d.x - d.r + (row % 2) * 5; xx < d.x + d.r; xx += 10) { g.save(); g.translate(xx, yy); g.rotate(row % 2 ? 0.7 : -0.7); g.fillRect(-3.5, -1, 7, 2); g.restore(); }
+        }
+        g.restore();
       }
       else if (d.type === 'car') {
         g.fillStyle = '#9aa5b3'; g.fillRect(d.x, d.y, d.w, d.h);
@@ -4729,7 +5431,22 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const b = z.bb, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2, R = Math.max(b.x1 - b.x0, b.y1 - b.y0) / 2;
     g.save();
     g.beginPath(); tracePoly(g, z.pts);
-    if (z.style === 'oil') {
+    if (z.style === 'marble') {
+      // A polished lobby floor: black and white marble diamonds, framed in brass.
+      g.fillStyle = '#efeae1'; g.fill();
+      g.save(); g.clip();
+      drawVeins(g, b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0, Math.round(b.x0 + b.y0));
+      const d = 30, n = Math.ceil(Math.hypot(b.x1 - b.x0, b.y1 - b.y0) / (2 * d)) + 1;
+      g.save(); g.translate((b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2); g.rotate(Math.PI / 4);
+      g.fillStyle = 'rgba(28,29,33,0.9)';
+      for (let i = -n; i < n; i++) for (let j = -n; j < n; j++) if (!((i + j) & 1)) g.fillRect(i * d, j * d, d, d);
+      g.restore();
+      const gl = g.createLinearGradient(b.x0, b.y0, b.x1, b.y1);
+      gl.addColorStop(0, 'rgba(255,255,255,0.22)'); gl.addColorStop(0.5, 'rgba(255,255,255,0)'); gl.addColorStop(1, 'rgba(255,255,255,0.12)');
+      g.fillStyle = gl; g.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+      g.restore();
+      g.beginPath(); tracePoly(g, z.pts); g.lineWidth = 3; g.strokeStyle = '#c9a44a'; g.stroke();
+    } else if (z.style === 'oil') {
       g.fillStyle = 'rgba(14,12,20,0.8)'; g.fill();
       g.clip();
       // An oily sheen: soft blooms of violet, teal and gold.
@@ -4754,6 +5471,238 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       g.fillStyle = 'rgba(255,255,255,0.25)';
       g.beginPath(); g.ellipse(cx - R * 0.2, cy - R * 0.25, R * 0.35, R * 0.12, -0.3, 0, TAU); g.fill();
     }
+    g.restore();
+  }
+  // ---------------------------------------------------------------------------
+  // The penthouse: marble, rugs, bunkers, koi, sushi, treadmills, a rotor and a vault door
+  // ---------------------------------------------------------------------------
+  // Grey veins through polished marble, the same every time for a given seed.
+  function drawVeins(g, x, y, w, h, seed) {
+    const rnd = mulberry32(seed), n = Math.max(2, Math.round((w * h) / 9000));
+    g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
+    for (let k = 0; k < n; k++) {
+      let px = x + rnd() * w, py = y + rnd() * h, a = rnd() * TAU;
+      g.strokeStyle = `rgba(110,108,104,${(0.14 + rnd() * 0.16).toFixed(2)})`; g.lineWidth = 0.8 + rnd() * 1.6;
+      g.beginPath(); g.moveTo(px, py);
+      for (let s = 0; s < 10; s++) { a += (rnd() - 0.5) * 0.9; px += Math.cos(a) * 16; py += Math.sin(a) * 16; g.lineTo(px, py); }
+      g.stroke();
+    }
+    g.restore();
+  }
+  // A Persian rug: a red field, a navy border picked out in gold, a medallion, and fringe on the short ends.
+  function drawPersian(g, z) {
+    const b = z.bb, w = b.x1 - b.x0, hh = b.y1 - b.y0, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2;
+    const bw = Math.min(w, hh) * 0.12, dia = (x, y, s) => { g.beginPath(); g.moveTo(x - s, y); g.lineTo(x, y - s); g.lineTo(x + s, y); g.lineTo(x, y + s); g.closePath(); g.fill(); };
+    g.save();
+    g.strokeStyle = '#efe6d2'; g.lineWidth = 1.2;
+    const long = w >= hh;
+    g.beginPath();
+    if (long) for (let y = b.y0 + 3; y < b.y1 - 2; y += 4) { g.moveTo(b.x0 - 7, y); g.lineTo(b.x0, y); g.moveTo(b.x1, y); g.lineTo(b.x1 + 7, y); }
+    else for (let x = b.x0 + 3; x < b.x1 - 2; x += 4) { g.moveTo(x, b.y0 - 7); g.lineTo(x, b.y0); g.moveTo(x, b.y1); g.lineTo(x, b.y1 + 7); }
+    g.stroke();
+    g.beginPath(); tracePoly(g, z.pts); g.fillStyle = '#8e1b22'; g.fill(); g.clip();
+    g.lineWidth = bw; g.strokeStyle = '#1d2a4d'; g.strokeRect(b.x0 + bw / 2 + 4, b.y0 + bw / 2 + 4, w - bw - 8, hh - bw - 8);
+    g.lineWidth = 1.5; g.strokeStyle = '#d9b44a'; g.strokeRect(b.x0 + 4, b.y0 + 4, w - 8, hh - 8); g.strokeRect(b.x0 + bw + 4, b.y0 + bw + 4, w - 2 * bw - 8, hh - 2 * bw - 8);
+    g.fillStyle = '#d9b44a';
+    const step = bw * 1.6;
+    for (let x = b.x0 + 4 + step / 2; x < b.x1 - 4; x += step) for (const y of [b.y0 + 4 + bw / 2, b.y1 - 4 - bw / 2]) dia(x, y, bw * 0.25);
+    for (let y = b.y0 + 4 + step / 2; y < b.y1 - 4; y += step) for (const x of [b.x0 + 4 + bw / 2, b.x1 - 4 - bw / 2]) dia(x, y, bw * 0.25);
+    const mr = Math.min(w, hh) * 0.26;
+    g.beginPath(); g.moveTo(cx - mr * 1.5, cy); g.lineTo(cx, cy - mr); g.lineTo(cx + mr * 1.5, cy); g.lineTo(cx, cy + mr); g.closePath();
+    g.fillStyle = '#1d2a4d'; g.fill(); g.strokeStyle = '#d9b44a'; g.lineWidth = 1.5; g.stroke();
+    circle(g, cx, cy, mr * 0.45); g.fillStyle = '#d9b44a'; g.fill();
+    circle(g, cx, cy, mr * 0.25); g.fillStyle = '#8e1b22'; g.fill();
+    const rnd = mulberry32(777);
+    for (let i = 0; i < (w * hh) / 60; i++) { g.fillStyle = rnd() < 0.5 ? 'rgba(0,0,0,0.12)' : 'rgba(255,200,170,0.08)'; g.fillRect(b.x0 + rnd() * w, b.y0 + rnd() * hh, 2, 2); }
+    g.restore();
+  }
+  // A bunker on the CEO's green: raked sand with a soft lip.
+  function drawSand(g, z) {
+    const b = z.bb;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    g.fillStyle = '#e6d3a0'; g.fill();
+    g.lineWidth = 6; g.strokeStyle = 'rgba(120,95,40,0.35)'; g.stroke();
+    g.clip();
+    g.strokeStyle = 'rgba(150,120,60,0.28)'; g.lineWidth = 1.5;
+    for (let y = b.y0 - 10; y < b.y1 + 10; y += 6) {
+      g.beginPath(); g.moveTo(b.x0, y);
+      for (let x = b.x0; x <= b.x1; x += 10) g.lineTo(x, y + Math.sin(x * 0.08 + y) * 1.8);
+      g.stroke();
+    }
+    const rnd = mulberry32(Math.round(b.x0 * 13 + b.y0));
+    for (let i = 0; i < ((b.x1 - b.x0) * (b.y1 - b.y0)) / 40; i++) {
+      g.fillStyle = rnd() < 0.5 ? 'rgba(255,255,255,0.25)' : 'rgba(120,95,40,0.2)';
+      g.fillRect(lerp(b.x0, b.x1, rnd()), lerp(b.y0, b.y1, rnd()), 1.4, 1.4);
+    }
+    g.restore();
+  }
+  // Yoga mats laid end to end: grippy, and slow to roll across.
+  function drawMats(g, z) {
+    const b = z.bb, w = b.x1 - b.x0, hh = b.y1 - b.y0, long = w >= hh, len = long ? w : hh, n = Math.max(1, Math.round(len / 150));
+    const cols = ['#7b5bd6', '#2fb3a0', '#ff7a59', '#9bd64a', '#4a8fe8', '#e85b9a'];
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts); g.clip();
+    for (let i = 0; i < n; i++) {
+      const a0 = (i / n) * len, a1 = ((i + 1) / n) * len;
+      const x = long ? b.x0 + a0 + 3 : b.x0 + 2, y = long ? b.y0 + 2 : b.y0 + a0 + 3, mw = long ? a1 - a0 - 6 : w - 4, mh = long ? hh - 4 : a1 - a0 - 6;
+      g.beginPath(); rr(g, x, y, mw, mh, 4); g.fillStyle = cols[i % cols.length]; g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.12)';
+      for (let yy = y + 4; yy < y + mh - 2; yy += 5) for (let xx = x + 4; xx < x + mw - 2; xx += 5) g.fillRect(xx, yy, 1.6, 1.6);
+    }
+    g.restore();
+  }
+  // The CEO's koi pond: a rim of river stones, deep green water and lily pads. The koi swim in the live layer.
+  function drawKoiPond(g, z) {
+    const b = z.bb, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2, R = Math.max(b.x1 - b.x0, b.y1 - b.y0) / 2;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts);
+    g.lineWidth = 12; g.strokeStyle = '#8d9096'; g.stroke();
+    const gr = g.createRadialGradient(cx, cy, R * 0.1, cx, cy, R);
+    gr.addColorStop(0, '#174f4b'); gr.addColorStop(1, '#2f7f6f');
+    g.fillStyle = gr; g.fill();
+    const rnd = mulberry32(Math.round(b.x0 * 7 + b.y0 * 3));
+    for (let i = 0; i < z.pts.length; i += 2) {
+      const [px, py] = z.pts[i];
+      g.beginPath(); g.ellipse(px, py, 5 + rnd() * 3, 4 + rnd() * 2, rnd() * 3, 0, TAU);
+      g.fillStyle = rnd() < 0.5 ? '#a4a7ad' : '#7c8087'; g.fill();
+    }
+    g.beginPath(); tracePoly(g, z.pts); g.clip();
+    for (let k = 0, n = 0; k < 80 && n < 4; k++) {
+      const x = lerp(b.x0, b.x1, rnd()), y = lerp(b.y0, b.y1, rnd());
+      if (!pointInPoly(x, y, z.pts)) continue;
+      n++;
+      const r = 7 + rnd() * 5, a = rnd() * TAU;
+      g.beginPath(); g.moveTo(x, y); g.arc(x, y, r, a + 0.35, a + TAU - 0.35); g.closePath(); g.fillStyle = '#4f9a45'; g.fill();
+      if (n === 1) { circle(g, x + 2, y - 1, 3); g.fillStyle = '#f7b2d0'; g.fill(); }
+    }
+    g.restore();
+  }
+  // Koi drifting round the pond, each on its own loop.
+  function drawKoi(g, z, t) {
+    const b = z.bb, cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2, rx = (b.x1 - b.x0) * 0.3, ry = (b.y1 - b.y0) * 0.3;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts); g.clip();
+    for (let i = 0; i < 4; i++) {
+      const s = (i % 2 ? -1 : 1) * (0.32 + i * 0.05), a = t * s + i * 1.9, k = 0.55 + (0.3 * ((i * 5) % 3)) / 2;
+      const x = cx + Math.cos(a) * rx * k, y = cy + Math.sin(a) * ry * k, hd = Math.atan2(Math.cos(a) * ry * s, -Math.sin(a) * rx * s);
+      g.save(); g.translate(x, y); g.rotate(hd + Math.sin(t * 4 + i) * 0.12);
+      g.fillStyle = i === 1 ? '#f4f1ea' : '#ff7a1a';
+      g.beginPath(); g.ellipse(0, 0, 9, 3.6, 0, 0, TAU); g.fill();
+      g.beginPath(); g.moveTo(-7, 0); g.lineTo(-14, -4.5); g.lineTo(-12, 0); g.lineTo(-14, 4.5); g.closePath(); g.fill();
+      g.fillStyle = i === 1 ? '#ff5a1a' : '#f4f1ea'; circle(g, 2, 0, 2.2); g.fill();
+      g.restore();
+    }
+    g.restore();
+  }
+  // Fish in the penthouse aquarium, lazily crossing the tank.
+  function drawTankLife(g, b, t) {
+    const { x0, y0, x1, y1 } = b.bb, w = x1 - x0 - 24, hh = y1 - y0 - 24, cols = ['#ff8a2a', '#ffd447', '#5bc0ff', '#ff5a7a', '#f4f4ef', '#ff8a2a'];
+    g.save();
+    g.beginPath(); g.rect(x0 + 6, y0 + 6, x1 - x0 - 12, y1 - y0 - 12); g.clip();
+    for (let i = 0; i < 6; i++) {
+      const s = 0.25 + (i % 3) * 0.08, ph = i * 1.7;
+      const x = x0 + 12 + w * (0.5 + 0.45 * Math.sin(t * s + ph)), y = y0 + 12 + hh * (0.5 + 0.45 * Math.sin(t * s * 1.37 + ph * 2.1));
+      const a = Math.atan2(hh * 1.37 * Math.cos(t * s * 1.37 + ph * 2.1), w * Math.cos(t * s + ph));
+      g.save(); g.translate(x, y); g.rotate(a);
+      g.fillStyle = cols[i];
+      g.beginPath(); g.ellipse(0, 0, 7, 3.2, 0, 0, TAU); g.fill();
+      g.beginPath(); g.moveTo(-5, 0); g.lineTo(-11, -4); g.lineTo(-11, 4); g.closePath(); g.fill();
+      circle(g, 3.5, -0.8, 0.9); g.fillStyle = '#111317'; g.fill();
+      g.restore();
+    }
+    g.restore();
+  }
+  // Kaiten sushi: a steel belt of overlapping plates, carrying lunch round the counter.
+  function drawSushiBelt(g, z, t) {
+    const b = z.bb, horiz = z.dir[0] !== 0, sign = horiz ? Math.sign(z.dir[0]) : Math.sign(z.dir[1]);
+    const len = horiz ? b.x1 - b.x0 : b.y1 - b.y0, wid = horiz ? b.y1 - b.y0 : b.x1 - b.x0;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts); g.clip();
+    g.fillStyle = '#aeb6c0'; g.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+    // The belt runs along local x from 0 to len, centred on local y = 0.
+    g.translate(horiz ? b.x0 : (b.x0 + b.x1) / 2, horiz ? (b.y0 + b.y1) / 2 : b.y0);
+    if (!horiz) g.rotate(Math.PI / 2);
+    const seg = 16, base = t * 60 * sign, off = ((base % seg) + seg) % seg;
+    g.strokeStyle = 'rgba(70,78,90,0.45)'; g.lineWidth = 1.2;
+    for (let x = -seg + off; x < len + seg; x += seg) { g.beginPath(); g.arc(x - seg * 0.6, 0, wid * 0.5, -0.9, 0.9); g.stroke(); }
+    g.fillStyle = '#7d8793'; g.fillRect(0, -wid / 2, len, 3); g.fillRect(0, wid / 2 - 3, len, 3);
+    const gap = 46, plates = ['#2f6fb3', '#e0342b', '#d9b44a', '#1b1d21', '#f4f4ef'], fish = ['#ff8f6b', '#e0343b', '#ffd447'];
+    for (let j = Math.ceil((-gap - base) / gap); j * gap + base < len + gap; j++) {
+      g.save(); g.translate(j * gap + base, 0);
+      circle(g, 0, 0, 12); g.fillStyle = '#f7f5ee'; g.fill(); g.lineWidth = 2.5; g.strokeStyle = plates[((j % 5) + 5) % 5]; g.stroke();
+      if (j % 2 === 0) {
+        g.fillStyle = '#fbfbf7'; g.beginPath(); g.ellipse(0, 0, 7.5, 4.5, 0.4, 0, TAU); g.fill();
+        g.fillStyle = fish[(((j / 2) % 3) + 3) % 3]; g.beginPath(); g.ellipse(0.5, -0.5, 7.5, 3.6, 0.4, 0, TAU); g.fill();
+      } else {
+        for (const s of [-1, 1]) { circle(g, s * 4, 0, 4); g.fillStyle = '#1f3a2a'; g.fill(); circle(g, s * 4, 0, 2.8); g.fillStyle = '#fbfbf7'; g.fill(); circle(g, s * 4, 0, 1.2); g.fillStyle = '#ff7a59'; g.fill(); }
+      }
+      g.restore();
+    }
+    g.restore();
+  }
+  // Treadmills in the executive gym: black belts running back toward you, steel decks, and a console at the front.
+  function drawTreadmill(g, z, t) {
+    const b = z.bb, horiz = z.dir[0] !== 0, sign = horiz ? Math.sign(z.dir[0]) : Math.sign(z.dir[1]);
+    const len = horiz ? b.x1 - b.x0 : b.y1 - b.y0, span = horiz ? b.y1 - b.y0 : b.x1 - b.x0, n = Math.max(1, Math.round(span / 76)), lane = span / n;
+    g.save();
+    g.beginPath(); tracePoly(g, z.pts); g.clip();
+    g.translate(horiz ? b.x0 : b.x1, b.y0);
+    if (!horiz) g.rotate(Math.PI / 2);
+    const gap = 9, off = (((t * 110 * sign) % gap) + gap) % gap, front = sign < 0 ? len - 9 : 0;
+    for (let i = 0; i < n; i++) {
+      const y0 = i * lane, y1 = y0 + lane;
+      g.fillStyle = '#c3c9d1'; g.fillRect(0, y0 + 2, len, lane - 4);
+      g.fillStyle = '#1d2025'; g.fillRect(3, y0 + 8, len - 6, lane - 16);
+      g.strokeStyle = 'rgba(255,255,255,0.14)'; g.lineWidth = 1.5;
+      g.beginPath(); for (let x = 3 + off; x < len - 3; x += gap) { g.moveTo(x, y0 + 9); g.lineTo(x, y1 - 9); } g.stroke();
+      const mid = (y0 + y1) / 2, cx = len / 2 - sign * 4 + ((t * 30 * sign) % 12);
+      g.strokeStyle = 'rgba(255,212,71,0.7)'; g.lineWidth = 3; g.lineCap = 'round'; g.lineJoin = 'round';
+      g.beginPath(); g.moveTo(cx - 6 * sign, mid - 9); g.lineTo(cx + 6 * sign, mid); g.lineTo(cx - 6 * sign, mid + 9); g.stroke();
+      g.fillStyle = '#2b3038'; g.fillRect(front, y0 + 4, 9, lane - 8);
+      g.fillStyle = '#ff4a3d'; g.fillRect(front + 3, y0 + lane / 2 - 6, 3, 12);
+    }
+    g.restore();
+  }
+  // A helicopter rotor blade. Each blade leaves a faint blur where it has just been.
+  function drawRotor(g, m, sh) {
+    const L = m.len, s = Math.sign(m.av || m.speed || 1);
+    g.save();
+    g.save(); g.translate(m.x, m.y);
+    g.beginPath(); g.moveTo(0, 0); g.arc(0, 0, L, m.angle - s * 0.55, m.angle, s < 0); g.closePath();
+    const gr = g.createRadialGradient(0, 0, 10, 0, 0, L);
+    gr.addColorStop(0, 'rgba(20,24,30,0)'); gr.addColorStop(1, 'rgba(20,24,30,0.16)');
+    g.fillStyle = gr; g.fill();
+    g.restore();
+    g.save(); g.translate(m.x + sh[0] * 1.6, m.y + sh[1] * 1.6); g.rotate(m.angle); g.fillStyle = 'rgba(6,10,16,0.24)'; g.fillRect(0, -m.w / 2, L, m.w); g.restore();
+    g.save(); g.translate(m.x, m.y); g.rotate(m.angle);
+    g.beginPath(); rr(g, 0, -m.w / 2, L, m.w, m.w / 2); g.fillStyle = '#2b3038'; g.fill();
+    g.fillStyle = '#f2b705'; g.fillRect(L - 14, -m.w / 2, 10, m.w);
+    g.fillStyle = 'rgba(255,255,255,0.18)'; g.fillRect(8, -m.w / 2 + 1, L - 24, 2);
+    g.restore();
+    circle(g, m.x, m.y, 10); g.fillStyle = '#1b1d21'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#8a929c'; g.stroke();
+    g.restore();
+  }
+  // The vault door: a slab of steel a foot thick, with a wheel that spins as it swings, on a massive hinge.
+  function drawVaultDoor(g, m, sh) {
+    const L = m.len, W = m.w;
+    g.save();
+    g.save(); g.translate(m.x + sh[0], m.y + sh[1]); g.rotate(m.angle); g.fillStyle = 'rgba(6,10,16,0.34)'; g.fillRect(0, -W / 2, L, W); g.restore();
+    g.save(); g.translate(m.x, m.y); g.rotate(m.angle);
+    const gr = g.createLinearGradient(0, -W / 2, 0, W / 2);
+    gr.addColorStop(0, '#c3cad3'); gr.addColorStop(0.5, '#8a939e'); gr.addColorStop(1, '#5c6571');
+    g.beginPath(); rr(g, 0, -W / 2, L, W, 3); g.fillStyle = gr; g.fill(); g.lineWidth = 1.5; g.strokeStyle = '#2f353d'; g.stroke();
+    g.fillStyle = '#d9dee4';
+    for (let y = -W / 2 + 3; y < W / 2 - 2; y += 4) g.fillRect(L - 1, y, 4, 2);
+    const wx = L * 0.55, wr = W * 0.42, spin = (m.angle - m.a0) * 3;
+    circle(g, wx, 0, wr); g.lineWidth = 2; g.strokeStyle = '#d9b44a'; g.stroke();
+    g.beginPath();
+    for (let i = 0; i < 3; i++) { const a = (i / 3) * Math.PI + spin; g.moveTo(wx + Math.cos(a) * wr, Math.sin(a) * wr); g.lineTo(wx - Math.cos(a) * wr, -Math.sin(a) * wr); }
+    g.stroke();
+    for (const x of [L * 0.18, L * 0.88]) { circle(g, x, 0, 2); g.fillStyle = '#2f353d'; g.fill(); }
+    g.restore();
+    circle(g, m.x, m.y, W * 0.75); g.fillStyle = '#3a414b'; g.fill(); g.lineWidth = 2; g.strokeStyle = '#1b1f26'; g.stroke();
+    circle(g, m.x, m.y, W * 0.3); g.fillStyle = '#c3cad3'; g.fill();
     g.restore();
   }
   // The dock edge and the service pit: a drop, with safety stripes painted round it.
@@ -5050,6 +5999,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       else if (z.type === 'turntable') drawTurntable(g, z, t);
       else if (z.type === 'air') drawAirLive(g, z, t);
       else if (z.style === 'coffee') drawRipples(g, z, t);
+      else if (z.style === 'koi') drawKoi(g, z, t);
     }
     for (const z of h.zones) if (z.style === 'shredder') drawShredder(g, z, t);
     g.restore();
@@ -5302,6 +6252,37 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       g.fillStyle = '#5bc0ff'; g.fillRect(-r * 0.8, r * 0.3, r * 1.6, r * 0.45);
       g.fillStyle = '#f4f4ef'; g.fillRect(-r * 0.6, -r * 0.6, r * 1.2, r * 0.5);
     },
+    // A champagne flute: from above, a ring of glass round a disc of champagne. Knocked over, you see the bowl and the stem.
+    glass(g, r, p) {
+      if (p.fallen) {
+        g.beginPath(); g.ellipse(r * 0.4, 0, r * 1.1, r * 0.55, 0, 0, TAU); g.fillStyle = 'rgba(235,244,250,0.75)'; g.fill();
+        g.strokeStyle = 'rgba(160,190,210,0.9)'; g.lineWidth = 0.8; g.stroke();
+        g.strokeStyle = 'rgba(200,220,235,0.9)'; g.lineWidth = 1.2;
+        g.beginPath(); g.moveTo(-r * 0.7, 0); g.lineTo(-r * 1.6, 0); g.stroke();
+        g.beginPath(); g.ellipse(-r * 1.6, 0, r * 0.2, r * 0.6, 0, 0, TAU); g.stroke();
+        return;
+      }
+      circle(g, 0, 0, r); g.fillStyle = 'rgba(235,244,250,0.6)'; g.fill(); g.lineWidth = 1; g.strokeStyle = 'rgba(160,190,210,0.95)'; g.stroke();
+      circle(g, 0, 0, r * 0.7); g.fillStyle = '#f1d98a'; g.fill();
+      circle(g, -r * 0.25, -r * 0.25, r * 0.18); g.fillStyle = 'rgba(255,255,255,0.8)'; g.fill();
+    },
+    // A gold bar: the stamped top face of an ingot.
+    goldbar(g, r) {
+      const L = r * 1.25, W = r * 0.72;
+      g.beginPath(); rr(g, -L, -W, L * 2, W * 2, 2); g.fillStyle = '#b8912f'; g.fill(); g.strokeStyle = '#7a5c0a'; g.lineWidth = 1; g.stroke();
+      const gr = g.createLinearGradient(-L, -W, L, W);
+      gr.addColorStop(0, '#fff1b8'); gr.addColorStop(0.5, '#e8c45a'); gr.addColorStop(1, '#c9a44a');
+      g.beginPath(); rr(g, -L * 0.72, -W * 0.6, L * 1.44, W * 1.2, 1.5); g.fillStyle = gr; g.fill();
+      g.fillStyle = 'rgba(122,92,10,0.55)'; g.fillRect(-L * 0.3, -1, L * 0.6, 2);
+    },
+    // A medicine ball: dark rubber, with grip seams.
+    medball(g, r) {
+      circle(g, 0, 0, r); g.fillStyle = '#2b2f36'; g.fill(); g.lineWidth = 1.5; g.strokeStyle = '#111317'; g.stroke();
+      g.strokeStyle = '#e2bd3a'; g.lineWidth = 1.6;
+      g.beginPath(); g.moveTo(-r, 0); g.lineTo(r, 0); g.stroke();
+      g.beginPath(); g.ellipse(0, 0, r * 0.45, r, 0, 0, TAU); g.stroke();
+      circle(g, -r * 0.35, -r * 0.35, r * 0.2); g.fillStyle = 'rgba(255,255,255,0.18)'; g.fill();
+    },
     // Pool balls: solids, stripes and the eight, numbered.
     pool(g, r, p) {
       const n = p.n || 1, cols = ['#f2c12e', '#2f5fd0', '#e0342b', '#6c3fb0', '#f07f1e', '#2a8a4a', '#8a2a2a', '#16171a'];
@@ -5330,6 +6311,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   };
   function drawConveyor(g, z, t) {
     if (z.skin === 'rollers') { drawRollers(g, z, t); return; }
+    if (z.skin === 'sushi') { drawSushiBelt(g, z, t); return; }
+    if (z.skin === 'treadmill') { drawTreadmill(g, z, t); return; }
     const b = z.bb, horiz = z.dir[0] !== 0, sign = horiz ? Math.sign(z.dir[0]) : Math.sign(z.dir[1]);
     g.save();
     g.beginPath(); tracePoly(g, z.pts); g.clip();
@@ -5406,6 +6389,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       else if (m.type === 'spinner' && m.kind === 'cardoor') drawCarDoor(g, m, sh);
       else if (m.type === 'spinner' && m.kind === 'brush') drawWashBrush(g, m, sh);
       else if (m.type === 'spinner' && m.kind === 'robot') drawRobotArm(g, m, sh);
+      else if (m.type === 'spinner' && m.kind === 'rotor') drawRotor(g, m, sh);
+      else if (m.type === 'spinner' && m.kind === 'vaultdoor') drawVaultDoor(g, m, sh);
       else if (m.type === 'slider') {
         const x0 = m.cx - m.w / 2, y0 = m.cy - m.h / 2;
         g.save();
@@ -5503,6 +6488,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function drawBlinkers(g, h) {
     const t = G.clock;
     for (const b of h.blocks) {
+      if (b.kind === 'aquarium') { drawTankLife(g, b, t); continue; }
       if (b.kind !== 'server') continue;
       const { x0, y0, x1, y1 } = b.bb, long = x1 - x0 >= y1 - y0, len = long ? x1 - x0 : y1 - y0, n = Math.max(1, Math.round(len / 36));
       for (let i = 0; i < n; i++) {
@@ -5628,15 +6614,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     let alpha = 1, scale = b.scale;
     if (b.state === 'splash') { alpha = Math.max(0, 1 - b.splashT / 0.25); scale = 1 - 0.3 * Math.min(1, b.splashT / 0.25); }
     if (alpha <= 0) return;
-    if (b.trail.length > 1 && b.state === 'rolling') {
-      g.save(); g.lineCap = 'round';
-      for (let i = 1; i < b.trail.length; i++) {
-        const k = i / b.trail.length;
-        g.strokeStyle = withAlpha(b.color, 0.28 * k); g.lineWidth = BALL_R * 1.3 * k;
-        g.beginPath(); g.moveTo(b.trail[i - 1][0], b.trail[i - 1][1]); g.lineTo(b.trail[i][0], b.trail[i][1]); g.stroke();
-      }
-      g.restore();
-    }
+    const skin = b.mine ? Career.wearing('ball') : 'classic';
+    if (b.trail.length > 1 && b.state === 'rolling') drawTrail(g, b, b.mine ? Career.wearing('trail') : 'none');
     const r = BALL_R * scale, sh = h.shadow, up = view.up, side = [-up[1], up[0]];
     g.save();
     g.globalAlpha = alpha;
@@ -5644,11 +6623,124 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       g.beginPath(); g.ellipse(b.x + sh[0] * 0.4, b.y + sh[1] * 0.4, r * 1.02, r * 0.95, 0, 0, TAU);
       g.fillStyle = 'rgba(6,10,16,0.35)'; g.fill();
     }
+    if (skin !== 'classic') {
+      drawSkin(g, b.x, b.y, r, skin, b.spin || 0, b.dir != null ? b.dir : Math.atan2(h.cup[1] - b.y, h.cup[0] - b.x));
+      g.restore();
+      return;
+    }
     const hx = b.x - side[0] * r * 0.35 + up[0] * r * 0.4, hy = b.y - side[1] * r * 0.35 + up[1] * r * 0.4;
     const gr = g.createRadialGradient(hx, hy, r * 0.08, b.x, b.y, r);
     gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.38, b.color); gr.addColorStop(1, shade(b.color, -0.3));
     circle(g, b.x, b.y, r); g.fillStyle = gr; g.fill();
     g.lineWidth = 1; g.strokeStyle = 'rgba(0,0,0,0.4)'; g.stroke();
+    g.restore();
+  }
+  // Balls from the locker, drawn at (x, y) with radius r. spin turns the pattern as the ball rolls, and dir is
+  // the way it's heading, which the eyeball looks toward.
+  function drawSkin(g, x, y, r, id, spin = 0, dir = -Math.PI / 2) {
+    g.save();
+    circle(g, x, y, r); g.clip();
+    const rot = (fn) => { g.save(); g.translate(x, y); g.rotate(spin); fn(); g.restore(); };
+    if (id === 'stress') {
+      g.fillStyle = '#ffd447'; g.fillRect(x - r, y - r, r * 2, r * 2);
+      g.fillStyle = '#3a2a00';
+      circle(g, x - r * 0.33, y - r * 0.22, r * 0.13); g.fill(); circle(g, x + r * 0.33, y - r * 0.22, r * 0.13); g.fill();
+      g.strokeStyle = '#3a2a00'; g.lineWidth = r * 0.14; g.lineCap = 'round';
+      g.beginPath(); g.arc(x, y + r * 0.02, r * 0.48, 0.35, Math.PI - 0.35); g.stroke();
+    } else if (id === 'bean') {
+      g.fillStyle = '#6b3f22'; g.fillRect(x - r, y - r, r * 2, r * 2);
+      rot(() => {
+        g.strokeStyle = '#2e1709'; g.lineWidth = r * 0.22; g.lineCap = 'round';
+        g.beginPath(); g.moveTo(-r * 0.1, -r * 0.9); g.bezierCurveTo(r * 0.45, -r * 0.3, -r * 0.45, r * 0.3, r * 0.1, r * 0.9); g.stroke();
+      });
+    } else if (id === 'eight') {
+      g.fillStyle = '#141519'; g.fillRect(x - r, y - r, r * 2, r * 2);
+      rot(() => {
+        circle(g, r * 0.2, 0, r * 0.5); g.fillStyle = '#f7f5ee'; g.fill();
+        g.fillStyle = '#141519'; g.font = `700 ${Math.round(r * 0.72)}px "Work Sans", sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('8', r * 0.2, r * 0.04);
+      });
+    } else if (id === 'tennis') {
+      g.fillStyle = '#d4ec3a'; g.fillRect(x - r, y - r, r * 2, r * 2);
+      rot(() => {
+        g.strokeStyle = '#f7fbe6'; g.lineWidth = r * 0.16;
+        g.beginPath(); g.arc(-r * 1.25, 0, r * 0.95, -0.9, 0.9); g.stroke();
+        g.beginPath(); g.arc(r * 1.25, 0, r * 0.95, Math.PI - 0.9, Math.PI + 0.9); g.stroke();
+      });
+    } else if (id === 'disco') {
+      g.fillStyle = '#8f9bab'; g.fillRect(x - r, y - r, r * 2, r * 2);
+      const q = Math.max(2, r / 3.2), o = ((spin * r) % q + q) % q;
+      for (let i = -r - q; i < r + q; i += q) for (let j = -r; j < r; j += q) {
+        const k = (Math.floor((i - o) / q) * 7 + Math.floor(j / q) * 3) % 5;
+        g.fillStyle = k === 0 ? '#ffffff' : k === 1 ? '#c9d2df' : k === 2 ? '#7d8898' : k === 3 ? '#aeb8c6' : '#e4e9f0';
+        g.fillRect(x + i + o, y + j, q - 0.8, q - 0.8);
+      }
+    } else if (id === 'eye') {
+      g.fillStyle = '#fbfaf6'; g.fillRect(x - r, y - r, r * 2, r * 2);
+      g.strokeStyle = 'rgba(210,60,60,0.35)'; g.lineWidth = 0.8;
+      for (let k = 0; k < 5; k++) { const a = k * 1.3 + 0.4; g.beginPath(); g.moveTo(x + Math.cos(a) * r, y + Math.sin(a) * r); g.lineTo(x + Math.cos(a + 0.3) * r * 0.55, y + Math.sin(a + 0.3) * r * 0.55); g.stroke(); }
+      const ix = x + Math.cos(dir) * r * 0.38, iy = y + Math.sin(dir) * r * 0.38;
+      circle(g, ix, iy, r * 0.46); g.fillStyle = '#2f7fd6'; g.fill();
+      circle(g, ix, iy, r * 0.22); g.fillStyle = '#0b0d12'; g.fill();
+      circle(g, ix - r * 0.12, iy - r * 0.12, r * 0.08); g.fillStyle = '#ffffff'; g.fill();
+    } else if (id === 'gold') {
+      const gr = g.createRadialGradient(x - r * 0.3, y - r * 0.35, r * 0.05, x, y, r);
+      gr.addColorStop(0, '#fff6c8'); gr.addColorStop(0.35, '#f2c230'); gr.addColorStop(1, '#8a5a00');
+      g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2);
+    } else {
+      g.fillStyle = '#f7f9fb'; g.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+    g.restore();
+    const hl = g.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.05, x, y, r);
+    hl.addColorStop(0, 'rgba(255,255,255,0.6)'); hl.addColorStop(0.45, 'rgba(255,255,255,0)'); hl.addColorStop(1, 'rgba(0,0,0,0.28)');
+    circle(g, x, y, r); g.fillStyle = hl; g.fill();
+    g.lineWidth = 1; g.strokeStyle = 'rgba(0,0,0,0.45)'; g.stroke();
+    if (id === 'gold' || id === 'disco') {
+      const tw = (Math.sin(G.clock * 5 + x) + 1) / 2;
+      g.save(); g.globalAlpha = 0.5 + 0.5 * tw; g.strokeStyle = '#ffffff'; g.lineWidth = 1.2;
+      const sx = x + r * 0.45, sy = y - r * 0.55, s = r * 0.5;
+      g.beginPath(); g.moveTo(sx - s, sy); g.lineTo(sx + s, sy); g.moveTo(sx, sy - s); g.lineTo(sx, sy + s); g.stroke();
+      g.restore();
+    }
+  }
+  // Trails from the locker, drawn behind a rolling ball along its recent path.
+  function drawTrail(g, b, id) {
+    const pts = b.trail, n = pts.length;
+    if (n < 2) return;
+    g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
+    const path = () => { g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < n; i++) g.lineTo(pts[i][0], pts[i][1]); };
+    if (id === 'chalk') {
+      path(); g.setLineDash([2, 7]); g.strokeStyle = 'rgba(255,255,255,0.8)'; g.lineWidth = 3.2; g.stroke();
+    } else if (id === 'confetti') {
+      const cols = ['#ff4f6d', '#ffd447', '#3fa9ff', '#5cd672', '#b57bff', '#ff9a3c'];
+      for (let i = 0; i < n; i++) {
+        const [x, y] = pts[i], k = i / n, s = 2 + 3 * k, a = (i * 1.7 + b.x * 0.01) % TAU;
+        g.save(); g.translate(x + Math.sin(i * 2.3) * 5, y + Math.cos(i * 1.9) * 5); g.rotate(a);
+        g.globalAlpha = 0.35 + 0.65 * k; g.fillStyle = cols[i % cols.length]; g.fillRect(-s, -s * 0.5, s * 2, s); g.restore();
+      }
+    } else if (id === 'neon') {
+      g.globalCompositeOperation = 'lighter';
+      path(); g.strokeStyle = 'rgba(255,80,190,0.28)'; g.lineWidth = BALL_R * 2.4; g.stroke();
+      path(); g.strokeStyle = 'rgba(60,220,255,0.75)'; g.lineWidth = 2.5; g.stroke();
+    } else if (id === 'flame') {
+      g.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < n; i++) {
+        const [x, y] = pts[i], k = i / n, fl = 0.8 + 0.2 * Math.sin(G.clock * 30 + i);
+        circle(g, x, y, BALL_R * (0.35 + 0.85 * k) * fl);
+        g.fillStyle = `rgba(255,${Math.round(90 + 150 * k)},${Math.round(40 * k)},${(0.12 + 0.4 * k).toFixed(3)})`; g.fill();
+      }
+    } else if (id === 'rainbow') {
+      for (let i = 1; i < n; i++) {
+        const k = i / n;
+        g.strokeStyle = `hsla(${Math.round((i * 24 + G.clock * 120) % 360)},90%,60%,${(0.2 + 0.6 * k).toFixed(3)})`; g.lineWidth = BALL_R * 1.5 * k;
+        g.beginPath(); g.moveTo(pts[i - 1][0], pts[i - 1][1]); g.lineTo(pts[i][0], pts[i][1]); g.stroke();
+      }
+    } else {
+      for (let i = 1; i < n; i++) {
+        const k = i / n;
+        g.strokeStyle = withAlpha(b.color, 0.28 * k); g.lineWidth = BALL_R * 1.3 * k;
+        g.beginPath(); g.moveTo(pts[i - 1][0], pts[i - 1][1]); g.lineTo(pts[i][0], pts[i][1]); g.stroke();
+      }
+    }
     g.restore();
   }
   // Rage mode: too much espresso. The aim drifts back and forth, and what you see is what you hit.
@@ -5707,6 +6799,12 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       const k = f.life / f.max;
       if (f.k === 'dot') { g.globalAlpha = k; g.fillStyle = f.color; circle(g, f.x, f.y, f.size); g.fill(); }
       else if (f.k === 'ring') { g.globalAlpha = k; g.strokeStyle = f.color; g.lineWidth = f.w; circle(g, f.x, f.y, lerp(f.r0, f.r1, 1 - k)); g.stroke(); }
+      else if (f.k === 'star') {
+        g.globalAlpha = Math.min(1, k * 1.6);
+        g.save(); g.translate(f.x, f.y); g.rotate(f.rot); g.beginPath();
+        for (let i = 0; i < 10; i++) { const a = (i / 10) * TAU - Math.PI / 2, rr2 = i % 2 ? f.size * 0.45 : f.size; g.lineTo(Math.cos(a) * rr2, Math.sin(a) * rr2); }
+        g.closePath(); g.fillStyle = '#ffd447'; g.fill(); g.lineWidth = 1; g.strokeStyle = '#8a6000'; g.stroke(); g.restore();
+      }
       else if (f.k === 'conf') {
         g.globalAlpha = Math.min(1, f.life * 1.5);
         g.save(); g.translate(f.x, f.y); g.rotate(f.rot); g.fillStyle = f.color; g.fillRect(-4, -2.2, 8, 4.4); g.restore();
@@ -5742,6 +6840,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     }
     const ghosts = visibleGhosts();
     for (const p of ghosts) drawGhostBall(g, p, h);
+    Ghost.draw(g);
     drawBall(g, G.ball, h);
     drawFlag(g, h, G.clock);
     if (h.tint) { g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = h.tint; g.fillRect(0, 0, canvas.width, canvas.height); applyView(g); }
@@ -5749,6 +6848,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (aim) drawAim(g, aim);
     drawFx(g);
     if (ghosts.length) drawGhostLabels(g, ghosts);
+    Ghost.label(g);
     Party.draw(g);
   }
   // Other players in an online room who are on the same hole as you.
@@ -5817,8 +6917,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     if (h) for (const tp of h.teleports) if (tp.arriveT > 0) tp.arriveT = Math.max(0, tp.arriveT - dt);
     if (b) {
       if (b.state === 'rolling') {
-        const last = b.trail[b.trail.length - 1];
-        if (!last || Math.hypot(last[0] - b.x, last[1] - b.y) > 3) { b.trail.push([b.x, b.y]); if (b.trail.length > 16) b.trail.shift(); }
+        const last = b.trail[b.trail.length - 1], keep = b.mine && Career.wearing('trail') !== 'none' ? 26 : 16;
+        if (!last || Math.hypot(last[0] - b.x, last[1] - b.y) > 3) { b.trail.push([b.x, b.y]); if (b.trail.length > keep) b.trail.shift(); }
+        const sp = Math.hypot(b.vx, b.vy);
+        b.spin = (b.spin || 0) + (sp * dt) / BALL_R;
+        if (sp > 1) b.dir = Math.atan2(b.vy, b.vx);
       } else if (b.trail.length) b.trail.length = 0;
       if (b.state === 'sinking') {
         b.sinkT += dt;
@@ -5837,6 +6940,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         }
       }
     }
+    if (G.screen === 'play') Ghost.frame(dt);
+    if (G.screen === 'setup' && Math.floor(G.clock / 20) !== Math.floor((G.clock - dt) / 20)) renderDailyBox();
     updateFx(dt);
     Party.update(dt);
     if (G.screen === 'map' || Campus.flight) Campus.update(dt);
@@ -5987,8 +7092,34 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       for (let i = 0; i < 90; i++) { x.fillStyle = cols[i % cols.length]; x.globalAlpha = 0.5; x.beginPath(); x.arc(r() * w, r() * w, 2.5, 0, TAU); x.fill(); }
       x.globalAlpha = 1;
     });
+    else if (kind === 'marble') c = tileCanvas(480, 480, (x, w) => {
+      // Black marble slabs with white veins and brass joints.
+      const r = mulberry32(31);
+      for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) { const v = 30 + Math.floor(r() * 8); x.fillStyle = `rgb(${v},${v + 1},${v + 4})`; x.fillRect(i * 240, j * 240, 240, 240); }
+      x.lineCap = 'round'; x.lineJoin = 'round';
+      for (let k = 0; k < 10; k++) {
+        let px = r() * w, py = r() * w, a = r() * TAU;
+        x.strokeStyle = `rgba(235,232,225,${(0.08 + r() * 0.14).toFixed(2)})`; x.lineWidth = 0.8 + r() * 2;
+        x.beginPath(); x.moveTo(px, py);
+        for (let s = 0; s < 14; s++) { a += (r() - 0.5) * 0.9; px += Math.cos(a) * 22; py += Math.sin(a) * 22; x.lineTo(px, py); }
+        x.stroke();
+      }
+      x.strokeStyle = 'rgba(184,145,47,0.75)'; x.lineWidth = 3;
+      for (let i = 0; i <= 2; i++) { x.beginPath(); x.moveTo(i * 240, 0); x.lineTo(i * 240, w); x.moveTo(0, i * 240); x.lineTo(w, i * 240); x.stroke(); }
+    });
+    else if (kind === 'deck') c = tileCanvas(480, 480, (x, w) => {
+      // Teak decking on the roof terrace: long boards with staggered joints.
+      const r = mulberry32(41);
+      for (let j = 0; j < 12; j++) {
+        const v = r();
+        x.fillStyle = `rgb(${150 + Math.floor(v * 22)},${104 + Math.floor(v * 16)},${66 + Math.floor(v * 10)})`; x.fillRect(0, j * 40, w, 40);
+        x.strokeStyle = 'rgba(90,55,25,0.18)'; x.lineWidth = 1;
+        for (let k = 0; k < 3; k++) { const yy = j * 40 + 8 + k * 10 + r() * 4; x.beginPath(); x.moveTo(0, yy); x.bezierCurveTo(w * 0.3, yy + 2, w * 0.6, yy - 2, w, yy); x.stroke(); }
+        x.fillStyle = 'rgba(40,24,10,0.55)'; x.fillRect(0, j * 40 + 37, w, 3); x.fillRect((Math.floor(r() * 4) * 120 + 60) % w, j * 40, 3, 37);
+      }
+    });
     const p = g.createPattern(c, 'repeat');
-    const scale = kind === 'carpet' || kind === 'paving' || kind === 'garage' || kind === 'raised' || kind === 'arcade' ? 0.5 : 1;
+    const scale = kind === 'carpet' || kind === 'paving' || kind === 'garage' || kind === 'raised' || kind === 'arcade' || kind === 'marble' || kind === 'deck' ? 0.5 : 1;
     if (p.setTransform && typeof DOMMatrix === 'function') p.setTransform(new DOMMatrix().scaleSelf(scale, scale));
     m[kind] = p;
     return p;
@@ -6585,8 +7716,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
         g.font = `600 ${cam.z > 0.3 ? 13 : 11}px "IBM Plex Mono", monospace`;
         for (const wh of this.holes) {
           if (!this.holeVisible(wh, vis)) continue;
-          const def = COURSES[wh.course].holes[wh.idx], [x, y] = P(wh.slot.cx, wh.slot.y + 34);
-          const txt = `${def.time} · ${def.name}`, w = g.measureText(txt).width + 14;
+          const def = COURSES[wh.course].holes[wh.idx], [x, y] = P(wh.slot.cx, wh.slot.y + 34), st = Career.stars(wh.course, wh.idx);
+          const txt = `${def.time} · ${def.name}${st ? ' ' + starText(st) : ''}`, w = g.measureText(txt).width + 14;
           const on = this.sel === wh;
           g.fillStyle = on ? '#ffd447' : 'rgba(15,20,28,0.72)'; g.beginPath(); rr(g, x - w / 2, y - 11, w, 22, 11); g.fill();
           g.fillStyle = on ? '#251d00' : '#eef2f7'; g.fillText(txt, x, y + 1);
@@ -6659,7 +7790,8 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       this.sel = wh;
       if (!wh) { $('mapCard').hidden = true; return; }
       const def = COURSES[wh.course].holes[wh.idx];
-      $('mapCardEyebrow').textContent = `${COURSES[wh.course].name} · ${def.time} · Hole ${wh.idx + 1} · Par ${def.par}`;
+      const best = Career.best(wh.course, wh.idx);
+      $('mapCardEyebrow').textContent = `${COURSES[wh.course].name} · ${def.time} · Hole ${wh.idx + 1} · Par ${def.par}${best != null ? ` · Your best ${best} ${starText(Career.stars(wh.course, wh.idx))}` : ''}`;
       $('mapCardName').textContent = def.name;
       $('mapCardTip').textContent = def.tip;
       $('mapPlay').textContent = `Play ${COURSES[wh.course].name}`;
@@ -7125,7 +8257,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (G.screen === 'play' && COURSE.id === 'workshop') return;
       const ids = this.holes();
       COURSES.workshop.holes = ids.filter(id => this.status[id] && this.status[id].playable).map(id => this.defFor(id));
-      if (!overlays.setup.hidden) renderCoursePicker('local', COURSES[store.get('building', 'office')] && COURSES[store.get('building', 'office')].holes.length ? store.get('building', 'office') : 'office');
+      if (!overlays.setup.hidden) renderCoursePicker('local', pickedBuilding());
       if (!overlays.club.hidden) renderClub();
     },
     // For an online tee-off: which holes, and at what par, so everyone plays the same course.
@@ -7524,7 +8656,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   // ---------------------------------------------------------------------------
   // HUD, overlays and screens
   // ---------------------------------------------------------------------------
-  const overlays = { setup: $('setup'), club: $('clubhouse'), summary: $('summary'), results: $('results'), menu: $('menu'), card: $('scorecard'), help: $('help') };
+  const overlays = { setup: $('setup'), club: $('clubhouse'), summary: $('summary'), results: $('results'), menu: $('menu'), card: $('scorecard'), help: $('help'), locker: $('locker'), daily: $('daily') };
   const anyOverlayOpen = () => Object.values(overlays).some(o => !o.hidden);
   function openOverlay(name) {
     const o = overlays[name];
@@ -7540,7 +8672,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   function closeAllOverlays() { for (const k in overlays) overlays[k].hidden = true; }
   function handleEscape() {
     if (!$('tauntPop').hidden) { closeTauntPop(); return; }
-    for (const k of ['help', 'card']) if (!overlays[k].hidden) { closeOverlay(k); return; }
+    for (const k of ['help', 'card', 'locker']) if (!overlays[k].hidden) { closeOverlay(k); return; }
     if (!overlays.menu.hidden) { closeMenu(); return; }
     if (G.screen === 'play' && !anyOverlayOpen()) openMenu();
   }
@@ -7688,12 +8820,140 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     sel.value = String(value);
     return sel;
   }
-  // A two-option picker between buildings, used on the setup card and in the clubhouse.
+  // Your career on the course pass: stars, title and streak, and today's Daily Hole.
+  function renderCareer() {
+    const n = Career.total(), max = Career.max(), streak = Daily.streak();
+    const chips = $('careerChips');
+    chips.textContent = '';
+    const chip = (text, strong) => { const c = el('span', 'chip'); if (strong) c.append(el('b', '', strong), document.createTextNode(' ')); c.append(document.createTextNode(text)); chips.append(c); };
+    chip(`of ${max} stars`, `★ ${n}`);
+    chip(Career.title(n));
+    if (streak > 0) chip('streak', `🔥 ${streak}-day`);
+    renderDailyBox();
+  }
+  function untilTomorrow() {
+    const m = Math.ceil(Daily.msLeft() / 60000), hh = Math.floor(m / 60), mm = m % 60;
+    return hh ? `${hh}h ${mm}m` : `${mm}m`;
+  }
+  function renderDailyBox() {
+    const p = Daily.pick(), def = COURSES[p.course].holes[p.idx], tries = Daily.tries(), done = Daily.done();
+    const box = $('dailyBox');
+    box.textContent = '';
+    const text = el('div', 'daily-text');
+    text.append(
+      el('div', 'eyebrow', `Daily Hole #${p.n} · ${done ? 'New one in ' + untilTomorrow() : p.twist.name}`),
+      el('div', 'daily-name', def.name),
+      el('div', 'daily-sub', done ? `${COURSES[p.course].name} · Best ${Daily.best()} · ${tries.map(v => emojiFor(v, def.par)).join(' ')}` : `${COURSES[p.course].name} · Par ${def.par} · ${tries.length ? `${3 - tries.length} of 3 tries left` : 'Three tries, best counts'}`),
+    );
+    const btn = el('button', 'btn btn-hi', done ? 'Share' : tries.length ? 'Keep going' : 'Play');
+    btn.type = 'button';
+    btn.id = 'dailyBtn';
+    btn.addEventListener('click', () => { Sound.unlock(); if (Daily.done()) { renderDaily(); openOverlay('daily'); } else startDaily(); });
+    box.append(text, btn);
+  }
+  function startDaily() {
+    const p = Daily.pick(), name = (String(setupPlayers[0] || $('onlineName').value || '').trim() || 'You').slice(0, 16);
+    startGame([{ name, dept: setupDepts[0] ?? -1 }], { kind: 'daily', key: 'daily:' + p.key, label: `Daily Hole #${p.n} · ${p.twist.name}` }, { courseId: p.course, daily: p });
+    toast(p.twist.name, `Daily Hole #${p.n}. ${p.twist.tip}`, 'hi');
+  }
+  // After each try: how it went, the tries so far, and once it's done, the share line and your streak.
+  function dailyTryDone() {
+    Daily.finish(G.players[0].scores[G.holeIdx], G.daily.key);
+    G.phase = 'between';
+    G.ball = null;
+    renderDaily();
+    openOverlay('daily');
+    renderCareer();
+  }
+  function dailyAgain() {
+    closeOverlay('daily');
+    if (!G.daily || Daily.done(G.daily.key)) { showSetup(); return; }
+    G.phase = 'idle';
+    loadHole(G.daily.idx);
+    startTurn(0, true);
+  }
+  function renderDaily() {
+    const p = G.screen === 'play' && G.daily ? G.daily : Daily.pick(), def = COURSES[p.course].holes[p.idx];
+    const tries = Daily.tries(p.key), best = Daily.best(p.key), done = Daily.done(p.key), streak = Daily.streak(p.key);
+    $('dailyEyebrow').textContent = `Daily Hole #${p.n} · ${p.twist.name}`;
+    $('dailyTitle').textContent = def.name;
+    $('dailySub').textContent = `${COURSES[p.course].name} · Par ${def.par}. ${p.twist.tip}`;
+    const ol = $('dailyTries');
+    ol.textContent = '';
+    for (let i = 0; i < 3; i++) {
+      const v = tries[i], li = el('li', 'sum-row' + (v != null && v === best && tries.indexOf(best) === i ? ' best' : ''));
+      li.append(el('span', 'sum-mark', li.classList.contains('best') ? '★' : ''), el('span', 'sum-name', `Try ${i + 1}`), el('span', 'sum-term', v == null ? (done ? 'Not needed' : '') : termFor(v, def.par)), el('span', 'sum-score', v == null ? '·' : String(v)));
+      ol.append(li);
+    }
+    $('dailyStreak').textContent = done
+      ? `${streak > 1 ? `🔥 ${streak}-day streak. ` : ''}Daily Hole #${p.n + 1} opens in ${untilTomorrow()}. Weekends never break your streak.`
+      : `${3 - tries.length} ${3 - tries.length === 1 ? 'try' : 'tries'} left. Your best one counts.`;
+    $('dailyShareBox').hidden = !done;
+    $('dailyCopy').hidden = !done;
+    $('dailyGo').hidden = done;
+    $('dailyGo').textContent = `Try again (${3 - tries.length} left)`;
+    $('dailyDone').textContent = done ? 'Done' : 'Stop for now';
+    if (done) $('dailyShare').value = Daily.shareText(p.key);
+  }
+  // The locker: what your stars have unlocked, and what you're wearing.
+  function renderLocker() {
+    const n = Career.total(), max = Career.max(), nx = Career.next();
+    $('lockerEyebrow').textContent = `${Career.title(n)} · ★ ${n} of ${max}`;
+    const prev = [...GEAR].reverse().find(g => g.stars <= n), from = prev ? prev.stars : 0;
+    $('lockerFill').style.width = `${nx ? Math.round(((n - from) / Math.max(1, nx.stars - from)) * 100) : 100}%`;
+    $('lockerSub').textContent = nx ? `${nx.stars - n} more ${nx.stars - n === 1 ? 'star' : 'stars'} to unlock ${nx.name}.` : 'You’ve unlocked everything. The corner office is yours.';
+    const ladder = $('lockerLadder');
+    ladder.textContent = '';
+    TITLES.forEach(([k, t], i) => {
+      if (i) ladder.append(document.createTextNode(' → '));
+      ladder.append(el(t === Career.title(n) ? 'b' : 'span', '', `${t}${k ? ` (★ ${k})` : ''}`));
+    });
+    for (const [kind, id] of [['ball', 'gearBalls'], ['trail', 'gearTrails'], ['building', 'gearBuildings']]) {
+      const box = $(id);
+      box.textContent = '';
+      for (const it of GEAR.filter(g => g.kind === kind)) {
+        const got = n >= it.stars, on = kind === 'ball' || kind === 'trail' ? Career.wearing(kind) === it.id : got;
+        const b = el('button', 'gear-item');
+        b.type = 'button';
+        b.disabled = !got;
+        b.setAttribute('aria-pressed', String(on));
+        const cv = document.createElement('canvas'), px = 112;
+        cv.width = px; cv.height = px;
+        drawGearPreview(cv.getContext('2d'), it, px);
+        b.append(cv, el('b', '', it.name), el('small', '', !got ? `★ ${it.stars}` : kind === 'building' ? 'On the setup card' : on ? 'Wearing it' : 'Tap to wear'));
+        if (got && kind !== 'building') b.addEventListener('click', () => { Career.data[kind] = it.id; Career.save(); renderLocker(); });
+        box.append(b);
+      }
+    }
+  }
+  function drawGearPreview(g, it, px) {
+    const s = px / 56;
+    g.setTransform(s, 0, 0, s, 0, 0);
+    if (it.kind === 'ball') drawSkin(g, 28, 28, 18, it.id, 0.6, -0.8);
+    else if (it.kind === 'trail') {
+      const pts = [];
+      for (let i = 0; i < 22; i++) { const u = i / 21; pts.push([7 + u * 38, 44 - Math.sin(u * 2.6) * 26]); }
+      drawTrail(g, { trail: pts, color: '#ffffff', x: 0 }, it.id);
+      const [lx, ly] = pts[pts.length - 1];
+      drawSkin(g, lx, ly, BALL_R, 'classic');
+    } else {
+      g.fillStyle = '#151b25'; g.beginPath(); rr(g, 8, 6, 40, 44, 6); g.fill();
+      g.fillStyle = '#2b3446'; for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) g.fillRect(13 + c * 11, 11 + r * 8, 8, 5);
+      g.fillStyle = '#ffd447'; g.font = '800 22px ' + DISPLAY_FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('★', 28, 30);
+    }
+  }
+  // A picker between buildings, used on the setup card and in the clubhouse.
+  // The building picked on the setup card, if it can be played: the penthouse needs its 100 stars.
+  function pickedBuilding() {
+    const b = store.get('building', 'office');
+    return COURSES[b] && COURSES[b].holes.length && (b !== 'penthouse' || Career.has('penthouse')) ? b : 'office';
+  }
   function renderCoursePicker(where, current) {
     const box = $(where === 'club' ? 'bldClub' : 'bldLocal');
-    const ids = Object.keys(COURSES).filter(id => COURSES[id].holes.length);
-    if (box.dataset.ids !== ids.join()) {
-      box.dataset.ids = ids.join();
+    const ids = Object.keys(COURSES).filter(id => COURSES[id].holes.length && (id !== 'penthouse' || Career.has('penthouse') || current === 'penthouse'));
+    const sig = ids.join() + '|' + Career.total();
+    if (box.dataset.ids !== sig) {
+      box.dataset.ids = sig;
       box.textContent = '';
       for (const id of ids) {
         const c = COURSES[id];
@@ -7709,7 +8969,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
           else { store.set('building', id); if (G.screen === 'setup') showBackdrop(id); }
         });
         const span = el('span');
-        span.append(el('b', '', c.name), el('small', '', c.shift));
+        span.append(el('b', '', c.name), el('small', '', c.shift + (STAR_COURSES.includes(id) ? ` · ★ ${Career.courseStars(id)}/${c.holes.length * 3}` : '')));
         lab.append(inp, span);
         box.append(lab);
       }
@@ -7744,8 +9004,9 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     $('playerCount').textContent = `${setupPlayers.length} of ${MAX_PLAYERS}`;
     $('addPlayer').disabled = setupPlayers.length >= MAX_PLAYERS;
     $('todayLabel').textContent = todayLabel();
-    renderCoursePicker('local', COURSES[store.get('building', 'office')] && COURSES[store.get('building', 'office')].holes.length ? store.get('building', 'office') : 'office');
+    renderCoursePicker('local', pickedBuilding());
     $('rageToggle').checked = !!store.get('rage', false);
+    renderCareer();
     if (focusIdx != null) { const f = $('player-' + focusIdx); if (f) { f.focus(); f.select(); } }
   }
   function syncCourseChoice() {
@@ -7758,7 +9019,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     const names = setupPlayers.map((n, i) => (String(n).trim() || `Player ${i + 1}`).slice(0, 16));
     setupPlayers = names.slice();
     store.set('players', names);
-    const b = store.get('building', 'office'), rage = $('rageToggle').checked, courseId = COURSES[b] && COURSES[b].holes.length ? b : 'office';
+    const rage = $('rageToggle').checked, courseId = pickedBuilding();
     store.set('rage', rage);
     const tail = `${courseId === 'office' ? '' : ' \u00B7 ' + COURSES[courseId].name}${rage ? ' \u00B7 Rage mode' : ''}`;
     let course;
@@ -7796,6 +9057,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       const nx = HOLES[idx + 1];
       const first = G.players.length > 1 ? ` ${rows[0].name} tees off first.` : '';
       $('sumNext').textContent = `Up next: ${holeName(idx + 1)}, par ${nx.par}.${first}`;
+    }
+    const ss = $('sumStars'), you = G.players[0], counts = STAR_COURSES.includes(COURSE.id) && you.scores[idx] != null;
+    ss.hidden = !counts;
+    if (counts) {
+      const st = Career.stars(COURSE.id, idx), fresh = G.lastStars && G.lastStars.newBest && G.lastStars.was != null && st > 0;
+      ss.textContent = '';
+      ss.append(el('span', 'st', starText(st)), document.createTextNode(st ? `${G.players.length > 1 ? you.name + '’s' : 'Your'} best here: ${Career.best(COURSE.id, idx)}${fresh ? '. New best!' : ''}` : `No stars here yet. Par gets you one.`));
+      const un = G.lastStars ? G.lastStars.unlocked : [];
+      if (un.length) ss.append(el('b', 'unl', `Unlocked: ${un.map(g => g.name).join(', ')}.${un.some(g => g.kind === 'building') ? ' Your badge now opens the private elevator.' : ' It’s in the Locker.'}`));
     }
     const memo = $('sumMemo');
     memo.textContent = '';
@@ -7874,7 +9144,15 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
     lines.push(`Par ${PAR_TOTAL}. ⛳ ace 🟩 under par ⬜ par 🟨 bogey 🟥 worse`);
     return lines.join('\n');
   }
+  function renderResultStars() {
+    const rs = $('resStars'), counts = STAR_COURSES.includes(COURSE.id);
+    rs.hidden = !counts;
+    if (!counts) return;
+    rs.textContent = '';
+    rs.append(el('span', 'st', '★'), document.createTextNode(`${Career.courseStars(COURSE.id)} of ${HOLES.length * 3} stars here${G.starGain ? `, ${G.starGain} new this round` : ''}. ${Career.title()}, with ${Career.total()} stars in all.`));
+  }
   function renderResults() {
+    renderResultStars();
     if (ONLINE.on) { renderOnlineResults(); return; }
     $('againBtn').textContent = 'Play again';
     $('newBtn').textContent = 'New game';
@@ -7958,9 +9236,10 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
       if (p.stats.smash) add('Things broken or spilled', String(p.stats.smash));
     }
   }
-  function copyResults() {
-    const ta = $('shareText'), btn = $('copyBtn');
-    const done = ok => { btn.textContent = ok ? 'Copied' : 'Press Ctrl+C to copy'; setTimeout(() => { btn.textContent = 'Copy results'; }, 2200); };
+  function copyResults() { copyShare('shareText', 'copyBtn', 'Copy results'); }
+  function copyShare(taId, btnId, label) {
+    const ta = $(taId), btn = $(btnId);
+    const done = ok => { btn.textContent = ok ? 'Copied' : 'Press Ctrl+C to copy'; setTimeout(() => { btn.textContent = label; }, 2200); };
     const fallback = () => {
       ta.focus(); ta.select();
       let ok = false;
@@ -8778,6 +10057,11 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   $('quitNo').addEventListener('click', () => { $('quitConfirm').hidden = true; });
   $('quitYes').addEventListener('click', () => (ONLINE.on ? leaveRoom() : showSetup()));
   $('copyBtn').addEventListener('click', copyResults);
+  $('lockerBtn').addEventListener('click', () => { renderLocker(); openOverlay('locker'); });
+  $('lockerClose').addEventListener('click', () => closeOverlay('locker'));
+  $('dailyGo').addEventListener('click', dailyAgain);
+  $('dailyCopy').addEventListener('click', () => copyShare('dailyShare', 'dailyCopy', 'Copy'));
+  $('dailyDone').addEventListener('click', () => { closeOverlay('daily'); if (G.screen === 'play') showSetup(); else renderCareer(); });
   $('againBtn').addEventListener('click', () => (ONLINE.on ? backToClubhouse() : startGame(G.players.map(p => ({ name: p.name, dept: p.dept })), G.course, { rage: G.rage, courseId: COURSE.id })));
   $('resCardBtn').addEventListener('click', openScorecard);
   $('newBtn').addEventListener('click', () => (ONLINE.on ? leaveRoom() : showSetup()));
@@ -8812,7 +10096,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   window.addEventListener('pagehide', () => { if (ONLINE.on) Net.send({ k: 'bye' }); });
   if (urlParams.has('debug')) {
     window.n2fDebug = {
-      G, ONLINE, Net, Party, Campus, Workshop, view,
+      G, ONLINE, Net, Party, Campus, Workshop, view, Career, Daily, Ghost, COURSES,
       // Jumps to a hole of the current game, for testing.
       jump(i) { loadHole(i); startTurn(0, true); },
       // The pieces the course checker needs to play shots without touching the game.
@@ -8902,7 +10186,7 @@ textarea#shareText { width: 100%; margin: 8px 0 12px; resize: none; border: 1.5p
   // Keeping a round in progress across page updates
   // ---------------------------------------------------------------------------
   function snapshot() {
-    if (ONLINE.on || (G.screen !== 'play' && G.screen !== 'results')) return { v: 1, screen: 'setup' };
+    if (ONLINE.on || G.daily || (G.screen !== 'play' && G.screen !== 'results')) return { v: 1, screen: 'setup' };
     const b = G.ball;
     return {
       v: 1, screen: G.screen, players: G.players, course: G.course, holeIdx: G.holeIdx, order: G.order, turn: G.turn, strokes: G.strokes,
