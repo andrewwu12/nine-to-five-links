@@ -195,17 +195,17 @@ All five buildings sit on one campus map, with a pond, a coffee kiosk, two stree
 - In an online room, the map shows everyone's ball on the hole they're playing.
 - During a round, the camera flies across the campus from each hole to the next. Tap to skip it.
 
-## Walk around in 3D
+## Play in 3D
 
-Press **Walk around in 3D** on the setup card to walk the campus in first person, or tap a hole on the campus map and press **Walk there in 3D**.
+Press **Play in 3D** on the setup card to play on the campus in first person. You start at the first hole of the building you picked. Or tap a hole on the campus map and press **Go there in 3D**.
 
-- Go in and out of all five buildings, past the pond, the coffee kiosk, the taco truck and the loading yard. Coworkers go about their day, cars drive down the streets, and the sun and the lights follow your clock, like on the map.
-- Every hole stands in its building in 3D, raised from the same layout and art as the classic game: rails, blocks, bumpers, moving parts and props, with a sign hanging over each one.
-- Step onto a tee and press **E**, or tap **Play this hole**, to play it on its own with the same physics, rules and stars as practice. A hot streak carries from hole to hole, and once you hole out you're back on your feet.
+- Stand on any hole and tap **Play this hole** (or press E) to play it on its own, like practice, or **Play all 9 holes** (R) for a full round on today's pins, for everyone on the setup card, with the scorecard between holes and the results at the end. Scores and stars count just as they do in the classic game.
+- Every hole is built in 3D from the same layout and art as the classic game: rails, blocks, bumpers, moving parts and props, with a sign hanging over each one.
+- **Putting:** drag sideways to aim, pull down for power and let go, or aim with the arrow keys and putt with Space. **From above** (or V) looks straight down on the hole, and **Walk away** leaves it.
+- Between holes you can walk anywhere: in and out of all five buildings, past the pond, the coffee kiosk, the taco truck and the loading yard. Coworkers say what's on their minds as you pass, cars drive down the streets, and the sun and the lights follow your clock.
 - **On a computer:** click and drag to look around (the mouse locks to the view where the browser allows it, and Esc frees it), WASD or the arrow keys to walk, Shift to run.
 - **On a phone:** your left thumb walks and your right thumb looks.
-- **Putting:** drag sideways to aim, pull down for power and let go, or aim with the arrow keys and putt with Space. **From above** (or V) looks straight down on the hole, and **Walk away** leaves it.
-- The 3D engine, [three.js](https://threejs.org), loads from a public CDN when you start walking. If your network blocks it, or your browser can't show 3D, the classic game works as before. Walking around isn't available in online rooms yet.
+- The 3D engine, [three.js](https://threejs.org) (MIT licence), is built into the page, so nothing extra downloads. It needs a browser that can show WebGL, and it isn't in online rooms yet.
 
 ## The Workshop: build your own holes
 
@@ -232,4 +232,4 @@ Each day, each group code, and each online room picks every hole's pin position,
 
 ## Hosting
 
-Everything is in `index.html`. GitHub Pages publishes the `gh-pages` branch, so after changing `main`, update the site with `git push origin main:gh-pages`. You can also open the file directly in a browser to play offline; online rooms still need the relays, and Walk around in 3D fetches its engine from a CDN.
+Everything is in `index.html`. GitHub Pages publishes the `gh-pages` branch, so after changing `main`, update the site with `git push origin main:gh-pages`. You can also open the file directly in a browser to play offline; online rooms still need the relays. The 3D engine for Play in 3D is in the file too.
