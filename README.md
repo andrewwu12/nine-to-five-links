@@ -195,6 +195,18 @@ All five buildings sit on one campus map, with a pond, a coffee kiosk, two stree
 - In an online room, the map shows everyone's ball on the hole they're playing.
 - During a round, the camera flies across the campus from each hole to the next. Tap to skip it.
 
+## Walk around in 3D
+
+Press **Walk around in 3D** on the setup card to walk the campus in first person, or tap a hole on the campus map and press **Walk there in 3D**.
+
+- Go in and out of all five buildings, past the pond, the coffee kiosk, the taco truck and the loading yard. Coworkers go about their day, cars drive down the streets, and the sun and the lights follow your clock, like on the map.
+- Every hole stands in its building in 3D, raised from the same layout and art as the classic game: rails, blocks, bumpers, moving parts and props, with a sign hanging over each one.
+- Step onto a tee and press **E**, or tap **Play this hole**, to play it on its own with the same physics, rules and stars as practice. A hot streak carries from hole to hole, and once you hole out you're back on your feet.
+- **On a computer:** click and drag to look around (the mouse locks to the view where the browser allows it, and Esc frees it), WASD or the arrow keys to walk, Shift to run.
+- **On a phone:** your left thumb walks and your right thumb looks.
+- **Putting:** drag sideways to aim, pull down for power and let go, or aim with the arrow keys and putt with Space. **From above** (or V) looks straight down on the hole, and **Walk away** leaves it.
+- The 3D engine, [three.js](https://threejs.org), loads from a public CDN when you start walking. If your network blocks it, or your browser can't show 3D, the classic game works as before. Walking around isn't available in online rooms yet.
+
 ## The Workshop: build your own holes
 
 Press **Build a course** on the setup card to design up to three holes of your own. They're saved in your browser. In an online room, press **Build holes together** in the clubhouse: everyone in the room edits the same holes at once, sees each other's cursors, and changes merge as they happen.
@@ -220,4 +232,4 @@ Each day, each group code, and each online room picks every hole's pin position,
 
 ## Hosting
 
-Everything is in `index.html`. GitHub Pages publishes the `gh-pages` branch, so after changing `main`, update the site with `git push origin main:gh-pages`. You can also open the file directly in a browser to play offline; online rooms still need the relays.
+Everything is in `index.html`. GitHub Pages publishes the `gh-pages` branch, so after changing `main`, update the site with `git push origin main:gh-pages`. You can also open the file directly in a browser to play offline; online rooms still need the relays, and Walk around in 3D fetches its engine from a CDN.

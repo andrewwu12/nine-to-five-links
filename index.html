@@ -401,6 +401,32 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 .map-card p { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
 .map-hint { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); margin: 0; padding: 6px 12px; border-radius: 999px; background: rgba(15, 20, 28, .6); color: var(--on-floor); font: 500 12px var(--body); white-space: nowrap; pointer-events: none; }
 .map-card:not([hidden]) ~ .map-hint { display: none; }
+#stage3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; cursor: grab; }
+.app.walking #stage { pointer-events: none; }
+.app.walking.locked #stage3d { cursor: none; }
+.walk-ui { position: absolute; inset: 0; pointer-events: none; z-index: 7; }
+.walk-ui > * { pointer-events: auto; }
+.walk-top { position: absolute; top: 12px; left: 16px; right: 16px; display: flex; align-items: center; gap: 10px; pointer-events: none; }
+.walk-top > * { pointer-events: auto; }
+.walk-where { padding: 8px 14px; border-radius: 12px; background: rgba(15, 20, 28, .62); color: var(--on-floor); font: 900 16px/1 var(--display); text-transform: uppercase; letter-spacing: .04em; pointer-events: none; }
+.walk-cross { position: absolute; left: 50%; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; pointer-events: none; }
+.walk-cross::before, .walk-cross::after { content: ""; position: absolute; background: rgba(255, 255, 255, .85); box-shadow: 0 0 0 1px rgba(0, 0, 0, .3); border-radius: 1px; }
+.walk-cross::before { left: 7px; top: 0; width: 2px; height: 16px; }
+.walk-cross::after { top: 7px; left: 0; width: 16px; height: 2px; }
+.walk-prompt { position: absolute; left: 50%; bottom: 56px; transform: translateX(-50%); width: min(calc(100% - 32px), 400px); background: var(--paper); color: var(--ink); border-radius: 16px; padding: 12px 16px 14px; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); }
+.walk-prompt h3 { margin: 4px 0 10px; font: 900 26px/1 var(--display); text-transform: uppercase; }
+.walk-prompt kbd { font: 600 11px var(--mono); padding: 2px 6px; border-radius: 5px; background: rgba(0, 0, 0, .12); }
+.walk-ui.touch kbd { display: none; }
+.walk-hint { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); margin: 0; padding: 6px 12px; border-radius: 14px; background: rgba(15, 20, 28, .62); color: var(--on-floor); font: 500 12px/1.35 var(--body); text-align: center; pointer-events: none; }
+.walk-prompt:not([hidden]) ~ .walk-hint { display: none; }
+.walk-power { position: absolute; left: 50%; transform: translateX(-50%); width: min(60%, 260px); height: 12px; border-radius: 999px; background: rgba(15, 20, 28, .6); box-shadow: 0 0 0 2px rgba(255, 255, 255, .25); overflow: hidden; pointer-events: none; }
+.walk-power i { display: block; height: 100%; width: 0; border-radius: inherit; }
+.walk-stick { position: absolute; width: 116px; height: 116px; margin: -58px 0 0 -58px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .5); background: rgba(15, 20, 28, .28); pointer-events: none; }
+.walk-stick i { position: absolute; left: 50%; top: 50%; width: 50px; height: 50px; margin: -25px 0 0 -25px; border-radius: 50%; background: rgba(255, 255, 255, .8); box-shadow: 0 4px 12px rgba(0, 0, 0, .3); }
+.walk-side { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.walk-note { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(calc(100% - 32px), 380px); background: var(--paper); color: var(--ink); border-radius: 16px; padding: 18px; text-align: center; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); }
+.walk-note p { margin: 0; font-size: 15px; }
+.walk-note .btn { margin-top: 14px; }
 
 /* Taunt menu */
 .taunt-pop { position: absolute; left: 16px; bottom: 64px; width: min(340px, calc(100% - 32px)); max-height: calc(100% - 150px); overflow-y: auto; display: grid; gap: 4px; padding: 8px; background: var(--paper); border-radius: 14px; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); z-index: 9; }
@@ -448,6 +474,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 </head>
 <body>
 <div class="app" id="app">
+  <canvas id="stage3d" aria-label="The campus in 3D" hidden></canvas>
   <canvas id="stage" tabindex="0" aria-label="Mini golf course"></canvas>
 
   <header class="hud hud-top" id="hudTop" hidden>
@@ -520,9 +547,30 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       <div class="row wrap">
         <button class="btn btn-hi" id="mapPractice" type="button">Practice this hole</button>
         <button class="btn btn-paper" id="mapPlay" type="button">Play</button>
+        <button class="btn btn-paper" id="mapWalk" type="button">Walk there in 3D</button>
       </div>
     </div>
     <p class="map-hint">Drag to look around. Scroll or pinch to zoom. Tap a hole.</p>
+  </div>
+  <div class="walk-ui" id="walkUi" hidden>
+    <div class="walk-top" id="walkTop">
+      <button class="btn btn-paper" id="walkBack" type="button">Back</button>
+      <div class="walk-where" id="walkWhere" role="status">The campus</div>
+    </div>
+    <div class="walk-cross" id="walkCross" aria-hidden="true"></div>
+    <div class="walk-stick" id="walkStick" hidden aria-hidden="true"><i></i></div>
+    <div class="walk-side" id="walkSide" hidden>
+      <button class="btn btn-paper" id="walkView" type="button" title="Switch views (V)">From above</button>
+      <button class="btn btn-paper" id="walkLeave" type="button">Walk away</button>
+    </div>
+    <div class="walk-power" id="walkPower" hidden aria-hidden="true"><i></i></div>
+    <div class="walk-prompt" id="walkPrompt" hidden>
+      <div class="eyebrow" id="walkPromptSub"></div>
+      <h3 id="walkPromptName"></h3>
+      <button class="btn btn-hi" id="walkPlay" type="button">Play this hole <kbd>E</kbd></button>
+    </div>
+    <p class="walk-hint" id="walkHint"></p>
+    <div class="walk-note" id="walkNote" hidden></div>
   </div>
   <div class="pings" id="pings" aria-live="polite"></div>
   <div class="taunt-pop" id="tauntPop" role="menu" aria-label="Taunts" hidden></div>
@@ -590,6 +638,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
           <p class="note">Everyone on the same course gets the same pin positions, so you can also each play on your own device and compare scores in the team chat. To play together live from different places, use Online room.</p>
           <div class="pass-actions">
             <button class="btn btn-hi btn-big" id="startBtn" type="button">Tee off</button>
+            <button class="btn btn-paper" id="walkBtn" type="button">Walk around in 3D</button>
             <button class="btn btn-paper" id="exploreBtn" type="button">Explore the campus</button>
             <button class="btn btn-paper" id="lockerBtn" type="button">Locker</button>
             <button class="btn btn-paper" id="buildBtn" type="button">Build a course</button>
@@ -794,6 +843,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         <dd>Hole out off a wall, a bumper, a forklift, a conveyor or a pinball bumper and the office calls the shot: bank shot, double bank, off the forklift, sushi express and more.</dd>
         <dt>Secrets</dt>
         <dd>Fifteen things to find around the buildings and the campus, each worth a bonus star. The Locker drops hints.</dd>
+        <dt>Walk around in 3D</dt>
+        <dd>Walk the campus in first person: in and out of every building, past the pond and the taco truck, and up to any hole. Step onto a tee and press E, or tap Play, to play it in 3D with the same rules and stars. Drag sideways to aim and pull down for power, or use the arrow keys and Space. View looks from above, and Walk away puts you back on your feet. On a computer, WASD walks and the mouse looks; on a phone, your left thumb walks and your right one looks.</dd>
         <dt>Practice</dt>
         <dd>Tap a hole on the campus map, or a star within reach in the Locker, to play it on its own. Press Retry, or R, to start again from the tee.</dd>
         <dt>Challenges</dt>
@@ -4857,6 +4908,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   }
   // Practice keeps your best score and sends you straight back to the tee.
   function practiceAgain() {
+    if (World.playing) { World.holeDone(); return; }
     const p = G.players[0], s = p.scores[G.holeIdx], st = Career.stars(COURSE.id, G.holeIdx);
     p.best = Math.min(p.best || 99, s);
     const un = G.lastStars ? G.lastStars.unlocked : [], g = un[un.length - 1];
@@ -4885,6 +4937,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     openOverlay('results');
   }
   function showSetup() {
+    if (World.on || !$('walkUi').hidden) World.stop(false);
     G.timers.length = 0;
     Party.clear();
     G.screen = 'setup';
@@ -4970,6 +5023,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr);
     staticCanvas.width = canvas.width; staticCanvas.height = canvas.height;
     layoutView();
+    World.resize();
   }
 
   // ---------------------------------------------------------------------------
@@ -7266,6 +7320,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   }
   function render() {
     const g = ctx;
+    if (World.on) { World.frame(); return; }
     if (G.screen === 'map') { Campus.render(g); return; }
     if (G.screen === 'build') { renderPlay(g); Workshop.drawOverlay(g); return; }
     if (Campus.flight && !Campus.flight.landed) { Campus.render(g, Campus.flight.cam); return; }
@@ -7396,6 +7451,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     if (G.screen === 'setup' && Math.floor(G.clock / 20) !== Math.floor((G.clock - dt) / 20)) renderDailyBox();
     updateFx(dt);
     Party.update(dt);
+    World.update(dt);
     if (G.screen === 'map' || Campus.flight) Campus.update(dt);
     Workshop.tick();
     if (G.screen === 'map' && Math.floor(G.clock) !== Math.floor(G.clock - dt)) Campus.syncClock();
@@ -7468,6 +7524,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     return c;
   }
   const campusPats = new WeakMap();
+  // The tiles behind each ground pattern, and how they're scaled, for the 3D campus to lay as textures.
+  const CAMPUS_TILES = {};
   // Repeating textures for the grounds, drawn at twice the world scale so they stay sharp up close.
   function campusPattern(g, kind) {
     let m = campusPats.get(g);
@@ -7574,6 +7632,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     const scale = kind === 'carpet' || kind === 'paving' || kind === 'garage' || kind === 'raised' || kind === 'arcade' || kind === 'marble' || kind === 'deck' ? 0.5 : 1;
     if (p.setTransform && typeof DOMMatrix === 'function') p.setTransform(new DOMMatrix().scaleSelf(scale, scale));
     m[kind] = p;
+    CAMPUS_TILES[kind] = { canvas: c, scale };
     return p;
   }
   function drawTree(g, x, y, r, seed) {
@@ -7637,6 +7696,24 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     return cloudSprite;
   }
 
+  // The sports field: a pitch inside a running track.
+  function drawFieldMarks(g) {
+    const [fx0, fy0, fx1, fy1] = CAMPUS.field, fcx = (fx0 + fx1) / 2, fcy = (fy0 + fy1) / 2, orx = (fx1 - fx0) / 2 - 60, ory = (fy1 - fy0) / 2 - 60;
+    g.strokeStyle = '#c4553b'; g.lineWidth = 180; g.beginPath(); g.ellipse(fcx, fcy, orx - 90, ory - 90, 0, 0, TAU); g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = 4;
+    for (const k of [-90, -45, 0, 45, 90]) { g.beginPath(); g.ellipse(fcx, fcy, orx - 90 + k, ory - 90 + k, 0, 0, TAU); g.stroke(); }
+    const pw = 2200, ph = 1340, px0 = fcx - pw / 2, py0 = fcy - ph / 2;
+    for (let i = 0; i < 10; i++) { g.fillStyle = i % 2 ? 'rgba(255,255,255,0.05)' : 'rgba(0,40,0,0.06)'; g.fillRect(px0 + (i * pw) / 10, py0, pw / 10, ph); }
+    g.strokeStyle = 'rgba(255,255,255,0.8)'; g.lineWidth = 8;
+    g.strokeRect(px0, py0, pw, ph);
+    g.beginPath(); g.moveTo(fcx, py0); g.lineTo(fcx, py0 + ph); g.stroke();
+    circle(g, fcx, fcy, 180); g.stroke();
+    for (const s of [-1, 1]) {
+      const gx = s < 0 ? px0 : px0 + pw;
+      g.strokeRect(s < 0 ? gx : gx - 330, fcy - 400, 330, 800); g.strokeRect(s < 0 ? gx : gx - 110, fcy - 180, 110, 360);
+      g.fillStyle = '#f4f1ea'; g.fillRect(s < 0 ? gx - 40 : gx, fcy - 70, 40, 140);
+    }
+  }
   const Campus = {
     ready: false, holes: [], nodes: [], npcs: [], cars: [], parked: [], trees: [], lamps: [], ducks: [], clouds: [], birds: [],
     cam: { x: 4700, y: 2100, z: 0.12, rot: 0 }, goal: null, drag: null, pointers: new Map(), idle: 0, sel: null, mins: 0,
@@ -7834,22 +7911,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       g.fillStyle = '#f4f1ea'; g.fillRect(qx1 - 570, qy0 + 240, 340, 140);
       g.fillStyle = '#ff8f2e'; for (let i = 0; i < 8; i++) g.fillRect(qx1 - 570 + i * 42, qy0 + 380, 26, 30);
       g.fillStyle = '#2b3038'; g.font = '900 44px ' + DISPLAY_FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('TACOS', qx1 - 400, qy0 + 310);
-      // The sports field: a pitch inside a running track.
-      const [fx0, fy0, fx1, fy1] = CAMPUS.field, fcx = (fx0 + fx1) / 2, fcy = (fy0 + fy1) / 2, orx = (fx1 - fx0) / 2 - 60, ory = (fy1 - fy0) / 2 - 60;
-      g.strokeStyle = '#c4553b'; g.lineWidth = 180; g.beginPath(); g.ellipse(fcx, fcy, orx - 90, ory - 90, 0, 0, TAU); g.stroke();
-      g.strokeStyle = 'rgba(255,255,255,0.5)'; g.lineWidth = 4;
-      for (const k of [-90, -45, 0, 45, 90]) { g.beginPath(); g.ellipse(fcx, fcy, orx - 90 + k, ory - 90 + k, 0, 0, TAU); g.stroke(); }
-      const pw = 2200, ph = 1340, px0 = fcx - pw / 2, py0 = fcy - ph / 2;
-      for (let i = 0; i < 10; i++) { g.fillStyle = i % 2 ? 'rgba(255,255,255,0.05)' : 'rgba(0,40,0,0.06)'; g.fillRect(px0 + (i * pw) / 10, py0, pw / 10, ph); }
-      g.strokeStyle = 'rgba(255,255,255,0.8)'; g.lineWidth = 8;
-      g.strokeRect(px0, py0, pw, ph);
-      g.beginPath(); g.moveTo(fcx, py0); g.lineTo(fcx, py0 + ph); g.stroke();
-      circle(g, fcx, fcy, 180); g.stroke();
-      for (const s of [-1, 1]) {
-        const gx = s < 0 ? px0 : px0 + pw;
-        g.strokeRect(s < 0 ? gx : gx - 330, fcy - 400, 330, 800); g.strokeRect(s < 0 ? gx : gx - 110, fcy - 180, 110, 360);
-        g.fillStyle = '#f4f1ea'; g.fillRect(s < 0 ? gx - 40 : gx, fcy - 70, 40, 140);
-      }
+      drawFieldMarks(g);
       // The pond, with a stone rim.
       const [px, py, rx, ry] = CAMPUS.pond;
       g.fillStyle = '#9d9a92'; g.beginPath(); g.ellipse(px, py, rx + 16, ry + 16, 0, 0, TAU); g.fill();
@@ -7995,6 +8057,21 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         const h = this.holeFor(wh);
         for (let i = 0; i < sub; i++) { updateMovers(h, sdt, null); stepProps(h, sdt, null, { hits: [] }); }
       }
+      this.tickLife(dt);
+      // Now and then someone within view says something.
+      if (this.cam.z > 0.22 && G.clock - this.lastSay > 2.6) {
+        const near = this.npcs.filter(p => p.x > vis.x0 && p.x < vis.x1 && p.y > vis.y0 && p.y < vis.y1 && p.sayT <= 0);
+        if (near.length) {
+          const p = pick(near), zone = this.nodes[p.node].zone;
+          p.say = pick(CHATTER[zone] || CHATTER.office); p.sayT = 4.2;
+          this.lastSay = G.clock;
+        }
+      }
+      if (this.flight) this.updateFlight(dt);
+      else if (G.screen === 'map') this.updateCamera(dt);
+    },
+    // People, traffic, ducks, clouds and birds go about their day, on the map and in 3D.
+    tickLife(dt) {
       for (const p of this.npcs) {
         if (p.sayT > 0) p.sayT -= dt;
         if (p.pause > 0) { p.pause -= dt; continue; }
@@ -8010,15 +8087,6 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         p.x += (dx / d) * step; p.y += (dy / d) * step;
         p.dir = Math.atan2(dy, dx); p.phase += dt * p.speed * 0.16;
       }
-      // Now and then someone within view says something.
-      if (this.cam.z > 0.22 && G.clock - this.lastSay > 2.6) {
-        const near = this.npcs.filter(p => p.x > vis.x0 && p.x < vis.x1 && p.y > vis.y0 && p.y < vis.y1 && p.sayT <= 0);
-        if (near.length) {
-          const p = pick(near), zone = this.nodes[p.node].zone;
-          p.say = pick(CHATTER[zone] || CHATTER.office); p.sayT = 4.2;
-          this.lastSay = G.clock;
-        }
-      }
       for (const c of this.cars) { c.y += c.dir * c.speed * dt; if (c.y > CAMPUS.h + 300) c.y = -300; if (c.y < -300) c.y = CAMPUS.h + 300; }
       for (const d of this.ducks) { d.a += d.speed * dt; d.bob += dt; }
       for (const c of this.clouds) { c.x += c.speed * dt; if (c.x > CAMPUS.w + 1600) c.x = -1600; }
@@ -8029,8 +8097,6 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       }
       for (const b of this.birds) { b.x += b.dir * 260 * dt; b.f += dt * 9; }
       if (this.birds.length && this.birds.every(b => b.x < -600 || b.x > CAMPUS.w + 600)) this.birds = [];
-      if (this.flight) this.updateFlight(dt);
-      else if (G.screen === 'map') this.updateCamera(dt);
     },
     updateCamera(dt) {
       this.idle += dt;
@@ -8249,6 +8315,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       $('mapPlay').textContent = `Play ${COURSES[wh.course].name}`;
       $('mapPlay').hidden = this.prevScreen === 'play';
       $('mapPractice').hidden = this.prevScreen === 'play';
+      $('mapWalk').hidden = this.prevScreen === 'play';
       $('mapCard').hidden = false;
       this.goal = { from: { ...this.cam }, to: { x: wh.slot.cx, y: wh.slot.cy + SLOT_H * 0.08, z: Math.min(cw / (SLOT_W * 1.15), ch / (SLOT_H * 1.6)), rot: 0 }, t: 0, dur: 0.9 };
       this.idle = -30;
@@ -8965,6 +9032,1195 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   };
 
   // ---------------------------------------------------------------------------
+  // Walk around: the campus in 3D, in first person. Every hole is the same hole as in the classic game, raised
+  // into 3D and played with the same physics; its floor is the classic drawing, painted live while you play.
+  // The 3D engine (three.js) loads only when you start walking.
+  // ---------------------------------------------------------------------------
+  const THREE_URLS = [
+    'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js',
+    'https://unpkg.com/three@0.160.0/build/three.module.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js',
+  ];
+  let THREE = null;
+  // World units are the game's units (30 to the foot): eye height, walking and running speed, how close you can
+  // get to things, and the buildings' walls and front doors.
+  const EYE = 160, WALK_SPEED = 320, RUN_SPEED = 640, BODY_R = 24, WALL_H = 420, BLD_T = 26, DOOR_W = 340, TOP_FOV = 34;
+  // How tall blocks and bumpers stand, and the colour of their sides. Tops are the classic drawing.
+  const BLOCK_H = {
+    cabinet: 110, couch: 70, printer: 100, paper: 26, espresso: 110, pallet: 95, machine: 150, vending: 190, fence: 110, rack: 230, car: 130,
+    ticket: 110, core: WALL_H, island: 30, washwall: 200, server: 210, crac: 190, chiller: 160, ups: 170, cage: 230, library: 200, pipe: 60,
+    patch: 130, bar: 105, arcade: 175, sling: 40, ring: 34, speaker: 160, djbooth: 110, trailer: 270, reception: 105, ceodesk: 76, books: 210,
+    boardtable: 76, screen: 160, aquarium: 210, sushibar: 95, dumbbells: 90, heli: 150, vaultwall: 230,
+  };
+  const BLOCK_SIDE = {
+    cabinet: '#7d8a9b', couch: '#2b4a8c', printer: '#c9d0d8', paper: '#e4e4dc', espresso: '#2d3036', pallet: '#7a522c', machine: '#3d4957',
+    vending: '#9c1d27', fence: '#8c96a3', rack: '#3a414b', car: '#8c96a3', ticket: '#d9a520', core: '#8d9299', island: '#9aa3ae', washwall: '#5d7c99',
+    server: '#1b1f26', crac: '#8c96a3', chiller: '#7d8793', ups: '#2b3038', cage: '#6f7a88', library: '#3a414b', pipe: '#7d8793', patch: '#2b3038',
+    bar: '#5a3818', arcade: '#2a2840', sling: '#8a5a33', ring: '#8a5a33', speaker: '#121218', djbooth: '#16151f', trailer: '#c9cfd8',
+    reception: '#4a2f1b', ceodesk: '#4a1d10', books: '#3a2414', boardtable: '#5a321a', screen: '#0d1117', aquarium: '#2a6f8f', sushibar: '#c9ab7a',
+    dumbbells: '#2b3038', heli: '#1f2733', vaultwall: '#6f7884',
+  };
+  const BUMPER_H = { planter: 46, table: 75, stool: 62, beanbag: 34, pillar: WALL_H, bollard: 70, charger: 120, extinguisher: 60, hightop: 105, palm: 44, globe: 95, trophy: 70, hub: 12, pop: 30 };
+  const BUMPER_SIDE = { planter: '#d9d2c5', table: '#86592f', stool: '#56606e', beanbag: '#c96a3a', pillar: '#e2bd3a', bollard: '#e2bd3a', charger: '#d6dbe1', extinguisher: '#c9302a', hightop: '#1d1b2c', palm: '#1f2a33', globe: '#2d5d8a', trophy: '#2b2f36', hub: '#141a26', pop: '#1b1b24' };
+  // Props: [shape, colour, height]. Pool balls take their colour from their number.
+  const PROP_LOOK = {
+    cup: ['cyl', '#f7f7f2', 14], can: ['cyl', '#c5cad1', 16], paper: ['ball', '#f4f4ee', 0], cone: ['cone', '#ff7a1a', 26], sign: ['box', '#ffd21f', 30],
+    box: ['box', '#c9965b', 24], flat: ['slab', '#c29056', 3], jug: ['cyl', '#78beff', 34], bin: ['cyl', '#8c96a3', 30], chair: ['chair', '#3f5aa8', 0],
+    barrel: ['cyl', '#2f6fb3', 42], crate: ['box', '#b98a52', 28], plank: ['slab', '#b98a52', 6], pool: ['ball', null, 0], pin: ['pin', '#f7f5ee', 34],
+    tape: ['box', '#23272e', 10], glass: ['cyl', '#dfeef6', 18], goldbar: ['bar', '#e8c45a', 9], medball: ['ball', '#2b2f36', 0],
+  };
+  const POOL_COLS = ['#f2c12e', '#2f5fd0', '#e0342b', '#6c3fb0', '#f07f1e', '#2a8a4a', '#8a2a2a', '#16171a'];
+  // Which building a spot is in (or near, with a pad), as the map lays them out.
+  const bldOf = (x, y, pad = 0) => Object.keys(CAMPUS.bld).find(id => { const b = CAMPUS.bld[id]; return x > b.x - pad && x < b.x + BLD_W + pad && y > b.y - pad && y < b.y + BLD_H + pad; }) || null;
+  // Named places outside, for the label at the top of the screen.
+  const WALK_AREAS = [
+    ['The parking lot', CAMPUS.lot], ['The yard', CAMPUS.yard], ['The plaza', CAMPUS.plaza], ['The patio', CAMPUS.patio], ['The sports field', CAMPUS.field],
+    ['The pond', [CAMPUS.pond[0] - CAMPUS.pond[2] - 160, CAMPUS.pond[1] - CAMPUS.pond[3] - 160, CAMPUS.pond[0] + CAMPUS.pond[2] + 160, CAMPUS.pond[1] + CAMPUS.pond[3] + 160]],
+    ['The street', [CAMPUS.street[0] - 140, -1e5, CAMPUS.street[1] + 140, 1e5]], ['The street', [CAMPUS.street2[0] - 140, -1e5, CAMPUS.street2[1] + 140, 1e5]],
+  ];
+  const World = {
+    on: false, ready: false, loading: null, playing: null, prompt: null, touch: false,
+    me: { x: 0, y: 0, a: -Math.PI / 2, pitch: -0.05, bob: 0 },
+    keys: new Set(), stick: null, ptrs: new Map(), putt: null, holes3d: new Map(), pending: [], polys: [],
+    cam: { x: 0, y: EYE, z: 0, tx: 0, ty: 0, tz: 0, ux: 0, uy: 1, uz: 0 }, camMode: 'walk', camBlend: 1, chaseA: null, topView: false,
+    // three.js, from whichever CDN answers first.
+    load() {
+      if (THREE) return Promise.resolve(THREE);
+      if (this.loading) return this.loading;
+      const tryAt = i => (i >= THREE_URLS.length ? Promise.reject(new Error('no 3D engine')) : import(THREE_URLS[i]).catch(() => tryAt(i + 1)));
+      this.loading = tryAt(0).then(m => { THREE = m; return m; }, e => { this.loading = null; throw e; });
+      return this.loading;
+    },
+    canWebGL() {
+      try { const c = document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl'))); } catch (e) { return false; }
+    },
+    // From the setup card (a building to start outside) or the campus map (a hole to start beside).
+    async start(at) {
+      Sound.unlock();
+      if (ONLINE.on || G.screen === 'walk') return;
+      closeAllOverlays();
+      $('mapUi').hidden = true;
+      G.timers.length = 0;
+      Party.clear();
+      G.screen = 'walk'; G.phase = 'idle'; G.practice = null;
+      G.hole = null; G.ball = null;
+      showHud(false);
+      this.touch = matchMedia('(pointer: coarse)').matches;
+      $('walkUi').hidden = false;
+      $('walkUi').classList.toggle('touch', this.touch);
+      this.setNote('Loading the 3D campus…');
+      if (!this.canWebGL()) { this.setNote('This browser can’t show 3D. The classic game works as usual.', true); return; }
+      try { await this.load(); } catch (e) { this.setNote('The 3D engine couldn’t load. Your network may be blocking it. The classic game works as usual.', true); return; }
+      if (G.screen !== 'walk') return;
+      try { if (!this.ready) this.init(); } catch (e) { this.error = e; this.setNote('Something went wrong building the 3D campus. The classic game works as usual.', true); return; }
+      this.on = true;
+      app.classList.add('walking');
+      $('stage3d').hidden = false;
+      this.setNote('');
+      if (!Campus.mins) { const d = new Date(); Campus.mins = d.getHours() * 60 + d.getMinutes(); }
+      this.spawn(at || pickedBuilding());
+      this.resize();
+      this.syncUi();
+    },
+    setNote(text, isError) {
+      const n = $('walkNote');
+      n.hidden = !text;
+      n.textContent = '';
+      if (!text) return;
+      n.append(el('p', '', text));
+      if (isError) { const b = el('button', 'btn btn-hi', 'Back'); b.type = 'button'; b.addEventListener('click', () => this.stop()); n.append(b); }
+    },
+    // Back to the course pass, or (from showSetup) just tidy up.
+    stop(toSetup = true) {
+      this.playing = null; this.putt = null; this.prompt = null; this.on = false;
+      this.keys.clear(); this.stick = null; this.ptrs.clear();
+      if (document.pointerLockElement) document.exitPointerLock();
+      app.classList.remove('walking', 'locked');
+      $('stage3d').hidden = true;
+      $('walkUi').hidden = true;
+      $('walkSide').hidden = true;
+      $('walkStick').hidden = true;
+      canvas.style.visibility = ''; this.partyShown = null;
+      if (toSetup) showSetup();
+    },
+    // Outside a building's front door looking at it, or just behind a hole's tee.
+    spawn(at) {
+      const me = this.me;
+      if (at && at.h) this.standBy(at, at.h);
+      else {
+        const b = CAMPUS.bld[at] || CAMPUS.bld.office, top = b.door === 'top';
+        Object.assign(me, { x: b.x + BLD_W / 2 + 40, y: top ? b.y - 380 : b.y + BLD_H + 380, a: top ? Math.PI / 2 : -Math.PI / 2, pitch: 0.1 });
+      }
+      this.camMode = 'walk'; this.camBlend = 1;
+      this.placeCamera(0);
+    },
+    // A clear spot just behind a hole's tee, facing the cup, close enough to tee off.
+    standBy(wh, h) {
+      const tx = h.tee[0] + wh.ox, ty = h.tee[1] + wh.oy, a = Math.atan2(h.cup[1] - h.tee[1], h.cup[0] - h.tee[0]), solids = this.holeSolids(wh, h);
+      let x = tx, y = ty;
+      for (const d of [90, 60, 30]) {
+        const px = tx - Math.cos(a) * d, py = ty - Math.sin(a) * d;
+        if (bldOf(px, py, -40) === wh.course && this.clear(px, py, solids)) { x = px; y = py; break; }
+      }
+      Object.assign(this.me, { x, y, a, pitch: -0.32 });
+    },
+    clear(x, y, extra = []) {
+      for (const s of this.polys.concat(extra)) {
+        if (x < s.x0 - BODY_R || x > s.x1 + BODY_R || y < s.y0 - BODY_R || y > s.y1 + BODY_R) continue;
+        if (pointInPoly(x, y, s.pts)) return false;
+        for (let i = 0; i < s.pts.length; i++) { const p = s.pts[i], q = s.pts[(i + 1) % s.pts.length]; if (segDist(x, y, p[0], p[1], q[0], q[1]) < BODY_R + 2) return false; }
+      }
+      return true;
+    },
+
+    // ---- Building the world ----
+    init() {
+      const T = THREE;
+      Campus.build();
+      const r = this.renderer = new T.WebGLRenderer({ canvas: $('stage3d'), antialias: (window.devicePixelRatio || 1) < 2, powerPreference: 'high-performance' });
+      r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      this.texScale = Math.min(window.innerWidth, window.innerHeight) < 600 ? 0.7 : 1;
+      this.scene = new T.Scene();
+      this.camera = new T.PerspectiveCamera(70, 1, 8, 16000);
+      this.hemi = new T.HemisphereLight(0xdfefff, 0x9aa88a, 0.6 * Math.PI);
+      this.sun = new T.DirectionalLight(0xfff2dd, 0.5 * Math.PI);
+      this.scene.add(this.hemi, this.sun, this.sun.target);
+      this.scene.fog = new T.Fog(0xbfe0f5, 3500, 15000);
+      this.mats = {}; this.geos = {}; this.flats = new Map(); this.insts = new Map(); this.roofs = []; this.groundMats = []; this.tagged = {}; this.overhead = [];
+      this.buildGround();
+      this.buildBuildings();
+      this.buildTrees();
+      this.buildLife();
+      this.flushFlats();
+      this.flushInst();
+      this.buildBall();
+      this.ready = true;
+    },
+    // Shared materials, made once each.
+    mat(key, make) { return this.mats[key] || (this.mats[key] = make()); },
+    lambert(color) { return this.mat('l' + color, () => new THREE.MeshLambertMaterial({ color: new THREE.Color(color) })); },
+    // Things indoors keep some of their colour whatever the time of day.
+    indoor(color) { return this.mat('i' + color, () => { const c = new THREE.Color(color); return new THREE.MeshLambertMaterial({ color: c, emissive: c.clone().multiplyScalar(0.15) }); }); },
+    basic(color) { return this.mat('b' + color, () => new THREE.MeshBasicMaterial({ color: new THREE.Color(color) })); },
+    // The ground outside isn't lit like objects are: it keeps the map's own colours, and dims and cools at night.
+    ground(color, extra) { return this.mat('g' + color, () => this.outdoor(new THREE.MeshBasicMaterial({ color: new THREE.Color(color), ...(extra || {}) }))); },
+    outdoor(m) { m.userData.base = m.color.clone(); this.groundMats.push(m); return m; },
+    // A repeating ground or floor texture from the map's own patterns, laid in world units.
+    pattern(kind, outdoor) {
+      return this.mat('p' + kind + (outdoor ? 'o' : 'i'), () => {
+        campusPattern(document.createElement('canvas').getContext('2d'), kind);
+        const info = CAMPUS_TILES[kind], tex = new THREE.CanvasTexture(info.canvas);
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
+        tex.userData = { pw: info.canvas.width * info.scale, ph: info.canvas.height * info.scale };
+        const m = new THREE.MeshBasicMaterial({ map: tex });
+        return outdoor ? this.outdoor(m) : m;
+      });
+    },
+    // A flat rectangle of ground at height y. Ones that share a material are drawn together, and textured ones
+    // get coordinates in world units so neighbours line up.
+    flat(x0, y0, x1, y1, y, mat) {
+      let b = this.flats.get(mat);
+      if (!b) { b = { pos: [], uv: [] }; this.flats.set(mat, b); }
+      const u = mat.map && mat.map.userData.pw;
+      for (const [x, z] of [[x0, y0], [x0, y1], [x1, y1], [x0, y0], [x1, y1], [x1, y0]]) {
+        b.pos.push(x, y, z);
+        b.uv.push(u ? x / u : (x - x0) / (x1 - x0), u ? -z / mat.map.userData.ph : 1 - (z - y0) / (y1 - y0));
+      }
+    },
+    flushFlats() {
+      for (const [mat, b] of this.flats) {
+        const g = new THREE.BufferGeometry();
+        g.setAttribute('position', new THREE.Float32BufferAttribute(b.pos, 3));
+        g.setAttribute('uv', new THREE.Float32BufferAttribute(b.uv, 2));
+        g.computeVertexNormals();
+        this.scene.add(new THREE.Mesh(g, mat));
+      }
+      this.flats.clear();
+    },
+    unitBox() { return this.geos.box || (this.geos.box = new THREE.BoxGeometry(1, 1, 1)); },
+    unitCyl() { return this.geos.cyl || (this.geos.cyl = new THREE.CylinderGeometry(1, 1, 1, 18)); },
+    unitBall() { return this.geos.ball || (this.geos.ball = new THREE.SphereGeometry(1, 20, 14)); },
+    disc() { return this.geos.disc || (this.geos.disc = new THREE.CircleGeometry(1, 40).rotateX(-Math.PI / 2)); },
+    box(w, h, d, x, y, z, mat, rotY = 0) {
+      const m = new THREE.Mesh(this.unitBox(), mat);
+      m.scale.set(w, h, d);
+      m.position.set(x, y + h / 2, z);
+      m.rotation.y = rotY;
+      this.scene.add(m);
+      return m;
+    },
+    // Things that never move, drawn together: one instanced mesh per shape and material, plus a tag for things
+    // that hide when you look from above. Windows, light panels, tables, plants, racks and parked cars.
+    inst(geo, mat, x, y, z, sx, sy, sz, rotY = 0, rotX = 0, color = null, tag = '') {
+      const key = geo.uuid + mat.uuid + tag;
+      let b = this.insts.get(key);
+      if (!b) { b = { geo, mat, tag, items: [] }; this.insts.set(key, b); }
+      b.items.push([x, y, z, sx, sy, sz, rotY, rotX, color]);
+    },
+    ibox(w, h, d, x, y, z, mat, tag = '') { this.inst(this.unitBox(), mat, x, y + h / 2, z, w, h, d, 0, 0, null, tag); },
+    icyl(r, h, x, y, z, mat) { this.inst(this.unitCyl(), mat, x, y + h / 2, z, r, h, r); },
+    flushInst() {
+      const m = new THREE.Matrix4(), q = new THREE.Quaternion(), p = new THREE.Vector3(), s = new THREE.Vector3(), e = new THREE.Euler(), col = new THREE.Color();
+      for (const { geo, mat, tag, items } of this.insts.values()) {
+        const im = new THREE.InstancedMesh(geo, mat, items.length);
+        items.forEach(([x, y, z, sx, sy, sz, ry, rx, c], i) => {
+          im.setMatrixAt(i, m.compose(p.set(x, y, z), q.setFromEuler(e.set(rx, ry, 0, 'YXZ')), s.set(sx, sy, sz)));
+          if (c) im.setColorAt(i, col.set(c));
+        });
+        this.scene.add(im);
+        if (tag) (this.tagged[tag] || (this.tagged[tag] = [])).push(im);
+      }
+      this.insts.clear();
+    },
+    cyl(r, h, x, y, z, mat) {
+      const m = new THREE.Mesh(this.unitCyl(), mat);
+      m.scale.set(r, h, r);
+      m.position.set(x, y + h / 2, z);
+      this.scene.add(m);
+      return m;
+    },
+    // Something you can't walk through, as a polygon on the ground, and how tall it is.
+    solid(pts, h = WALL_H) {
+      const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+      this.polys.push({ pts, h, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) });
+    },
+    ring(x, y, rx, ry, n = 16) { return Array.from({ length: n }, (_, i) => [x + Math.cos((i / n) * TAU) * rx, y + Math.sin((i / n) * TAU) * ry]); },
+    buildGround() {
+      const W = CAMPUS.w, H = CAMPUS.h, F = this.flat.bind(this), side = this.ground('#a5a29a'), asph = this.pattern('asphalt', true);
+      F(-20000, -20000, W + 20000, H + 20000, 0, this.pattern('grass', true));
+      const white = this.ground('#eef0f2'), yellow = this.ground('#f2d24b');
+      // The two streets, with sidewalks, a centre line and crossings at each row of front doors.
+      for (const [x0, x1] of [CAMPUS.street, CAMPUS.street2]) {
+        F(x0 - 140, -20000, x1 + 140, H + 20000, 2, side);
+        F(x0, -20000, x1, H + 20000, 4, asph);
+        for (let y = -3000; y < H + 3000; y += 110) F((x0 + x1) / 2 - 3, y, (x0 + x1) / 2 + 3, y + 60, 6, yellow);
+        for (const cy of [3010, 4400]) for (let x = x0 + 10; x < x1 - 10; x += 44) F(x, cy - 50, x + 24, cy + 50, 6, white);
+      }
+      const [lx0, ly0, lx1, ly1] = CAMPUS.lot;
+      F(lx0, ly0, lx1, ly1, 4, asph);
+      for (let x = lx0 + 24; x < lx1; x += 72) { if (x > 2380 && x < 2640) continue; F(x - 2, ly0 + 40, x + 2, ly0 + 180, 6, white); F(x - 2, ly1 - 180, x + 2, ly1 - 40, 6, white); }
+      const sx1 = CAMPUS.street[1], [yx0, yy0, yx1, yy1] = CAMPUS.yard;
+      F(yx0, yy0, yx1, yy1, 4, this.pattern('concrete', true));
+      F(sx1, 3000, yx0, 3400, 2, side); F(sx1, 3040, yx0 + 20, 3360, 4, asph);
+      for (const [x0, y0, x1, y1] of CAMPUS.drives) {
+        F(x0 - 30, y0, x1 + 30, y1, 2, side); F(x0, y0, x1, y1, 4, asph);
+        for (let y = y0 + 30; y < y1 - 40; y += 110) F((x0 + x1) / 2 - 3, y, (x0 + x1) / 2 + 3, y + 60, 6, yellow);
+      }
+      const pave = this.pattern('paving', true), [pl0, pt0, pl1, pt1] = CAMPUS.plaza, [qx0, qy0, qx1, qy1] = CAMPUS.patio, [fx0, fy0, fx1, fy1] = CAMPUS.field;
+      for (const [x, y, w, h] of [[pl0, pt0, pl1 - pl0, pt1 - pt0], [4320, 2920, 140, 200], [2410, 3140, 200, 240], [100, 2640, 2010, 90], [560, 700, 90, 2030],
+        [qx0, qy0, qx1 - qx0, qy1 - qy0], [11170, 2920, 200, qy0 - 2920], [CAMPUS.street2[1] + 140, 2960, qx0 - CAMPUS.street2[1] - 140, 100], [11170, qy1, 200, fy0 - qy1 + 60]]) F(x, y, x + w, y + h, 3, pave);
+      // The sports field: a pitch inside a running track, painted on a texture of its own.
+      const S = 0.4, c = document.createElement('canvas');
+      c.width = Math.ceil((fx1 - fx0) * S); c.height = Math.ceil((fy1 - fy0) * S);
+      const g = c.getContext('2d');
+      g.setTransform(S, 0, 0, S, -fx0 * S, -fy0 * S);
+      drawFieldMarks(g);
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
+      F(fx0, fy0, fx1, fy1, 3, this.outdoor(new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false })));
+      // The pond with its stone rim, and the fountain in the plaza.
+      const [px, py, rx, ry] = CAMPUS.pond, disc = (cx, cy, ax, ay, y, mat) => {
+        const m = new THREE.Mesh(this.disc(), mat);
+        m.scale.set(ax, 1, ay); m.position.set(cx, y, cy); this.scene.add(m); return m;
+      };
+      disc(px, py, rx + 18, ry + 18, 3, this.ground('#9d9a92'));
+      disc(px, py, rx, ry, 5, new THREE.MeshLambertMaterial({ color: 0x3f8fbf, emissive: 0x0b2a40 }));
+      this.solid(this.ring(px, py, rx + 6, ry + 6, 24), 0);
+      this.cyl(72, 34, 2510, 0, 3030, this.lambert('#8c8578'));
+      disc(2510, 3030, 60, 60, 36, new THREE.MeshLambertMaterial({ color: 0x4c9ec6, emissive: 0x0b2a40 }));
+      this.cyl(12, 90, 2510, 0, 3030, this.lambert('#b9b1a3'));
+      this.solid(this.ring(2510, 3030, 74, 74), 40);
+      // The coffee kiosk and its tables, the trailers in the yard, and the patio's picnic tables and taco truck.
+      this.box(220, 210, 120, 410, 0, 820, this.lambert('#6b3a1f'));
+      this.box(236, 14, 40, 410, 160, 752, this.lambert('#e8453a'));
+      this.sign('COFFEE', 410, 196, 730, Math.PI, 150, 30, '#e8453a', '#fff6d1');
+      this.solid(rect(300, 760, 220, 120), 210);
+      for (const [tx, ty] of [[280, 1000], [420, 1040], [540, 980]]) { this.icyl(26, 4, tx, 72, ty, this.lambert('#f4f1ea')); this.icyl(4, 72, tx, 0, ty, this.lambert('#56606e')); }
+      for (let i = 0; i < 3; i++) {
+        const tx = 5600 + i * 900;
+        this.box(200, 250, 700, tx, 20, 3310, this.lambert('#d9dde3')); this.box(202, 24, 702, tx, 40, 3310, this.lambert('#e8453a'));
+        this.solid(rect(tx - 100, 2960, 200, 700), 270);
+      }
+      for (let x = qx0 + 320; x < qx1 - 700; x += 460) for (let y = qy0 + 260; y < qy1 - 150; y += 340) {
+        this.ibox(140, 8, 48, x, 70, y, this.lambert('#a0703f'));
+        for (const o of [-42, 42]) this.ibox(140, 6, 16, x, 42, y + o, this.lambert('#7a5530'));
+        for (const o of [-60, 60]) this.ibox(6, 70, 90, x + o, 0, y, this.lambert('#7a5530'));
+        this.solid(rect(x - 70, y - 50, 140, 100), 78);
+      }
+      const tx = qx1 - 400, ty = qy0 + 310;
+      this.box(340, 210, 150, tx, 30, ty, this.lambert('#f4f1ea'));
+      for (const [wx, wz] of [[-110, -60], [110, -60], [-110, 60], [110, 60]]) { const w = new THREE.Mesh(this.unitCyl(), this.lambert('#1f2228')); w.scale.set(18, 14, 18); w.rotation.x = Math.PI / 2; w.position.set(tx + wx, 18, ty + wz + Math.sign(wz) * 4); this.scene.add(w); }
+      this.sign('TACOS', tx, 190, ty + 76, 0, 220, 54, '#2b3038', '#f4f1ea');
+      this.sign('TACOS', tx - 171, 190, ty, -Math.PI / 2, 120, 40, '#2b3038', '#f4f1ea');
+      this.box(8, 80, 110, tx - 172, 60, ty, this.lambert('#ff8f2e'));
+      this.solid(rect(tx - 170, ty - 75, 340, 150), 240);
+      // The data center's fence and its backup generators.
+      const dc = CAMPUS.bld.datacenter, fence = new THREE.MeshLambertMaterial({ color: 0xc8d2de, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false });
+      for (const [x0, y0, x1, y1] of [[dc.x - 45, dc.y - 45, dc.x + BLD_W + 45, dc.y - 45], [dc.x - 45, dc.y + BLD_H + 200, dc.x + BLD_W + 45, dc.y + BLD_H + 200], [dc.x - 45, dc.y - 45, dc.x - 45, dc.y + BLD_H + 200], [dc.x + BLD_W + 45, dc.y - 45, dc.x + BLD_W + 45, dc.y + BLD_H + 200]]) {
+        // A gap where the driveway comes in.
+        const horiz = y0 === y1, parts = horiz && y0 === dc.y - 45 ? [[x0, dc.x + BLD_W / 2 - 260], [dc.x + BLD_W / 2 + 260, x1]] : horiz ? [[x0, x1]] : [[y0, y1]];
+        for (const [a, b] of parts) {
+          const m = this.box(horiz ? b - a : 4, 200, horiz ? 4 : b - a, horiz ? (a + b) / 2 : x0, 0, horiz ? y0 : (a + b) / 2, fence);
+          m.renderOrder = 2;
+          this.solid(horiz ? [[a, y0 - 4], [b, y0 - 4], [b, y0 + 4], [a, y0 + 4]] : [[x0 - 4, a], [x0 + 4, a], [x0 + 4, b], [x0 - 4, b]], 200);
+        }
+      }
+      for (let k = 0; k < 4; k++) { const gx = dc.x + 420 + k * 760, gy = dc.y + BLD_H + 60; this.ibox(360, 120, 90, gx + 180, 0, gy + 45, this.lambert('#d8dde3')); this.solid(rect(gx, gy, 360, 90), 120); }
+    },
+    // Text on a board: a sign over a door, on the taco truck, or hanging over a hole.
+    signMat(text, w, h, bg, fg) {
+      const c = document.createElement('canvas'), S = 4;
+      c.width = Math.round(w * S); c.height = Math.round(h * S);
+      const g = c.getContext('2d');
+      g.fillStyle = bg; g.fillRect(0, 0, c.width, c.height);
+      g.fillStyle = fg; g.font = `900 ${Math.round(h * S * 0.62)}px ${DISPLAY_FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillText(text, c.width / 2, c.height / 2 + h * S * 0.04, c.width * 0.92);
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 4;
+      return new THREE.MeshBasicMaterial({ map: tex });
+    },
+    sign(text, x, y, z, rotY, w, h, bg, fg, parent = this.scene) {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), this.signMat(text, w, h, bg, fg));
+      m.position.set(x, y, z); m.rotation.y = rotY;
+      parent.add(m);
+      return m;
+    },
+    // Each building: its floor, walls with a front door and windows, a sign, a roof outside and lit ceiling panels inside.
+    buildBuildings() {
+      const T = BLD_T;
+      for (const id of Object.keys(CAMPUS.bld)) {
+        const b = CAMPUS.bld[id], look = BLD_LOOK[id] || BLD_LOOK.office, top = b.door === 'top', x0 = b.x, y0 = b.y, x1 = b.x + BLD_W, y1 = b.y + BLD_H;
+        this.flat(x0, y0, x1, y1, 1, this.pattern(look.floor, false));
+        const outside = this.lambert(look.wall), inside = this.mat('in' + id, () => new THREE.MeshBasicMaterial({ color: new THREE.Color(look.wall).lerp(new THREE.Color('#f1f3f5'), id === 'gameroom' ? 0.18 : 0.55) }));
+        const dx = (x0 + x1) / 2, cym = (y0 + y1) / 2, garage = id === 'garage';
+        // Walls as boxes. Each one's inner face is painted the interior colour, lit as if indoors.
+        const wall = (ax, ay, bx, by) => {
+          const horiz = ay === by, len = horiz ? bx - ax : by - ay, mats = [outside, outside, outside, outside, outside, outside];
+          // Box faces: +x, -x, +y, -y, +z, -z. The one facing the middle of the building is the inside.
+          if (horiz) mats[ay < cym ? 4 : 5] = inside; else mats[ax < dx ? 0 : 1] = inside;
+          const m = new THREE.Mesh(this.unitBox(), mats);
+          m.scale.set(horiz ? len + T : T, WALL_H, horiz ? T : len + T);
+          m.position.set(horiz ? (ax + bx) / 2 : ax, WALL_H / 2, horiz ? ay : (ay + by) / 2);
+          this.scene.add(m);
+          this.solid(horiz ? rect(ax - T / 2, ay - T / 2, len + T, T) : rect(ax - T / 2, ay - T / 2, T, len + T));
+        };
+        const fy = top ? y0 : y1, by = top ? y1 : y0;
+        wall(x0, by, x1, by);
+        wall(x0, y0, x0, y1);
+        wall(x1, y0, x1, y1);
+        wall(x0, fy, dx - DOOR_W / 2 - T / 2, fy);
+        wall(dx + DOOR_W / 2 + T / 2, fy, x1, fy);
+        // Above the door, its frame in the building's colour, and the sign over it.
+        this.box(DOOR_W + T, WALL_H - 260, T, dx, 260, fy, outside);
+        const frame = this.lambert(look.door), out = top ? -1 : 1;
+        for (const s of [-1, 1]) this.box(16, 260, T + 8, dx + s * (DOOR_W / 2 + 8), 0, fy, frame);
+        this.box(DOOR_W + 32, 16, T + 8, dx, 260, fy, frame);
+        this.sign(b.name, dx, 336, fy + out * (T / 2 + 2), top ? Math.PI : 0, 640, 72, '#151b25', look.door);
+        this.sign(b.name, dx, 336, fy - out * (T / 2 + 2), top ? 0 : Math.PI, 420, 48, '#151b25', look.door);
+        // Windows along the outside, lit at night.
+        if (look.windows) {
+          const glass = this.mat('glass', () => new THREE.MeshLambertMaterial({ color: 0x8cc8f0, emissive: 0x000000 }));
+          for (const [ax, ay, bx2, by2] of [[x0, y0, x1, y0], [x0, y1, x1, y1], [x0, y0, x0, y1], [x1, y0, x1, y1]]) {
+            const horiz = ay === by2, len = horiz ? bx2 - ax : by2 - ay, off = horiz ? (ay < cym ? -1 : 1) : (ax < dx ? -1 : 1);
+            for (let k = 60; k < len - 120; k += 220) {
+              const cx = horiz ? ax + k + 70 : ax, cz = horiz ? ay : ay + k + 70;
+              if (horiz && ay === fy && Math.abs(cx - dx) < DOOR_W / 2 + 120) continue;
+              this.ibox(horiz ? 140 : 4, 150, horiz ? 4 : 140, cx + (horiz ? 0 : off * (T / 2 + 1)), 140, cz + (horiz ? off * (T / 2 + 1) : 0), glass);
+            }
+          }
+        }
+        // The garage is open to the air: long openings in its walls, shown as dark bands.
+        if (garage) {
+          const dark = this.basic('#23272c');
+          for (const [ax, ay, bx2, by2] of [[x0, by, x1, by], [x0, y0, x0, y1], [x1, y0, x1, y1]]) {
+            const horiz = ay === by2, len = horiz ? bx2 - ax : by2 - ay;
+            this.box(horiz ? len - 120 : T + 2, 120, horiz ? T + 2 : len - 120, horiz ? (ax + bx2) / 2 : ax, 170, horiz ? ay : (ay + by2) / 2, dark);
+          }
+        }
+        // A roof seen from outside, and a ceiling with light panels seen from inside.
+        const roof = new THREE.Mesh(new THREE.PlaneGeometry(BLD_W + T, BLD_H + T), this.lambert('#4a5059'));
+        roof.rotation.x = -Math.PI / 2; roof.position.set(dx, WALL_H, cym);
+        this.scene.add(roof);
+        this.roofs.push(roof);
+        const ceil = new THREE.Mesh(new THREE.PlaneGeometry(BLD_W, BLD_H), this.basic(id === 'gameroom' ? '#2a2744' : id === 'datacenter' ? '#3a414b' : '#d9dde2'));
+        ceil.rotation.x = Math.PI / 2; ceil.position.set(dx, WALL_H - 1, cym);
+        this.scene.add(ceil);
+        const panel = this.basic(id === 'gameroom' ? '#ff9ad8' : id === 'datacenter' ? '#cdeeff' : '#fffbea');
+        for (let i = 0; i < 9; i++) { const s = slotRect(id, i); for (const k of [-1, 1]) this.ibox(320, 2, 60, s.cx + k * 240, WALL_H - 4, s.cy, panel, 'ceiling'); }
+      }
+      // Things in the halls: plants, pallets and drums, parked cars, racks, arcade cabinets and the reception desk.
+      for (const d of Campus.decor || []) {
+        if (d.k === 'plant') { this.icyl(16, 34, d.x, 0, d.y, this.indoor('#ece7de')); this.inst(this.unitBall(), this.indoor('#2f8453'), d.x, 62, d.y, 26, 30, 26); this.solid(this.ring(d.x, d.y, 18, 18, 8), 90); }
+        else if (d.k === 'pallet') { this.ibox(68, 70, 60, d.x, 0, d.y, this.indoor('#c99a62')); this.solid(rect(d.x - 34, d.y - 30, 68, 60), 70); }
+        else if (d.k === 'drums') for (const [ox, oy] of [[-15, -15], [15, -15], [0, 12]]) { this.icyl(14, 42, d.x + ox, 0, d.y + oy, this.indoor('#2f6fb3')); this.solid(this.ring(d.x + ox, d.y + oy, 14, 14, 8), 42); }
+        else if (d.k === 'car') this.carMesh(d.x, d.y, d.a, d.c, true);
+        else if (d.k === 'rack') { this.ibox(40, 210, 108, d.x, 0, d.y, this.indoor('#1b1f26')); this.ibox(2, 150, 90, d.x - 21, 30, d.y, this.basic('#2fd06b')); this.ibox(2, 150, 90, d.x + 21, 30, d.y, this.basic('#2fd06b')); this.solid(rect(d.x - 20, d.y - 54, 40, 108), 210); }
+        else if (d.k === 'arcade') { this.ibox(48, 170, 40, d.x, 0, d.y, this.indoor('#2a2840')); for (const s of [-1, 1]) this.ibox(40, 40, 2, d.x, 100, d.y + s * 21, this.basic(d.c)); this.solid(rect(d.x - 24, d.y - 20, 48, 40), 170); }
+        else if (d.k === 'desk') {
+          // The front desk stands to one side of the door, so it doesn't block the way in.
+          const x = d.x - 520, y = d.y - 10;
+          this.box(300, 105, 56, x, 0, y, this.indoor('#b8854f'));
+          this.sign('RECEPTION', x, 70, y - 29, Math.PI, 220, 34, '#b8854f', '#f4f1ea');
+          this.solid(rect(x - 150, y - 28, 300, 56), 105);
+        }
+      }
+      for (const [x, y, a, c] of Campus.parked) this.carMesh(x, y, a, c, true);
+    },
+    // A car: a body, a cabin and four wheels. Parked ones are drawn together with the rest and are in the way;
+    // the ones on the streets move every frame.
+    carMesh(x, y, a, color, parked) {
+      if (parked) {
+        const c = Math.cos(a), s = Math.sin(a), at = (u, v) => [x + u * c - v * s, y + u * s + v * c], [cx, cz] = at(-6, 0);
+        this.inst(this.unitBox(), this.lambert('#ffffff'), x, 27, y, 88, 34, 44, -a, 0, color);
+        this.inst(this.unitBox(), this.lambert('#2a3442'), cx, 56, cz, 46, 24, 38, -a);
+        for (const [wx, wz] of [[-28, -22], [28, -22], [-28, 22], [28, 22]]) { const [px, pz] = at(wx, wz); this.inst(this.unitCyl(), this.lambert('#16181c'), px, 11, pz, 11, 8, 11, -a, Math.PI / 2); }
+        this.solid([[-46, -24], [46, -24], [46, 24], [-46, 24]].map(([u, v]) => at(u, v)), 70);
+        return null;
+      }
+      const g = new THREE.Group();
+      const body = new THREE.Mesh(this.unitBox(), this.lambert(color)); body.scale.set(88, 34, 44); body.position.y = 27;
+      const cab = new THREE.Mesh(this.unitBox(), this.lambert('#2a3442')); cab.scale.set(46, 24, 38); cab.position.set(-6, 56, 0);
+      g.add(body, cab);
+      for (const [wx, wz] of [[-28, -22], [28, -22], [-28, 22], [28, 22]]) { const w = new THREE.Mesh(this.unitCyl(), this.lambert('#16181c')); w.scale.set(11, 8, 11); w.rotation.x = Math.PI / 2; w.position.set(wx, 11, wz); g.add(w); }
+      g.position.set(x, 0, y); g.rotation.y = -a;
+      this.scene.add(g);
+      return g;
+    },
+    buildTrees() {
+      const trees = Campus.trees, n = trees.length;
+      const trunks = new THREE.InstancedMesh(this.unitCyl(), this.lambert('#6b4a2c'), n), crowns = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 1), this.lambert('#ffffff'), n);
+      const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3(), col = new THREE.Color();
+      trees.forEach(([x, y, r], i) => {
+        trunks.setMatrixAt(i, m.compose(p.set(x, 70, y), q, s.set(9, 140, 9)));
+        crowns.setMatrixAt(i, m.compose(p.set(x, 140 + r * 0.7, y), q, s.set(r * 1.15, r * 1.25, r * 1.15)));
+        crowns.setColorAt(i, col.set(i % 3 === 0 ? '#5b9c3e' : i % 3 === 1 ? '#4a8a36' : '#6fae4a'));
+        this.solid(rect(x - 10, y - 10, 20, 20), 300);
+      });
+      this.scene.add(trunks, crowns);
+      // Street lamps along the streets and the lot, string lights on the patio, floodlights round the field.
+      const lamps = Campus.lamps.filter(([x, y, r]) => r !== 700 && !bldOf(x, y) && !(x === 2510 && y === 3030) && !(x === 6890 && y === 3300))
+        .map(([x, y, r]) => (CAMPUS.drives.some(([x0, y0, x1, y1]) => x > x0 && x < x1 && y > y0 && y < y1) ? [x + 150, y, r] : [x, y, r]));
+      const posts = new THREE.InstancedMesh(this.unitCyl(), this.lambert('#3a414b'), lamps.length);
+      this.bulbs = new THREE.InstancedMesh(this.unitBall(), this.basic('#fff1c8'), lamps.length);
+      lamps.forEach(([x, y, r], i) => {
+        const hgt = r >= 1000 ? 700 : r <= 240 ? 220 : 320;
+        posts.setMatrixAt(i, m.compose(p.set(x, hgt / 2, y), q, s.set(5, hgt, 5)));
+        this.bulbs.setMatrixAt(i, m.compose(p.set(x, hgt + 8, y), q, s.set(r >= 1000 ? 40 : 14, r >= 1000 ? 26 : 14, r >= 1000 ? 40 : 14)));
+      });
+      this.scene.add(posts, this.bulbs);
+    },
+    // Moving things: coworkers, cars on the streets and the ducks.
+    buildLife() {
+      const N = Campus.npcs.length, col = new THREE.Color();
+      this.npcBody = new THREE.InstancedMesh(this.unitCyl(), this.lambert('#ffffff'), N);
+      this.npcLegs = new THREE.InstancedMesh(this.unitCyl(), this.lambert('#2b3038'), N);
+      this.npcHead = new THREE.InstancedMesh(this.unitBall(), this.lambert('#ffffff'), N);
+      this.npcHair = new THREE.InstancedMesh(this.unitBall(), this.lambert('#ffffff'), N);
+      Campus.npcs.forEach((p, i) => {
+        this.npcBody.setColorAt(i, col.set(p.vest ? '#ff8f2e' : p.shirt)); this.npcHead.setColorAt(i, col.set(p.skin)); this.npcHair.setColorAt(i, col.set(p.hat ? '#f2c12e' : p.hair));
+      });
+      for (const k of [this.npcBody, this.npcLegs, this.npcHead, this.npcHair]) { k.frustumCulled = false; this.scene.add(k); }
+      this.carsLive = Campus.cars.map(c => this.carMesh(c.x, c.y, c.dir > 0 ? Math.PI / 2 : -Math.PI / 2, c.color, false));
+      this.ducks = Campus.ducks.map(() => {
+        const g = new THREE.Group(), body = new THREE.Mesh(this.unitBall(), this.lambert('#f4f1ea')), head = new THREE.Mesh(this.unitBall(), this.lambert('#2f7a4a'));
+        body.scale.set(16, 9, 10); body.position.y = 9; head.scale.setScalar(7); head.position.set(12, 18, 0);
+        g.add(body, head); this.scene.add(g); return g;
+      });
+    },
+    lifeFrame() {
+      const m = this.tmpM || (this.tmpM = new THREE.Matrix4()), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3();
+      Campus.npcs.forEach((n, i) => {
+        const bob = Math.abs(Math.sin(n.phase)) * 3;
+        this.npcLegs.setMatrixAt(i, m.compose(p.set(n.x, 33, n.y), q, s.set(10, 66, 10)));
+        this.npcBody.setMatrixAt(i, m.compose(p.set(n.x, 92 + bob, n.y), q, s.set(15, 56, 15)));
+        this.npcHead.setMatrixAt(i, m.compose(p.set(n.x, 132 + bob, n.y), q, s.set(11, 13, 11)));
+        this.npcHair.setMatrixAt(i, m.compose(p.set(n.x, 139 + bob, n.y), q, s.set(11.5, 7, 11.5)));
+      });
+      for (const k of [this.npcBody, this.npcLegs, this.npcHead, this.npcHair]) k.instanceMatrix.needsUpdate = true;
+      Campus.cars.forEach((c, i) => this.carsLive[i].position.set(c.x, 0, c.y));
+      Campus.ducks.forEach((d, i) => {
+        const x = d.px + Math.cos(d.a) * d.rx * d.r, y = d.py + Math.sin(d.a) * d.ry * d.r, dir = d.a + (d.speed > 0 ? Math.PI / 2 : -Math.PI / 2);
+        this.ducks[i].position.set(x, 4 + Math.sin(d.bob * 2) * 1.5, y); this.ducks[i].rotation.y = -dir;
+      });
+    },
+
+    // ---- Holes ----
+    // The holes of whichever building you're in or near are built in 3D; far ones are taken down again.
+    nearHoles() {
+      const near = bldOf(this.me.x, this.me.y, 900);
+      // The map swaps in a round's own pins after a round; anything built from the old ones goes.
+      for (const wh of this.holes3d.keys()) if (wh !== this.playing && !Campus.holes.includes(wh)) this.dropHole(wh);
+      this.pending = this.pending.filter(wh => Campus.holes.includes(wh));
+      for (const wh of Campus.holes) {
+        const want = wh.course === near, have = this.holes3d.get(wh);
+        if (want && !have && !this.pending.includes(wh)) this.pending.push(wh);
+        if (!want && have && wh !== this.playing) this.dropHole(wh);
+      }
+      // One hole per frame, nearest first, so walking up to a building doesn't stall.
+      if (this.pending.length) {
+        this.pending.sort((a, b) => Math.hypot(a.slot.cx - this.me.x, a.slot.cy - this.me.y) - Math.hypot(b.slot.cx - this.me.x, b.slot.cy - this.me.y));
+        const wh = this.pending.shift();
+        if (wh.course === near && !this.holes3d.get(wh)) { const o = this.makeHole(wh, wh.h); o.overhead.visible = !this.over; this.holes3d.set(wh, o); }
+      }
+    },
+    dropHole(wh) {
+      const o = this.holes3d.get(wh);
+      if (!o) return;
+      this.scene.remove(o.group);
+      const shared = Object.values(this.geos);
+      o.group.traverse(k => { if (k.geometry && !shared.includes(k.geometry)) k.geometry.dispose(); });
+      o.tex.dispose(); o.floorMat.dispose(); o.topMat.dispose(); o.sideMat.dispose(); o.signMat.map.dispose(); o.signMat.dispose();
+      this.holes3d.delete(wh);
+    },
+    // The parts of a hole too tall to walk over: big blocks and pillars.
+    holeSolids(wh, h) {
+      const out = [], add = (pts, ht) => { const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]); out.push({ pts, h: ht, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) }); };
+      for (const b of h.blocks) { const ht = BLOCK_H[b.kind] || 90; if (ht >= 60) add(b.pts.map(([x, y]) => [x + wh.ox, y + wh.oy]), ht); }
+      for (const c of h.bumpers) { const ht = BUMPER_H[c.kind] || 40; if (ht >= 100) add(this.ring(c.x + wh.ox, c.y + wh.oy, c.r, c.r, 10), ht); }
+      return out;
+    },
+    // The hole's drawing, as a texture over its whole slot: the building's floor, then the classic hole on top.
+    paintHole(o, h, live) {
+      const g = o.ctx, s = o.wh.slot, S = o.scale, at = () => g.setTransform(S, 0, 0, S, -s.x * S, -s.y * S);
+      at();
+      if (!live || !o.base) {
+        g.fillStyle = campusPattern(g, (BLD_LOOK[o.wh.course] || BLD_LOOK.office).floor); g.fillRect(s.x, s.y, s.w, s.h);
+        Campus.withMapView(() => {
+          g.save(); g.translate(o.wh.ox, o.wh.oy);
+          drawDecorUnder(g, h); drawCourseBase(g, h); drawDecals(g, h); drawZonesStatic(g, h); drawCupHole(g, h);
+          for (const b of h.blocks) drawBlock(g, b, h.shadow);
+          for (const c of h.bumpers) drawBumper(g, c, h.shadow);
+          drawDecorOver(g, h);
+          g.restore();
+        });
+        if (live) {
+          if (!o.base) { o.base = document.createElement('canvas'); o.base.width = o.canvas.width; o.base.height = o.canvas.height; }
+          const bg = o.base.getContext('2d');
+          bg.clearRect(0, 0, o.base.width, o.base.height); bg.drawImage(o.canvas, 0, 0);
+        }
+      } else {
+        g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(o.base, 0, 0); at();
+      }
+      if (live) {
+        // The ball's trail, the ghost and the aim go on the floor too; the map view hides the play ball, so they're
+        // gathered first.
+        const mine = h === G.hole, b = mine ? G.ball : null, aim = mine ? currentAim() : null;
+        Campus.withMapView(() => {
+          g.save(); g.translate(o.wh.ox, o.wh.oy);
+          drawZonesLive(g, h, h.t); drawBlinkers(g, h); drawArrivals(g, h); drawCupHole(g, h);
+          if (mine) {
+            if (b && b.trail.length > 1 && b.state === 'rolling') drawTrail(g, b, b.fire ? 'flame' : b.golden ? 'sparkle' : b.mine ? Career.wearing('trail') : 'none');
+            Ghost.draw(g);
+            drawFx(g);
+            if (aim) drawAim(g, aim);
+          }
+          g.restore();
+        });
+      }
+      o.tex.needsUpdate = true;
+    },
+    makeHole(wh, h) {
+      const T = THREE, s = wh.slot, S = this.texScale, group = new T.Group(), ox = wh.ox, oy = wh.oy;
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(s.w * S); canvas.height = Math.round(s.h * S);
+      const tex = new T.CanvasTexture(canvas);
+      tex.colorSpace = T.SRGBColorSpace;
+      tex.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
+      const o = { wh, src: h, group, canvas, ctx: canvas.getContext('2d'), tex, scale: S, base: null, movers: [], props: new Map(), live: false, paintT: 0 };
+      // Does anything move on this hole's floor?
+      o.animated = h.zones.some(z => z.type === 'conveyor' || z.type === 'turntable' || z.type === 'air' || z.type === 'dance' || z.style === 'coffee' || z.style === 'koi' || z.style === 'shredder') || h.blocks.some(b => b.kind === 'server' || b.kind === 'aquarium') || h.teleports.length > 0;
+      this.paintHole(o, h, false);
+      o.floorMat = new T.MeshBasicMaterial({ map: tex });
+      o.topMat = new T.MeshBasicMaterial({ map: tex, side: T.DoubleSide });
+      o.sideMat = new T.MeshBasicMaterial({ vertexColors: true, side: T.DoubleSide });
+      const floor = new T.Mesh(new T.PlaneGeometry(s.w, s.h), o.floorMat);
+      floor.rotation.x = -Math.PI / 2; floor.position.set(s.cx, 2, s.cy);
+      group.add(floor);
+      // Raised parts: rails round the course, blocks and bumpers. Tops share the hole's texture; sides are plain
+      // colours, a little darker low down and on faces turned east or west.
+      const top = { pos: [], uv: [] }, side = { pos: [], col: [] };
+      const uvOf = (x, y) => [(x + ox - s.x) / s.w, 1 - (y + oy - s.y) / s.h];
+      const prism = (pts, y1, color) => {
+        const c = new T.Color(color), contour = pts.map(([x, y]) => new T.Vector2(x, y));
+        for (const tri of T.ShapeUtils.triangulateShape(contour, [])) for (const k of tri) { const [x, y] = pts[k]; top.pos.push(x + ox, y1 + 2, y + oy); top.uv.push(...uvOf(x, y)); }
+        for (let i = 0; i < pts.length; i++) {
+          const [ax, ay] = pts[i], [bx, by] = pts[(i + 1) % pts.length], len = Math.hypot(bx - ax, by - ay) || 1;
+          const k = Math.abs(by - ay) / len > 0.7 ? 0.8 : 0.94, hi = c.clone().multiplyScalar(k), lo = c.clone().multiplyScalar(k * 0.72);
+          for (const [x, y, z, cc] of [[ax, 2, ay, lo], [bx, 2, by, lo], [bx, y1 + 2, by, hi], [ax, 2, ay, lo], [bx, y1 + 2, by, hi], [ax, y1 + 2, ay, hi]]) { side.pos.push(x + ox, y, z + oy); side.col.push(cc.r, cc.g, cc.b); }
+        }
+      };
+      const RAIL = 16, railCol = theme(h).rail[1];
+      for (const poly of h.course) {
+        const n = poly.length, out = [];
+        let sign = 1;
+        { const [ax, ay] = poly[0], [bx, by] = poly[1], l = Math.hypot(bx - ax, by - ay) || 1, mx = (ax + bx) / 2, my = (ay + by) / 2; if (pointInPoly(mx + ((by - ay) / l) * 2, my - ((bx - ax) / l) * 2, poly)) sign = -1; }
+        for (let i = 0; i < n; i++) { const [ax, ay] = poly[i], [bx, by] = poly[(i + 1) % n], l = Math.hypot(bx - ax, by - ay) || 1; out.push([((by - ay) / l) * sign, (-(bx - ax) / l) * sign]); }
+        for (let i = 0; i < n; i++) {
+          const [ax, ay] = poly[i], [bx, by] = poly[(i + 1) % n], [nx, ny] = out[i];
+          prism([[ax, ay], [bx, by], [bx + nx * RAIL, by + ny * RAIL], [ax + nx * RAIL, ay + ny * RAIL]], RAIL, railCol);
+          // Fill the gap at each outside corner.
+          const [px2, py2] = out[(i + n - 1) % n], a0 = Math.atan2(py2, px2), a1 = Math.atan2(ny, nx);
+          let d = a1 - a0; while (d > Math.PI) d -= TAU; while (d < -Math.PI) d += TAU;
+          if (Math.abs(d) > 0.02) {
+            const steps = Math.max(1, Math.ceil(Math.abs(d) / 0.35)), wedge = [[ax, ay]];
+            for (let k = 0; k <= steps; k++) { const a = a0 + (d * k) / steps; wedge.push([ax + Math.cos(a) * RAIL, ay + Math.sin(a) * RAIL]); }
+            prism(wedge, RAIL, railCol);
+          }
+        }
+      }
+      for (const b of h.blocks) prism(b.pts, BLOCK_H[b.kind] || 90, BLOCK_SIDE[b.kind] || '#8a94a3');
+      for (const c of h.bumpers) prism(this.ring(c.x, c.y, c.r, c.r, 20), BUMPER_H[c.kind] || 40, c.tint || BUMPER_SIDE[c.kind] || '#c3cbd5');
+      const tg = new T.BufferGeometry();
+      tg.setAttribute('position', new T.Float32BufferAttribute(top.pos, 3));
+      tg.setAttribute('uv', new T.Float32BufferAttribute(top.uv, 2));
+      const sg = new T.BufferGeometry();
+      sg.setAttribute('position', new T.Float32BufferAttribute(side.pos, 3));
+      sg.setAttribute('color', new T.Float32BufferAttribute(side.col, 3));
+      group.add(new T.Mesh(tg, o.topMat), new T.Mesh(sg, o.sideMat));
+      o.solids = this.holeSolids(wh, h);
+      // The cup's flag, and a sign hanging over the hole with its number and name.
+      o.pole = new T.Mesh(this.unitCyl(), this.basic('#e8ebef'));
+      o.pole.scale.set(1.6, 150, 1.6);
+      o.flag = new T.Mesh(this.geos.flag || (this.geos.flag = new T.PlaneGeometry(46, 30).translate(23, 0, 0)), this.mat('flag', () => new T.MeshBasicMaterial({ color: 0xff5a4e, side: T.DoubleSide })));
+      const def = COURSES[wh.course].holes[wh.idx];
+      o.signMat = this.signMat(`${wh.idx + 1} · ${def.name}`, 330, 48, '#151b25', '#ffd447');
+      o.overhead = new T.Group();
+      for (const r of [0, Math.PI]) { const m = new T.Mesh(this.geos.holeSign || (this.geos.holeSign = new T.PlaneGeometry(330, 48)), o.signMat); m.position.set(s.cx, 352, s.cy); m.rotation.y = r; o.overhead.add(m); }
+      for (const k of [-1, 1]) { const w = new T.Mesh(this.unitBox(), this.basic('#3a414b')); w.scale.set(1.5, 44, 1.5); w.position.set(s.cx + k * 150, 398, s.cy); o.overhead.add(w); }
+      group.add(o.overhead);
+      group.add(o.pole, o.flag);
+      this.scene.add(group);
+      return o;
+    },
+    // Everything on a hole that moves, from the hole's own state: movers, props and the flag.
+    holeFrame(o, h) {
+      const ox = o.wh.ox, oy = o.wh.oy;
+      if (o.moverSrc !== h) {
+        for (const m of o.movers) o.group.remove(m.obj);
+        o.movers = h.movers.map(m => ({ m, obj: this.moverMesh(m) }));
+        for (const mm of o.movers) o.group.add(mm.obj);
+        o.moverSrc = h;
+      }
+      for (const { m, obj } of o.movers) this.placeMover(obj, m, ox, oy);
+      if (o.propSrc !== h || o.propCount !== h.props.length) {
+        for (const obj of o.props.values()) o.group.remove(obj);
+        o.props.clear();
+        o.propSrc = h; o.propCount = h.props.length;
+      }
+      for (const p of h.props) {
+        let obj = o.props.get(p);
+        if (!obj) { obj = this.propMesh(p); o.props.set(p, obj); o.group.add(obj); }
+        obj.visible = p.alive;
+        if (!p.alive) continue;
+        obj.position.set(p.x + ox, 2, p.y + oy);
+        obj.rotation.y = -(p.rot || 0);
+        const inner = obj.children[0];
+        if (p.fallen && !obj.userData.round) { inner.rotation.z = Math.PI / 2; inner.position.y = p.r * 0.8; }
+        else { inner.rotation.z = 0; inner.position.y = obj.userData.y0; }
+      }
+      // The flag on its pole, rippling; it's taken out when your ball gets close.
+      const [cx, cy] = h.cup, b = h === G.hole ? G.ball : null, near = b && (b.state === 'sinking' || Math.hypot(b.x - cx, b.y - cy) < 80);
+      o.pole.visible = o.flag.visible = !near;
+      o.pole.position.set(cx + ox, 77, cy + oy);
+      o.flag.position.set(cx + ox, 135, cy + oy);
+      o.flag.rotation.y = Math.sin(G.clock * 2.3 + ox) * 0.3 - 0.6;
+    },
+    moverMesh(m) {
+      const T = THREE, g = new T.Group(), k = m.kind || m.type;
+      const part = (w, h, d, color, x = 0, y = 0, z = 0) => { const b = new T.Mesh(this.unitBox(), this.indoor(color)); b.scale.set(w, h, d); b.position.set(x, y + h / 2, z); g.add(b); return b; };
+      if (m.type === 'spinner') {
+        const look = { minute: ['#ff5a4e', 8], hour: ['#ffd447', 8], robot: ['#ff8f2e', 34], barrier: ['#f4f4ef', 16], cardoor: [m.color || '#e8453a', 60], brush: ['#3f8fd8', 70], flipper: ['#f4f4ef', 20], rotor: ['#2b3038', 12], vaultdoor: ['#8a939e', 140] }[k] || ['#ffd447', 14];
+        part(m.len, look[1], m.w, look[0], m.len / 2, 0, 0);
+        if (k === 'robot') { const base = new T.Mesh(this.unitCyl(), this.indoor('#2b3038')); base.scale.set(21, 50, 21); base.position.y = 25; g.add(base); }
+        if (k === 'barrier') part(16, 70, 16, '#e2bd3a', 0, 0, 0);
+        if (k === 'rotor' || k === 'vaultdoor') { const hub = new T.Mesh(this.unitCyl(), this.indoor('#3a414b')); hub.scale.set(m.w * 0.9, look[1] + 10, m.w * 0.9); hub.position.y = (look[1] + 10) / 2; g.add(hub); }
+      } else if (m.type === 'slider') {
+        if (m.r) { const c = new T.Mesh(this.unitCyl(), this.indoor(m.color || '#e8453a')); c.scale.set(m.r, 22, m.r); c.position.y = 11; g.add(c); }
+        else if (k === 'car' || k === 'forklift') {
+          const horiz = Math.abs(m.b[0] - m.a[0]) >= Math.abs(m.b[1] - m.a[1]), L = horiz ? m.w : m.h, W = horiz ? m.h : m.w;
+          if (k === 'car') { part(L, 40, W, m.color || '#e8453a', 0, 10, 0); part(L * 0.5, 28, W * 0.85, '#2a3442', -L * 0.06, 50, 0); }
+          else { part(L * 0.6, 70, W, '#f2b705', -L * 0.2, 0, 0); part(L * 0.1, 160, W * 0.9, '#3a414b', L * 0.13, 0, 0); part(L * 0.34, 6, W * 0.6, '#9aa3ae', L * 0.33, 4, 0); }
+          g.userData.car = true;
+        } else part(m.w, k === 'foos' ? 40 : k === 'cart' ? 60 : 80, m.h, m.color || (k === 'tapebot' ? '#c9d0d8' : k === 'crash' ? '#56606e' : k === 'foos' ? '#e0342b' : '#cfd7e0'));
+      } else if (m.type === 'doors') {
+        const col = m.style === 'glass' ? '#aad7f0' : m.style === 'gate' ? '#f2b705' : m.style === 'cage' ? '#7890a5' : '#b3bdc9';
+        g.userData.panels = [part(1, 240, 1, col), part(1, 240, 1, col)];
+      } else if (m.type === 'roomba') {
+        const c = new T.Mesh(this.unitCyl(), this.indoor('#2b3038')); c.scale.set(m.r, 14, m.r); c.position.y = 7; g.add(c);
+      }
+      return g;
+    },
+    placeMover(obj, m, ox, oy) {
+      if (m.type === 'spinner') { obj.position.set(m.x + ox, 2, m.y + oy); obj.rotation.y = -m.angle; }
+      else if (m.type === 'slider') { obj.position.set(m.cx + ox, 2, m.cy + oy); if (obj.userData.car) obj.rotation.y = -forkliftAngle(m); }
+      else if (m.type === 'roomba') obj.position.set(m.x + ox, 2, m.y + oy);
+      else if (m.type === 'doors') {
+        doorPanels(m).forEach((p, i) => { const b = obj.userData.panels[i]; if (!b) return; b.scale.set(Math.max(1, p.x1 - p.x0), 240, Math.max(1, p.y1 - p.y0)); b.position.set((p.x0 + p.x1) / 2 + ox, 122, (p.y0 + p.y1) / 2 + oy); });
+      }
+    },
+    propMesh(p) {
+      const T = THREE, [shape, color, h] = PROP_LOOK[p.kind] || ['box', '#c3cbd5', 12], g = new T.Group(), r = p.r;
+      const col = color || POOL_COLS[((p.n || 1) - 1) % 8];
+      let m;
+      if (shape === 'cyl' || shape === 'pin') { m = new T.Mesh(this.unitCyl(), this.indoor(col)); m.scale.set(r * (shape === 'pin' ? 0.8 : 1), h, r * (shape === 'pin' ? 0.8 : 1)); g.userData.y0 = h / 2; }
+      else if (shape === 'cone') { m = new T.Mesh(this.geos.cone || (this.geos.cone = new T.ConeGeometry(1, 1, 16)), this.indoor(col)); m.scale.set(r, h, r); g.userData.y0 = h / 2; }
+      else if (shape === 'ball') { m = new T.Mesh(this.unitBall(), this.indoor(col)); m.scale.setScalar(r); g.userData.y0 = r; g.userData.round = true; }
+      else if (shape === 'chair') {
+        m = new T.Group();
+        const seat = new T.Mesh(this.unitBox(), this.indoor(col)); seat.scale.set(r * 1.3, 8, r * 1.3); seat.position.y = 34;
+        const back = new T.Mesh(this.unitBox(), this.indoor('#2f4686')); back.scale.set(5, 40, r * 1.3); back.position.set(-r * 0.62, 56, 0);
+        const stem = new T.Mesh(this.unitCyl(), this.indoor('#2b3038')); stem.scale.set(3, 30, 3); stem.position.y = 15;
+        m.add(seat, back, stem); g.userData.y0 = 0;
+      } else {
+        const w = shape === 'bar' ? r * 2.5 : shape === 'slab' ? r * 2.6 : r * 1.7, d = shape === 'bar' ? r * 1.4 : shape === 'slab' ? r * 1.4 : r * 1.7;
+        m = new T.Mesh(this.unitBox(), this.indoor(col)); m.scale.set(w, h, d); g.userData.y0 = h / 2;
+      }
+      m.position.y = g.userData.y0;
+      g.add(m);
+      return g;
+    },
+    // Your ball, as a ball, with whatever you're wearing from the Locker.
+    buildBall() {
+      this.ballMesh = new THREE.Mesh(this.unitBall(), new THREE.MeshLambertMaterial({ color: 0xffffff }));
+      this.ballShadow = new THREE.Mesh(this.disc(), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.32, depthWrite: false }));
+      this.teeRing = new THREE.Mesh(new THREE.RingGeometry(26, 36, 40).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffd447, transparent: true, opacity: 0.85, depthWrite: false }));
+      this.ballMesh.visible = this.ballShadow.visible = this.teeRing.visible = false;
+      this.scene.add(this.ballMesh, this.ballShadow, this.teeRing);
+    },
+    ballLook(b) {
+      const skin = b.golden ? 'gold' : b.mine ? Career.wearing('ball') : 'classic', key = `${skin}${skin === 'classic' ? b.color : ''}${b.fire ? 'f' : ''}`;
+      if (key === this.ballKey) return;
+      this.ballKey = key;
+      const mt = this.ballMesh.material;
+      if (mt.map) { mt.map.dispose(); mt.map = null; }
+      mt.color.set(skin === 'classic' ? b.color : '#ffffff');
+      if (skin !== 'classic') {
+        // The Locker's ball art, twice round the ball.
+        const c = document.createElement('canvas');
+        c.width = 128; c.height = 64;
+        const g = c.getContext('2d');
+        for (const x of [32, 96]) drawSkin(g, x, 32, 46, skin, 0, 0);
+        mt.map = new THREE.CanvasTexture(c);
+        mt.map.colorSpace = THREE.SRGBColorSpace;
+      }
+      if (b.fire) mt.emissive.set('#ff6a1a'); else if (skin === 'gold' || b.golden) mt.emissive.set('#8a6a10'); else mt.emissive.copy(mt.color).multiplyScalar(0.35);
+      mt.emissiveIntensity = b.fire ? 0.6 : 1;
+      mt.needsUpdate = true;
+    },
+    ballFrame() {
+      const b = G.ball, wh = this.playing, m = this.ballMesh, sh = this.ballShadow;
+      const show = !!(wh && b && G.screen === 'play' && b.state !== 'hidden' && b.state !== 'sunk');
+      m.visible = sh.visible = show;
+      if (!show) return;
+      this.ballLook(b);
+      let scale = 1, y = 2 + BALL_R;
+      if (b.state === 'sinking') { const k = Math.min(1, b.sinkT / 0.3); y -= k * (BALL_R * 2 + 4); sh.visible = false; }
+      else if (b.state === 'splash') { const k = Math.min(1, b.splashT / 0.25); scale = 1 - 0.3 * k; y -= k * BALL_R * 1.6; m.visible = k < 1; sh.visible = false; }
+      m.scale.setScalar(BALL_R * scale);
+      m.position.set(b.x + wh.ox, y, b.y + wh.oy);
+      m.rotation.set(0, -(b.dir || 0), 0);
+      m.rotateZ(-(b.spin || 0));
+      sh.scale.setScalar(BALL_R * 1.05);
+      sh.position.set(b.x + wh.ox + 2.5, 2.6, b.y + wh.oy + 2.5);
+    },
+
+    // ---- You ----
+    update(dt) {
+      if (!this.on) return;
+      // Anything else that takes over the screen (a challenge link, say) ends the walk.
+      if (G.screen !== 'walk' && !(this.playing && G.screen === 'play')) { this.stop(false); return; }
+      Campus.mins += dt;
+      Campus.tickLife(dt);
+      this.lifeFrame();
+      this.nearHoles();
+      // Holes near you keep moving: movers swing and props settle. The one you're playing is stepped by the game.
+      const sub = Math.ceil(dt / (1 / 120)), sdt = dt / sub;
+      for (const [wh, o] of this.holes3d) {
+        const h = wh === this.playing && G.hole ? G.hole : wh.h;
+        if (h !== G.hole) for (let i = 0; i < sub; i++) { updateMovers(h, sdt, null); stepProps(h, sdt, null, { hits: [] }); }
+        this.holeFrame(o, h);
+        // Floors with something moving on them are repainted a few times a second. The one you're playing on is
+        // repainted whenever anything on it changes: the ball, your aim, the ghost or a splash.
+        const live = h === G.hole || (o.animated && Math.hypot(wh.slot.cx - this.me.x, wh.slot.cy - this.me.y) < 1500);
+        if (live && h === G.hole) {
+          const b = G.ball, gp = Ghost.pos(), key = o.animated || fxList.length || (b && b.state !== 'rest') ? null : `${b ? b.x + ',' + b.y : ''}|${kbAim.angle}|${kbAim.power}|${kbAim.active}|${G.phase}|${gp ? gp.x + ',' + gp.y : ''}`;
+          if (key === null || key !== o.paintKey) { this.paintHole(o, h, true); o.paintKey = key; }
+        } else if (live && G.clock - o.paintT > 1 / 15) { this.paintHole(o, h, true); o.paintT = G.clock; }
+        else if (!live && o.live) { this.paintHole(o, h, false); o.paintKey = undefined; }
+        o.live = live;
+      }
+      if (this.playing) {
+        // Ready to putt: the aim shows on the floor, starting toward the cup each time the ball stops.
+        if (canAim()) {
+          if (this.lastPhase !== 'aim' && G.ball && G.strokes > 0) kbAim.angle = Math.atan2(G.hole.cup[1] - G.ball.y, G.hole.cup[0] - G.ball.x);
+          kbAim.active = true;
+        }
+        this.lastPhase = G.phase;
+      }
+      if (G.screen === 'walk') { this.walk(dt); this.findTee(); this.meet(); }
+      this.ballFrame();
+      this.lights();
+      this.placeCamera(dt);
+      this.syncUi();
+    },
+    walk(dt) {
+      const k = this.keys, f = (k.has('KeyW') || k.has('ArrowUp') ? 1 : 0) - (k.has('KeyS') || k.has('ArrowDown') ? 1 : 0);
+      const st = (k.has('KeyD') ? 1 : 0) - (k.has('KeyA') ? 1 : 0);
+      // The arrow keys turn, for anyone without a mouse.
+      this.me.a += ((k.has('ArrowRight') ? 1 : 0) - (k.has('ArrowLeft') ? 1 : 0)) * 2.2 * dt;
+      let mx = f, my = st;
+      if (this.stick) { mx = -this.stick.dy; my = this.stick.dx; }
+      const mag = Math.hypot(mx, my);
+      if (mag > 0.08) {
+        const run = k.has('ShiftLeft') || k.has('ShiftRight') || (this.stick && mag > 0.92), sp = (run ? RUN_SPEED : WALK_SPEED) * Math.min(1, mag), ca = Math.cos(this.me.a), sa = Math.sin(this.me.a);
+        const n = Math.max(1, mag), vx = (ca * mx - sa * my) / n, vy = (sa * mx + ca * my) / n;
+        this.moveBy(vx * sp * dt, vy * sp * dt);
+        this.me.bob += dt * sp * 0.028;
+      }
+    },
+    // Looking around: by mouse, by dragging, or with a thumb.
+    turn(dx, dy, k) {
+      this.me.a += dx * k;
+      this.me.pitch = clamp(this.me.pitch - dy * k, -1.25, 1.1);
+    },
+    // Walk, sliding along walls instead of stopping dead.
+    moveBy(dx, dy) {
+      const me = this.me, steps = Math.ceil(Math.hypot(dx, dy) / 12) || 1;
+      for (let s = 0; s < steps; s++) {
+        me.x += dx / steps; me.y += dy / steps;
+        for (let it = 0; it < 2; it++) for (const p of this.solidsNear(me.x, me.y, BODY_R + 4)) this.pushOut(p.pts);
+      }
+      me.x = clamp(me.x, -3000, CAMPUS.w + 3000); me.y = clamp(me.y, -3000, CAMPUS.h + 3000);
+    },
+    pushOut(pts) {
+      const me = this.me;
+      let best = Infinity, bx = 0, by = 0;
+      for (let i = 0; i < pts.length; i++) {
+        const [ax, ay] = pts[i], [ex, ey] = pts[(i + 1) % pts.length], abx = ex - ax, aby = ey - ay, l2 = abx * abx + aby * aby, t = l2 ? clamp(((me.x - ax) * abx + (me.y - ay) * aby) / l2, 0, 1) : 0;
+        const qx = ax + abx * t, qy = ay + aby * t, d = Math.hypot(me.x - qx, me.y - qy);
+        if (d < best) { best = d; bx = qx; by = qy; }
+      }
+      const inside = pointInPoly(me.x, me.y, pts);
+      if (!inside && best >= BODY_R) return;
+      const ex = me.x - bx, ey = me.y - by, d = Math.hypot(ex, ey) || 1e-6, s = inside ? -1 : 1;
+      me.x = bx + (ex / d) * BODY_R * s; me.y = by + (ey / d) * BODY_R * s;
+    },
+    solidsNear(x, y, R) {
+      const out = [], test = p => { if (p.x0 < x + R && p.x1 > x - R && p.y0 < y + R && p.y1 > y - R) out.push(p); };
+      for (const p of this.polys) test(p);
+      for (const o of this.holes3d.values()) for (const p of o.solids) test(p);
+      return out;
+    },
+    // Coworkers you pass say something now and then, and the ducks on the pond say hello back.
+    meet() {
+      const me = this.me;
+      if (G.clock - (this.quackAt ?? -99) > 20) for (const d of Campus.ducks) {
+        if (Math.hypot(d.px + Math.cos(d.a) * d.rx * d.r - me.x, d.py + Math.sin(d.a) * d.ry * d.r - me.y) > 240) continue;
+        this.quackAt = G.clock;
+        Sound.quack();
+        Secrets.find('ducks', 0.3, true);
+        break;
+      }
+      if (G.clock - (this.metAt ?? -99) < 12) return;
+      for (const n of Campus.npcs) {
+        if (Math.abs(n.x - me.x) > 150 || Math.abs(n.y - me.y) > 150 || Math.hypot(n.x - me.x, n.y - me.y) > 150 || G.clock - (n.metAt ?? -99) < 60) continue;
+        n.metAt = this.metAt = G.clock;
+        ping({ from: `${n.name}, ${n.dept}`, initials: n.name[0], color: n.shirt, text: pick(CHATTER[Campus.nodes[n.node].zone] || CHATTER.office), tag: 'overheard' });
+        return;
+      }
+    },
+    // Is there a tee at your feet?
+    findTee() {
+      let best = null, bd = 110;
+      for (const wh of this.holes3d.keys()) {
+        const d = Math.hypot(wh.h.tee[0] + wh.ox - this.me.x, wh.h.tee[1] + wh.oy - this.me.y);
+        if (d < bd) { bd = d; best = wh; }
+      }
+      this.prompt = best;
+    },
+    where() {
+      const id = bldOf(this.me.x, this.me.y);
+      if (id) return COURSES[id].name;
+      const a = WALK_AREAS.find(([, [x0, y0, x1, y1]]) => this.me.x > x0 && this.me.x < x1 && this.me.y > y0 && this.me.y < y1);
+      return a ? a[0] : 'The campus';
+    },
+
+    // ---- Playing a hole ----
+    startHole(wh) {
+      if (!wh || this.playing || G.screen !== 'walk') return;
+      const name = (String(setupPlayers[0] || '').trim() || 'You').slice(0, 16), keep = this.lastPlayer;
+      this.playing = wh;
+      this.prompt = null;
+      this.keys.clear(); this.stick = null; $('walkStick').hidden = true;
+      if (document.pointerLockElement) document.exitPointerLock();
+      setCourse(wh.course);
+      // The same pins and flips as the hole in front of you.
+      const key = wh.key === 'day' ? 'day:' + todayKey() : wh.key;
+      startGame([{ name, dept: setupDepts[0] ?? -1 }], { kind: 'practice', key, label: `Walk around · ${HOLES[wh.idx].name}` }, { courseId: wh.course, practice: wh.idx });
+      // A hot streak carries from hole to hole while you walk the campus.
+      if (keep && keep.heat) { G.players[0].heat = keep.heat; G.players[0].fire = keep.fire; if (G.ball) G.ball.fire = !!keep.fire; updateHud(); }
+      const o = this.holes3d.get(wh), h = G.hole;
+      if (!o || o.src.cup[0] !== h.cup[0] || o.src.cup[1] !== h.cup[1] || o.src.tee[0] !== h.tee[0] || o.src.tee[1] !== h.tee[1]) { this.dropHole(wh); const n = this.makeHole(wh, h); n.overhead.visible = !this.over; this.holes3d.set(wh, n); }
+      this.lastPhase = null; this.chaseA = null;
+      this.camMode = this.topView ? 'top' : 'putt'; this.camBlend = 0;
+      this.syncUi();
+    },
+    // Back on your feet, standing behind the hole's tee.
+    leaveHole() {
+      const wh = this.playing;
+      if (!wh) return;
+      this.playing = null;
+      this.putt = null;
+      this.ptrs.clear();
+      this.lastPlayer = G.players[0];
+      G.timers.length = 0;
+      Party.clear();
+      closeAllOverlays();
+      G.screen = 'walk'; G.phase = 'idle'; G.practice = null;
+      G.hole = null; G.ball = null;
+      showHud(false);
+      const o = this.holes3d.get(wh);
+      if (o && o.src !== wh.h) this.dropHole(wh);
+      this.standBy(wh, wh.h);
+      this.camMode = 'walk'; this.camBlend = 0;
+      this.syncUi();
+    },
+    // After the ball drops: the score shows for a moment, then you're back on your feet.
+    holeDone() {
+      const p = G.players[0], s = p.scores[G.holeIdx], st = Career.stars(COURSE.id, G.holeIdx), best = Career.best(COURSE.id, G.holeIdx);
+      const un = G.lastStars ? G.lastStars.unlocked : [], g = un[un.length - 1];
+      if (g) { toast('Unlocked!', g.kind === 'building' ? `${g.name}: your badge now opens the private elevator.` : `${g.name}. It’s in the Locker.`, 'hi'); Sound.cheer(); }
+      else toast(`${s} ${s === 1 ? 'stroke' : 'strokes'}`, `Your best here: ${best ?? s}${st ? ' ' + starText(st) : ''}. Go again, or find another tee.`, s <= HOLES[G.holeIdx].par ? 'hi' : '');
+      const wh = this.playing;
+      after(g ? 2.4 : 1.9, () => { if (this.playing === wh && G.screen === 'play') this.leaveHole(); });
+    },
+    // Putting: drag sideways to aim, pull back toward you for power, let go to putt. The keys work too.
+    puttDown(x, y) { if (!canAim()) return; this.putt = { x, y, a0: kbAim.angle, power: 0 }; kbAim.power = 0.03; },
+    puttMove(x, y) {
+      const p = this.putt;
+      if (!p || !canAim()) return;
+      kbAim.angle = p.a0 + (x - p.x) * (this.touch ? 0.006 : 0.004);
+      p.power = clamp((y - p.y) / clamp(ch * 0.32, 140, 260), 0, 1);
+      kbAim.power = Math.max(0.03, p.power);
+    },
+    puttUp() {
+      const p = this.putt;
+      this.putt = null;
+      if (!p || !canAim()) return;
+      if (p.power >= 0.04) shoot(kbAim.angle + wobble(), p.power);
+      else kbAim.power = 0.5;
+    },
+    toggleView() {
+      if (!this.playing) return;
+      this.topView = !this.topView;
+      this.camMode = this.topView ? 'top' : 'putt'; this.camBlend = 0;
+      this.syncUi();
+    },
+
+    // ---- Camera, light and screen ----
+    // How far back the camera can sit before something tall gets between it and the ball.
+    clipCam(bx, by, cx, cy) {
+      const dx = cx - bx, dy = cy - by, len = Math.hypot(dx, dy) || 1;
+      let t = 1;
+      for (const s of this.solidsNear((bx + cx) / 2, (by + cy) / 2, len / 2 + 30)) {
+        if (s.h < 90) continue;
+        for (let i = 0; i < s.pts.length; i++) {
+          const [ax, ay] = s.pts[i], [ex, ey] = s.pts[(i + 1) % s.pts.length], sx = ex - ax, sy = ey - ay, den = dx * sy - dy * sx;
+          if (Math.abs(den) < 1e-9) continue;
+          const u = ((ax - bx) * sy - (ay - by) * sx) / den, v = ((ax - bx) * dy - (ay - by) * dx) / den;
+          if (u > 0 && u < t && v >= 0 && v <= 1) t = u;
+        }
+      }
+      return t >= 1 ? 1 : Math.max(0.2, t - 22 / len);
+    },
+    placeCamera(dt) {
+      const c = this.camera, me = this.me, b = G.ball, wh = this.playing;
+      let x, y, z, tx, ty, tz, ux = 0, uy = 1, uz = 0, fov = this.fovBase || 68;
+      if (wh && b && this.camMode === 'top') {
+        // Straight down over the hole, tee at the bottom of the screen.
+        const h = G.hole || wh.h, [fx0, fy0, fx1, fy1] = h.frame, cx = (fx0 + fx1) / 2 + wh.ox, cy = (fy0 + fy1) / 2 + wh.oy;
+        const ua = Math.atan2(h.cup[1] - h.tee[1], h.cup[0] - h.tee[0]), dx = Math.cos(ua), dy = Math.sin(ua);
+        let eu = 0, er = 0;
+        for (const [px, py] of [[fx0, fy0], [fx1, fy0], [fx0, fy1], [fx1, fy1]]) { const ex = px + wh.ox - cx, ey = py + wh.oy - cy; eu = Math.max(eu, Math.abs(ex * dx + ey * dy)); er = Math.max(er, Math.abs(ey * dx - ex * dy)); }
+        const tv = Math.tan((TOP_FOV * Math.PI) / 360), hgt = Math.max(eu / tv, er / (tv * c.aspect)) * 1.05 + 16;
+        x = cx; z = cy; y = hgt; tx = cx; ty = 0; tz = cy; ux = dx; uy = 0; uz = dy; fov = TOP_FOV;
+      } else if (wh && b) {
+        // Behind the ball, looking where you're aiming, or where it's rolling.
+        const rolling = b.state === 'rolling';
+        let a = kbAim.angle;
+        if (rolling && Math.hypot(b.vx, b.vy) > 40) a = Math.atan2(b.vy, b.vx);
+        if (this.chaseA == null) this.chaseA = a;
+        else this.chaseA += Math.atan2(Math.sin(a - this.chaseA), Math.cos(a - this.chaseA)) * Math.min(1, dt * (rolling ? 2.5 : 12));
+        const ca = Math.cos(this.chaseA), sa = Math.sin(this.chaseA), bx = b.x + wh.ox, by = b.y + wh.oy, back = rolling ? 230 : 175;
+        const k = this.clipCam(bx, by, bx - ca * back, by - sa * back);
+        x = bx - ca * back * k; z = by - sa * back * k; y = (rolling ? 130 : 100) * (0.6 + 0.4 * k);
+        tx = bx + ca * (rolling ? 120 : 80); tz = by + sa * (rolling ? 120 : 80); ty = 0;
+      } else {
+        const bob = reduceMotion ? 0 : Math.sin(me.bob) * 3;
+        x = me.x; z = me.y; y = EYE + bob;
+        tx = me.x + Math.cos(me.a) * Math.cos(me.pitch) * 100; tz = me.y + Math.sin(me.a) * Math.cos(me.pitch) * 100; ty = y + Math.sin(me.pitch) * 100;
+        this.chaseA = null;
+      }
+      // Ease between walking, putting and the view from above.
+      this.camBlend = Math.min(1, this.camBlend + dt * 2.2);
+      const k = this.camBlend >= 1 ? 1 : 1 - Math.pow(1 - this.camBlend, 3), cm = this.cam, want = { x, y, z, tx, ty, tz, ux, uy, uz, fov };
+      if (cm.fov == null) cm.fov = fov;
+      if (k >= 1) Object.assign(cm, want);
+      else for (const key in want) cm[key] = lerp(cm[key], want[key], k);
+      if (Math.abs(c.fov - cm.fov) > 0.01) { c.fov = cm.fov; c.updateProjectionMatrix(); }
+      c.position.set(cm.x, cm.y, cm.z);
+      c.up.set(cm.ux, cm.uy, cm.uz).normalize();
+      c.lookAt(cm.tx, cm.ty, cm.tz);
+      // From above, the roofs, the lights and the hanging signs would be in the way.
+      const over = cm.y > WALL_H - 60;
+      if (over !== this.over) {
+        this.over = over;
+        for (const r of this.roofs.concat(this.tagged.ceiling || [])) r.visible = !over;
+        for (const o of this.holes3d.values()) o.overhead.visible = !over;
+      }
+    },
+    // The sun and the sky follow your clock, like on the map. Windows and lamps light up at night.
+    lights() {
+      const hr = Campus.hour(), day = clamp(Math.sin(((hr - 6) / 12) * Math.PI) * 1.4, 0, 1), dusk = clamp(1 - Math.abs(hr - 18.5) / 1.6, 0, 1) + clamp(1 - Math.abs(hr - 6.5) / 1.4, 0, 1);
+      const sky = this.sky || (this.sky = new THREE.Color());
+      sky.set('#0d1730').lerp(this.tmpC || (this.tmpC = new THREE.Color('#9fd1f2')), day).lerp(this.tmpD || (this.tmpD = new THREE.Color('#f2a97e')), clamp(dusk, 0, 1) * 0.5);
+      this.scene.background = sky;
+      this.scene.fog.color.copy(sky);
+      // (Lights in this version of three.js are π times dimmer than the numbers suggest.)
+      this.hemi.intensity = Math.PI * (0.25 + 0.35 * day);
+      this.sun.intensity = Math.PI * (0.03 + 0.47 * day);
+      const tint = this.tint || (this.tint = new THREE.Color());
+      tint.setRGB(lerp(0.3, 1, day), lerp(0.34, 1, day) - dusk * 0.06, lerp(0.5, 1, day) - dusk * 0.12);
+      for (const m of this.groundMats) m.color.copy(m.userData.base).multiply(tint);
+      const az = ((hr - 6) / 12) * Math.PI;
+      this.sun.position.set(this.me.x - Math.cos(az) * 4000, 600 + 5000 * Math.max(0.05, Math.sin(az)), this.me.y + 3000);
+      this.sun.target.position.set(this.me.x, 0, this.me.y);
+      const night = 1 - day, glass = this.mats.glass;
+      if (glass) glass.emissive.setRGB(0.95 * night, 0.85 * night, 0.55 * night);
+      if (this.bulbs) this.bulbs.visible = night > 0.3;
+    },
+    resize() {
+      if (!this.renderer) return;
+      this.renderer.setSize(cw, ch, false);
+      this.camera.aspect = cw / ch;
+      this.fovBase = cw < ch ? 80 : 68;
+      if (this.camMode !== 'top') { this.camera.fov = this.cam.fov = this.fovBase; }
+      this.camera.updateProjectionMatrix();
+      this.hudShown = null;
+    },
+    frame() {
+      this.renderer.render(this.scene, this.camera);
+      // Celebrations still play over the top, on the classic canvas, which is hidden the rest of the time.
+      const party = Party.running.length > 0;
+      if (party || this.partyShown) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        Party.draw(ctx);
+      }
+      if (party !== this.partyShown) { this.partyShown = party; canvas.style.visibility = party ? '' : 'hidden'; }
+    },
+    syncUi() {
+      const walking = G.screen === 'walk', putting = !!this.playing && G.screen === 'play', ui = $('walkUi');
+      ui.classList.toggle('putting', putting);
+      $('walkTop').hidden = !walking;
+      $('walkCross').hidden = !walking;
+      $('walkSide').hidden = !putting;
+      const vw = this.topView ? 'Behind the ball' : 'From above';
+      if ($('walkView').textContent !== vw) $('walkView').textContent = vw;
+      if (putting) $('hint').hidden = true;
+      const w = this.where();
+      if (w !== this.whereShown) { $('walkWhere').textContent = w; this.whereShown = w; }
+      const pr = walking ? this.prompt : null;
+      $('walkPrompt').hidden = !pr;
+      if (pr && this.promptShown !== pr) {
+        const def = COURSES[pr.course].holes[pr.idx], best = Career.best(pr.course, pr.idx);
+        $('walkPromptName').textContent = def.name;
+        $('walkPromptSub').textContent = `${def.time} · Hole ${pr.idx + 1} · Par ${def.par}${best != null ? ` · Your best ${best} ${starText(Career.stars(pr.course, pr.idx))}` : ''}`;
+      }
+      this.promptShown = pr;
+      // A ring on the floor where you'd tee off.
+      if (this.teeRing) {
+        this.teeRing.visible = !!pr;
+        if (pr) { this.teeRing.position.set(pr.h.tee[0] + pr.ox, 3, pr.h.tee[1] + pr.oy); this.teeRing.material.opacity = 0.55 + 0.35 * Math.sin(G.clock * 5); }
+      }
+      const locked = !!document.pointerLockElement;
+      const hint = putting ? (this.touch ? 'Drag sideways to aim, pull down for power, and let go to putt.' : 'Drag sideways to aim, pull down for power, and let go. Or aim with the arrow keys and putt with Space. V switches views.')
+        : walking ? (this.touch ? 'Left thumb walks, right thumb looks. Step onto a tee to play it.' : locked ? 'WASD walks, Shift runs, the mouse looks. Step onto a tee and press E. Esc frees the mouse.' : 'Click and drag to look around. WASD or the arrow keys to walk, Shift to run.') : '';
+      if (hint !== this.hintShown) { $('walkHint').textContent = hint; this.hintShown = hint; }
+      // While putting, the hint and the power bar sit just above the game's own buttons.
+      if (putting !== this.hudShown) {
+        this.hudShown = putting;
+        const lift = putting && !$('hudBottom').hidden ? app.getBoundingClientRect().bottom - $('hudBottom').getBoundingClientRect().top + 8 : 14;
+        $('walkHint').style.bottom = `${lift}px`;
+        $('walkPower').style.bottom = `${lift + 40}px`;
+      }
+      const pw = putting && this.putt ? this.putt.power : 0;
+      $('walkPower').hidden = !(pw > 0);
+      if (pw > 0) { const bar = $('walkPower').firstElementChild; bar.style.width = `${Math.round(pw * 100)}%`; bar.style.background = powerColor(pw); }
+    },
+    // Pointer input on the 3D view.
+    down(e) {
+      if (!this.on) return;
+      Sound.unlock();
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      e.preventDefault();
+      const cv = $('stage3d'), r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+      try { cv.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      if (G.screen === 'play') {
+        if (this.playing && !this.putt && canAim()) { this.puttDown(x, y); this.ptrs.set(e.pointerId, { kind: 'putt' }); }
+        return;
+      }
+      if (G.screen !== 'walk') return;
+      if (e.pointerType === 'mouse') {
+        if (!document.pointerLockElement && cv.requestPointerLock) { try { const p = cv.requestPointerLock(); if (p && p.catch) p.catch(() => {}); } catch (err) { /* ignore */ } }
+        this.ptrs.set(e.pointerId, { kind: 'look', x, y });
+      } else if (x < r.width * 0.45 && !this.stick) {
+        this.stick = { id: e.pointerId, x0: x, y0: y, dx: 0, dy: 0 };
+        this.ptrs.set(e.pointerId, { kind: 'stick' });
+        const st = $('walkStick');
+        st.style.left = `${x}px`; st.style.top = `${y}px`; st.firstElementChild.style.transform = '';
+        st.hidden = false;
+      } else this.ptrs.set(e.pointerId, { kind: 'look', x, y });
+    },
+    move(e) {
+      if (!this.on) return;
+      const cv = $('stage3d');
+      if (document.pointerLockElement === cv) { if (G.screen === 'walk') this.turn(clamp(e.movementX || 0, -150, 150), clamp(e.movementY || 0, -150, 150), 0.0024); return; }
+      const p = this.ptrs.get(e.pointerId);
+      if (!p) return;
+      const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+      if (p.kind === 'putt') this.puttMove(x, y);
+      else if (p.kind === 'stick' && this.stick) {
+        const s = this.stick, dx = x - s.x0, dy = y - s.y0, l = Math.hypot(dx, dy), R = 54, k = l > R ? R / l : 1;
+        s.dx = (dx * k) / R; s.dy = (dy * k) / R;
+        $('walkStick').firstElementChild.style.transform = `translate(${dx * k}px, ${dy * k}px)`;
+      } else if (p.kind === 'look' && G.screen === 'walk') { this.turn(x - p.x, y - p.y, this.touch ? 0.0065 : 0.0045); p.x = x; p.y = y; }
+    },
+    up(e) {
+      const p = this.ptrs.get(e.pointerId);
+      this.ptrs.delete(e.pointerId);
+      if (!p) return;
+      if (p.kind === 'putt') this.puttUp();
+      if (p.kind === 'stick') { this.stick = null; $('walkStick').hidden = true; }
+    },
+    key(e, down) {
+      if (!this.on) return;
+      const tag = e.target && e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (!down) { this.keys.delete(e.code); return; }
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (this.playing && G.screen === 'play') { if (e.code === 'KeyV' && !anyOverlayOpen()) { e.preventDefault(); this.toggleView(); } return; }
+      if (G.screen !== 'walk') return;
+      if (e.code === 'KeyE' || (e.code === 'Enter' && tag !== 'BUTTON')) { if (this.prompt) { e.preventDefault(); this.startHole(this.prompt); } return; }
+      if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ShiftLeft', 'ShiftRight'].includes(e.code)) { this.keys.add(e.code); e.preventDefault(); }
+    },
+  };
+
+  // ---------------------------------------------------------------------------
   // Input
   // ---------------------------------------------------------------------------
   const pullMax = () => clamp(Math.min(cw, ch) * 0.3, 110, 230);
@@ -9108,6 +10364,18 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     e.preventDefault();
   });
 
+  // Walking around in 3D: the mouse or a thumb looks, a thumb or the keys walk, and a drag putts.
+  const stage3d = $('stage3d');
+  stage3d.addEventListener('pointerdown', e => World.down(e));
+  stage3d.addEventListener('pointermove', e => World.move(e));
+  stage3d.addEventListener('pointerup', e => World.up(e));
+  stage3d.addEventListener('pointercancel', e => World.up(e));
+  stage3d.addEventListener('contextmenu', e => e.preventDefault());
+  window.addEventListener('keydown', e => World.key(e, true));
+  window.addEventListener('keyup', e => World.key(e, false));
+  window.addEventListener('blur', () => { World.keys.clear(); World.stick = null; $('walkStick').hidden = true; });
+  document.addEventListener('pointerlockchange', () => app.classList.toggle('locked', document.pointerLockElement === stage3d));
+
   // ---------------------------------------------------------------------------
   // HUD, overlays and screens
   // ---------------------------------------------------------------------------
@@ -9250,11 +10518,12 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     $('quitConfirm').hidden = true;
     const p = curPlayer();
     $('menuSub').textContent = p ? `${HOLES[G.holeIdx].time}, ${holeName(G.holeIdx)}. ${ONLINE.on ? 'Room ' + ONLINE.code + '.' : G.players.length > 1 ? p.name + ' is up.' : ''}` : '';
-    $('quitBtn').textContent = ONLINE.on ? 'Leave room' : 'Quit round';
-    $('quitYes').textContent = ONLINE.on ? 'Leave room' : 'Quit round';
+    $('quitBtn').textContent = ONLINE.on ? 'Leave room' : World.playing ? 'Walk away' : 'Quit round';
+    $('quitYes').textContent = ONLINE.on ? 'Leave room' : World.playing ? 'Walk away' : 'Quit round';
     $('quitMsg').textContent = ONLINE.on
       ? 'Leave this room? You can come back with the invite link, but your round starts over.'
-      : "Quit this round? Everyone's scores from this round will be lost.";
+      : World.playing ? 'Leave this hole and go back to walking around?' : "Quit this round? Everyone's scores from this round will be lost.";
+    $('menuMapBtn').hidden = !!World.playing;
     openOverlay('menu');
   }
   function closeMenu() { closeOverlay('menu'); }
@@ -10640,6 +11909,12 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     startFromSetup();
   });
   $('mapPractice').addEventListener('click', () => { const wh = Campus.sel; if (wh) { $('mapUi').hidden = true; startPractice(wh.course, wh.idx); } });
+  $('mapWalk').addEventListener('click', () => { const wh = Campus.sel; if (wh) World.start(wh); });
+  $('walkBtn').addEventListener('click', () => World.start());
+  $('walkBack').addEventListener('click', () => World.stop());
+  $('walkPlay').addEventListener('click', () => World.startHole(World.prompt));
+  $('walkLeave').addEventListener('click', () => World.leaveHole());
+  $('walkView').addEventListener('click', () => World.toggleView());
   $('helpBtn').addEventListener('click', () => openOverlay('help'));
   $('helpClose').addEventListener('click', () => closeOverlay('help'));
   $('nextBtn').addEventListener('click', () => { Sound.unlock(); nextHole(); });
@@ -10652,7 +11927,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   $('menuHelpBtn').addEventListener('click', () => openOverlay('help'));
   $('quitBtn').addEventListener('click', () => { $('quitConfirm').hidden = false; $('quitNo').focus(); });
   $('quitNo').addEventListener('click', () => { $('quitConfirm').hidden = true; });
-  $('quitYes').addEventListener('click', () => (ONLINE.on ? leaveRoom() : showSetup()));
+  $('quitYes').addEventListener('click', () => { if (World.playing) { closeMenu(); World.leaveHole(); } else if (ONLINE.on) leaveRoom(); else showSetup(); });
   $('copyBtn').addEventListener('click', copyResults);
   $('lockerBtn').addEventListener('click', () => { renderLocker(); openOverlay('locker'); });
   $('lockerClose').addEventListener('click', () => closeOverlay('locker'));
@@ -10693,7 +11968,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   window.addEventListener('pagehide', () => { if (ONLINE.on) Net.send({ k: 'bye' }); });
   if (urlParams.has('debug')) {
     window.n2fDebug = {
-      G, ONLINE, Net, Party, Campus, Workshop, view, Career, Daily, Ghost, COURSES, Goals, Secrets, SECRETS, Challenge, Rivals, starsWithinReach,
+      G, ONLINE, Net, Party, Campus, Workshop, World, view, Career, Daily, Ghost, COURSES, Goals, Secrets, SECRETS, Challenge, Rivals, starsWithinReach,
       gold() { G.forceGold = true; }, trickFor, retryPractice, startPractice,
       // Jumps to a hole of the current game, for testing.
       jump(i) { loadHole(i); startTurn(0, true); },
