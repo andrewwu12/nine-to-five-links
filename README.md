@@ -56,7 +56,7 @@ Turn it on from the setup card, or from the clubhouse for an online room. Floors
 - **Hot streaks:** two holes under par in a row sets you on fire: a flaming ball, a new sound on every putt, and a tag on the scoreboard until you make a bogey. Par keeps it going.
 - **Golden balls:** about one hole in 40 of a regular round, your ball turns gold. Sink it at par or better for a bonus star.
 - **Trick shots:** hole out off a wall, a bumper or something that moves, and the shot gets called: *Bank shot!*, *Double bank!*, *Off the forklift!*, *Sushi express!*, *Pinball wizard!* and more.
-- **Secrets:** fifteen things to find around the buildings and the campus, each worth a bonus star. The Locker drops hints; they aren't listed here.
+- **Secrets:** sixteen things to find around the buildings and the campus, each worth a bonus star. The Locker drops hints; they aren't listed here.
 - **Challenge links:** after a round, **Challenge a coworker** copies a message with a link that carries your round: the building, the pins, the mode and your score on each hole. Whoever opens it gets a challenge on the setup card, plays the same layout, sees your score on each hole as they go, and gets a verdict at the end with a link to send it back. Everything is in the link, so it needs no server.
 - **Head to head:** the game keeps your win–loss record against each coworker, from challenges and from full rounds played together on one screen or in an online room. It shows on the results, in the Locker and in the clubhouse.
 
@@ -203,9 +203,20 @@ Press **Play in 3D** on the setup card to play on the campus in first person. Yo
 - Every hole is built in 3D from the same layout and art as the classic game: rails, blocks, bumpers, moving parts and props, with a sign hanging over each one.
 - **Putting:** drag sideways to aim, pull down for power and let go, or aim with the arrow keys and putt with Space. **From above** (or V) looks straight down on the hole, and **Walk away** leaves it.
 - Between holes you can walk anywhere: in and out of all five buildings, past the pond, the coffee kiosk, the taco truck and the loading yard. Coworkers say what's on their minds as you pass, cars drive down the streets, and the sun and the lights follow your clock.
-- **On a computer:** click and drag to look around (the mouse locks to the view where the browser allows it, and Esc frees it), WASD or the arrow keys to walk, Shift to run.
+- **On a computer:** click and drag to look around (the mouse locks to the view where the browser allows it, and Esc frees it), WASD or the arrow keys to walk, Shift to run, Space to jump.
 - **On a phone:** your left thumb walks and your right thumb looks.
 - The 3D engine, [three.js](https://threejs.org) (MIT licence), is built into the page, so nothing extra downloads. It needs a browser that can show WebGL, and it isn't in online rooms yet.
+
+## Bug hunt
+
+Production bugs have got loose on the campus. In Play in 3D, press **Bug hunt** and squash them with a golf ball blaster, wave after wave.
+
+- **What's coming:** crawling bugs that bite, walking printers that spit paper jams, meeting invites that hover and follow you, and on every fifth wave, Legacy Code itself, a mainframe on legs.
+- **The blaster** fires whichever ball you wear from the Locker. Balls bounce off walls, and a squash off a bounce is a bank shot worth double. Squash two at once for a birdie, three for an eagle, and on up to a condor. Quick squashes in a row build a combo, and while you're on fire from golf, every ball hits twice as hard.
+- **Golf calls in backup.** Play any hole whenever you like; the bugs wait while you putt. Par brings a supply drop with morale and a full hopper, a birdie sends a flock of birds after the nearest bugs, and an eagle or a hole in one brings an eagle over that clears the floor and halves the boss.
+- **Morale** drops when you're bitten or hit, and comes back if you stay out of trouble for a few seconds. Run out and you take a sick day, unless you use your one mulligan. Your best score is kept.
+- **On a computer:** click or hold to fire (F works too), R reloads and Space jumps. **On a phone:** hold **Fire** and slide your thumb on it to aim, and tap **Reload** to reload. Red arrows at the edge of the screen point to bugs you can't see.
+- The balls go straight through coworkers. Nobody in the office gets hurt.
 
 ## The Workshop: build your own holes
 

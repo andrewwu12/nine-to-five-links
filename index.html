@@ -430,6 +430,48 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 .walk-note { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(calc(100% - 32px), 380px); background: var(--paper); color: var(--ink); border-radius: 16px; padding: 18px; text-align: center; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); }
 .walk-note p { margin: 0; font-size: 15px; }
 .walk-note .btn { margin-top: 14px; }
+.walk-note h3 { margin: 0 0 8px; font: 900 30px/1 var(--display); text-transform: uppercase; }
+.walk-note .row { justify-content: center; gap: 8px; }
+.walk-top .walk-hunt { margin-left: auto; }
+.walk-ui > .hunt-hud { position: absolute; inset: 0; pointer-events: none; }
+.hunt-hud > * { pointer-events: none; }
+.hunt-hud > button, .hunt-top .btn { pointer-events: auto; }
+.hunt-top { position: absolute; top: 12px; right: 16px; display: grid; justify-items: end; gap: 4px; width: 168px; padding: 9px 12px 10px; border-radius: 12px; background: rgba(15, 20, 28, .68); color: var(--on-floor); font: 600 12px var(--mono); }
+.hunt-top b { font: 900 18px/1 var(--display); text-transform: uppercase; letter-spacing: .04em; color: var(--hi); }
+.hunt-score { font: 900 26px/1 var(--display); color: #fff; font-variant-numeric: tabular-nums; }
+.hunt-bar { width: 100%; height: 8px; border-radius: 999px; background: rgba(255, 255, 255, .16); overflow: hidden; }
+.hunt-bar i { display: block; height: 100%; width: 100%; border-radius: inherit; background: #35d07f; transition: width .15s; }
+.hunt-boss { width: 100%; display: grid; gap: 3px; justify-items: end; color: #3dff7a; font: 900 14px/1 var(--display); text-transform: uppercase; letter-spacing: .06em; }
+.hunt-boss .hunt-bar i { background: #3dff7a; }
+.hunt-end { min-height: 30px; padding: 6px 12px; font-size: 12px; margin-top: 4px; }
+.hunt-ammo { position: absolute; right: 16px; bottom: 14px; padding: 6px 12px; border-radius: 12px; background: rgba(15, 20, 28, .62); color: #fff; font: 900 22px/1 var(--display); font-variant-numeric: tabular-nums; }
+.hunt-call { position: absolute; left: 50%; top: 30%; transform: translate(-50%, -50%) scale(.7); font: 900 clamp(36px, 10vw, 76px)/1 var(--display); color: var(--hi); text-transform: uppercase; letter-spacing: .03em; text-shadow: 0 4px 0 #8a5a00, 0 12px 30px rgba(0, 0, 0, .5); opacity: 0; transition: opacity .18s, transform .18s; white-space: nowrap; }
+.hunt-call.on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.hunt-hurt { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(232, 69, 58, 0) 50%, rgba(232, 69, 58, .6) 100%); opacity: 0; }
+.hunt-hurt.on { animation: huntHurt .5s ease-out; }
+@keyframes huntHurt { from { opacity: 1; } to { opacity: 0; } }
+.hunt-pops span { position: absolute; transform: translate(-50%, -50%); font: 900 20px/1 var(--display); color: #fff; text-shadow: 0 2px 4px rgba(0, 0, 0, .75); white-space: nowrap; animation: huntPop .9s ease-out forwards; }
+@keyframes huntPop { from { opacity: 1; margin-top: 0; } to { opacity: 0; margin-top: -56px; } }
+.hunt-fire { position: absolute; right: 20px; bottom: 96px; width: 92px; height: 92px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .8); background: rgba(232, 69, 58, .82); color: #fff; font: 900 20px/1 var(--display); text-transform: uppercase; letter-spacing: .06em; touch-action: none; display: none; place-items: center; align-content: center; gap: 4px; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
+.hunt-fire small { font: 600 11px var(--mono); letter-spacing: 0; text-transform: none; }
+.hunt-reload { position: absolute; right: 26px; bottom: 200px; display: none; }
+.hunt-hud.over .hunt-fire, .hunt-hud.over .hunt-reload, .hunt-hud.over .hunt-ammo { visibility: hidden; }
+.hunt-edge { position: absolute; top: 50%; display: grid; justify-items: center; gap: 4px; transform: translateY(-50%); color: #fff; font: 900 15px/1 var(--display); text-shadow: 0 2px 4px rgba(0, 0, 0, .75); }
+.hunt-edge::before { content: ''; border: 15px solid transparent; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .45)); }
+.hunt-edge.left { left: 8px; }
+.hunt-edge.left::before { border-left: 0; border-right: 22px solid #ff5a4e; }
+.hunt-edge.right { right: 8px; }
+.hunt-edge.right::before { border-right: 0; border-left: 22px solid #ff5a4e; }
+.hunt-edge.near::before { animation: huntEdge .4s ease-in-out infinite alternate; }
+@keyframes huntEdge { to { transform: scale(1.3); } }
+.walk-ui.touch .hunt-fire { display: grid; }
+.walk-ui.touch .hunt-reload { display: inline-flex; }
+.walk-ui.touch .hunt-ammo { display: none; }
+.walk-ui.touch.hunting .walk-where { display: none; }
+.walk-ui.touch.hunting .walk-prompt { top: 158px; }
+.walk-cross.hunting::before, .walk-cross.hunting::after { background: var(--hi); }
+.walk-cross.hit::before, .walk-cross.hit::after { background: #ff5a4e; animation: huntHit .2s; }
+@keyframes huntHit { from { transform: scale(1.8); } to { transform: none; } }
 
 /* Taunt menu */
 .taunt-pop { position: absolute; left: 16px; bottom: 64px; width: min(340px, calc(100% - 32px)); max-height: calc(100% - 150px); overflow-y: auto; display: grid; gap: 4px; padding: 8px; background: var(--paper); border-radius: 14px; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); z-index: 9; }
@@ -472,6 +514,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 @media (prefers-reduced-motion: reduce) {
   .toast.show { animation: toast-fade 2s linear both; }
   .btn { transition: none; }
+  .hunt-edge.near::before, .walk-cross.hit::before, .walk-cross.hit::after { animation: none; }
+  .hunt-call { transition: opacity .18s; }
 }
 </style>
 </head>
@@ -559,6 +603,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     <div class="walk-top" id="walkTop">
       <button class="btn btn-paper" id="walkBack" type="button">Back</button>
       <div class="walk-where" id="walkWhere" role="status">The campus</div>
+      <button class="btn btn-paper walk-hunt" id="huntBtn" type="button">Bug hunt</button>
     </div>
     <div class="walk-cross" id="walkCross" aria-hidden="true"></div>
     <div class="walk-stick" id="walkStick" hidden aria-hidden="true"><i></i></div>
@@ -577,6 +622,31 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     </div>
     <p class="walk-hint" id="walkHint"></p>
     <div class="walk-note" id="walkNote" hidden></div>
+    <div class="hunt-hud" id="huntHud" hidden>
+      <div class="hunt-top">
+        <b id="huntWave">Wave 1</b><span id="huntLeft"></span><span class="hunt-score" id="huntScore">0</span>
+        <div class="hunt-bar" title="Morale"><i id="huntMorale"></i></div>
+        <div class="hunt-boss" id="huntBoss" hidden><span>Legacy Code</span><div class="hunt-bar"><i id="huntBossBar"></i></div></div>
+        <button class="btn btn-paper hunt-end" id="huntEnd" type="button">End hunt</button>
+      </div>
+      <div class="hunt-ammo" id="huntAmmo"></div>
+      <div class="hunt-call" id="huntCall" aria-live="polite"></div>
+      <div class="hunt-hurt" id="huntHurt"></div>
+      <div class="hunt-pops" id="huntPops"></div>
+      <div class="hunt-edge left" id="huntEdgeL" hidden><small></small></div>
+      <div class="hunt-edge right" id="huntEdgeR" hidden><small></small></div>
+      <button class="hunt-fire" id="huntFire" type="button" aria-label="Fire">Fire<small id="huntFireAmmo"></small></button>
+      <button class="btn btn-paper hunt-reload" id="huntReload" type="button">Reload</button>
+    </div>
+    <div class="walk-note" id="huntOver" hidden>
+      <h3>Sick day</h3>
+      <p id="huntOverText"></p>
+      <div class="row wrap">
+        <button class="btn btn-hi" id="huntMull" type="button">Take a mulligan</button>
+        <button class="btn btn-paper" id="huntAgain" type="button">Hunt again</button>
+        <button class="btn btn-paper" id="huntQuit" type="button">Walk around</button>
+      </div>
+    </div>
   </div>
   <div class="pings" id="pings" aria-live="polite"></div>
   <div class="taunt-pop" id="tauntPop" role="menu" aria-label="Taunts" hidden></div>
@@ -848,9 +918,11 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         <dt>Trick shots</dt>
         <dd>Hole out off a wall, a bumper, a forklift, a conveyor or a pinball bumper and the office calls the shot: bank shot, double bank, off the forklift, sushi express and more.</dd>
         <dt>Secrets</dt>
-        <dd>Fifteen things to find around the buildings and the campus, each worth a bonus star. The Locker drops hints.</dd>
+        <dd>Sixteen things to find around the buildings and the campus, each worth a bonus star. The Locker drops hints.</dd>
         <dt>Play in 3D</dt>
-        <dd>The whole campus in first person. You start at the first hole of the building you picked: tap Play this hole, or Play all 9 holes for a full round on today's pins with the scorecard, for everyone on the setup card. Drag sideways to aim and pull down for power, or use the arrow keys and Space. From above looks down on the hole. Between holes you can walk anywhere: in and out of every building, past the pond and the taco truck. Stand on any hole to play it. On a computer, WASD walks and the mouse looks; on a phone, your left thumb walks and your right one looks.</dd>
+        <dd>The whole campus in first person. You start at the first hole of the building you picked: tap Play this hole, or Play all 9 holes for a full round on today's pins with the scorecard, for everyone on the setup card. Drag sideways to aim and pull down for power, or use the arrow keys and Space. From above looks down on the hole. Between holes you can walk anywhere: in and out of every building, past the pond and the taco truck. Stand on any hole to play it. On a computer, WASD walks, the mouse looks and Space jumps; on a phone, your left thumb walks and your right one looks.</dd>
+        <dt>Bug hunt</dt>
+        <dd>In Play in 3D, press Bug hunt. Production bugs, walking printers and meeting invites swarm in, wave after wave, and Legacy Code itself boots up every fifth wave. Squash them with the golf ball blaster: balls bounce off walls, and a squash off a bounce is a bank shot worth double. Several at once is a birdie, then an eagle, then an albatross. Sink a putt on any hole for backup: par brings a supply drop, a birdie a birdie strike, an eagle or a hole in one an eagle strike. Run out of morale and you take a sick day, unless you use your one mulligan. On a computer, click or hold to fire (F works too), R reloads and Space jumps; on a phone, hold Fire and slide it to aim. Red arrows at the edge of the screen point to bugs you can’t see. The balls go straight through coworkers.</dd>
         <dt>Practice</dt>
         <dd>Tap a hole on the campus map, or a star within reach in the Locker, to play it on its own. Press Retry, or R, to start again from the tee.</dd>
         <dt>Challenges</dt>
@@ -2530,6 +2602,11 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       bumper() { tone({ freq: 1180, to: 1560, type: 'square', dur: 0.07, vol: 0.06 }); tone({ freq: 392, dur: 0.16, vol: 0.12, delay: 0.02 }); noise({ dur: 0.05, vol: 0.12, type: 'highpass', freq: 2400, q: 0.8 }); },
       squeal() { noise({ dur: 0.55, vol: 0.1, type: 'bandpass', freq: 2600, to: 1900, q: 9 }); },
       fire() { noise({ dur: 0.8, vol: 0.22, type: 'bandpass', freq: 380, to: 1900, q: 0.9 }); tone({ freq: 220, to: 660, type: 'sawtooth', dur: 0.45, vol: 0.05 }); [523, 784, 1047].forEach((f, i) => tone({ freq: f, type: 'triangle', dur: 0.25, vol: 0.1, delay: 0.25 + i * 0.08 })); },
+      // Bug hunt: the blaster, a squashed bug, a hit on you, and a reload.
+      blast() { tone({ freq: 820, to: 260, type: 'square', dur: 0.07, vol: 0.05 }); noise({ dur: 0.06, vol: 0.12, type: 'bandpass', freq: 1700, q: 1.1 }); },
+      squish() { noise({ dur: 0.14, vol: 0.22, type: 'lowpass', freq: 1000, to: 220, q: 1.4 }); tone({ freq: 320, to: 90, dur: 0.12, vol: 0.12 }); },
+      hurt() { tone({ freq: 190, to: 110, type: 'sawtooth', dur: 0.2, vol: 0.1 }); },
+      reload() { [0, 0.1, 0.2].forEach(d => tone({ freq: 1250, to: 900, type: 'triangle', dur: 0.04, vol: 0.06, delay: d })); },
       // Knocking props around, by what they're made of.
       prop(mat, k) {
         const v = 0.04 + 0.2 * k;
@@ -2979,6 +3056,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     { id: 'heckler', name: 'Glutton for punishment', hint: 'Ask the office what it thinks. Then keep asking.' },
     { id: 'ducks', name: 'Duck, duck, putt', hint: 'Say hello to the ducks on the campus pond.' },
     { id: 'night', name: 'Graveyard shift', hint: 'Finish a hole in the small hours.' },
+    { id: 'bughunt', name: 'Pest control', hint: 'Survive the Legacy Code wave of a bug hunt in Play in 3D.' },
     { id: 'sushi', name: 'Conveyor-belt sushi', hint: 'Ride the whole loop at the penthouse lunch.', ph: true },
     { id: 'chopped', name: 'Chopped', hint: 'Get a little too close to the helicopter.', ph: true },
     { id: 'koi', name: 'Fish food', hint: 'The CEO’s koi are always hungry.', ph: true },
@@ -9142,6 +9220,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     },
     // Back to the course pass, or (from showSetup) just tidy up.
     stop(toSetup = true) {
+      Hunt.stop();
       this.playing = null; this.putt = null; this.prompt = null; this.on = false;
       this.round = false; this.followed = null; this.lastBall = null;
       this.keys.clear(); this.stick = null; this.ptrs.clear();
@@ -9882,6 +9961,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       this.ballFrame();
       this.lights();
       this.placeCamera(dt);
+      if (Hunt.on) Hunt.update(dt);
       this.syncUi();
     },
     // Slow frames draw fewer pixels; once there's room again, it goes back up.
@@ -9909,7 +9989,11 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         this.moveBy(vx * sp * dt, vy * sp * dt);
         this.me.bob += dt * sp * 0.028;
       }
+      // Up in the air from a jump, and back down.
+      const me = this.me;
+      if (me.jumpV || me.jumpY) { me.jumpY = Math.max(0, (me.jumpY || 0) + me.jumpV * dt); me.jumpV -= 1500 * dt; if (!me.jumpY && me.jumpV < 0) me.jumpV = 0; }
     },
+    jump() { if (!this.me.jumpY) this.me.jumpV = 470; },
     // Looking around: by mouse, by dragging, or with a thumb.
     turn(dx, dy, k) {
       this.me.a += dx * k;
@@ -9924,22 +10008,33 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       }
       me.x = clamp(me.x, -3000, CAMPUS.w + 3000); me.y = clamp(me.y, -3000, CAMPUS.h + 3000);
     },
-    pushOut(pts) {
-      const me = this.me;
+    // Push something round out of a solid it has walked into: you, or (with no solid given, against everything
+    // nearby) a bug, whose campus y is called z.
+    pushOut(pts, o = this.me, r = BODY_R, ky = 'y') {
+      if (!pts) { for (let it = 0; it < 2; it++) for (const p of this.solidsNear(o.x, o[ky], r + 4)) this.pushOut(p.pts, o, r, ky); return; }
+      const ox = o.x, oy = o[ky];
       let best = Infinity, bx = 0, by = 0;
       for (let i = 0; i < pts.length; i++) {
-        const [ax, ay] = pts[i], [ex, ey] = pts[(i + 1) % pts.length], abx = ex - ax, aby = ey - ay, l2 = abx * abx + aby * aby, t = l2 ? clamp(((me.x - ax) * abx + (me.y - ay) * aby) / l2, 0, 1) : 0;
-        const qx = ax + abx * t, qy = ay + aby * t, d = Math.hypot(me.x - qx, me.y - qy);
+        const [ax, ay] = pts[i], [ex, ey] = pts[(i + 1) % pts.length], abx = ex - ax, aby = ey - ay, l2 = abx * abx + aby * aby, t = l2 ? clamp(((ox - ax) * abx + (oy - ay) * aby) / l2, 0, 1) : 0;
+        const qx = ax + abx * t, qy = ay + aby * t, d = Math.hypot(ox - qx, oy - qy);
         if (d < best) { best = d; bx = qx; by = qy; }
       }
-      const inside = pointInPoly(me.x, me.y, pts);
-      if (!inside && best >= BODY_R) return;
-      const ex = me.x - bx, ey = me.y - by, d = Math.hypot(ex, ey) || 1e-6, s = inside ? -1 : 1;
-      me.x = bx + (ex / d) * BODY_R * s; me.y = by + (ey / d) * BODY_R * s;
+      const inside = pointInPoly(ox, oy, pts);
+      if (!inside && best >= r) return;
+      const ex = ox - bx, ey = oy - by, d = Math.hypot(ex, ey) || 1e-6, s = inside ? -1 : 1;
+      o.x = bx + (ex / d) * r * s; o[ky] = by + (ey / d) * r * s;
     },
+    // What's solid near a spot. The campus's own solids sit in a coarse grid, so this stays quick with a swarm about.
     solidsNear(x, y, R) {
-      const out = [], test = p => { if (p.x0 < x + R && p.x1 > x - R && p.y0 < y + R && p.y1 > y - R) out.push(p); };
-      for (const p of this.polys) test(p);
+      if (!this.grid) {
+        this.grid = new Map();
+        for (const p of this.polys) for (let gx = Math.floor(p.x0 / 400); gx <= Math.floor(p.x1 / 400); gx++) for (let gy = Math.floor(p.y0 / 400); gy <= Math.floor(p.y1 / 400); gy++) {
+          const k = gx * 4096 + gy;
+          (this.grid.get(k) || this.grid.set(k, []).get(k)).push(p);
+        }
+      }
+      const out = [], seen = new Set(), test = p => { if (!seen.has(p) && p.x0 < x + R && p.x1 > x - R && p.y0 < y + R && p.y1 > y - R) { seen.add(p); out.push(p); } };
+      for (let gx = Math.floor((x - R) / 400); gx <= Math.floor((x + R) / 400); gx++) for (let gy = Math.floor((y - R) / 400); gy <= Math.floor((y + R) / 400); gy++) { const c = this.grid.get(gx * 4096 + gy); if (c) for (const p of c) test(p); }
       for (const o of this.holes3d.values()) for (const p of o.solids) test(p);
       return out;
     },
@@ -9957,7 +10052,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       for (const n of Campus.npcs) {
         if (Math.abs(n.x - me.x) > 150 || Math.abs(n.y - me.y) > 150 || Math.hypot(n.x - me.x, n.y - me.y) > 150 || G.clock - (n.metAt ?? -99) < 60) continue;
         n.metAt = this.metAt = G.clock;
-        ping({ from: `${n.name}, ${n.dept}`, initials: n.name[0], color: n.shirt, text: pick(CHATTER[Campus.nodes[n.node].zone] || CHATTER.office), tag: 'overheard' });
+        ping({ from: `${n.name}, ${n.dept}`, initials: n.name[0], color: n.shirt, text: Hunt.on ? pick(HUNT_CHATTER) : pick(CHATTER[Campus.nodes[n.node].zone] || CHATTER.office), tag: 'overheard' });
         return;
       }
     },
@@ -10136,7 +10231,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         return;
       } else {
         const bob = reduceMotion ? 0 : Math.sin(me.bob) * 3;
-        x = me.x; z = me.y; y = EYE + bob;
+        x = me.x; z = me.y; y = EYE + bob + (me.jumpY || 0);
         tx = me.x + Math.cos(me.a) * Math.cos(me.pitch) * 100; tz = me.y + Math.sin(me.a) * Math.cos(me.pitch) * 100; ty = y + Math.sin(me.pitch) * 100;
         this.chaseA = null;
       }
@@ -10205,8 +10300,10 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       if (party !== this.partyShown) { this.partyShown = party; canvas.style.visibility = party ? '' : 'hidden'; }
     },
     syncUi() {
-      const walking = G.screen === 'walk', putting = !!this.playing && G.screen === 'play', ui = $('walkUi');
+      const walking = G.screen === 'walk', putting = !!this.playing && G.screen === 'play', ui = $('walkUi'), hunting = Hunt.on && !Hunt.over;
       ui.classList.toggle('putting', putting);
+      ui.classList.toggle('hunting', Hunt.on);
+      $('huntBtn').hidden = Hunt.on;
       $('walkTop').hidden = !walking;
       $('walkCross').hidden = !walking;
       $('walkSide').hidden = !putting;
@@ -10215,7 +10312,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       if (putting) $('hint').hidden = true;
       const w = this.where();
       if (w !== this.whereShown) { $('walkWhere').textContent = w; this.whereShown = w; }
-      const pr = walking ? this.prompt : null;
+      const pr = walking && !(Hunt.on && Hunt.over) ? this.prompt : null;
       $('walkPrompt').hidden = !pr;
       if (pr && this.promptShown !== pr) {
         const def = COURSES[pr.course].holes[pr.idx], best = Career.best(pr.course, pr.idx);
@@ -10231,7 +10328,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       }
       const locked = !!document.pointerLockElement;
       const hint = putting ? (this.touch ? 'Drag sideways to aim, pull down for power, and let go to putt.' : 'Drag sideways to aim, pull down for power, and let go. Or aim with the arrow keys and putt with Space. V switches views.')
-        : walking ? (this.touch ? 'Left thumb walks, right thumb looks. Stand on any hole to play it.' : locked ? 'WASD walks, Shift runs, the mouse looks. On a hole, E plays it and R plays all nine. Esc frees the mouse.' : 'Click and drag to look around. WASD or the arrow keys to walk, Shift to run. Stand on any hole to play it.') : '';
+        : walking && hunting ? (this.touch ? 'Hold Fire to shoot and slide it to aim. Par or better on any hole calls in backup.' : locked ? 'Click or hold to fire (or F), R reloads, Space jumps. Par or better on any hole calls in backup.' : 'Click or hold to fire, drag to aim, R reloads, Space jumps. Par or better on any hole calls in backup.')
+        : walking ? (this.touch ? 'Left thumb walks, right thumb looks. Stand on any hole to play it.' : locked ? 'WASD walks, Shift runs, Space jumps, the mouse looks. On a hole, E plays it and R plays all nine. Esc frees the mouse.' : 'Click and drag to look around. WASD or the arrow keys to walk, Shift to run. Stand on any hole to play it.') : '';
       if (hint !== this.hintShown) { $('walkHint').textContent = hint; this.hintShown = hint; }
       // While putting, the hint and the power bar sit just above the game's own buttons.
       if (putting !== this.hudShown) {
@@ -10259,7 +10357,10 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       if (G.screen !== 'walk') return;
       if (e.pointerType === 'mouse') {
         if (!document.pointerLockElement && cv.requestPointerLock) { try { const p = cv.requestPointerLock(); if (p && p.catch) p.catch(() => {}); } catch (err) { /* ignore */ } }
-        this.ptrs.set(e.pointerId, { kind: 'look', x, y });
+        // In a bug hunt the button is the trigger: a click fires once, holding it keeps firing, and dragging still looks.
+        const hunting = Hunt.on && !Hunt.over;
+        if (hunting) { Hunt.trigger = true; Hunt.fire(); }
+        this.ptrs.set(e.pointerId, { kind: hunting ? 'fire' : 'look', x, y });
       } else if (x < r.width * 0.45 && !this.stick) {
         this.stick = { id: e.pointerId, x0: x, y0: y, dx: 0, dy: 0 };
         this.ptrs.set(e.pointerId, { kind: 'stick' });
@@ -10285,7 +10386,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         const s = this.stick, dx = x - s.x0, dy = y - s.y0, l = Math.hypot(dx, dy), R = 54, k = l > R ? R / l : 1;
         s.dx = (dx * k) / R; s.dy = (dy * k) / R;
         $('walkStick').firstElementChild.style.transform = `translate(${dx * k}px, ${dy * k}px)`;
-      } else if (p.kind === 'look' && G.screen === 'walk') { this.turn(x - p.x, y - p.y, this.touch ? 0.0065 : 0.0045); p.x = x; p.y = y; }
+      } else if ((p.kind === 'look' || p.kind === 'fire') && G.screen === 'walk') { this.turn(x - p.x, y - p.y, this.touch ? 0.0065 : 0.0045); p.x = x; p.y = y; }
     },
     up(e) {
       const p = this.ptrs.get(e.pointerId);
@@ -10293,18 +10394,635 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       if (!p) return;
       if (p.kind === 'putt') this.puttUp();
       if (p.kind === 'stick') { this.stick = null; $('walkStick').hidden = true; }
+      if (p.kind === 'fire') Hunt.trigger = false;
     },
     key(e, down) {
       if (!this.on) return;
       const tag = e.target && e.target.tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-      if (!down) { this.keys.delete(e.code); return; }
+      if (!down) { this.keys.delete(e.code); if (e.code === 'KeyF') Hunt.trigger = false; return; }
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (this.playing && G.screen === 'play') { if (e.code === 'KeyV' && !anyOverlayOpen()) { e.preventDefault(); this.toggleView(); } return; }
       if (G.screen !== 'walk') return;
+      if (Hunt.on && !Hunt.over) {
+        if (e.code === 'KeyF') { e.preventDefault(); Hunt.trigger = true; return; }
+        if (e.code === 'KeyR') { e.preventDefault(); Hunt.startReload(); return; }
+      }
+      if (e.code === 'Space' && tag !== 'BUTTON') { e.preventDefault(); this.jump(); return; }
       if (e.code === 'KeyE' || (e.code === 'Enter' && tag !== 'BUTTON')) { if (this.prompt) { e.preventDefault(); this.startHole(this.prompt); } return; }
       if (e.code === 'KeyR') { if (this.prompt) { e.preventDefault(); this.startRound(this.prompt.course); } return; }
       if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ShiftLeft', 'ShiftRight'].includes(e.code)) { this.keys.add(e.code); e.preventDefault(); }
+    },
+  };
+
+
+  // ---------------------------------------------------------------------------
+  // Bug hunt: production bugs have got loose on the campus. In Play in 3D you squash them with a golf ball blaster,
+  // wave after wave, and sink putts in between to call for help: par brings a supply drop, a birdie a birdie strike,
+  // an eagle or a hole in one an eagle strike. Balls only ever hit bugs; they go straight through coworkers.
+  // ---------------------------------------------------------------------------
+  // r: size, hp: hits to squash, speed: units a second, bite: morale lost up close, pts: score. Some hover at fly,
+  // and some spit things at you from inside range, every few seconds.
+  const BUG_KINDS = {
+    crawler: { r: 18, hp: 1, speed: 280, bite: 5, pts: 100, bits: ['#262b35', '#ff3b3b', '#3a414b'] },
+    printer: { r: 32, hp: 4, speed: 140, bite: 10, pts: 250, range: 950, spit: 'paper', every: 2.8, bits: ['#fbfbf7', '#d8d2c3', '#ff4d3d'] },
+    drone: { r: 26, hp: 2, speed: 230, bite: 0, pts: 200, fly: 205, range: 1150, spit: 'invite', every: 2.3, bits: ['#f7f7f2', '#e8453a', '#2b3038'] },
+    boss: { r: 92, hp: 80, speed: 100, bite: 18, pts: 2500, range: 1400, spit: 'code', every: 1.4, bits: ['#3dff7a', '#cfc8b6', '#14171c'] },
+  };
+  // What they spit: paper jams, meeting invites (which follow you a little) and green spaghetti code.
+  const SPITS = { paper: { speed: 560, r: 11, hurt: 8, color: '#f4f4ee' }, invite: { speed: 470, r: 12, hurt: 7, color: '#ff6b5a', home: 1.2 }, code: { speed: 640, r: 16, hurt: 12, color: '#3dff7a' } };
+  const MAG = 24, FIRE_GAP = 0.13, RELOAD_T = 1.1, SHOT_SPEED = 2700, SHOT_R = 9, SHOT_G = 700;
+  const WAVE_NAMES = ['Monday morning', 'Stand-up', 'Sprint planning', 'Release day', 'Legacy code', 'Hotfix', 'Code freeze', 'All hands', 'Quarter end', 'The big migration'];
+  // Squash several at once and the office calls it in golf: two is a birdie, three an eagle, and so on.
+  const MULTI_WORDS = ['', '', 'Birdie!', 'Eagle!', 'Albatross!', 'Condor!'];
+  const HUNT_CHATTER = ['Have you tried turning it off and on again?', 'It works on my machine.', 'That’s not a bug, that’s a feature.', 'I’ll open a ticket.', 'Who deployed on a Friday?', 'Is this going in the retro?', 'Can we take this offline?', 'Did someone merge without a review?'];
+  // Your blaster fires whatever ball you wear from the Locker.
+  const SKIN_COLORS = { classic: '#ffffff', stress: '#ffd447', bean: '#7a4a28', eight: '#25272d', tennis: '#d6ef3d', disco: '#dfe5ec', eye: '#f2f2ec', gold: '#e8c45a', moon: '#c8ccd2', globe: '#2f6fb3' };
+  const Hunt = {
+    on: false, built: false, over: false, wave: 0, score: 0, squashed: 0, morale: 100, ammo: MAG, reload: 0, cool: 0, trigger: false,
+    calm: 0, toSpawn: [], spawnT: 0, breakT: 0, cleared: false, combo: 0, comboT: 0, multi: 0, multiT: 0, mulligan: true, kick: 0, shake: 0,
+    bugs: [], shots: [], spits: [], bits: [], queue: [], strike: null, paid: null, best: store.get('huntBest', 0),
+
+    // ---- The pieces, made the first time you hunt ----
+    build() {
+      const T = THREE, W = World, inst = (geo, mat, n) => { const m = new T.InstancedMesh(geo, mat, n); m.count = 0; m.frustumCulled = false; W.scene.add(m); return m; };
+      const lit = (c, e = 0.18) => { const col = new T.Color(c); return new T.MeshLambertMaterial({ color: col, emissive: col.clone().multiplyScalar(e) }); };
+      const glow = c => new T.MeshBasicMaterial({ color: new T.Color(c) });
+      this.M = new T.Matrix4(); this.Q = new T.Quaternion(); this.P = new T.Vector3(); this.S = new T.Vector3(); this.E = new T.Euler(); this.C = new T.Color(); this.V = new T.Vector3();
+      this.m = {
+        // Crawlers: a shell, red eyes and six skittering legs. The shell takes a colour per bug, so a hit can flash it.
+        shell: inst(W.unitBall(), lit('#ffffff', 0.12), 60), eyes: inst(W.unitBall(), glow('#ff3b3b'), 120), legs: inst(W.unitBox(), lit('#14171c'), 360),
+        // Printers that walk, with a sheet sticking out and a cross red light.
+        printer: inst(W.unitBox(), lit('#ffffff'), 24), paper: inst(W.unitBox(), glow('#fbfbf7'), 24), led: inst(W.unitBox(), glow('#ff4d3d'), 24), feet: inst(W.unitBox(), lit('#2b3038'), 48),
+        // Meeting invites: a card with a red header and a propeller.
+        card: inst(W.unitBox(), lit('#ffffff', 0.35), 24), header: inst(W.unitBox(), glow('#e8453a'), 24), prop: inst(W.unitBox(), lit('#2b3038'), 48),
+        shots: inst(W.unitBall(), new T.MeshLambertMaterial({ color: 0xffffff, emissive: 0x555555 }), 64),
+        spits: inst(W.unitBall(), new T.MeshBasicMaterial({ color: 0xffffff }), 48),
+        bits: inst(W.unitBox(), new T.MeshBasicMaterial({ color: 0xffffff }), 420),
+      };
+      // Legacy Code: a mainframe on legs, blinking, with a green screen for a face.
+      const boss = this.boss = new T.Group(), part = (w, h, d, mat, x, y, z) => { const b = new T.Mesh(W.unitBox(), mat); b.scale.set(w, h, d); b.position.set(x, y + h / 2, z); boss.add(b); return b; };
+      part(110, 300, 190, lit('#cfc8b6', 0.25), 0, 70, 0);
+      part(6, 70, 150, W.basic('#06140a'), 57, 280, 0);
+      const screen = new T.Mesh(new T.PlaneGeometry(140, 60), W.signMat('LEGACY CODE', 140, 60, '#06140a', '#3dff7a'));
+      screen.rotation.y = Math.PI / 2; screen.position.set(61, 315, 0); boss.add(screen);
+      this.bossLights = [];
+      for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) this.bossLights.push(part(4, 14, 14, glow(['#3dff7a', '#ffd447', '#ff4d3d'][(i + j) % 3]), 57, 140 + i * 30, -40 + j * 40));
+      this.bossLegs = [part(50, 70, 44, lit('#2b3038'), 0, 0, -50), part(50, 70, 44, lit('#2b3038'), 0, 0, 50)];
+      boss.visible = false; W.scene.add(boss);
+      // A supply crate on a parachute.
+      const crate = this.crate = new T.Group(), box = new T.Mesh(W.unitBox(), lit('#b98a52', 0.25)); box.scale.set(60, 60, 60); box.position.y = 30; crate.add(box);
+      const chute = new T.Mesh(W.unitBall(), lit('#e8453a', 0.3)); chute.scale.set(90, 34, 90); chute.position.y = 190; crate.add(chute);
+      for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { const l = new T.Mesh(W.unitBox(), W.basic('#f4f1ea')); l.scale.set(1.5, 130, 1.5); l.position.set(sx * 40, 125, sz * 40); crate.add(l); }
+      crate.visible = false; W.scene.add(crate);
+      // Birds for a birdie strike, and one eagle.
+      const bird = (body, wing, size) => {
+        const g = new T.Group(), b = new T.Mesh(W.unitBall(), lit(body, 0.3)); b.scale.set(22 * size, 10 * size, 12 * size); g.add(b);
+        const head = new T.Mesh(W.unitBall(), lit(size > 2 ? '#f4f1ea' : body, 0.3)); head.scale.setScalar(8 * size); head.position.set(20 * size, 4 * size, 0); g.add(head);
+        const beak = new T.Mesh(W.unitBox(), W.basic('#ffb020')); beak.scale.set(8 * size, 3 * size, 3 * size); beak.position.set(30 * size, 3 * size, 0); g.add(beak);
+        g.userData.wings = [-1, 1].map(s => { const w = new T.Mesh(W.unitBox(), lit(wing, 0.3)); w.scale.set(14 * size, 2 * size, 30 * size); w.position.set(0, 4 * size, s * 18 * size); g.add(w); return w; });
+        g.visible = false; W.scene.add(g); return g;
+      };
+      this.birds = ['#3f8fd8', '#e8453a', '#ffd447', '#35a06a', '#c39bff', '#ff8f2e'].map(c => bird(c, c, 1));
+      this.eagle = bird('#5a3a1c', '#4a2f17', 3.2);
+      // The blaster, held in front of you: a toy cannon with a hopper of golf balls on top.
+      const vm = this.vm = new T.Group(), vpart = (geo, c, sx, sy, sz, x, y, z) => { const m = new T.Mesh(geo, new T.MeshBasicMaterial({ color: new T.Color(c), depthTest: false })); m.scale.set(sx, sy, sz); m.position.set(x, y, z); m.renderOrder = 999; vm.add(m); return m; };
+      vpart(W.unitBox(), '#ff7a1a', 10, 9, 30, 0, 0, 0);
+      vpart(W.unitBox(), '#d9600f', 10.2, 2, 30.2, 0, -3.5, 0);
+      const barrel = vpart(W.unitCyl(), '#f4f4ef', 3.4, 18, 3.4, 0, 1, -22); barrel.rotation.x = Math.PI / 2;
+      vpart(W.unitBox(), '#2b3038', 6, 12, 7, 0, -9, 7).rotation.x = 0.35;
+      vpart(W.unitBox(), '#bfe6ff', 9, 7, 11, 0, 8, 2);
+      for (const [bx, bz] of [[-2, -1], [2, 1], [0, 4], [-1, -4]]) vpart(W.unitBall(), '#ffffff', 2.2, 2.2, 2.2, bx, 8.5, bz + 2);
+      this.flashMesh = vpart(W.unitBall(), '#ffe9a8', 5, 5, 5, 0, 1, -33);
+      vm.visible = false;
+      W.camera.add(vm);
+      W.scene.add(W.camera);
+      this.built = true;
+    },
+    reset() {
+      Object.assign(this, { over: false, wave: 0, score: 0, squashed: 0, morale: 100, ammo: MAG, reload: 0, cool: 0, trigger: false, calm: 0, toSpawn: [], spawnT: 0, breakT: 0, cleared: false, combo: 0, comboT: 0, multi: 0, multiT: 0, mulligan: true, kick: 0, shake: 0, bugs: [], shots: [], spits: [], queue: [], strike: null, paid: G.hole });
+      if (!this.built) return;
+      this.boss.visible = this.crate.visible = this.eagle.visible = false;
+      for (const b of this.birds) b.visible = false;
+      $('huntOver').hidden = true;
+    },
+    start() {
+      if (!World.on || G.screen !== 'walk') return;
+      Sound.unlock();
+      if (!this.built) this.build();
+      this.reset();
+      this.on = true;
+      this.shotColor = SKIN_COLORS[Career.wearing('ball')] || '#ffffff';
+      this.m.shots.material.color.set(this.shotColor);
+      this.nextWave();
+      Sound.whistle();
+      World.hintShown = null;
+      World.syncUi(); this.ui();
+    },
+    stop() {
+      if (!this.on) return;
+      this.on = false;
+      this.reset();
+      this.bits = [];
+      this.draw(0);
+      if (this.vm) this.vm.visible = false;
+      $('huntHud').hidden = true;
+      $('walkCross').classList.remove('hunting', 'hit');
+      World.hintShown = null;
+      if (World.on) World.syncUi();
+    },
+
+    // ---- Waves ----
+    nextWave() {
+      const n = ++this.wave, boss = n % 5 === 0;
+      const list = [...Array(3 + n * 2).fill('crawler'), ...Array(Math.floor((n - 1) * 1.2)).fill('printer'), ...Array(Math.max(0, n - 2)).fill('drone')];
+      for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+      this.toSpawn = boss ? ['boss', ...list] : list;
+      this.spawnT = 1.2;
+      // Surviving the Legacy Code wave is a secret.
+      if (n === 6) Secrets.find('bughunt', 0.5, true);
+      toast(`Wave ${n}`, boss ? `${WAVE_NAMES[(n - 1) % WAVE_NAMES.length]}. Something big is booting up.` : `${WAVE_NAMES[(n - 1) % WAVE_NAMES.length]}. ${this.toSpawn.length} bugs incoming.`, 'bad');
+    },
+    spawning(dt) {
+      if (!this.toSpawn.length) {
+        if (!this.bugs.length && !this.cleared) {
+          this.cleared = true; this.breakT = 7;
+          const bonus = 500 * this.wave;
+          this.score += bonus;
+          toast('Wave cleared', `+${bonus}. Sink a putt on any hole before the next wave and you get backup.`, 'hi');
+          Sound.cheer();
+        }
+        if (this.cleared && (this.breakT -= dt) <= 0) { this.cleared = false; this.nextWave(); }
+        return;
+      }
+      if ((this.spawnT -= dt) > 0 || this.bugs.length >= 26) return;
+      this.spawnT = Math.max(0.4, 1 - this.wave * 0.1);
+      const kind = this.toSpawn[0], at = this.spawnPoint(kind === 'boss' ? 850 : 520, BUG_KINDS[kind].r);
+      if (!at) return;
+      this.toSpawn.shift();
+      const K = BUG_KINDS[kind];
+      this.bugs.push({ kind, x: at[0], z: at[1], y: K.fly || 0, a: Math.atan2(World.me.y - at[1], World.me.x - at[0]), hp: K.hp, grow: 0, t: 0, seed: Math.random() * 9, bite: 0.5, shoot: 1 + Math.random() * 2, flash: 0, lx: at[0], lz: at[1], checkT: 1, stuck: 0 });
+      this.burst({ x: at[0], y: (K.fly || 0) + K.r, z: at[1] }, ['#3dff7a', '#ff4fb8', '#3fe0ff'], kind === 'boss' ? 40 : 8, 0.6);
+      if (kind === 'boss') { Sound.rumble(); this.call('Legacy Code!'); }
+    },
+    // A way off, on your side of the walls, with room to stand. Early waves come mostly from in front of you.
+    spawnPoint(min, r) {
+      const me = World.me, inside = bldOf(me.x, me.y), spread = Math.min(TAU, 2.2 + this.wave * 0.45);
+      for (let k = 0; k < 40; k++) {
+        const a = me.a + (Math.random() - 0.5) * (k < 25 ? spread : TAU), d = min + Math.random() * 650, x = me.x + Math.cos(a) * d, z = me.y + Math.sin(a) * d;
+        if (bldOf(x, z) !== inside) continue;
+        if (inside) { const b = CAMPUS.bld[inside]; if (x < b.x + r + 30 || x > b.x + BLD_W - r - 30 || z < b.y + r + 30 || z > b.y + BLD_H - r - 30) continue; }
+        else if (x < -600 || x > CAMPUS.w + 600 || z < -600 || z > CAMPUS.h + 600) continue;
+        if (this.free(x, z, r)) return [x, z];
+      }
+      return null;
+    },
+    free(x, z, r) {
+      for (const p of World.solidsNear(x, z, r + 4)) {
+        if (pointInPoly(x, z, p.pts)) return false;
+        for (let i = 0; i < p.pts.length; i++) { const a = p.pts[i], b = p.pts[(i + 1) % p.pts.length]; if (segDist(x, z, a[0], a[1], b[0], b[1]) < r) return false; }
+      }
+      return true;
+    },
+
+    // ---- Every frame ----
+    update(dt) {
+      const walking = G.screen === 'walk', live = walking && !this.over;
+      this.payForGolf();
+      if (live) {
+        if (this.queue.length && !this.strike) this.callIn(this.queue.shift());
+        this.cool = Math.max(0, this.cool - dt);
+        if (this.reload > 0 && (this.reload -= dt) <= 0) { this.reload = 0; this.ammo = MAG; }
+        if (this.trigger) this.fire();
+        this.calm += dt;
+        if (this.calm > 3 && this.morale < 100) this.morale = Math.min(100, this.morale + 6 * dt);
+        this.spawning(dt);
+        for (const b of this.bugs) this.stepBug(b, dt);
+        this.bugs = this.bugs.filter(b => !b.dead);
+        for (const s of this.spits) this.stepSpit(s, dt);
+        this.spits = this.spits.filter(s => s.life > 0);
+        for (const s of this.shots) this.stepShot(s, dt);
+        this.shots = this.shots.filter(s => s.life > 0);
+        this.stepStrike(dt);
+        if ((this.comboT -= dt) <= 0) this.combo = 0;
+        if (this.multi && (this.multiT -= dt) <= 0) { if (this.multi >= 2) this.call(MULTI_WORDS[Math.min(5, this.multi)]); this.multi = 0; }
+      }
+      // Bits of squashed bug keep falling, even while the bugs wait for you to putt.
+      for (const p of this.bits) {
+        p.vy -= 900 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt; p.life -= dt; p.spin += dt * 9;
+        if (p.y < 2) { p.y = 2; p.vy *= -0.3; p.vx *= 0.6; p.vz *= 0.6; }
+      }
+      this.bits = this.bits.filter(p => p.life > 0);
+      this.draw(dt);
+      if (this.shake > 0 && live) { this.shake -= dt; const c = World.camera.position, k = this.shake * 14; c.x += (Math.random() - 0.5) * k; c.y += (Math.random() - 0.5) * k; c.z += (Math.random() - 0.5) * k; }
+      this.ui();
+    },
+    stepBug(b, dt) {
+      const K = BUG_KINDS[b.kind], me = World.me, dx = me.x - b.x, dz = me.y - b.z, d = Math.hypot(dx, dz) || 1;
+      b.t += dt; b.flash = Math.max(0, b.flash - dt);
+      if (b.grow < 1) { b.grow = Math.min(1, b.grow + dt * (b.kind === 'boss' ? 0.8 : 3)); return; }
+      // Head for you, the little ones wiggling; the ones that spit keep their distance.
+      let speed = K.speed;
+      if (K.range && d < K.range * 0.5) speed *= b.kind === 'drone' ? -0.4 : 0.15;
+      const wig = b.kind === 'crawler' ? Math.sin(b.t * 8 + b.seed) * 0.55 : b.kind === 'drone' ? Math.sin(b.t * 1.3 + b.seed) * 0.9 : 0, head = Math.atan2(dz, dx) + wig;
+      let vx = Math.cos(head) * speed, vz = Math.sin(head) * speed;
+      // Don't pile up.
+      for (const o of this.bugs) {
+        if (o === b || o.dead) continue;
+        const ox = b.x - o.x, oz = b.z - o.z, od = Math.hypot(ox, oz), min = (K.r + BUG_KINDS[o.kind].r) * 1.1;
+        if (od < min && od > 0.01) { vx += (ox / od) * (min - od) * 6; vz += (oz / od) * (min - od) * 6; }
+      }
+      // And keep out of your face.
+      if (d < K.r + BODY_R + 4) { vx -= (dx / d) * speed; vz -= (dz / d) * speed; }
+      b.x += vx * dt; b.z += vz * dt;
+      if (!K.fly) World.pushOut(null, b, K.r, 'z');
+      b.a = b.kind === 'crawler' ? Math.atan2(vz, vx) : Math.atan2(dz, dx);
+      if (K.fly) b.y = K.fly + Math.sin(b.t * 2 + b.seed) * 22;
+      // Close enough, it bites, then hops back for a moment.
+      b.bite -= dt;
+      if (K.bite && d < K.r + BODY_R + 16 && b.bite <= 0) {
+        b.bite = 1.1; this.hurt(K.bite);
+        if (b.kind !== 'boss') { b.x -= (dx / d) * 110; b.z -= (dz / d) * 110; World.pushOut(null, b, K.r, 'z'); }
+      }
+      if (K.range && (b.shoot -= dt) <= 0) { b.shoot = K.every * (0.75 + Math.random() * 0.5); if (d < K.range) this.spit(b); }
+      // Stuck behind something for a few seconds: it tunnels out somewhere else.
+      if ((b.checkT -= dt) <= 0) {
+        b.checkT = 1;
+        b.stuck = Math.hypot(b.x - b.lx, b.z - b.lz) < 40 && d > 260 ? b.stuck + 1 : 0;
+        b.lx = b.x; b.lz = b.z;
+        if (b.stuck >= 3) { const at = this.spawnPoint(380, K.r); if (at) { b.x = b.lx = at[0]; b.z = b.lz = at[1]; b.grow = 0; b.stuck = 0; } }
+      }
+    },
+    spit(b) {
+      const K = BUG_KINDS[b.kind], S = SPITS[K.spit], me = World.me;
+      const fx = b.x + Math.cos(b.a) * K.r, fy = b.kind === 'boss' ? 300 : b.kind === 'printer' ? 75 : b.y, fz = b.z + Math.sin(b.a) * K.r;
+      const tx = me.x, ty = EYE - 25 + (me.jumpY || 0), tz = me.y, dx = tx - fx, dy = ty - fy, dz = tz - fz, n = Math.hypot(dx, dy, dz) || 1;
+      this.spits.push({ kind: K.spit, x: fx, y: fy, z: fz, vx: (dx / n) * S.speed, vy: (dy / n) * S.speed, vz: (dz / n) * S.speed, life: 3.5 });
+      if (b.kind === 'printer') Sound.printer(3); else if (b.kind === 'drone') Sound.blip(); else Sound.thud();
+    },
+    stepSpit(s, dt) {
+      const S = SPITS[s.kind], me = World.me, hy = EYE - 30 + (me.jumpY || 0);
+      if (S.home) {
+        const sp = Math.hypot(s.vx, s.vy, s.vz), dx = me.x - s.x, dy = hy - s.y, dz = me.y - s.z, n = Math.hypot(dx, dy, dz) || 1, k = Math.min(1, S.home * dt);
+        s.vx += ((dx / n) * sp - s.vx) * k; s.vy += ((dy / n) * sp - s.vy) * k; s.vz += ((dz / n) * sp - s.vz) * k;
+      }
+      s.x += s.vx * dt; s.y += s.vy * dt; s.z += s.vz * dt;
+      if ((s.life -= dt) <= 0) return;
+      if (Math.hypot(s.x - me.x, s.z - me.y) < BODY_R + S.r + 6 && Math.abs(s.y - hy) < 70) { s.life = 0; this.hurt(S.hurt); this.burst(s, [S.color], 6, 0.3); return; }
+      if (s.y < 0 || this.inWall(s.x, s.z, s.y)) { s.life = 0; this.burst(s, [S.color], 5, 0.3); }
+    },
+    inWall(x, z, y) { return World.solidsNear(x, z, 2).some(p => p.h > y && pointInPoly(x, z, p.pts)); },
+    // Where a bug's body is: the height of its middle, and how far it reaches out (w) and up and down (h) from there.
+    body(b) {
+      const g = Math.max(0.3, b.grow), r = BUG_KINDS[b.kind].r * g;
+      if (b.kind === 'crawler') return { y: r * 0.55, w: r * 1.3, h: r * 0.7 };
+      if (b.kind === 'printer') return { y: 40 * g, w: r * 0.95, h: 40 * g };
+      if (b.kind === 'drone') return { y: b.y, w: r * 1.15, h: 18 };
+      return { y: 185 * g, w: 105 * g, h: 185 * g };
+    },
+
+    // ---- The blaster ----
+    fire() {
+      if (this.over || this.reload > 0 || this.cool > 0) return;
+      if (this.ammo <= 0) { this.startReload(); return; }
+      this.ammo--; this.cool = FIRE_GAP; this.kick = 1;
+      const cam = World.camera, d = cam.getWorldDirection(this.V);
+      this.assist(d);
+      const o = cam.position, fire = !!(World.lastPlayer && World.lastPlayer.fire);
+      this.shots.push({ x: o.x + d.x * 26, y: o.y + d.y * 26 - 5, z: o.z + d.z * 26, vx: d.x * SHOT_SPEED, vy: d.y * SHOT_SPEED + 40, vz: d.z * SHOT_SPEED, life: 2.4, banks: 0, fire });
+      Sound.blast();
+      if (!this.ammo) this.startReload();
+    },
+    startReload() {
+      if (this.reload > 0 || this.ammo === MAG || this.over) return;
+      this.reload = RELOAD_T;
+      Sound.reload();
+    },
+    // Shots lean toward a bug just off the crosshair, more so on a touch screen, and allow for the drop on the way.
+    assist(d) {
+      const cone = World.touch ? 0.12 : 0.04, o = World.camera.position;
+      let best = null, bestA = cone;
+      for (const b of this.bugs) {
+        if (b.dead || b.grow < 1) continue;
+        const tx = b.x - o.x, ty = this.body(b).y - o.y, tz = b.z - o.z, n = Math.hypot(tx, ty, tz);
+        if (n > 1800) continue;
+        const ang = Math.acos(clamp((tx * d.x + ty * d.y + tz * d.z) / n, -1, 1));
+        if (ang < bestA) { const t = n / SHOT_SPEED, ly = ty + (SHOT_G / 2) * t * t - 40 * t, m = Math.hypot(tx, ly, tz); bestA = ang; best = [tx / m, ly / m, tz / m]; }
+      }
+      if (best) d.set(best[0], best[1], best[2]);
+    },
+    stepShot(s, dt) {
+      const n = Math.max(1, Math.ceil((Math.hypot(s.vx, s.vy, s.vz) * dt) / 30)), h = dt / n;
+      for (let k = 0; k < n && s.life > 0; k++) {
+        s.vy -= SHOT_G * h;
+        let nx = s.x + s.vx * h, nz = s.z + s.vz * h;
+        // Walls and anything taller than the ball send it back: a squash after a bounce is a bank shot.
+        const w = this.wallHit(s.x, s.z, nx, nz, s.y);
+        if (w) {
+          const dot = s.vx * w.nx + s.vz * w.nz;
+          s.vx = (s.vx - 2 * dot * w.nx) * 0.82; s.vz = (s.vz - 2 * dot * w.nz) * 0.82;
+          nx = w.x + w.nx * 2; nz = w.z + w.nz * 2;
+          if (++s.banks > 4) s.life = 0;
+          Sound.bounce(500);
+        }
+        s.x = nx; s.z = nz; s.y += s.vy * h;
+        if (s.y < SHOT_R) { s.y = SHOT_R; s.vy = Math.abs(s.vy) * 0.5; s.vx *= 0.72; s.vz *= 0.72; if (Math.abs(s.vy) < 80) s.life = Math.min(s.life, 0.35); }
+        const top = bldOf(s.x, s.z) ? WALL_H - SHOT_R : 5000;
+        if (s.y > top) { s.y = top; s.vy = -Math.abs(s.vy) * 0.6; }
+        for (const b of this.bugs) {
+          if (b.dead || b.grow < 0.5) continue;
+          const B = this.body(b), rr = B.w + SHOT_R;
+          if (Math.abs(s.x - b.x) > rr || Math.abs(s.z - b.z) > rr || Math.abs(s.y - B.y) > B.h + SHOT_R) continue;
+          if (Math.hypot(s.x - b.x, s.z - b.z) < rr) { this.hit(b, s); s.life = 0; break; }
+        }
+        if (s.life > 0) for (const p of this.spits) {
+          if (p.life > 0 && Math.hypot(s.x - p.x, s.y - p.y, s.z - p.z) < SHOT_R + SPITS[p.kind].r + 6) { p.life = 0; s.life = 0; this.score += 25; this.pop(p, '+25'); this.burst(p, [SPITS[p.kind].color], 6, 0.3); break; }
+        }
+      }
+      s.life -= dt;
+    },
+    wallHit(x0, z0, x1, z1, y) {
+      const dx = x1 - x0, dz = z1 - z0, len = Math.hypot(dx, dz);
+      if (len < 1e-6) return null;
+      let best = null, bt = 1;
+      for (const p of World.solidsNear((x0 + x1) / 2, (z0 + z1) / 2, len / 2 + SHOT_R)) {
+        if (p.h < y - SHOT_R) continue;
+        for (let i = 0; i < p.pts.length; i++) {
+          const [ax, ay] = p.pts[i], [bx, by] = p.pts[(i + 1) % p.pts.length], sx = bx - ax, sy = by - ay, den = dx * sy - dz * sx;
+          if (Math.abs(den) < 1e-9) continue;
+          const t = ((ax - x0) * sy - (ay - z0) * sx) / den, u = ((ax - x0) * dz - (ay - z0) * dx) / den;
+          if (t < 0 || t >= bt || u < 0 || u > 1) continue;
+          bt = t;
+          const l = Math.hypot(sx, sy) || 1;
+          let nx = sy / l, nz = -sx / l;
+          if (nx * dx + nz * dz > 0) { nx = -nx; nz = -nz; }
+          best = { x: x0 + dx * t, z: z0 + dz * t, nx, nz };
+        }
+      }
+      return best;
+    },
+    hit(b, s) {
+      b.hp -= s && s.fire ? 2 : 1;
+      b.flash = 0.12;
+      const c = $('walkCross');
+      c.classList.remove('hit'); void c.offsetWidth; c.classList.add('hit');
+      if (b.hp <= 0) this.kill(b, s ? s.banks : 0);
+      else Sound.prop('rubber', 0.6);
+    },
+    kill(b, banks = 0) {
+      if (b.dead) return;
+      b.dead = true;
+      this.squashed++;
+      const K = BUG_KINDS[b.kind];
+      this.combo = this.comboT > 0 ? this.combo + 1 : 1; this.comboT = 2.5;
+      this.multi++; this.multiT = 0.9;
+      const pts = Math.round((K.pts * (banks ? 2 : 1) * (1 + 0.25 * Math.min(8, this.combo - 1))) / 10) * 10;
+      this.score += pts;
+      this.pop({ x: b.x, y: this.body(b).y, z: b.z }, banks ? `Bank shot! +${pts}` : `+${pts}`);
+      this.burst({ x: b.x, y: this.body(b).y, z: b.z }, K.bits, b.kind === 'boss' ? 90 : b.kind === 'crawler' ? 14 : 22, b.kind === 'boss' ? 1.6 : 1);
+      Sound.squish();
+      if (b.kind === 'boss') { this.call('Deprecated!'); Sound.cheer(); }
+    },
+    hurt(n) {
+      if (this.over) return;
+      this.morale = Math.max(0, this.morale - n); this.calm = 0;
+      const v = $('huntHurt');
+      v.classList.remove('on'); void v.offsetWidth; v.classList.add('on');
+      Sound.hurt();
+      if (!reduceMotion) this.shake = 0.22;
+      if (this.morale <= 0) this.sickDay();
+    },
+    // Out of morale: a sick day, unless you take a mulligan.
+    sickDay() {
+      this.over = true; this.trigger = false;
+      const isBest = this.score > this.best;
+      if (isBest) { this.best = this.score; store.set('huntBest', this.best); }
+      Sound.sad();
+      $('huntOverText').textContent = `You made it to wave ${this.wave} and squashed ${this.squashed} ${this.squashed === 1 ? 'bug' : 'bugs'} for ${this.score.toLocaleString()} points.${isBest && this.score ? ' A new best!' : ` Your best is ${this.best.toLocaleString()}.`}`;
+      $('huntMull').hidden = !this.mulligan;
+      $('huntOver').hidden = false;
+      if (document.pointerLockElement) document.exitPointerLock();
+    },
+    mull() {
+      if (!this.mulligan || !this.over) return;
+      this.mulligan = false; this.over = false; this.morale = 60; this.ammo = MAG; this.reload = 0;
+      $('huntOver').hidden = true;
+      // Everything close by gets shoved back a bit.
+      for (const b of this.bugs) { const dx = b.x - World.me.x, dz = b.z - World.me.y, d = Math.hypot(dx, dz) || 1; if (d < 500) { b.x += (dx / d) * (500 - d); b.z += (dz / d) * (500 - d); } }
+      this.spits = [];
+      toast('Mulligan', 'One free do-over, as tradition allows.', 'hi');
+    },
+
+    // ---- Golf pays for backup ----
+    payForGolf() {
+      const p = G.players[0];
+      if (!World.playing || !p || !G.hole || this.paid === G.hole) return;
+      const s = p.scores[G.holeIdx];
+      if (s == null) return;
+      this.paid = G.hole;
+      const diff = s - HOLES[G.holeIdx].par, kind = s === 1 || diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 0 ? 'drop' : null;
+      if (!kind) { ping({ from: 'Your caddie', initials: 'C', color: '#35a06a', text: 'No backup for a bogey. Par or better calls in help.', tag: 'bug hunt' }); return; }
+      this.queue.push(kind);
+      ping({ from: 'Your caddie', initials: 'C', color: '#35a06a', text: { drop: 'Par! A supply drop is ready for when you’re back on your feet.', birdie: 'Birdie! The birds are ready when you are.', eagle: 'Eagle! Something big is circling overhead.' }[kind], tag: 'bug hunt' });
+    },
+    callIn(kind) {
+      const me = World.me;
+      const top = bldOf(me.x, me.y) ? 180 : 900;
+      if (kind === 'drop') {
+        // In front of you, if there's room, or else right where you are.
+        const ax = me.x + Math.cos(me.a) * 380, az = me.y + Math.sin(me.a) * 380, ok = bldOf(ax, az) === bldOf(me.x, me.y) && this.free(ax, az, 45);
+        this.strike = { kind, t: 0, top, x: ok ? ax : me.x, z: ok ? az : me.y };
+        toast('Supply drop!', 'Par pays: snacks and a fresh sleeve of balls.', 'hi'); Sound.whoosh();
+      } else if (kind === 'birdie') {
+        const targets = this.bugs.filter(b => !b.dead).sort((a, b) => Math.hypot(a.x - me.x, a.z - me.y) - Math.hypot(b.x - me.x, b.z - me.y)).slice(0, 6);
+        this.strike = { kind, t: 0, top, birds: this.birds.map((g, i) => ({ g, target: targets[i] || null, x: me.x + Math.cos(me.a + i - 2.5) * 300, y: top === 900 ? 950 : 380, z: me.y + Math.sin(me.a + i - 2.5) * 300, done: !targets[i] })) };
+        toast('Birdie strike!', 'The birds have your back.', 'hi'); Sound.cheer();
+      } else {
+        const a = Math.random() * TAU;
+        this.strike = { kind, t: 0, dur: 2.4, x0: me.x - Math.cos(a) * 2600, z0: me.y - Math.sin(a) * 2600, x1: me.x + Math.cos(a) * 2600, z1: me.y + Math.sin(a) * 2600, a };
+        toast('Eagle strike!', 'Nothing gets past an eagle.', 'hi'); Sound.boom();
+      }
+    },
+    stepStrike(dt) {
+      const k = this.strike;
+      if (!k) return;
+      k.t += dt;
+      if (k.kind === 'drop') {
+        const f = Math.min(1, k.t / (k.top > 500 ? 1.6 : 1.1));
+        this.crate.visible = true;
+        this.crate.position.set(k.x, k.top * (1 - f), k.z);
+        this.crate.children.forEach((c, i) => { if (i) c.visible = f < 1; });
+        if (f >= 1 && !k.landed) {
+          k.landed = true;
+          this.morale = Math.min(100, this.morale + 40); this.ammo = MAG; this.reload = 0;
+          Sound.thud();
+          this.burst({ x: k.x, y: 30, z: k.z }, ['#b98a52', '#ffd447', '#ffffff'], 18, 0.8);
+        }
+        if (k.t > 3) { this.crate.visible = false; this.strike = null; }
+      } else if (k.kind === 'birdie') {
+        let busy = false;
+        for (const b of k.birds) {
+          b.g.visible = !b.done || k.t < 4;
+          if (b.done) { b.y = Math.min(b.y + 600 * dt, k.top > 500 ? 2000 : 380); b.x += Math.cos(b.g.rotation.y) * 500 * dt; b.z -= Math.sin(b.g.rotation.y) * 500 * dt; b.g.position.set(b.x, b.y, b.z); continue; }
+          busy = true;
+          const t = b.target, tx = t.x, ty = this.body(t).y, tz = t.z, dx = tx - b.x, dy = ty - b.y, dz = tz - b.z, d = Math.hypot(dx, dy, dz) || 1, step = 1500 * dt;
+          if (t.dead || d < step + 20) {
+            if (!t.dead) { if (t.kind === 'boss') { t.hp -= 10; t.flash = 0.2; if (t.hp <= 0) this.kill(t); } else this.kill(t); }
+            b.done = true;
+          } else { b.x += (dx / d) * step; b.y += (dy / d) * step; b.z += (dz / d) * step; }
+          b.g.position.set(b.x, b.y, b.z); b.g.rotation.y = -Math.atan2(dz, dx);
+          for (const w of b.g.userData.wings) w.rotation.x = Math.sin(k.t * 30) * 0.7;
+        }
+        if (!busy && k.t > 2.5) { for (const b of k.birds) b.g.visible = false; this.strike = null; }
+      } else {
+        const f = k.t / k.dur, x = lerp(k.x0, k.x1, f), z = lerp(k.z0, k.z1, f), g = this.eagle;
+        g.visible = f < 1;
+        g.position.set(x, 300 + Math.sin(f * Math.PI) * 60, z); g.rotation.y = -k.a;
+        for (const w of g.userData.wings) w.rotation.x = Math.sin(k.t * 12) * 0.6;
+        // Everything the eagle passes goes; the boss only loses half.
+        for (const b of this.bugs) {
+          if (b.dead || b.eagled) continue;
+          const along = (b.x - k.x0) * Math.cos(k.a) + (b.z - k.z0) * Math.sin(k.a);
+          if (along > f * 5200 || Math.hypot(b.x - World.me.x, b.z - World.me.y) > 2600) continue;
+          b.eagled = true;
+          if (b.kind === 'boss') { b.hp = Math.ceil(b.hp / 2); b.flash = 0.3; } else this.kill(b);
+        }
+        if (f >= 1) { g.visible = false; this.strike = null; }
+      }
+    },
+
+    // ---- Effects and screen ----
+    burst(at, colors, n, speed = 1) {
+      for (let i = 0; i < n && this.bits.length < 420; i++) {
+        const a = Math.random() * TAU, v = (120 + Math.random() * 260) * speed;
+        this.bits.push({ x: at.x, y: at.y, z: at.z, vx: Math.cos(a) * v, vy: (180 + Math.random() * 320) * speed, vz: Math.sin(a) * v, life: 0.7 + Math.random() * 0.7, size: 4 + Math.random() * 6 * speed, color: colors[i % colors.length], spin: Math.random() * 6 });
+      }
+    },
+    call(text) {
+      const c = $('huntCall');
+      c.textContent = text;
+      c.classList.remove('on'); void c.offsetWidth; c.classList.add('on');
+      clearTimeout(this.callTimer);
+      this.callTimer = setTimeout(() => c.classList.remove('on'), 1100);
+    },
+    // A score floating up from where a bug was squashed.
+    pop(at, text) {
+      const v = this.V.set(at.x, (at.y || 0) + 40, at.z).project(World.camera);
+      if (v.z > 1 || Math.abs(v.x) > 1.1 || Math.abs(v.y) > 1.1) return;
+      const s = el('span', '', text);
+      s.style.left = `${((v.x + 1) / 2) * cw}px`; s.style.top = `${((1 - v.y) / 2) * ch}px`;
+      $('huntPops').append(s);
+      setTimeout(() => s.remove(), 900);
+    },
+    // Puts one part of a bug in place: an offset from the bug's middle, turned the way the bug faces.
+    put(im, i, b, lx, ly, lz, sx, sy, sz, rot = 0, tilt = 0) {
+      const c = Math.cos(b.a), s = Math.sin(b.a);
+      this.P.set(b.x + lx * c - lz * s, (b.y || 0) + ly, b.z + lx * s + lz * c);
+      this.Q.setFromEuler(this.E.set(0, -(b.a + rot), tilt, 'YXZ'));
+      im.setMatrixAt(i, this.M.compose(this.P, this.Q, this.S.set(sx, sy, sz)));
+    },
+    draw(dt) {
+      if (!this.built) return;
+      const m = this.m, n = { shell: 0, eyes: 0, legs: 0, printer: 0, paper: 0, led: 0, feet: 0, card: 0, header: 0, prop: 0 };
+      let boss = null;
+      for (const b of this.bugs) {
+        const K = BUG_KINDS[b.kind], g = b.grow, r = K.r * g, step = Math.sin(b.t * 16 + b.seed);
+        if (b.kind === 'crawler') {
+          const i = n.shell++;
+          this.put(m.shell, i, b, 0, r * 0.55, 0, r * 1.35, r * 0.6, r);
+          m.shell.setColorAt(i, this.C.set(b.flash > 0 ? '#ffffff' : '#262b35'));
+          for (const side of [-1, 1]) this.put(m.eyes, n.eyes++, b, r * 1.15, r * 0.75, side * r * 0.38, r * 0.2, r * 0.2, r * 0.2);
+          for (const side of [-1, 1]) for (const k of [-1, 0, 1]) this.put(m.legs, n.legs++, b, k * r * 0.6, r * 0.2, side * r * 0.85, r * 0.14, r * 0.12, r * 0.95, Math.sin(b.t * 20 + k * 2 + side) * 0.4);
+        } else if (b.kind === 'printer') {
+          const i = n.printer++, bob = Math.abs(step) * 4;
+          this.put(m.printer, i, b, 0, 34 * g + bob + r * 0.6, 0, r * 1.3, r * 1.2, r * 1.5);
+          m.printer.setColorAt(i, this.C.set(b.flash > 0 ? '#ffffff' : '#d8d2c3'));
+          this.put(m.paper, n.paper++, b, -r * 0.2, 34 * g + bob + r * 1.3, 0, r * 0.9, r * 0.5, r * 1.1, 0, 0.5);
+          this.put(m.led, n.led++, b, r * 0.66, 34 * g + bob + r * 0.85, 0, 2, r * 0.18, r * 0.5);
+          for (const side of [-1, 1]) this.put(m.feet, n.feet++, b, side * step * 10, 17 * g, side * r * 0.45, r * 0.5, 34 * g, r * 0.35);
+        } else if (b.kind === 'drone') {
+          const i = n.card++;
+          this.put(m.card, i, b, 0, 0, 0, r * 1.5, 3, r * 2, 0, Math.sin(b.t * 2) * 0.2);
+          m.card.setColorAt(i, this.C.set(b.flash > 0 ? '#ffd447' : '#f7f7f2'));
+          this.put(m.header, n.header++, b, r * 0.55, 2.5, 0, r * 0.4, 2, r * 2);
+          for (const q of [0, Math.PI / 2]) this.put(m.prop, n.prop++, b, 0, 14, 0, r * 2.2, 1.5, r * 0.22, b.t * 30 + q);
+        } else boss = b;
+      }
+      for (const k in n) { m[k].count = n[k]; m[k].instanceMatrix.needsUpdate = true; if (m[k].instanceColor) m[k].instanceColor.needsUpdate = true; }
+      // The boss.
+      this.boss.visible = !!boss;
+      if (boss) {
+        const B = this.boss, g = boss.grow;
+        B.position.set(boss.x, 0, boss.z); B.rotation.y = -boss.a; B.scale.setScalar(Math.max(0.01, g));
+        this.bossLegs.forEach((l, i) => { l.position.x = Math.sin(boss.t * 3 + i * Math.PI) * 22; });
+        this.bossLights.forEach((l, i) => { l.visible = Math.sin(boss.t * 9 + i * 1.7) > -0.3; });
+        B.children[0].material.emissive.setRGB(boss.flash > 0 ? 0.9 : 0.2, boss.flash > 0 ? 0.9 : 0.19, boss.flash > 0 ? 0.9 : 0.16);
+      }
+      // Shots, spit and bits.
+      let i = 0;
+      for (const s of this.shots) this.P.set(s.x, s.y, s.z), this.Q.identity(), m.shots.setMatrixAt(i++, this.M.compose(this.P, this.Q, this.S.setScalar(SHOT_R)));
+      m.shots.count = i; m.shots.instanceMatrix.needsUpdate = true;
+      i = 0;
+      for (const s of this.spits) {
+        const S = SPITS[s.kind];
+        this.Q.setFromEuler(this.E.set(G.clock * 6, G.clock * 4, 0)); m.spits.setMatrixAt(i, this.M.compose(this.P.set(s.x, s.y, s.z), this.Q, this.S.set(S.r, s.kind === 'invite' ? S.r * 0.4 : S.r, S.r)));
+        m.spits.setColorAt(i++, this.C.set(S.color));
+      }
+      m.spits.count = i; m.spits.instanceMatrix.needsUpdate = true; if (m.spits.instanceColor) m.spits.instanceColor.needsUpdate = true;
+      i = 0;
+      for (const p of this.bits) {
+        this.Q.setFromEuler(this.E.set(p.spin, p.spin * 0.7, 0));
+        m.bits.setMatrixAt(i, this.M.compose(this.P.set(p.x, p.y, p.z), this.Q, this.S.setScalar(p.size * Math.min(1, p.life * 2))));
+        m.bits.setColorAt(i++, this.C.set(p.color));
+      }
+      m.bits.count = i; m.bits.instanceMatrix.needsUpdate = true; if (m.bits.instanceColor) m.bits.instanceColor.needsUpdate = true;
+      // The blaster: kicks when it fires, bobs as you walk, and dips while it reloads.
+      const show = this.on && !this.over && G.screen === 'walk', vm = this.vm;
+      vm.visible = show;
+      if (show) {
+        this.kick = Math.max(0, this.kick - dt * 9);
+        const cam = World.camera, tv = Math.tan((cam.fov * Math.PI) / 360), hw = 46 * tv * cam.aspect, hh = 46 * tv, tall = cam.aspect < 0.9;
+        const sc = clamp(hw / 50, 0.5, 1) * 0.6, bob = reduceMotion ? 0 : Math.sin(World.me.bob) * 1.5;
+        const rl = this.reload > 0 ? Math.sin((1 - this.reload / RELOAD_T) * Math.PI) : 0;
+        vm.scale.setScalar(sc);
+        vm.position.set(hw * (tall ? 0.22 : 0.48) + bob * 0.4 * sc, -hh * (tall ? 0.66 : 0.55) + (Math.abs(bob) * 0.5 - rl * 10) * sc, -46 + this.kick * 6 * sc);
+        vm.rotation.set(this.kick * 0.16 - rl * 0.8, 0.12, rl * 0.35);
+        this.flashMesh.visible = this.kick > 0.55;
+      }
+    },
+    ui() {
+      const hud = $('huntHud'), show = this.on && G.screen === 'walk';
+      hud.hidden = !show;
+      $('walkCross').classList.toggle('hunting', this.on);
+      if (!show) return;
+      // Bugs close by that you can't see show as arrows at the side of the screen they're on.
+      const cam = World.camera, me = World.me, half = Math.atan(Math.tan((cam.fov * Math.PI) / 360) * cam.aspect) * 0.92, side = [0, 0], near = [false, false];
+      for (const b of this.bugs) {
+        if (b.dead || b.grow < 1 || this.over) continue;
+        const dx = b.x - me.x, dz = b.z - me.y, d = Math.hypot(dx, dz);
+        if (d > 1200) continue;
+        const rel = Math.atan2(dz, dx) - me.a, r = Math.atan2(Math.sin(rel), Math.cos(rel));
+        if (Math.abs(r) < half) continue;
+        side[r > 0 ? 1 : 0]++;
+        if (d < 300) near[r > 0 ? 1 : 0] = true;
+      }
+      const left = this.bugs.length + this.toSpawn.length, boss = this.bugs.find(b => b.kind === 'boss');
+      const key = `${this.wave}|${left}|${this.score}|${Math.ceil(this.morale)}|${this.ammo}|${this.reload > 0}|${boss ? boss.hp : -1}|${this.cleared}|${this.over}|${side}|${near}`;
+      if (key === this.uiKey) return;
+      this.uiKey = key;
+      hud.classList.toggle('over', this.over);
+      ['huntEdgeL', 'huntEdgeR'].forEach((id, i) => { const e = $(id); e.hidden = !side[i]; e.lastChild.textContent = side[i]; e.classList.toggle('near', near[i]); });
+      $('huntWave').textContent = `Wave ${this.wave}`;
+      $('huntLeft').textContent = this.cleared ? 'Cleared' : `${left} ${left === 1 ? 'bug' : 'bugs'} left`;
+      $('huntScore').textContent = this.score.toLocaleString();
+      const mo = $('huntMorale');
+      mo.style.width = `${this.morale}%`;
+      mo.style.background = this.morale > 50 ? '#35d07f' : this.morale > 25 ? '#ffb020' : '#ff5a4e';
+      const ammo = this.reload > 0 ? 'Reloading' : `${this.ammo}/${MAG}`;
+      $('huntAmmo').textContent = ammo;
+      $('huntFireAmmo').textContent = ammo;
+      $('huntBoss').hidden = !boss;
+      if (boss) $('huntBossBar').style.width = `${Math.max(0, (boss.hp / BUG_KINDS.boss.hp) * 100)}%`;
     },
   };
 
@@ -10461,7 +11179,21 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   stage3d.addEventListener('contextmenu', e => e.preventDefault());
   window.addEventListener('keydown', e => World.key(e, true));
   window.addEventListener('keyup', e => World.key(e, false));
-  window.addEventListener('blur', () => { World.keys.clear(); World.stick = null; $('walkStick').hidden = true; });
+  window.addEventListener('blur', () => { World.keys.clear(); World.stick = null; $('walkStick').hidden = true; Hunt.trigger = false; });
+  // Bug hunt: Fire holds to fire and slides to aim, on a touch screen; the rest are plain buttons.
+  const fireBtn = $('huntFire');
+  fireBtn.addEventListener('pointerdown', e => { e.preventDefault(); Sound.unlock(); try { fireBtn.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ } Hunt.trigger = true; Hunt.aim = { id: e.pointerId, x: e.clientX, y: e.clientY }; });
+  fireBtn.addEventListener('pointermove', e => { const a = Hunt.aim; if (!a || a.id !== e.pointerId) return; World.turn(e.clientX - a.x, e.clientY - a.y, 0.0065); a.x = e.clientX; a.y = e.clientY; });
+  const fireUp = () => { Hunt.trigger = false; Hunt.aim = null; };
+  fireBtn.addEventListener('pointerup', fireUp);
+  fireBtn.addEventListener('pointercancel', fireUp);
+  fireBtn.addEventListener('contextmenu', e => e.preventDefault());
+  $('huntReload').addEventListener('click', () => Hunt.startReload());
+  $('huntBtn').addEventListener('click', () => Hunt.start());
+  $('huntEnd').addEventListener('click', () => Hunt.stop());
+  $('huntAgain').addEventListener('click', () => { Hunt.stop(); Hunt.start(); });
+  $('huntQuit').addEventListener('click', () => Hunt.stop());
+  $('huntMull').addEventListener('click', () => Hunt.mull());
   document.addEventListener('pointerlockchange', () => app.classList.toggle('locked', document.pointerLockElement === stage3d));
 
   // ---------------------------------------------------------------------------
@@ -12057,7 +12789,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   window.addEventListener('pagehide', () => { if (ONLINE.on) Net.send({ k: 'bye' }); });
   if (urlParams.has('debug')) {
     window.n2fDebug = {
-      G, ONLINE, Net, Party, Campus, Workshop, World, view, Career, Daily, Ghost, COURSES, Goals, Secrets, SECRETS, Challenge, Rivals, starsWithinReach,
+      G, ONLINE, Net, Party, Campus, Workshop, World, Hunt, view, Career, Daily, Ghost, COURSES, Goals, Secrets, SECRETS, Challenge, Rivals, starsWithinReach,
       gold() { G.forceGold = true; }, trickFor, retryPractice, startPractice,
       // Jumps to a hole of the current game, for testing.
       jump(i) { loadHole(i); startTurn(0, true); },
