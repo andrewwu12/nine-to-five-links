@@ -432,30 +432,54 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 .walk-note .btn { margin-top: 14px; }
 .walk-note h3 { margin: 0 0 8px; font: 900 30px/1 var(--display); text-transform: uppercase; }
 .walk-note .row { justify-content: center; gap: 8px; }
-.walk-top .walk-hunt { margin-left: auto; }
+/* Bug hunt: the button in 3D, red and hard to miss, pulsing until your first hunt */
+.walk-top .walk-hunt { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; background: #e8453a; color: #fff; font-weight: 700; box-shadow: 0 6px 18px rgba(232, 69, 58, .45), inset 0 -3px 0 rgba(0, 0, 0, .18); }
+.walk-top .walk-hunt:hover { background: #d63a2f; }
+.walk-hunt svg { width: 22px; height: 22px; flex: none; }
+.walk-hunt kbd { font: 600 11px var(--mono); padding: 2px 6px; border-radius: 5px; background: rgba(0, 0, 0, .22); }
+.walk-ui.touch .walk-hunt kbd { display: none; }
+.walk-hunt.fresh { animation: huntPulse 1.6s ease-in-out infinite; }
+@keyframes huntPulse { 50% { box-shadow: 0 0 0 10px rgba(232, 69, 58, .28), 0 6px 18px rgba(232, 69, 58, .45); } }
+/* The course pass's way in */
+.hunt-promo { appearance: none; border: 0; width: 100%; margin: 0 0 14px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: #14171c; color: #fff; text-align: left; cursor: pointer; box-shadow: inset 0 0 0 2px #e8453a, 0 10px 24px rgba(232, 69, 58, .18); font: inherit; touch-action: manipulation; }
+.hunt-promo:hover { background: #1d2129; }
+.hunt-promo svg { width: 44px; height: 44px; color: #e8453a; }
+.hunt-promo svg .eye { fill: #14171c; }
+.hunt-promo b { display: block; font: 900 28px/1 var(--display); text-transform: uppercase; letter-spacing: .02em; }
+.hunt-promo small { display: block; margin-top: 3px; font: 500 13px/1.35 var(--body); color: #c9d0da; }
+.hunt-promo em { display: block; font: 600 10px/1.2 var(--mono); font-style: normal; letter-spacing: .12em; text-transform: uppercase; color: #ffd447; }
+.hunt-promo .go { padding: 10px 14px; border-radius: 10px; background: #e8453a; font: 700 15px var(--body); white-space: nowrap; }
+/* The hunt's HUD */
 .walk-ui > .hunt-hud { position: absolute; inset: 0; pointer-events: none; }
 .hunt-hud > * { pointer-events: none; }
 .hunt-hud > button, .hunt-top .btn { pointer-events: auto; }
-.hunt-top { position: absolute; top: 12px; right: 16px; display: grid; justify-items: end; gap: 4px; width: 168px; padding: 9px 12px 10px; border-radius: 12px; background: rgba(15, 20, 28, .68); color: var(--on-floor); font: 600 12px var(--mono); }
+.hunt-top { position: absolute; top: 12px; right: 16px; display: grid; justify-items: end; gap: 4px; width: 176px; padding: 9px 12px 10px; border-radius: 12px; background: rgba(15, 20, 28, .72); color: var(--on-floor); font: 600 12px var(--mono); }
 .hunt-top b { font: 900 18px/1 var(--display); text-transform: uppercase; letter-spacing: .04em; color: var(--hi); }
 .hunt-score { font: 900 26px/1 var(--display); color: #fff; font-variant-numeric: tabular-nums; }
+.hunt-label { width: 100%; display: flex; justify-content: space-between; font: 600 10px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--on-floor-2); }
 .hunt-bar { width: 100%; height: 8px; border-radius: 999px; background: rgba(255, 255, 255, .16); overflow: hidden; }
 .hunt-bar i { display: block; height: 100%; width: 100%; border-radius: inherit; background: #35d07f; transition: width .15s; }
 .hunt-boss { width: 100%; display: grid; gap: 3px; justify-items: end; color: #3dff7a; font: 900 14px/1 var(--display); text-transform: uppercase; letter-spacing: .06em; }
 .hunt-boss .hunt-bar i { background: #3dff7a; }
+.hunt-buffs { width: 100%; text-align: right; font: 600 11px/1.3 var(--mono); color: #ffd447; }
 .hunt-end { min-height: 30px; padding: 6px 12px; font-size: 12px; margin-top: 4px; }
-.hunt-ammo { position: absolute; right: 16px; bottom: 14px; padding: 6px 12px; border-radius: 12px; background: rgba(15, 20, 28, .62); color: #fff; font: 900 22px/1 var(--display); font-variant-numeric: tabular-nums; }
+.hunt-gun { position: absolute; right: 16px; bottom: 14px; display: grid; justify-items: end; gap: 2px; padding: 6px 12px; border-radius: 12px; background: rgba(15, 20, 28, .66); color: #fff; }
+.hunt-gun small { font: 600 10px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--on-floor-2); }
+.hunt-gun span { font: 900 22px/1 var(--display); font-variant-numeric: tabular-nums; }
 .hunt-call { position: absolute; left: 50%; top: 30%; transform: translate(-50%, -50%) scale(.7); font: 900 clamp(36px, 10vw, 76px)/1 var(--display); color: var(--hi); text-transform: uppercase; letter-spacing: .03em; text-shadow: 0 4px 0 #8a5a00, 0 12px 30px rgba(0, 0, 0, .5); opacity: 0; transition: opacity .18s, transform .18s; white-space: nowrap; }
 .hunt-call.on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.hunt-note { position: absolute; left: 50%; top: calc(50% + 34px); transform: translateX(-50%); width: max-content; max-width: min(90%, 420px); padding: 6px 12px; border-radius: 12px; background: rgba(15, 20, 28, .76); color: #fff; font: 600 13px/1.35 var(--body); text-align: center; opacity: 0; transition: opacity .25s; }
+.hunt-note.on { opacity: 1; }
 .hunt-hurt { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(232, 69, 58, 0) 50%, rgba(232, 69, 58, .6) 100%); opacity: 0; }
+.hunt-hurt.left { background: linear-gradient(90deg, rgba(232, 69, 58, .78), rgba(232, 69, 58, 0) 38%); }
+.hunt-hurt.right { background: linear-gradient(270deg, rgba(232, 69, 58, .78), rgba(232, 69, 58, 0) 38%); }
+.hunt-hurt.back { background: linear-gradient(0deg, rgba(232, 69, 58, .78), rgba(232, 69, 58, 0) 34%), radial-gradient(ellipse at center, rgba(232, 69, 58, 0) 60%, rgba(232, 69, 58, .45) 100%); }
 .hunt-hurt.on { animation: huntHurt .5s ease-out; }
 @keyframes huntHurt { from { opacity: 1; } to { opacity: 0; } }
 .hunt-pops span { position: absolute; transform: translate(-50%, -50%); font: 900 20px/1 var(--display); color: #fff; text-shadow: 0 2px 4px rgba(0, 0, 0, .75); white-space: nowrap; animation: huntPop .9s ease-out forwards; }
 @keyframes huntPop { from { opacity: 1; margin-top: 0; } to { opacity: 0; margin-top: -56px; } }
-.hunt-fire { position: absolute; right: 20px; bottom: 96px; width: 92px; height: 92px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .8); background: rgba(232, 69, 58, .82); color: #fff; font: 900 20px/1 var(--display); text-transform: uppercase; letter-spacing: .06em; touch-action: none; display: none; place-items: center; align-content: center; gap: 4px; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
-.hunt-fire small { font: 600 11px var(--mono); letter-spacing: 0; text-transform: none; }
-.hunt-reload { position: absolute; right: 26px; bottom: 200px; display: none; }
-.hunt-hud.over .hunt-fire, .hunt-hud.over .hunt-reload, .hunt-hud.over .hunt-ammo { visibility: hidden; }
+.hunt-bars i { position: absolute; left: 0; top: 0; width: 40px; height: 6px; margin: -3px 0 0 -20px; border-radius: 3px; background: rgba(15, 20, 28, .8); box-shadow: 0 0 0 1px rgba(255, 255, 255, .45); overflow: hidden; }
+.hunt-bars i b { display: block; height: 100%; background: #ff5a4e; }
 .hunt-edge { position: absolute; top: 50%; display: grid; justify-items: center; gap: 4px; transform: translateY(-50%); color: #fff; font: 900 15px/1 var(--display); text-shadow: 0 2px 4px rgba(0, 0, 0, .75); }
 .hunt-edge::before { content: ''; border: 15px solid transparent; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .45)); }
 .hunt-edge.left { left: 8px; }
@@ -464,14 +488,101 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 .hunt-edge.right::before { border-right: 0; border-left: 22px solid #ff5a4e; }
 .hunt-edge.near::before { animation: huntEdge .4s ease-in-out infinite alternate; }
 @keyframes huntEdge { to { transform: scale(1.3); } }
+.hunt-squad { position: absolute; left: 16px; top: 64px; display: grid; gap: 6px; width: 176px; }
+.hunt-mate { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 3px 6px; padding: 6px 8px; border-radius: 10px; background: rgba(15, 20, 28, .72); color: #fff; font: 600 12px/1.2 var(--body); }
+.hunt-mate b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hunt-mate small { font: 600 10px var(--mono); color: var(--on-floor-2); }
+.hunt-mate i { grid-column: 1 / -1; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .16); overflow: hidden; }
+.hunt-mate i b { display: block; height: 100%; background: #35d07f; }
+.hunt-mate.down { box-shadow: inset 0 0 0 2px #ff5a4e; }
+.hunt-mate.down small { color: #ff8f86; }
+.walk-ui > .hunt-tags { position: absolute; inset: 0; pointer-events: none; }
+.hunt-tag { position: absolute; left: 0; top: 0; display: grid; justify-items: center; gap: 3px; padding: 3px 8px 4px; border-radius: 8px; background: rgba(15, 20, 28, .74); box-shadow: inset 0 -2px 0 var(--c, #fff); color: #fff; font: 700 12px/1.15 var(--body); white-space: nowrap; }
+.hunt-tag i { display: block; width: 46px; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .18); overflow: hidden; }
+.hunt-tag b { display: block; height: 100%; }
+.hunt-tag.down { background: rgba(120, 20, 14, .82); }
+.hunt-revive { position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%); width: min(80%, 280px); display: grid; gap: 6px; padding: 10px 14px; border-radius: 12px; background: rgba(15, 20, 28, .8); color: #fff; font: 700 14px var(--body); text-align: center; }
+.hunt-revive .hunt-bar i { background: #5bc0ff; transition: none; }
+.hunt-fire { position: absolute; right: 20px; bottom: 96px; width: 92px; height: 92px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .8); background: rgba(232, 69, 58, .82); color: #fff; font: 900 20px/1 var(--display); text-transform: uppercase; letter-spacing: .06em; touch-action: none; display: none; place-items: center; align-content: center; gap: 3px; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
+.hunt-fire small { font: 600 11px/1.1 var(--mono); letter-spacing: 0; text-transform: none; }
+.hunt-fire small:empty { display: none; }
+.hunt-reload { position: absolute; right: 26px; bottom: 200px; display: none; }
+.hunt-hud.over .hunt-fire, .hunt-hud.over .hunt-reload, .hunt-hud.over .hunt-gun { visibility: hidden; }
 .walk-ui.touch .hunt-fire { display: grid; }
 .walk-ui.touch .hunt-reload { display: inline-flex; }
-.walk-ui.touch .hunt-ammo { display: none; }
+.walk-ui.touch .hunt-reload[hidden] { display: none; }
+.walk-ui.touch .hunt-gun { display: none; }
 .walk-ui.touch.hunting .walk-where { display: none; }
-.walk-ui.touch.hunting .walk-prompt { top: 158px; }
+.walk-ui.touch.hunting .walk-prompt { top: 214px; }
 .walk-cross.hunting::before, .walk-cross.hunting::after { background: var(--hi); }
 .walk-cross.hit::before, .walk-cross.hit::after { background: #ff5a4e; animation: huntHit .2s; }
 @keyframes huntHit { from { transform: scale(1.8); } to { transform: none; } }
+/* Big cards: the start of a wave, and the first sight of a new kind of bug */
+.hunt-title { position: absolute; left: 50%; top: 30%; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 6px; width: max-content; max-width: calc(100% - 32px); text-align: center; color: #fff; text-shadow: 0 4px 18px rgba(0, 0, 0, .6); pointer-events: none; }
+.hunt-title b { font: 900 clamp(48px, 12vw, 96px)/.9 var(--display); text-transform: uppercase; letter-spacing: .02em; color: #ffd447; }
+.hunt-title span { font: 900 clamp(22px, 5vw, 36px)/1 var(--display); text-transform: uppercase; letter-spacing: .04em; }
+.hunt-title small { font: 600 15px/1.35 var(--body); }
+.hunt-title.on { animation: huntTitle 2.9s ease both; }
+@keyframes huntTitle { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.85); } 12%, 82% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1); } }
+@keyframes huntFade { 0%, 100% { opacity: 0; } 10%, 85% { opacity: 1; } }
+.hunt-intro { position: absolute; left: 50%; top: 64px; transform: translateX(-50%); width: min(calc(100% - 32px), 380px); display: grid; gap: 4px; padding: 12px 16px; border-radius: 14px; background: var(--paper); color: var(--ink); box-shadow: 0 16px 40px rgba(0, 0, 0, .4); border-left: 6px solid #e8453a; pointer-events: none; }
+.hunt-intro .eyebrow { color: #b3261e; }
+.hunt-intro b { font: 900 26px/1 var(--display); text-transform: uppercase; }
+.hunt-intro small { font: 500 13px/1.4 var(--body); color: var(--ink-2); }
+.hunt-intro.boss { border-left-color: #3dff7a; background: #14171c; color: #fff; }
+.hunt-intro.boss small { color: #c9d0da; }
+.hunt-intro.boss .eyebrow { color: #3dff7a; }
+.walk-ui.touch .hunt-intro { top: auto; bottom: 250px; }
+.walk-ui.touch .hunt-title { top: 60%; }
+.walk-ui.touch .hunt-perks { top: 214px; bottom: auto; }
+/* After a wave: three perks to choose from */
+.hunt-perks { position: absolute; left: 50%; bottom: 72px; transform: translateX(-50%); width: min(calc(100% - 24px), 660px); display: grid; gap: 8px; padding: 12px; border-radius: 16px; background: rgba(15, 20, 28, .86); box-shadow: 0 16px 40px rgba(0, 0, 0, .4); }
+.hunt-perks .eyebrow { color: #ffd447; text-align: center; }
+.hunt-perk-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.hunt-perk { appearance: none; border: 0; position: relative; display: grid; gap: 3px; align-content: start; padding: 10px 12px; border-radius: 12px; background: var(--paper); color: var(--ink); text-align: left; cursor: pointer; font: inherit; touch-action: manipulation; }
+.hunt-perk:hover, .hunt-perk:focus-visible { background: var(--hi-soft); }
+.hunt-perk b { font: 800 16px/1.15 var(--body); padding-right: 22px; }
+.hunt-perk small { font: 500 12px/1.35 var(--body); color: var(--ink-2); }
+.hunt-perk em { font: 600 10px var(--mono); font-style: normal; color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; }
+.hunt-perk kbd { position: absolute; right: 8px; top: 8px; font: 600 11px var(--mono); padding: 1px 6px; border-radius: 5px; background: rgba(0, 0, 0, .1); }
+.walk-ui.touch .hunt-perk kbd { display: none; }
+@media (max-width: 600px) { .hunt-perk-list { grid-template-columns: 1fr; } .hunt-perk { padding: 8px 12px; } .hunt-perks { bottom: 14px; } }
+/* The incident report at the end of a hunt */
+.hunt-report { width: min(calc(100% - 24px), 470px); max-height: calc(100% - 24px); overflow-y: auto; text-align: left; -webkit-user-select: text; user-select: text; }
+.hunt-report .eyebrow, .hunt-report h3, .hunt-report > p { text-align: center; }
+.hunt-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; margin: 12px 0 0; }
+.hunt-stats div { display: grid; gap: 1px; padding: 6px 0; border-top: 1px solid var(--line); min-width: 0; }
+.hunt-stats dt { font: 600 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.hunt-stats dd { margin: 0; font: 600 14px/1.3 var(--body); overflow-wrap: anywhere; }
+.hunt-team { display: grid; gap: 4px; margin-top: 12px; }
+.hunt-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 8px; background: var(--paper-2); font-size: 13px; }
+.hunt-row b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hunt-row span:last-child { font: 800 15px var(--body); }
+.hunt-report .note { text-align: center; margin-top: 10px; }
+/* The Bug hunt card */
+.hunt-panel { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(calc(100% - 24px), 520px); max-height: calc(100% - 24px); overflow-y: auto; display: grid; gap: 12px; padding: 20px; border-radius: 18px; background: var(--paper); color: var(--ink); box-shadow: 0 30px 80px rgba(0, 0, 0, .5); -webkit-user-select: text; user-select: text; touch-action: pan-y; }
+.hunt-panel :focus-visible { outline-color: var(--focus); }
+.hunt-panel-head { display: flex; align-items: center; gap: 12px; padding-right: 40px; }
+.hunt-panel-bug { flex: none; width: 58px; height: 58px; border-radius: 14px; display: grid; place-items: center; background: #14171c; color: #e8453a; }
+.hunt-panel-bug svg { width: 42px; height: 42px; }
+.hunt-panel-bug svg .eye { fill: #14171c; }
+.hunt-panel h2 { margin: 2px 0 0; font: 900 48px/.9 var(--display); text-transform: uppercase; color: #d63a2f; }
+.hunt-lede { margin: 0; font-size: 15px; }
+.hunt-how { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; counter-reset: how; }
+.hunt-how li { position: relative; padding-left: 34px; font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+.hunt-how li b { color: var(--ink); }
+.hunt-how li::before { counter-increment: how; content: counter(how); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: #e8453a; color: #fff; font: 700 12px/1 var(--mono); }
+.seg3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.seg-opt input:disabled + span { opacity: .55; cursor: default; }
+.hunt-x { position: absolute; right: 12px; top: 12px; width: 38px; height: 38px; border: 0; border-radius: 50%; background: var(--paper-2); color: var(--ink); font: 400 26px/1 var(--body); cursor: pointer; }
+.hunt-x:hover { background: var(--paper-3); }
+.hunt-go { width: 100%; background: #e8453a; color: #fff; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .18); }
+.hunt-go:hover { background: #d63a2f; }
+.hunt-go:disabled { opacity: .45; cursor: default; }
+.hunt-panel .status-line { margin: 0; }
+.hunt-panel .club-list li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid var(--line); }
+.hunt-panel .club-list small { font: 600 11px var(--mono); color: var(--ink-2); }
+@media (max-height: 640px) { .hunt-how li { font-size: 13px; } .hunt-panel h2 { font-size: 40px; } }
 
 /* Taunt menu */
 .taunt-pop { position: absolute; left: 16px; bottom: 64px; width: min(340px, calc(100% - 32px)); max-height: calc(100% - 150px); overflow-y: auto; display: grid; gap: 4px; padding: 8px; background: var(--paper); border-radius: 14px; box-shadow: 0 16px 40px rgba(0, 0, 0, .4); z-index: 9; }
@@ -514,8 +625,9 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 @media (prefers-reduced-motion: reduce) {
   .toast.show { animation: toast-fade 2s linear both; }
   .btn { transition: none; }
-  .hunt-edge.near::before, .walk-cross.hit::before, .walk-cross.hit::after { animation: none; }
+  .hunt-edge.near::before, .walk-cross.hit::before, .walk-cross.hit::after, .walk-hunt.fresh { animation: none; }
   .hunt-call { transition: opacity .18s; }
+  .hunt-title.on { animation: huntFade 2.9s linear both; }
 }
 </style>
 </head>
@@ -603,7 +715,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     <div class="walk-top" id="walkTop">
       <button class="btn btn-paper" id="walkBack" type="button">Back</button>
       <div class="walk-where" id="walkWhere" role="status">The campus</div>
-      <button class="btn btn-paper walk-hunt" id="huntBtn" type="button">Bug hunt</button>
+      <button class="btn walk-hunt" id="huntBtn" type="button" title="Bug hunt (B)"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M14 18l-7-5M14 26H5M14 34l-7 5M34 18l7-5M34 26h9M34 34l7 5M19 11l-3-5M29 11l3-5"/></g><ellipse cx="24" cy="28" rx="11" ry="14" fill="currentColor"/><circle cx="24" cy="13" r="6" fill="currentColor"/><circle class="eye" cx="21.5" cy="12.5" r="1.8" fill="#ff3b3b"/><circle class="eye" cx="26.5" cy="12.5" r="1.8" fill="#ff3b3b"/></svg><span>Bug hunt</span><kbd>B</kbd></button>
     </div>
     <div class="walk-cross" id="walkCross" aria-hidden="true"></div>
     <div class="walk-stick" id="walkStick" hidden aria-hidden="true"><i></i></div>
@@ -625,26 +737,109 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     <div class="hunt-hud" id="huntHud" hidden>
       <div class="hunt-top">
         <b id="huntWave">Wave 1</b><span id="huntLeft"></span><span class="hunt-score" id="huntScore">0</span>
-        <div class="hunt-bar" title="Morale"><i id="huntMorale"></i></div>
-        <div class="hunt-boss" id="huntBoss" hidden><span>Legacy Code</span><div class="hunt-bar"><i id="huntBossBar"></i></div></div>
+        <div class="hunt-label"><span>Morale</span><span id="huntMoraleNum">100</span></div>
+        <div class="hunt-bar"><i id="huntMorale"></i></div>
+        <div class="hunt-boss" id="huntBoss" hidden><span id="huntBossName">Legacy Code</span><div class="hunt-bar"><i id="huntBossBar"></i></div></div>
+        <div class="hunt-buffs" id="huntBuffs" hidden></div>
         <button class="btn btn-paper hunt-end" id="huntEnd" type="button">End hunt</button>
       </div>
-      <div class="hunt-ammo" id="huntAmmo"></div>
+      <div class="hunt-squad" id="huntSquad" hidden></div>
+      <div class="hunt-bars" id="huntBars" aria-hidden="true"></div>
+      <div class="hunt-gun"><small id="huntGun">Golf blaster</small><span id="huntAmmo"></span></div>
       <div class="hunt-call" id="huntCall" aria-live="polite"></div>
+      <div class="hunt-note" id="huntNote" aria-live="polite"></div>
       <div class="hunt-hurt" id="huntHurt"></div>
       <div class="hunt-pops" id="huntPops"></div>
       <div class="hunt-edge left" id="huntEdgeL" hidden><small></small></div>
       <div class="hunt-edge right" id="huntEdgeR" hidden><small></small></div>
-      <button class="hunt-fire" id="huntFire" type="button" aria-label="Fire">Fire<small id="huntFireAmmo"></small></button>
+      <div class="hunt-revive" id="huntRevive" hidden><b id="huntReviveName"></b><div class="hunt-bar"><i id="huntReviveBar"></i></div></div>
+      <button class="hunt-fire" id="huntFire" type="button" aria-label="Fire">Fire<small id="huntFireAmmo"></small><small id="huntFireGun"></small></button>
       <button class="btn btn-paper hunt-reload" id="huntReload" type="button">Reload</button>
     </div>
-    <div class="walk-note" id="huntOver" hidden>
-      <h3>Sick day</h3>
+    <div class="hunt-tags" id="huntTags" aria-hidden="true"></div>
+    <div class="hunt-title" id="huntTitle" hidden aria-live="polite"><b id="huntTitleBig"></b><span id="huntTitleMid"></span><small id="huntTitleSmall"></small></div>
+    <div class="hunt-intro" id="huntIntro" hidden aria-live="polite"><span class="eyebrow" id="huntIntroTag">New bug</span><b id="huntIntroName"></b><small id="huntIntroTip"></small></div>
+    <div class="hunt-perks" id="huntPerks" hidden><div class="eyebrow">Wave cleared · pick a perk</div><div class="hunt-perk-list" id="huntPerkList"></div></div>
+    <div class="walk-note" id="huntDown" hidden>
+      <h3>Out sick</h3>
+      <p id="huntDownText"></p>
+      <div class="row wrap">
+        <button class="btn btn-hi" id="huntDownMull" type="button">Take a mulligan</button>
+        <button class="btn btn-paper" id="huntDownLeave" type="button">Leave the hunt</button>
+      </div>
+    </div>
+    <div class="walk-note hunt-report" id="huntOver" hidden>
+      <div class="eyebrow" id="huntOverEyebrow">Incident report</div>
+      <h3 id="huntOverTitle">Sick day</h3>
       <p id="huntOverText"></p>
+      <dl class="hunt-stats" id="huntStats"></dl>
+      <div class="hunt-team" id="huntTeam" hidden></div>
+      <p class="note" id="huntWaitNote" hidden></p>
       <div class="row wrap">
         <button class="btn btn-hi" id="huntMull" type="button">Take a mulligan</button>
-        <button class="btn btn-paper" id="huntAgain" type="button">Hunt again</button>
+        <button class="btn btn-hi" id="huntAgain" type="button">Hunt again</button>
+        <button class="btn btn-paper" id="huntShare" type="button">Copy result</button>
         <button class="btn btn-paper" id="huntQuit" type="button">Walk around</button>
+      </div>
+    </div>
+    <div class="hunt-panel" id="huntPanel" role="dialog" aria-labelledby="huntPanelTitle" hidden>
+      <button class="hunt-x" id="huntPanelClose" type="button" aria-label="Close">×</button>
+      <div class="hunt-panel-head">
+        <span class="hunt-panel-bug"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M14 18l-7-5M14 26H5M14 34l-7 5M34 18l7-5M34 26h9M34 34l7 5M19 11l-3-5M29 11l3-5"/></g><ellipse cx="24" cy="28" rx="11" ry="14" fill="currentColor"/><circle cx="24" cy="13" r="6" fill="currentColor"/><circle class="eye" cx="21.5" cy="12.5" r="1.8" fill="#ff3b3b"/><circle class="eye" cx="26.5" cy="12.5" r="1.8" fill="#ff3b3b"/></svg></span>
+        <div><div class="eyebrow">Play in 3D · Solo or squad</div><h2 id="huntPanelTitle">Bug hunt</h2></div>
+      </div>
+      <p class="hunt-lede">Production bugs are loose on the campus. Squash them with a golf ball blaster before they eat all your morale.</p>
+      <ol class="hunt-how">
+        <li><b>Fire.</b> <span id="huntHowFire"></span></li>
+        <li><b>Bank it.</b> Balls bounce off walls, and a squash off a bounce pays double. Firewalls only fall to bank shots, hits from behind, the putter or the sand wedge.</li>
+        <li><b>Golf calls in backup.</b> Sink par or better on any hole for a supply drop, a birdie strike or an eagle strike.</li>
+        <li><b>Grab pick-ups.</b> Bugs drop clubs (driver, range bucket, sand wedge, putter), coffee and donuts. Pick a perk after every wave. A boss turns up every fifth.</li>
+      </ol>
+      <p class="field-label">Workload</p>
+      <div class="seg seg3" role="radiogroup" aria-label="Workload">
+        <label class="seg-opt"><input type="radio" name="huntLevel" value="intern"><span><b>Intern</b><small>Easy</small></span></label>
+        <label class="seg-opt"><input type="radio" name="huntLevel" value="manager" checked><span><b>Manager</b><small>Normal</small></span></label>
+        <label class="seg-opt"><input type="radio" name="huntLevel" value="crunch"><span><b>Crunch time</b><small>Hard</small></span></label>
+      </div>
+      <p class="note" id="huntLevelNote"></p>
+      <div class="tabs" role="tablist" aria-label="Solo or squad">
+        <button class="tab" role="tab" id="huntTabSolo" aria-selected="true" aria-controls="huntSoloPane" type="button">Solo</button>
+        <button class="tab" role="tab" id="huntTabSquad" aria-selected="false" aria-controls="huntSquadPane" type="button">Squad of up to 4</button>
+      </div>
+      <div class="pane" id="huntSoloPane" role="tabpanel" aria-labelledby="huntTabSolo">
+        <button class="btn btn-big hunt-go" id="huntSoloGo" type="button">Start the hunt</button>
+        <p class="note" id="huntBestNote"></p>
+        <p class="note" id="huntSoloInSquad" hidden>You're in a squad. Leave it on the Squad tab to hunt on your own.</p>
+      </div>
+      <div class="pane" id="huntSquadPane" role="tabpanel" aria-labelledby="huntTabSquad" hidden>
+        <p class="note" id="huntSquadElsewhere" hidden>Squads run on the public version of the game. Open <a class="link" href="https://andrewwu12.github.io/nine-to-five-links/" target="_blank" rel="noopener">andrewwu12.github.io/nine-to-five-links</a>, choose Play in 3D, then Bug hunt.</p>
+        <div class="pane" id="huntSquadForm">
+          <label class="field-label" for="huntName">Your name</label>
+          <input class="text-input" id="huntName" maxlength="16" autocomplete="off" spellcheck="false" placeholder="Your name">
+          <p class="error" id="huntNameError" hidden>Add your name so your squad can tell who's who.</p>
+          <button class="btn btn-big hunt-go" id="huntCreate" type="button">Start a squad</button>
+          <label class="field-label" for="huntCode">Or join one with its code</label>
+          <div class="row">
+            <input class="code-input" id="huntCode" maxlength="16" autocomplete="off" spellcheck="false" placeholder="e.g. HOTFIX-417">
+            <button class="btn btn-paper" id="huntJoin" type="button">Join</button>
+          </div>
+          <p class="note">Everyone plays in their own browser, from anywhere. You all fight the same bugs, and you can bring a teammate back by standing next to them when they're out sick.</p>
+        </div>
+        <div class="pane" id="huntLobby" hidden>
+          <p class="status-line"><span class="live-dot" id="huntLobbyDot"></span><span id="huntLobbyStatus"></span></p>
+          <label class="field-label" for="huntLink">Invite link</label>
+          <div class="row">
+            <input class="code-input plain" id="huntLink" readonly>
+            <button class="btn btn-paper" id="huntCopy" type="button">Copy link</button>
+          </div>
+          <p class="field-label">In the squad</p>
+          <ul class="club-list" id="huntMembers"></ul>
+          <p class="note" id="huntSquadFull" hidden>Someone else tried to join, but the squad is full. Four is the limit.</p>
+          <button class="btn btn-big hunt-go" id="huntSquadGo" type="button">Start the hunt</button>
+          <button class="btn btn-big hunt-go" id="huntRejoin" type="button" hidden>Rejoin the hunt</button>
+          <p class="note" id="huntSquadWait"></p>
+          <button class="btn btn-paper" id="huntLeave" type="button">Leave the squad</button>
+        </div>
       </div>
     </div>
   </div>
@@ -665,6 +860,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         <div class="career" id="careerChips"></div>
       </div>
       <div class="pass-body">
+        <button class="hunt-promo" id="huntPromo" type="button"><svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M14 18l-7-5M14 26H5M14 34l-7 5M34 18l7-5M34 26h9M34 34l7 5M19 11l-3-5M29 11l3-5"/></g><ellipse cx="24" cy="28" rx="11" ry="14" fill="currentColor"/><circle cx="24" cy="13" r="6" fill="currentColor"/><circle class="eye" cx="21.5" cy="12.5" r="1.8" fill="#ff3b3b"/><circle class="eye" cx="26.5" cy="12.5" r="1.8" fill="#ff3b3b"/></svg><span><em>New in Play in 3D</em><b>Bug hunt</b><small>Golf balls versus production bugs. On your own or in a squad of four.</small></span><span class="go">Play</span></button>
         <div class="challenge" id="challengeBox" hidden></div>
         <div class="daily" id="dailyBox"></div>
         <div class="goals" id="goalsBox"></div>
@@ -922,7 +1118,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         <dt>Play in 3D</dt>
         <dd>The whole campus in first person. You start at the first hole of the building you picked: tap Play this hole, or Play all 9 holes for a full round on today's pins with the scorecard, for everyone on the setup card. Drag sideways to aim and pull down for power, or use the arrow keys and Space. From above looks down on the hole. Between holes you can walk anywhere: in and out of every building, past the pond and the taco truck. Stand on any hole to play it. On a computer, WASD walks, the mouse looks and Space jumps; on a phone, your left thumb walks and your right one looks.</dd>
         <dt>Bug hunt</dt>
-        <dd>In Play in 3D, press Bug hunt. Production bugs, walking printers and meeting invites swarm in, wave after wave, and Legacy Code itself boots up every fifth wave. Squash them with the golf ball blaster: balls bounce off walls, and a squash off a bounce is a bank shot worth double. Several at once is a birdie, then an eagle, then an albatross. Sink a putt on any hole for backup: par brings a supply drop, a birdie a birdie strike, an eagle or a hole in one an eagle strike. Run out of morale and you take a sick day, unless you use your one mulligan. On a computer, click or hold to fire (F works too), R reloads and Space jumps; on a phone, hold Fire and slide it to aim. Red arrows at the edge of the screen point to bugs you can’t see. The balls go straight through coworkers.</dd>
+        <dd>A shooter inside Play in 3D: press Bug hunt on the course pass, or the red Bug hunt button (or B) while you walk. Bugs come in waves: crawlers, walking printers, meeting invites, reply-all swarms, merge conflicts that split in two and firewalls that block straight shots, with a boss every fifth wave (Legacy Code, then Spaghetti Code). Squash them with the golf ball blaster. Balls bounce off walls, and a squash off a bounce is a bank shot worth double. Bugs drop clubs (a driver that sprays seven balls, a range bucket that fires fast, a sand wedge whose balls burst, a putter that goes through everything), coffee, donuts and golden balls. After each wave, pick one of three perks. Sink par or better on any hole for backup: a supply drop, a birdie strike or an eagle strike. Choose a workload (Intern, Manager or Crunch time) and hunt alone, or start a squad of up to four and send the link: you all fight the same bugs, and you can bring a teammate back by standing next to them when they're out sick. On a computer, click or hold to fire (F works too), R reloads and Space jumps; on a phone, hold Fire and slide it to aim. The balls go straight through coworkers.</dd>
         <dt>Practice</dt>
         <dd>Tap a hole on the campus map, or a star within reach in the Locker, to play it on its own. Press Retry, or R, to start again from the tee.</dd>
         <dt>Challenges</dt>
@@ -2515,6 +2711,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     let ac = null, master = null, noiseBuf = null, muted = !!store.get('muted', false), lastBounce = 0;
     function unlock() {
       if (ac) { if (ac.state === 'suspended') ac.resume().catch(() => {}); return; }
+      // Browsers won't start sound before the first tap or key, so don't try until then.
+      if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
       try { ac = new AC(); } catch (e) { ac = null; return; }
@@ -9209,6 +9407,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       this.spawn(at || pickedBuilding());
       this.resize();
       this.syncUi();
+      Hunt.welcome();
     },
     setNote(text, isError) {
       const n = $('walkNote');
@@ -9961,7 +10160,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       this.ballFrame();
       this.lights();
       this.placeCamera(dt);
-      if (Hunt.on) Hunt.update(dt);
+      Hunt.frame(dt);
       this.syncUi();
     },
     // Slow frames draw fewer pixels; once there's room again, it goes back up.
@@ -9983,8 +10182,9 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       let mx = f, my = st;
       if (this.stick) { mx = -this.stick.dy; my = this.stick.dx; }
       const mag = Math.hypot(mx, my);
-      if (mag > 0.08) {
-        const run = k.has('ShiftLeft') || k.has('ShiftRight') || (this.stick && mag > 0.92), sp = (run ? RUN_SPEED : WALK_SPEED) * Math.min(1, mag), ca = Math.cos(this.me.a), sa = Math.sin(this.me.a);
+      // Out sick, you stay put. Perks and coffee speed you up.
+      if (mag > 0.08 && !(Hunt.on && (Hunt.down || Hunt.ended))) {
+        const run = k.has('ShiftLeft') || k.has('ShiftRight') || (this.stick && mag > 0.92), sp = (run ? RUN_SPEED : WALK_SPEED) * Math.min(1, mag) * (Hunt.on ? Hunt.speedMul() : 1), ca = Math.cos(this.me.a), sa = Math.sin(this.me.a);
         const n = Math.max(1, mag), vx = (ca * mx - sa * my) / n, vy = (sa * mx + ca * my) / n;
         this.moveBy(vx * sp * dt, vy * sp * dt);
         this.me.bob += dt * sp * 0.028;
@@ -10300,10 +10500,11 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       if (party !== this.partyShown) { this.partyShown = party; canvas.style.visibility = party ? '' : 'hidden'; }
     },
     syncUi() {
-      const walking = G.screen === 'walk', putting = !!this.playing && G.screen === 'play', ui = $('walkUi'), hunting = Hunt.on && !Hunt.over;
+      const walking = G.screen === 'walk', putting = !!this.playing && G.screen === 'play', ui = $('walkUi'), hunting = Hunt.on && !Hunt.down && !Hunt.ended;
       ui.classList.toggle('putting', putting);
       ui.classList.toggle('hunting', Hunt.on);
-      $('huntBtn').hidden = Hunt.on;
+      $('huntBtn').hidden = Hunt.on || Hunt.panelOpen;
+      $('huntBtn').classList.toggle('fresh', Hunt.fresh);
       $('walkTop').hidden = !walking;
       $('walkCross').hidden = !walking;
       $('walkSide').hidden = !putting;
@@ -10312,7 +10513,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       if (putting) $('hint').hidden = true;
       const w = this.where();
       if (w !== this.whereShown) { $('walkWhere').textContent = w; this.whereShown = w; }
-      const pr = walking && !(Hunt.on && Hunt.over) ? this.prompt : null;
+      const pr = walking && !Hunt.panelOpen && !Hunt.offer && !(Hunt.on && (Hunt.down || Hunt.ended)) ? this.prompt : null;
       $('walkPrompt').hidden = !pr;
       if (pr && this.promptShown !== pr) {
         const def = COURSES[pr.course].holes[pr.idx], best = Career.best(pr.course, pr.idx);
@@ -10346,6 +10547,8 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     down(e) {
       if (!this.on) return;
       Sound.unlock();
+      // A click outside the Bug hunt card closes it.
+      if (Hunt.panelOpen) { Hunt.closePanel(); return; }
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       e.preventDefault();
       const cv = $('stage3d'), r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
@@ -10358,7 +10561,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       if (e.pointerType === 'mouse') {
         if (!document.pointerLockElement && cv.requestPointerLock) { try { const p = cv.requestPointerLock(); if (p && p.catch) p.catch(() => {}); } catch (err) { /* ignore */ } }
         // In a bug hunt the button is the trigger: a click fires once, holding it keeps firing, and dragging still looks.
-        const hunting = Hunt.on && !Hunt.over;
+        const hunting = Hunt.on && !Hunt.down && !Hunt.ended;
         if (hunting) { Hunt.trigger = true; Hunt.fire(); }
         this.ptrs.set(e.pointerId, { kind: hunting ? 'fire' : 'look', x, y });
       } else if (x < r.width * 0.45 && !this.stick) {
@@ -10404,7 +10607,10 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (this.playing && G.screen === 'play') { if (e.code === 'KeyV' && !anyOverlayOpen()) { e.preventDefault(); this.toggleView(); } return; }
       if (G.screen !== 'walk') return;
-      if (Hunt.on && !Hunt.over) {
+      if (Hunt.panelOpen) { if (e.code === 'Escape' || e.code === 'KeyB') { e.preventDefault(); Hunt.closePanel(); } return; }
+      if (e.code === 'KeyB' && !Hunt.on) { e.preventDefault(); Hunt.openPanel(); return; }
+      if (Hunt.offer && /^Digit[1-3]$/.test(e.code)) { e.preventDefault(); Hunt.pickPerk(+e.code.slice(5) - 1); return; }
+      if (Hunt.on && !Hunt.down && !Hunt.ended) {
         if (e.code === 'KeyF') { e.preventDefault(); Hunt.trigger = true; return; }
         if (e.code === 'KeyR') { e.preventDefault(); Hunt.startReload(); return; }
       }
@@ -10418,58 +10624,146 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
 
   // ---------------------------------------------------------------------------
   // Bug hunt: production bugs have got loose on the campus. In Play in 3D you squash them with a golf ball blaster,
-  // wave after wave, and sink putts in between to call for help: par brings a supply drop, a birdie a birdie strike,
-  // an eagle or a hole in one an eagle strike. Balls only ever hit bugs; they go straight through coworkers.
+  // wave after wave, on your own or in a squad of up to four, and sink putts in between to call for help: par brings
+  // a supply drop, a birdie a birdie strike, an eagle or a hole in one an eagle strike. Balls only ever hit bugs.
   // ---------------------------------------------------------------------------
-  // r: size, hp: hits to squash, speed: units a second, bite: morale lost up close, pts: score. Some hover at fly,
-  // and some spit things at you from inside range, every few seconds.
+  // r: size, hp: hits to squash, speed: units a second, bite: morale lost up close, pts: score, drop: the chance of
+  // leaving a pick-up. Some hover at fly, some spit from inside range every few seconds, and a boss comes every fifth
+  // wave. tip: what the game tells you the first time one turns up.
   const BUG_KINDS = {
-    crawler: { r: 18, hp: 1, speed: 280, bite: 5, pts: 100, bits: ['#262b35', '#ff3b3b', '#3a414b'] },
-    printer: { r: 32, hp: 4, speed: 140, bite: 10, pts: 250, range: 950, spit: 'paper', every: 2.8, bits: ['#fbfbf7', '#d8d2c3', '#ff4d3d'] },
-    drone: { r: 26, hp: 2, speed: 230, bite: 0, pts: 200, fly: 205, range: 1150, spit: 'invite', every: 2.3, bits: ['#f7f7f2', '#e8453a', '#2b3038'] },
-    boss: { r: 92, hp: 80, speed: 100, bite: 18, pts: 2500, range: 1400, spit: 'code', every: 1.4, bits: ['#3dff7a', '#cfc8b6', '#14171c'] },
+    crawler: { name: 'Bug', r: 18, hp: 1, speed: 280, bite: 5, pts: 100, drop: 0.04, bits: ['#262b35', '#ff3b3b', '#3a414b'] },
+    swarm: { name: 'Reply-all', r: 12, hp: 1, speed: 330, bite: 3, pts: 60, fly: 70, drop: 0.015, bits: ['#ffffff', '#e8453a', '#c9d3df'], tip: 'They come in fives, fast and flimsy. Sweep them up.' },
+    printer: { name: 'Printer', r: 32, hp: 4, speed: 140, bite: 10, pts: 250, range: 950, spit: 'paper', every: 2.8, drop: 0.18, bits: ['#fbfbf7', '#d8d2c3', '#ff4d3d'], tip: 'Spits paper jams from a distance. Shoot the paper down for 25.' },
+    drone: { name: 'Meeting invite', r: 26, hp: 2, speed: 230, bite: 0, pts: 200, fly: 205, range: 1150, spit: 'invite', every: 2.3, drop: 0.15, bits: ['#f7f7f2', '#e8453a', '#2b3038'], tip: 'Hovers out of reach and sends invites that follow you.' },
+    merge: { name: 'Merge conflict', r: 26, hp: 3, speed: 210, bite: 7, pts: 200, split: true, drop: 0.12, bits: ['#e8453a', '#35d07f', '#262b35'], tip: 'Squash it and it splits in two.' },
+    firewall: { name: 'Firewall', r: 30, hp: 4, speed: 130, bite: 10, pts: 350, shield: true, drop: 0.3, bits: ['#c9562f', '#8f3a1c', '#262b35'], tip: 'Straight shots bounce off its front. Bank one in, get round the back, or blow it up.' },
+    legacy: { name: 'Legacy Code', r: 92, hp: 80, speed: 100, bite: 18, pts: 2500, range: 1400, spit: 'code', every: 1.4, boss: true, drop: 1, bits: ['#3dff7a', '#cfc8b6', '#14171c'], tip: 'A boss. It spits green code. Keep moving, keep firing.' },
+    spaghetti: { name: 'Spaghetti Code', r: 100, hp: 110, speed: 90, bite: 16, pts: 3500, range: 1500, spit: 'meatball', every: 2.4, brood: 7, boss: true, drop: 1, bits: ['#f2d36b', '#c8321e', '#8a4a2a'], tip: 'A boss. It lobs meatballs and spawns more bugs. Don’t stand still.' },
   };
-  // What they spit: paper jams, meeting invites (which follow you a little) and green spaghetti code.
-  const SPITS = { paper: { speed: 560, r: 11, hurt: 8, color: '#f4f4ee' }, invite: { speed: 470, r: 12, hurt: 7, color: '#ff6b5a', home: 1.2 }, code: { speed: 640, r: 16, hurt: 12, color: '#3dff7a' } };
-  const MAG = 24, FIRE_GAP = 0.13, RELOAD_T = 1.1, SHOT_SPEED = 2700, SHOT_R = 9, SHOT_G = 700;
-  const WAVE_NAMES = ['Monday morning', 'Stand-up', 'Sprint planning', 'Release day', 'Legacy code', 'Hotfix', 'Code freeze', 'All hands', 'Quarter end', 'The big migration'];
+  const KIND_IDS = Object.keys(BUG_KINDS);
+  // What they spit: paper jams, meeting invites (which follow you a little), green spaghetti code, and meatballs
+  // that are lobbed and burst where they land.
+  const SPITS = {
+    paper: { speed: 560, r: 11, hurt: 8, color: '#f4f4ee' },
+    invite: { speed: 470, r: 12, hurt: 7, color: '#ff6b5a', home: 1.2 },
+    code: { speed: 640, r: 16, hurt: 12, color: '#3dff7a' },
+    meatball: { speed: 0, r: 20, hurt: 15, color: '#8a4a2a', lob: true, blast: 150 },
+  };
+  const SPIT_IDS = Object.keys(SPITS);
+  const SPIT_G = 900, SHOT_R = 9, SHOT_G = 700, RELOAD_T = 1.1;
+  // What's in your hands. gap: seconds between shots, ammo: balls before it's back to the blaster, pellets and
+  // spread for the driver, drop: how hard gravity pulls, lob: an upward nudge, blast: a splash, pierce: through all.
+  const WEAPONS = {
+    blaster: { name: 'Golf blaster', gap: 0.13, speed: 2700, drop: 1, dmg: 1, pellets: 1, spread: 0, body: '#ff7a1a', barrel: [3.4, 18, 3.4, '#f4f4ef'] },
+    driver: { name: 'Driver', gap: 0.5, ammo: 12, speed: 2400, drop: 1, dmg: 1, pellets: 7, spread: 0.075, body: '#30343c', barrel: [7, 11, 7, '#c9ced6'] },
+    bucket: { name: 'Range bucket', gap: 0.05, ammo: 100, speed: 2800, drop: 1, dmg: 1, pellets: 1, spread: 0.03, body: '#2f8a4e', barrel: [3, 16, 3, '#f4f4ef'] },
+    wedge: { name: 'Sand wedge', gap: 0.75, ammo: 8, speed: 1500, drop: 2, lob: 0.2, dmg: 3, pellets: 1, spread: 0, blast: 170, body: '#b8913f', barrel: [6, 10, 6, '#e8d3a0'] },
+    putter: { name: 'Putter', gap: 0.6, ammo: 10, speed: 6500, drop: 0, dmg: 4, pellets: 1, spread: 0, pierce: true, body: '#8d96a3', barrel: [2.2, 30, 2.2, '#e3e7ec'] },
+  };
+  const WEAPON_IDS = Object.keys(WEAPONS);
+  // What squashed bugs leave behind. w: how often each turns up.
+  const PICKUPS = {
+    driver: { name: 'Driver', note: 'Seven balls a swing.', color: '#30343c', w: 3 },
+    bucket: { name: 'Range bucket', note: 'A hundred balls, fast.', color: '#2f8a4e', w: 3 },
+    wedge: { name: 'Sand wedge', note: 'Lobs balls that burst where they land.', color: '#d9b26a', w: 2 },
+    putter: { name: 'Putter', note: 'Straight through everything, firewalls too.', color: '#c9ced6', w: 2 },
+    coffee: { name: 'Coffee', note: 'Quicker legs and a quicker trigger for 12 seconds.', color: '#7a4a28', w: 3 },
+    donut: { name: 'Donut', note: '35 more morale.', color: '#ff8fc7', w: 3 },
+    golden: { name: 'Golden ball', note: 'Double points for 15 seconds.', color: '#e8c45a', w: 2 },
+    sleeve: { name: 'Sleeve of balls', note: 'A full hopper.', color: '#f4f4ee', w: 2 },
+  };
+  const PICKUP_IDS = Object.keys(PICKUPS);
+  // One of three after every wave. They stack, up to max.
+  const PERKS = [
+    { id: 'hopper', name: 'Bigger hopper', text: '8 more balls in every load.', max: 3 },
+    { id: 'hands', name: 'Quick hands', text: 'Reload a third faster.', max: 2 },
+    { id: 'espresso', name: 'Espresso shot', text: 'Fire a fifth faster.', max: 3 },
+    { id: 'heavy', name: 'Heavy balls', text: 'Every ball hits one harder.', max: 2 },
+    { id: 'trick', name: 'Trick shot', text: 'One more bounce, and bank shots pay triple.', max: 1 },
+    { id: 'skin', name: 'Thick skin', text: 'Bites and spit hurt a quarter less.', max: 2 },
+    { id: 'wind', name: 'Second wind', text: 'Morale comes back sooner and faster.', max: 2 },
+    { id: 'legs', name: 'Lunch-break legs', text: 'Walk and run 15% faster.', max: 2 },
+    { id: 'magnet', name: 'Magnet', text: 'Grab pick-ups from three times as far.', max: 1 },
+    { id: 'lucky', name: 'Lucky ball', text: 'Bugs leave more pick-ups.', max: 2 },
+    { id: 'team', name: 'Team player', text: 'Bring teammates back twice as fast.', max: 1, squad: true },
+  ];
+  const HUNT_LEVELS = {
+    intern: { name: 'Intern', note: 'Fewer bugs, gentler bites.', count: 0.7, hurt: 0.6, speed: 0.9, pts: 0.75 },
+    manager: { name: 'Manager', note: 'The usual workload.', count: 1, hurt: 1, speed: 1, pts: 1 },
+    crunch: { name: 'Crunch time', note: 'More bugs, nastier bites.', count: 1.35, hurt: 1.4, speed: 1.12, pts: 1.5 },
+  };
+  const WAVE_NAMES = ['Monday morning', 'Stand-up', 'Sprint planning', 'Release day', 'Legacy code', 'Hotfix', 'Code freeze', 'All hands', 'Quarter end', 'The big migration', 'Reorg', 'Budget review', 'Offsite', 'Audit', 'Year end'];
   // Squash several at once and the office calls it in golf: two is a birdie, three an eagle, and so on.
   const MULTI_WORDS = ['', '', 'Birdie!', 'Eagle!', 'Albatross!', 'Condor!'];
-  const HUNT_CHATTER = ['Have you tried turning it off and on again?', 'It works on my machine.', 'That’s not a bug, that’s a feature.', 'I’ll open a ticket.', 'Who deployed on a Friday?', 'Is this going in the retro?', 'Can we take this offline?', 'Did someone merge without a review?'];
+  const HUNT_CHATTER = ['Have you tried turning it off and on again?', 'It works on my machine.', 'That’s not a bug, that’s a feature.', 'I’ll open a ticket.', 'Who deployed on a Friday?', 'Is this going in the retro?', 'Can we take this offline?', 'Did someone merge without a review?', 'I’m not touching that firewall.', 'Reply-all? Again?'];
   // Your blaster fires whatever ball you wear from the Locker.
   const SKIN_COLORS = { classic: '#ffffff', stress: '#ffd447', bean: '#7a4a28', eight: '#25272d', tennis: '#d6ef3d', disco: '#dfe5ec', eye: '#f2f2ec', gold: '#e8c45a', moon: '#c8ccd2', globe: '#2f6fb3' };
-  const Hunt = {
-    on: false, built: false, over: false, wave: 0, score: 0, squashed: 0, morale: 100, ammo: MAG, reload: 0, cool: 0, trigger: false,
-    calm: 0, toSpawn: [], spawnT: 0, breakT: 0, cleared: false, combo: 0, comboT: 0, multi: 0, multiT: 0, mulligan: true, kick: 0, shake: 0,
-    bugs: [], shots: [], spits: [], bits: [], queue: [], strike: null, paid: null, best: store.get('huntBest', 0),
+  // Squads talk over the same relays as online rooms, on a channel of their own.
+  const HUNT_PREFIX = 'nine-to-five-links/v1/hunt/', SQUAD_MAX = 4;
+  const SQUAD_WORDS = ['BUGS', 'PATCH', 'HOTFIX', 'DEBUG', 'TICKET', 'DEPLOY', 'ROLLBACK', 'ONCALL', 'PAGER', 'SPRINT'];
 
-    // ---- The pieces, made the first time you hunt ----
+  const Hunt = {
+    on: false, built: false, mode: 'solo', level: HUNT_LEVELS[store.get('huntLevel', '')] ? store.get('huntLevel', '') : 'manager', panelOpen: false, tab: 'solo', fresh: store.get('huntFresh', true),
+    // The waves, the bugs and what they leave. In a squad only the host runs these; everyone else follows its snapshots.
+    session: '', wave: 0, toSpawn: [], spawnT: 0, breakT: 0, cleared: false, ended: false, bugs: [], byId: new Map(), spits: [], pickups: [], nextId: 1,
+    // You: morale, the gun in your hands, perks and buffs, and what you've done this hunt.
+    score: 0, squashed: 0, morale: 100, down: false, mulligan: true, weapon: 'blaster', wammo: 0, ammo: 24, reload: 0, cool: 0, trigger: false, calm: 0,
+    combo: 0, comboT: 0, multi: 0, multiT: 0, kick: 0, shake: 0, safeT: 0, perks: {}, buffs: {}, offer: null, shots: [], bits: [], queue: [], strike: null, paid: null,
+    squad: null,
+
+    // ---- The pieces, made the first time they're needed ----
     build() {
       const T = THREE, W = World, inst = (geo, mat, n) => { const m = new T.InstancedMesh(geo, mat, n); m.count = 0; m.frustumCulled = false; W.scene.add(m); return m; };
       const lit = (c, e = 0.18) => { const col = new T.Color(c); return new T.MeshLambertMaterial({ color: col, emissive: col.clone().multiplyScalar(e) }); };
       const glow = c => new T.MeshBasicMaterial({ color: new T.Color(c) });
-      this.M = new T.Matrix4(); this.Q = new T.Quaternion(); this.P = new T.Vector3(); this.S = new T.Vector3(); this.E = new T.Euler(); this.C = new T.Color(); this.V = new T.Vector3();
+      this.M = new T.Matrix4(); this.Q = new T.Quaternion(); this.P = new T.Vector3(); this.S = new T.Vector3(); this.E = new T.Euler(); this.C = new T.Color(); this.V = new T.Vector3(); this.V2 = new T.Vector3();
+      // Bricks for the firewalls' shields.
+      const bc = document.createElement('canvas');
+      bc.width = bc.height = 64;
+      const bx = bc.getContext('2d');
+      bx.fillStyle = '#6e2410'; bx.fillRect(0, 0, 64, 64); bx.fillStyle = '#c9562f';
+      for (let row = 0; row < 4; row++) for (let col = -1; col < 3; col++) bx.fillRect(col * 32 + (row % 2) * 16 + 2, row * 16 + 2, 28, 12);
+      const bricks = new T.CanvasTexture(bc);
+      bricks.colorSpace = T.SRGBColorSpace;
       this.m = {
-        // Crawlers: a shell, red eyes and six skittering legs. The shell takes a colour per bug, so a hit can flash it.
-        shell: inst(W.unitBall(), lit('#ffffff', 0.12), 60), eyes: inst(W.unitBall(), glow('#ff3b3b'), 120), legs: inst(W.unitBox(), lit('#14171c'), 360),
+        // Crawlers, merge conflicts and firewalls share a shell, red eyes and skittering legs. Shells take a colour per bug.
+        shell: inst(W.unitBall(), lit('#ffffff', 0.12), 160), eyes: inst(W.unitBall(), glow('#ff3b3b'), 320), legs: inst(W.unitBox(), lit('#14171c'), 720),
+        brick: inst(W.unitBox(), new T.MeshLambertMaterial({ map: bricks, emissive: new T.Color('#3a1206') }), 40),
         // Printers that walk, with a sheet sticking out and a cross red light.
-        printer: inst(W.unitBox(), lit('#ffffff'), 24), paper: inst(W.unitBox(), glow('#fbfbf7'), 24), led: inst(W.unitBox(), glow('#ff4d3d'), 24), feet: inst(W.unitBox(), lit('#2b3038'), 48),
-        // Meeting invites: a card with a red header and a propeller.
-        card: inst(W.unitBox(), lit('#ffffff', 0.35), 24), header: inst(W.unitBox(), glow('#e8453a'), 24), prop: inst(W.unitBox(), lit('#2b3038'), 48),
-        shots: inst(W.unitBall(), new T.MeshLambertMaterial({ color: 0xffffff, emissive: 0x555555 }), 64),
-        spits: inst(W.unitBall(), new T.MeshBasicMaterial({ color: 0xffffff }), 48),
+        printer: inst(W.unitBox(), lit('#ffffff'), 30), paper: inst(W.unitBox(), glow('#fbfbf7'), 30), led: inst(W.unitBox(), glow('#ff4d3d'), 30), feet: inst(W.unitBox(), lit('#2b3038'), 60),
+        // Meeting invites (a card, a red header and a propeller) and reply-alls (an envelope with flapping wings).
+        card: inst(W.unitBox(), lit('#ffffff', 0.35), 120), header: inst(W.unitBox(), glow('#e8453a'), 120), prop: inst(W.unitBox(), lit('#2b3038'), 240),
+        shots: inst(W.unitBall(), new T.MeshLambertMaterial({ color: 0xffffff, emissive: 0x555555 }), 160),
+        spits: inst(W.unitBall(), new T.MeshBasicMaterial({ color: 0xffffff }), 64),
         bits: inst(W.unitBox(), new T.MeshBasicMaterial({ color: 0xffffff }), 420),
       };
       // Legacy Code: a mainframe on legs, blinking, with a green screen for a face.
-      const boss = this.boss = new T.Group(), part = (w, h, d, mat, x, y, z) => { const b = new T.Mesh(W.unitBox(), mat); b.scale.set(w, h, d); b.position.set(x, y + h / 2, z); boss.add(b); return b; };
-      part(110, 300, 190, lit('#cfc8b6', 0.25), 0, 70, 0);
+      const legacy = this.legacy = new T.Group(), part = (w, h, d, mat, x, y, z) => { const b = new T.Mesh(W.unitBox(), mat); b.scale.set(w, h, d); b.position.set(x, y + h / 2, z); legacy.add(b); return b; };
+      this.legacyBody = part(110, 300, 190, lit('#cfc8b6', 0.25), 0, 70, 0);
       part(6, 70, 150, W.basic('#06140a'), 57, 280, 0);
       const screen = new T.Mesh(new T.PlaneGeometry(140, 60), W.signMat('LEGACY CODE', 140, 60, '#06140a', '#3dff7a'));
-      screen.rotation.y = Math.PI / 2; screen.position.set(61, 315, 0); boss.add(screen);
-      this.bossLights = [];
-      for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) this.bossLights.push(part(4, 14, 14, glow(['#3dff7a', '#ffd447', '#ff4d3d'][(i + j) % 3]), 57, 140 + i * 30, -40 + j * 40));
-      this.bossLegs = [part(50, 70, 44, lit('#2b3038'), 0, 0, -50), part(50, 70, 44, lit('#2b3038'), 0, 0, 50)];
-      boss.visible = false; W.scene.add(boss);
+      screen.rotation.y = Math.PI / 2; screen.position.set(61, 315, 0); legacy.add(screen);
+      this.legacyLights = [];
+      for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) this.legacyLights.push(part(4, 14, 14, glow(['#3dff7a', '#ffd447', '#ff4d3d'][(i + j) % 3]), 57, 140 + i * 30, -40 + j * 40));
+      this.legacyLegs = [part(50, 70, 44, lit('#2b3038'), 0, 0, -50), part(50, 70, 44, lit('#2b3038'), 0, 0, 50)];
+      legacy.visible = false; W.scene.add(legacy);
+      // Spaghetti Code: a rolling ball of noodles in sauce, meatballs for eyes and a fork stuck in the top.
+      const sp = this.spaghetti = new T.Group(), noodle = lit('#f2d36b', 0.25), roll = this.spagRoll = new T.Group();
+      roll.position.y = 92; sp.add(roll);
+      const core = new T.Mesh(W.unitBall(), noodle); core.scale.setScalar(76); roll.add(core);
+      const loop = new T.TorusGeometry(68, 5, 6, 18, 3.4);
+      for (let i = 0; i < 26; i++) { const t = new T.Mesh(loop, noodle); t.rotation.set(Math.random() * TAU, Math.random() * TAU, Math.random() * TAU); t.scale.setScalar(0.92 + Math.random() * 0.3); roll.add(t); }
+      const sauce = new T.Mesh(W.unitBall(), lit('#c8321e', 0.3)); sauce.scale.set(66, 24, 66); sauce.position.y = 158; sp.add(sauce);
+      for (const s of [-1, 1]) {
+        const ball = new T.Mesh(W.unitBall(), lit('#8a4a2a', 0.25)); ball.scale.setScalar(22); ball.position.set(68, 118, s * 30); sp.add(ball);
+        const eye = new T.Mesh(W.unitBall(), glow('#ffffff')); eye.scale.setScalar(9); eye.position.set(86, 122, s * 30); sp.add(eye);
+        const pupil = new T.Mesh(W.unitBall(), glow('#14171c')); pupil.scale.setScalar(4.5); pupil.position.set(94, 123, s * 30); sp.add(pupil);
+      }
+      const fork = new T.Group(), steel = lit('#c9ced6', 0.3);
+      fork.position.set(-10, 168, 12); fork.rotation.set(0.3, 0, -0.5); sp.add(fork);
+      const handle = new T.Mesh(W.unitBox(), steel); handle.scale.set(8, 120, 4); handle.position.y = 60; fork.add(handle);
+      for (let i = 0; i < 4; i++) { const tine = new T.Mesh(W.unitBox(), steel); tine.scale.set(2.5, 34, 2.5); tine.position.set(-6 + i * 4, -14, 0); fork.add(tine); }
+      sp.visible = false; W.scene.add(sp);
       // A supply crate on a parachute.
       const crate = this.crate = new T.Group(), box = new T.Mesh(W.unitBox(), lit('#b98a52', 0.25)); box.scale.set(60, 60, 60); box.position.y = 30; crate.add(box);
       const chute = new T.Mesh(W.unitBall(), lit('#e8453a', 0.3)); chute.scale.set(90, 34, 90); chute.position.y = 190; crate.add(chute);
@@ -10485,91 +10779,280 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       };
       this.birds = ['#3f8fd8', '#e8453a', '#ffd447', '#35a06a', '#c39bff', '#ff8f2e'].map(c => bird(c, c, 1));
       this.eagle = bird('#5a3a1c', '#4a2f17', 3.2);
-      // The blaster, held in front of you: a toy cannon with a hopper of golf balls on top.
+      // The gun in your hands: a toy cannon with a hopper of golf balls on top, recoloured for whichever club you're holding.
       const vm = this.vm = new T.Group(), vpart = (geo, c, sx, sy, sz, x, y, z) => { const m = new T.Mesh(geo, new T.MeshBasicMaterial({ color: new T.Color(c), depthTest: false })); m.scale.set(sx, sy, sz); m.position.set(x, y, z); m.renderOrder = 999; vm.add(m); return m; };
-      vpart(W.unitBox(), '#ff7a1a', 10, 9, 30, 0, 0, 0);
-      vpart(W.unitBox(), '#d9600f', 10.2, 2, 30.2, 0, -3.5, 0);
-      const barrel = vpart(W.unitCyl(), '#f4f4ef', 3.4, 18, 3.4, 0, 1, -22); barrel.rotation.x = Math.PI / 2;
+      this.vmBody = vpart(W.unitBox(), '#ff7a1a', 10, 9, 30, 0, 0, 0);
+      this.vmStripe = vpart(W.unitBox(), '#d9600f', 10.2, 2, 30.2, 0, -3.5, 0);
+      this.vmBarrel = vpart(W.unitCyl(), '#f4f4ef', 3.4, 18, 3.4, 0, 1, -22); this.vmBarrel.rotation.x = Math.PI / 2;
       vpart(W.unitBox(), '#2b3038', 6, 12, 7, 0, -9, 7).rotation.x = 0.35;
-      vpart(W.unitBox(), '#bfe6ff', 9, 7, 11, 0, 8, 2);
-      for (const [bx, bz] of [[-2, -1], [2, 1], [0, 4], [-1, -4]]) vpart(W.unitBall(), '#ffffff', 2.2, 2.2, 2.2, bx, 8.5, bz + 2);
+      this.vmHopper = vpart(W.unitBox(), '#bfe6ff', 9, 7, 11, 0, 8, 2);
+      this.vmBalls = [[-2, -1], [2, 1], [0, 4], [-1, -4]].map(([bx2, bz]) => vpart(W.unitBall(), '#ffffff', 2.2, 2.2, 2.2, bx2, 8.5, bz + 2));
       this.flashMesh = vpart(W.unitBall(), '#ffe9a8', 5, 5, 5, 0, 1, -33);
       vm.visible = false;
       W.camera.add(vm);
       W.scene.add(W.camera);
+      this.pickMats = {};
       this.built = true;
     },
-    reset() {
-      Object.assign(this, { over: false, wave: 0, score: 0, squashed: 0, morale: 100, ammo: MAG, reload: 0, cool: 0, trigger: false, calm: 0, toSpawn: [], spawnT: 0, breakT: 0, cleared: false, combo: 0, comboT: 0, multi: 0, multiT: 0, mulligan: true, kick: 0, shake: 0, bugs: [], shots: [], spits: [], queue: [], strike: null, paid: G.hole });
+    // Recolours the gun for what you're holding.
+    tintGun() {
       if (!this.built) return;
-      this.boss.visible = this.crate.visible = this.eagle.visible = false;
-      for (const b of this.birds) b.visible = false;
-      $('huntOver').hidden = true;
+      const W = WEAPONS[this.weapon], [bx2, by2, bz, bc] = W.barrel;
+      this.vmBody.material.color.set(W.body);
+      this.vmStripe.material.color.set(W.body).multiplyScalar(0.75);
+      this.vmBarrel.scale.set(bx2, by2, bz); this.vmBarrel.material.color.set(bc);
+      this.vmBarrel.position.z = -15 - by2 / 2;
+      this.flashMesh.position.z = -16 - by2;
+      const hopper = this.weapon === 'blaster' || this.weapon === 'bucket';
+      this.vmHopper.visible = hopper; this.vmBalls.forEach(b => { b.visible = hopper; });
+      this.vmHopper.material.color.set(this.weapon === 'bucket' ? '#2f8a4e' : '#bfe6ff');
+      this.vmHopper.scale.set(this.weapon === 'bucket' ? 12 : 9, this.weapon === 'bucket' ? 10 : 7, this.weapon === 'bucket' ? 13 : 11);
     },
-    start() {
-      if (!World.on || G.screen !== 'walk') return;
+    // A pick-up, made from a few simple shapes, spinning over a coloured ring with its name above it.
+    pickupMesh(type) {
+      const T = THREE, W = World, P = PICKUPS[type], g = new T.Group(), item = new T.Group(), mats = this.pickMats;
+      const mat = c => mats[c] || (mats[c] = new T.MeshLambertMaterial({ color: new T.Color(c), emissive: new T.Color(c).multiplyScalar(0.3) }));
+      const add = (geo, c, sx, sy, sz, x, y, z, rz = 0) => { const m = new T.Mesh(geo, mat(c)); m.scale.set(sx, sy, sz); m.position.set(x, y, z); m.rotation.z = rz; item.add(m); return m; };
+      if (type === 'bucket') { add(W.unitCyl(), '#2f8a4e', 18, 24, 18, 0, 0, 0); for (const [x, z] of [[-5, -4], [5, -3], [0, 6], [-2, 1]]) add(W.unitBall(), '#ffffff', 5, 5, 5, x, 14, z); }
+      else if (WEAPONS[type]) {
+        add(W.unitCyl(), '#c9ced6', 1.6, 64, 1.6, 0, 6, 0, 0.35);
+        const head = { driver: [16, 10, 12, '#30343c'], wedge: [14, 12, 4, '#d9b26a'], putter: [20, 5, 5, '#e3e7ec'] }[type];
+        add(W.unitBox(), head[3], head[0], head[1], head[2], -14, -22, 0, 0.35);
+      } else if (type === 'coffee') { add(W.unitCyl(), '#f4f1ea', 11, 24, 11, 0, 0, 0); add(W.unitCyl(), '#7a4a28', 11.5, 9, 11.5, 0, -2, 0); add(W.unitCyl(), '#2b3038', 12, 3, 12, 0, 13, 0); }
+      else if (type === 'donut') { const d = new T.Mesh(this.donutGeo || (this.donutGeo = new T.TorusGeometry(13, 6, 10, 20)), mat('#ff8fc7')); d.rotation.x = Math.PI / 2.6; item.add(d); }
+      else if (type === 'golden') add(W.unitBall(), '#e8c45a', 13, 13, 13, 0, 0, 0);
+      else { add(W.unitBox(), '#f4f4ee', 14, 28, 12, 0, 0, 0); add(W.unitBox(), '#2f6fb3', 14.5, 8, 12.5, 0, 6, 0); }
+      item.position.y = 46; g.add(item);
+      const ring = new T.Mesh(this.ringGeo || (this.ringGeo = new T.RingGeometry(26, 36, 28)), mats['ring' + P.color] || (mats['ring' + P.color] = new T.MeshBasicMaterial({ color: new T.Color(P.color === '#f4f4ee' ? '#ffd447' : P.color), transparent: true, opacity: 0.8, side: T.DoubleSide })));
+      ring.rotation.x = -Math.PI / 2; ring.position.y = 3; g.add(ring);
+      const label = new T.Mesh(this.labelGeo || (this.labelGeo = new T.PlaneGeometry(96, 22)), mats['label' + type] || (mats['label' + type] = W.signMat(P.name, 96, 22, '#14171c', '#ffd447')));
+      label.position.y = 96; g.add(label);
+      g.userData = { item, label };
+      W.scene.add(g);
+      return g;
+    },
+    // A teammate: a coworker in their colour, holding a blaster. Their name and morale float above them on screen.
+    avatarMesh(mate) {
+      const T = THREE, W = World, g = new T.Group(), body = new T.Group(), color = COLORS[mate.c] || '#ffffff';
+      const add = (geo, mat, sx, sy, sz, x, y, z) => { const m = new T.Mesh(geo, mat); m.scale.set(sx, sy, sz); m.position.set(x, y, z); body.add(m); return m; };
+      add(W.unitCyl(), W.lambert('#2b3038'), 10, 66, 10, 0, 33, 0);
+      const shirt = add(W.unitCyl(), new T.MeshLambertMaterial({ color: new T.Color(color), emissive: new T.Color(color).multiplyScalar(0.2) }), 15, 56, 15, 0, 92, 0);
+      add(W.unitBall(), W.lambert(['#f1c9a5', '#c68e62', '#8a5a3c', '#e0ac7e'][mate.id.charCodeAt(0) % 4]), 11, 13, 11, 0, 132, 0);
+      add(W.unitBall(), W.lambert('#2b2118'), 11.5, 7, 11.5, 0, 139, 0);
+      const gun = add(W.unitBox(), W.lambert('#ff7a1a'), 26, 8, 8, 16, 100, 9);
+      // A ring on the floor in their colour, so you can pick them out of a crowd of coworkers.
+      const ring = new T.Mesh(this.ringGeo || (this.ringGeo = new T.RingGeometry(26, 36, 28)), new T.MeshBasicMaterial({ color: new T.Color(color), transparent: true, opacity: 0.7, side: T.DoubleSide }));
+      ring.rotation.x = -Math.PI / 2; ring.position.y = 3;
+      g.add(body, ring);
+      W.scene.add(g);
+      const tag = el('div', 'hunt-tag'), bar = el('i'), fill = el('b');
+      tag.append(el('span', '', mate.name), bar); bar.append(fill);
+      tag.style.setProperty('--c', color);
+      $('huntTags').append(tag);
+      return { g, body, shirt, gun, ring, tag, fill, label: mate.name + '|' + mate.c };
+    },
+    dropAvatar(mate) {
+      if (!mate.av) return;
+      World.scene.remove(mate.av.g);
+      mate.av.ring.material.dispose();
+      mate.av.tag.remove();
+      mate.av = null;
+    },
+
+    // ---- Starting and stopping ----
+    reset() {
+      for (const p of this.pickups) if (p.mesh) World.scene.remove(p.mesh);
+      Object.assign(this, {
+        ended: false, wave: 0, toSpawn: [], spawnT: 0, breakT: 0, cleared: false, bugs: [], byId: new Map(), spits: [], pickups: [], nextId: 1, snapT: 0,
+        score: 0, squashed: 0, morale: 100, down: false, mulligan: true, weapon: 'blaster', wammo: 0, reload: 0, cool: 0, trigger: false, calm: 0,
+        combo: 0, comboT: 0, multi: 0, multiT: 0, kick: 0, shake: 0, safeT: 0, perks: {}, buffs: {}, offer: null, shots: [], queue: [], strike: null, paid: G.hole,
+        kills: [], killSeen: new Set(), gone: new Map(), ghosts: new Map(), spitOut: [], hitsOut: [], book: new Map(), pulls: 0, pullHit: new Set(), introQ: [], reviving: null, saved: false,
+        seen: new Set(), stats: { fired: 0, hits: 0, banks: 0, best: 0, backup: 0, grabbed: 0, revives: 0, kinds: {}, t0: G.clock },
+      });
+      this.ammo = this.magSize();
+      if (!this.built) return;
+      this.tintGun();
+      this.legacy.visible = this.spaghetti.visible = this.crate.visible = this.eagle.visible = false;
+      for (const b of this.birds) b.visible = false;
+      for (const id of ['huntOver', 'huntDown', 'huntPerks', 'huntRevive']) $(id).hidden = true;
+    },
+    // opts: { squad, session, x, z, a } when a squad's host starts a hunt, or when you join one already going.
+    start(opts = {}) {
+      if (!World.on) return;
+      if (World.playing) { if (!opts.squad) return; World.leaveHole(); }
       Sound.unlock();
       if (!this.built) this.build();
+      this.closePanel();
       this.reset();
       this.on = true;
+      this.mode = opts.squad ? 'squad' : 'solo';
+      this.session = opts.session || randId();
       this.shotColor = SKIN_COLORS[Career.wearing('ball')] || '#ffffff';
-      this.m.shots.material.color.set(this.shotColor);
-      this.nextWave();
+      if (this.fresh) { this.fresh = false; store.set('huntFresh', false); }
+      if (!opts.squad) store.set('huntLevel', this.level);
+      if (Number.isFinite(opts.x) && Number.isFinite(opts.z)) this.placeNear(opts.x, opts.z, opts.a);
+      if (this.isHost()) this.nextWave();
+      else this.titleCard('Bug hunt', `Joining ${this.hostName()}’s hunt`, 'Squash everything that moves.');
       Sound.whistle();
       World.hintShown = null;
       World.syncUi(); this.ui();
     },
-    stop() {
-      if (!this.on) return;
+    stop(keepSquad) {
+      const wasSquad = this.on && this.mode === 'squad';
+      // A host walking out of a hunt that's still going hands it over by leaving the squad.
+      if (wasSquad && this.isHost() && !this.ended && this.squad && this.squad.mates.size) keepSquad = false;
+      if (wasSquad && this.squad) this.squad.left = this.session;
+      this.closePanel();
       this.on = false;
-      this.reset();
-      this.bits = [];
-      this.draw(0);
-      if (this.vm) this.vm.visible = false;
+      this.trigger = false;
+      if (this.built) { this.reset(); this.bits = []; this.draw(0); this.vm.visible = false; }
       $('huntHud').hidden = true;
+      for (const id of ['huntOver', 'huntDown', 'huntPerks', 'huntRevive', 'huntTitle', 'huntIntro']) $(id).hidden = true;
       $('walkCross').classList.remove('hunting', 'hit');
+      if (!keepSquad) this.squadLeave(true);
       World.hintShown = null;
       if (World.on) World.syncUi();
     },
+    // In a squad, stepping into a hunt beside whoever started it, facing the same way.
+    placeNear(x, z, a) {
+      const me = World.me, slot = this.squad ? [ONLINE.me.id, ...this.squad.mates.keys()].sort().indexOf(ONLINE.me.id) : 0;
+      for (let k = 0; k < 24; k++) {
+        const ang = (a || 0) + Math.PI / 2 + (slot + k) * 1.1, d = 150 + Math.floor(k / 6) * 60, px = x + Math.cos(ang) * d, pz = z + Math.sin(ang) * d;
+        if (bldOf(px, pz) === bldOf(x, z) && World.clear(px, pz)) { me.x = px; me.y = pz; break; }
+      }
+      if (Number.isFinite(a)) me.a = a;
+      me.pitch = -0.05;
+      World.camMode = 'walk'; World.blendCam();
+    },
+    // Called every frame the 3D campus runs, hunting or not: squads keep talking in the lobby too.
+    frame(dt) {
+      if (this.squad) this.netTick(dt);
+      if (this.on) this.update(dt);
+      else if (this.squad && this.built) this.drawMates(dt);
+    },
 
-    // ---- Waves ----
+    // ---- Every frame of a hunt ----
+    update(dt) {
+      const walking = G.screen === 'walk', squad = this.mode === 'squad', host = this.isHost();
+      // Alone, the bugs wait while you putt. In a squad the hunt goes on, and whoever's putting is left alone.
+      const live = !this.ended && (squad || (walking && !this.down));
+      const act = live && walking && !this.down;
+      this.payForGolf();
+      if (live) {
+        this.targets = this.players();
+        if (host) { this.spawning(dt); for (const b of this.bugs) if (!b.dead) this.stepBug(b, dt); }
+        else this.follow(dt);
+        this.bugs = this.bugs.filter(b => !b.dead);
+        for (const s of this.spits) this.stepSpit(s, dt);
+        this.spits = this.spits.filter(s => s.life > 0);
+        for (const s of this.shots) this.stepShot(s, dt);
+        this.shots = this.shots.filter(s => s.life > 0);
+        if (this.queue.length && !this.strike) this.callIn(...this.queue.shift());
+        this.stepStrike(dt);
+        this.stepPickups(dt);
+        if ((this.comboT -= dt) <= 0) this.combo = 0;
+        if (this.multi && (this.multiT -= dt) <= 0) { if (this.multi >= 2) { this.call(MULTI_WORDS[Math.min(5, this.multi)]); this.stats.best = Math.max(this.stats.best, this.multi); } this.multi = 0; }
+        for (const k in this.buffs) this.buffs[k] = Math.max(0, this.buffs[k] - dt);
+        this.safeT = Math.max(0, this.safeT - dt);
+        if (squad) {
+          if (host) {
+            this.teamCheck();
+            if (this.spitOut.length) { Net.send({ k: 'hx', s: this.session, l: this.spitOut.slice(0, 24) }); this.spitOut = []; }
+            if ((this.snapT -= dt) <= 0) { this.snapT = 0.125; this.sendSnap(); }
+          } else if (this.hitsOut.length) { Net.send({ k: 'hh', s: this.session, l: this.hitsOut.slice(0, 40) }); this.hitsOut = []; }
+        }
+      }
+      if (act) {
+        this.cool = Math.max(0, this.cool - dt);
+        if (this.reload > 0 && (this.reload -= dt) <= 0) { this.reload = 0; this.ammo = this.magSize(); }
+        if (this.trigger) this.fire();
+        this.calm += dt;
+        const wind = this.perk('wind');
+        if (this.calm > 3 - wind && this.morale < 100) this.morale = Math.min(100, this.morale + (6 + 4 * wind) * dt);
+        this.collect();
+        if (squad) this.reviveTick(dt);
+      } else this.reviving = null;
+      // Bits of squashed bug keep falling, even while the bugs wait for you to putt.
+      for (const p of this.bits) {
+        p.vy -= 900 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt; p.life -= dt; p.spin += dt * 9;
+        if (p.y < 2) { p.y = 2; p.vy *= -0.3; p.vx *= 0.6; p.vz *= 0.6; }
+      }
+      this.bits = this.bits.filter(p => p.life > 0);
+      this.draw(dt);
+      if (this.squad) this.drawMates(dt);
+      if (this.shake > 0 && act) { this.shake -= dt; const c = World.camera.position, k = this.shake * 14; c.x += (Math.random() - 0.5) * k; c.y += (Math.random() - 0.5) * k; c.z += (Math.random() - 0.5) * k; }
+      this.ui();
+    },
+    // Everyone the bugs can go after: you, unless you're out sick (or, in a squad, putting), and your teammates.
+    players() {
+      const out = [], me = World.me;
+      if (!this.down && !this.ended && G.screen === 'walk') out.push({ id: this.myId(), x: me.x, z: me.y, a: me.a, me: true });
+      if (this.squad) for (const m of this.squad.mates.values()) if (m.st === 'hunt' && m.s === this.session && !m.dn && !m.pt && m.x != null && Date.now() - m.seen < 6000) out.push({ id: m.id, x: m.rx, z: m.rz, a: m.a, mate: m });
+      return out;
+    },
+    targetFor(b) {
+      let best = null, bd = Infinity;
+      for (const p of this.targets) { const d = Math.hypot(p.x - b.x, p.z - b.z); if (d < bd) { bd = d; best = p; } }
+      return best;
+    },
+    // How much harder a squad has it: half as many bugs again for each extra hunter.
+    crowd() { return this.squad ? 1 + 0.5 * [...this.squad.mates.values()].filter(m => m.st === 'hunt' && m.s === this.session).length : 1; },
+
+    // ---- Waves (run by you alone, or by a squad's host) ----
     nextWave() {
-      const n = ++this.wave, boss = n % 5 === 0;
-      const list = [...Array(3 + n * 2).fill('crawler'), ...Array(Math.floor((n - 1) * 1.2)).fill('printer'), ...Array(Math.max(0, n - 2)).fill('drone')];
+      const n = ++this.wave, L = HUNT_LEVELS[this.level], crowd = this.crowd(), count = k => Math.round(k * L.count * crowd);
+      const list = [
+        ...Array(count(3 + n * 2)).fill('crawler'),
+        ...Array(count(Math.floor((n - 1) * 1.2))).fill('printer'),
+        ...Array(count(Math.max(0, n - 2))).fill('drone'),
+        ...Array(count(n >= 3 ? Math.floor((n - 1) / 2) : 0)).fill('swarm'),
+        ...Array(count(n >= 4 ? Math.floor((n - 2) * 0.8) : 0)).fill('merge'),
+        ...Array(count(n >= 6 ? Math.floor((n - 4) * 0.7) : 0)).fill('firewall'),
+      ];
       for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
-      this.toSpawn = boss ? ['boss', ...list] : list;
-      this.spawnT = 1.2;
-      // Surviving the Legacy Code wave is a secret.
-      if (n === 6) Secrets.find('bughunt', 0.5, true);
-      toast(`Wave ${n}`, boss ? `${WAVE_NAMES[(n - 1) % WAVE_NAMES.length]}. Something big is booting up.` : `${WAVE_NAMES[(n - 1) % WAVE_NAMES.length]}. ${this.toSpawn.length} bugs incoming.`, 'bad');
+      const boss = n % 5 === 0 ? (Math.floor(n / 5) % 2 === 1 ? 'legacy' : 'spaghetti') : null;
+      this.toSpawn = boss ? [boss, ...list] : list;
+      this.spawnT = 1.5; this.cleared = false; this.breakT = 0;
+      this.onWave(n);
     },
     spawning(dt) {
       if (!this.toSpawn.length) {
         if (!this.bugs.length && !this.cleared) {
-          this.cleared = true; this.breakT = 7;
-          const bonus = 500 * this.wave;
-          this.score += bonus;
-          toast('Wave cleared', `+${bonus}. Sink a putt on any hole before the next wave and you get backup.`, 'hi');
-          Sound.cheer();
+          this.cleared = true; this.breakT = 10;
+          const bonus = Math.round(500 * this.wave * HUNT_LEVELS[this.level].pts);
+          this.addScore(this.myId(), bonus);
+          if (this.squad) for (const m of this.squad.mates.values()) if (m.st === 'hunt' && m.s === this.session) this.addScore(m.id, bonus);
+          this.onCleared(bonus);
         }
-        if (this.cleared && (this.breakT -= dt) <= 0) { this.cleared = false; this.nextWave(); }
+        if (this.cleared && (this.breakT -= dt) <= 0) this.nextWave();
         return;
       }
-      if ((this.spawnT -= dt) > 0 || this.bugs.length >= 26) return;
-      this.spawnT = Math.max(0.4, 1 - this.wave * 0.1);
-      const kind = this.toSpawn[0], at = this.spawnPoint(kind === 'boss' ? 850 : 520, BUG_KINDS[kind].r);
+      if ((this.spawnT -= dt) > 0 || this.bugs.length >= 34) return;
+      this.spawnT = Math.max(0.35, 1 - this.wave * 0.1);
+      const kind = this.toSpawn[0], K = BUG_KINDS[kind], around = this.targets.length ? this.targets[Math.floor(Math.random() * this.targets.length)] : null;
+      if (!around) return;
+      const at = this.spawnPoint(K.boss ? 850 : 520, K.r, around);
       if (!at) return;
       this.toSpawn.shift();
-      const K = BUG_KINDS[kind];
-      this.bugs.push({ kind, x: at[0], z: at[1], y: K.fly || 0, a: Math.atan2(World.me.y - at[1], World.me.x - at[0]), hp: K.hp, grow: 0, t: 0, seed: Math.random() * 9, bite: 0.5, shoot: 1 + Math.random() * 2, flash: 0, lx: at[0], lz: at[1], checkT: 1, stuck: 0 });
-      this.burst({ x: at[0], y: (K.fly || 0) + K.r, z: at[1] }, ['#3dff7a', '#ff4fb8', '#3fe0ff'], kind === 'boss' ? 40 : 8, 0.6);
-      if (kind === 'boss') { Sound.rumble(); this.call('Legacy Code!'); }
+      if (kind === 'swarm') for (let i = 0; i < 5; i++) this.addBug('swarm', at[0] + Math.cos(i * 1.26) * 44, at[1] + Math.sin(i * 1.26) * 44);
+      else this.addBug(kind, at[0], at[1]);
+      this.burst({ x: at[0], y: (K.fly || 0) + K.r, z: at[1] }, ['#3dff7a', '#ff4fb8', '#3fe0ff'], K.boss ? 40 : 8, 0.6);
+      if (K.boss) Sound.rumble();
     },
-    // A way off, on your side of the walls, with room to stand. Early waves come mostly from in front of you.
-    spawnPoint(min, r) {
-      const me = World.me, inside = bldOf(me.x, me.y), spread = Math.min(TAU, 2.2 + this.wave * 0.45);
+    addBug(kind, x, z, extra) {
+      const K = BUG_KINDS[kind];
+      const hp = K.boss ? Math.round(K.hp * (1 + 0.6 * Math.floor((this.wave - 1) / 10)) * this.crowd()) : K.hp;
+      const b = { id: this.nextId++, kind, x, z, y: K.fly || 0, a: Math.random() * TAU, hp, max: hp, grow: 0, t: 0, seed: Math.random() * 9, bite: 0.5, shoot: 1 + Math.random() * 2, brood: K.brood || 0, flash: 0, lx: x, lz: z, checkT: 1, stuck: 0, roll: 0, ...extra };
+      this.bugs.push(b); this.byId.set(b.id, b);
+      this.meet(kind);
+      return b;
+    },
+    // A way off, on the same side of the walls as whoever it's after, with room to stand. Early waves come mostly
+    // from in front of them.
+    spawnPoint(min, r, p) {
+      const inside = bldOf(p.x, p.z), a0 = Number.isFinite(p.a) ? p.a : Math.random() * TAU, spread = Math.min(TAU, 2.2 + this.wave * 0.45);
       for (let k = 0; k < 40; k++) {
-        const a = me.a + (Math.random() - 0.5) * (k < 25 ? spread : TAU), d = min + Math.random() * 650, x = me.x + Math.cos(a) * d, z = me.y + Math.sin(a) * d;
+        const a = a0 + (Math.random() - 0.5) * (k < 25 ? spread : TAU), d = min + Math.random() * 650, x = p.x + Math.cos(a) * d, z = p.z + Math.sin(a) * d;
         if (bldOf(x, z) !== inside) continue;
         if (inside) { const b = CAMPUS.bld[inside]; if (x < b.x + r + 30 || x > b.x + BLD_W - r - 30 || z < b.y + r + 30 || z > b.y + BLD_H - r - 30) continue; }
         else if (x < -600 || x > CAMPUS.w + 600 || z < -600 || z > CAMPUS.h + 600) continue;
@@ -10584,159 +11067,213 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       }
       return true;
     },
-
-    // ---- Every frame ----
-    update(dt) {
-      const walking = G.screen === 'walk', live = walking && !this.over;
-      this.payForGolf();
-      if (live) {
-        if (this.queue.length && !this.strike) this.callIn(this.queue.shift());
-        this.cool = Math.max(0, this.cool - dt);
-        if (this.reload > 0 && (this.reload -= dt) <= 0) { this.reload = 0; this.ammo = MAG; }
-        if (this.trigger) this.fire();
-        this.calm += dt;
-        if (this.calm > 3 && this.morale < 100) this.morale = Math.min(100, this.morale + 6 * dt);
-        this.spawning(dt);
-        for (const b of this.bugs) this.stepBug(b, dt);
-        this.bugs = this.bugs.filter(b => !b.dead);
-        for (const s of this.spits) this.stepSpit(s, dt);
-        this.spits = this.spits.filter(s => s.life > 0);
-        for (const s of this.shots) this.stepShot(s, dt);
-        this.shots = this.shots.filter(s => s.life > 0);
-        this.stepStrike(dt);
-        if ((this.comboT -= dt) <= 0) this.combo = 0;
-        if (this.multi && (this.multiT -= dt) <= 0) { if (this.multi >= 2) this.call(MULTI_WORDS[Math.min(5, this.multi)]); this.multi = 0; }
-      }
-      // Bits of squashed bug keep falling, even while the bugs wait for you to putt.
-      for (const p of this.bits) {
-        p.vy -= 900 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt; p.life -= dt; p.spin += dt * 9;
-        if (p.y < 2) { p.y = 2; p.vy *= -0.3; p.vx *= 0.6; p.vz *= 0.6; }
-      }
-      this.bits = this.bits.filter(p => p.life > 0);
-      this.draw(dt);
-      if (this.shake > 0 && live) { this.shake -= dt; const c = World.camera.position, k = this.shake * 14; c.x += (Math.random() - 0.5) * k; c.y += (Math.random() - 0.5) * k; c.z += (Math.random() - 0.5) * k; }
-      this.ui();
+    // Where a bug's body is: the height of its middle, and how far it reaches out (w) and up and down (h) from there.
+    body(b) {
+      const g = Math.max(0.3, b.grow), r = BUG_KINDS[b.kind].r * g;
+      if (b.kind === 'crawler' || b.kind === 'merge') return { y: r * 0.55, w: r * 1.3, h: r * 0.75 };
+      if (b.kind === 'firewall') return { y: r * 0.9, w: r * 1.35, h: r };
+      if (b.kind === 'printer') return { y: 40 * g, w: r * 0.95, h: 40 * g };
+      if (b.kind === 'drone') return { y: b.y, w: r * 1.15, h: 18 };
+      if (b.kind === 'swarm') return { y: b.y, w: r * 1.4, h: 14 };
+      if (b.kind === 'spaghetti') return { y: 100 * g, w: 100 * g, h: 100 * g };
+      return { y: 185 * g, w: 105 * g, h: 185 * g };
     },
+
+    // ---- How bugs behave (the host's job in a squad) ----
     stepBug(b, dt) {
-      const K = BUG_KINDS[b.kind], me = World.me, dx = me.x - b.x, dz = me.y - b.z, d = Math.hypot(dx, dz) || 1;
+      const K = BUG_KINDS[b.kind], L = HUNT_LEVELS[this.level];
       b.t += dt; b.flash = Math.max(0, b.flash - dt);
-      if (b.grow < 1) { b.grow = Math.min(1, b.grow + dt * (b.kind === 'boss' ? 0.8 : 3)); return; }
-      // Head for you, the little ones wiggling; the ones that spit keep their distance.
-      let speed = K.speed;
+      if (b.grow < 1) { b.grow = Math.min(1, b.grow + dt * (K.boss ? 0.8 : 3)); return; }
+      const tg = this.targetFor(b);
+      if (K.fly) b.y = K.fly + Math.sin(b.t * (b.kind === 'swarm' ? 6 : 2) + b.seed) * (b.kind === 'swarm' ? 12 : 22);
+      if (!tg) return;
+      const dx = tg.x - b.x, dz = tg.z - b.z, d = Math.hypot(dx, dz) || 1;
+      // Head for them, the little ones wiggling; the ones that spit keep their distance.
+      let speed = K.speed * L.speed;
       if (K.range && d < K.range * 0.5) speed *= b.kind === 'drone' ? -0.4 : 0.15;
-      const wig = b.kind === 'crawler' ? Math.sin(b.t * 8 + b.seed) * 0.55 : b.kind === 'drone' ? Math.sin(b.t * 1.3 + b.seed) * 0.9 : 0, head = Math.atan2(dz, dx) + wig;
+      const wig = b.kind === 'crawler' || b.kind === 'swarm' ? Math.sin(b.t * 8 + b.seed) * 0.55 : b.kind === 'drone' ? Math.sin(b.t * 1.3 + b.seed) * 0.9 : b.kind === 'merge' ? Math.sin(b.t * 4 + b.seed) * 0.3 : 0;
+      const head = Math.atan2(dz, dx) + wig;
       let vx = Math.cos(head) * speed, vz = Math.sin(head) * speed;
       // Don't pile up.
       for (const o of this.bugs) {
         if (o === b || o.dead) continue;
-        const ox = b.x - o.x, oz = b.z - o.z, od = Math.hypot(ox, oz), min = (K.r + BUG_KINDS[o.kind].r) * 1.1;
+        const ox = b.x - o.x, oz = b.z - o.z;
+        if (Math.abs(ox) > 260 || Math.abs(oz) > 260) continue;
+        const od = Math.hypot(ox, oz), min = (K.r + BUG_KINDS[o.kind].r) * 1.1;
         if (od < min && od > 0.01) { vx += (ox / od) * (min - od) * 6; vz += (oz / od) * (min - od) * 6; }
       }
-      // And keep out of your face.
+      // And keep out of their face.
       if (d < K.r + BODY_R + 4) { vx -= (dx / d) * speed; vz -= (dz / d) * speed; }
+      const ox0 = b.x, oz0 = b.z;
       b.x += vx * dt; b.z += vz * dt;
       if (!K.fly) World.pushOut(null, b, K.r, 'z');
-      b.a = b.kind === 'crawler' ? Math.atan2(vz, vx) : Math.atan2(dz, dx);
-      if (K.fly) b.y = K.fly + Math.sin(b.t * 2 + b.seed) * 22;
+      b.roll += Math.hypot(b.x - ox0, b.z - oz0) / 80;
+      b.a = b.kind === 'crawler' || b.kind === 'swarm' ? Math.atan2(vz, vx) : Math.atan2(dz, dx);
       // Close enough, it bites, then hops back for a moment.
       b.bite -= dt;
       if (K.bite && d < K.r + BODY_R + 16 && b.bite <= 0) {
-        b.bite = 1.1; this.hurt(K.bite);
-        if (b.kind !== 'boss') { b.x -= (dx / d) * 110; b.z -= (dz / d) * 110; World.pushOut(null, b, K.r, 'z'); }
+        b.bite = 1.1; this.bitePlayer(tg, K.bite * L.hurt, b);
+        if (!K.boss) { b.x -= (dx / d) * 110; b.z -= (dz / d) * 110; World.pushOut(null, b, K.r, 'z'); }
       }
-      if (K.range && (b.shoot -= dt) <= 0) { b.shoot = K.every * (0.75 + Math.random() * 0.5); if (d < K.range) this.spit(b); }
+      if (K.range && (b.shoot -= dt) <= 0) { b.shoot = K.every * (0.75 + Math.random() * 0.5); if (d < K.range) this.spit(b, tg); }
+      // Spaghetti Code keeps making more bugs.
+      if (K.brood && (b.brood -= dt) <= 0) {
+        b.brood = K.brood;
+        for (const s of [-1, 1]) { const a = b.a + s * 1.3; this.addBug('crawler', b.x + Math.cos(a) * 140, b.z + Math.sin(a) * 140, { grow: 0.4 }); }
+      }
       // Stuck behind something for a few seconds: it tunnels out somewhere else.
       if ((b.checkT -= dt) <= 0) {
         b.checkT = 1;
         b.stuck = Math.hypot(b.x - b.lx, b.z - b.lz) < 40 && d > 260 ? b.stuck + 1 : 0;
         b.lx = b.x; b.lz = b.z;
-        if (b.stuck >= 3) { const at = this.spawnPoint(380, K.r); if (at) { b.x = b.lx = at[0]; b.z = b.lz = at[1]; b.grow = 0; b.stuck = 0; } }
+        if (b.stuck >= 3) { const at = this.spawnPoint(380, K.r, tg); if (at) { b.x = b.lx = at[0]; b.z = b.lz = at[1]; b.grow = 0; b.stuck = 0; } }
       }
     },
-    spit(b) {
-      const K = BUG_KINDS[b.kind], S = SPITS[K.spit], me = World.me;
-      const fx = b.x + Math.cos(b.a) * K.r, fy = b.kind === 'boss' ? 300 : b.kind === 'printer' ? 75 : b.y, fz = b.z + Math.sin(b.a) * K.r;
-      const tx = me.x, ty = EYE - 25 + (me.jumpY || 0), tz = me.y, dx = tx - fx, dy = ty - fy, dz = tz - fz, n = Math.hypot(dx, dy, dz) || 1;
-      this.spits.push({ kind: K.spit, x: fx, y: fy, z: fz, vx: (dx / n) * S.speed, vy: (dy / n) * S.speed, vz: (dz / n) * S.speed, life: 3.5 });
+    bitePlayer(tg, n, b) {
+      if (tg.me) this.hurt(n, b.x, b.z);
+      else Net.send({ k: 'hb', s: this.session, to: tg.id, n: Math.round(n), x: Math.round(b.x), z: Math.round(b.z) });
+    },
+    spit(b, tg) {
+      const K = BUG_KINDS[b.kind], S = SPITS[K.spit];
+      const fx = b.x + Math.cos(b.a) * K.r, fy = b.kind === 'legacy' ? 300 : b.kind === 'spaghetti' ? 200 : b.kind === 'printer' ? 75 : b.y, fz = b.z + Math.sin(b.a) * K.r;
+      let vx, vy, vz;
+      if (S.lob) {
+        const d = Math.hypot(tg.x - fx, tg.z - fz), t = clamp(d / 650, 0.8, 1.8);
+        vx = (tg.x - fx) / t; vz = (tg.z - fz) / t; vy = (12 - fy + 0.5 * SPIT_G * t * t) / t;
+      } else {
+        const dx = tg.x - fx, dy = EYE - 25 - fy, dz = tg.z - fz, n = Math.hypot(dx, dy, dz) || 1;
+        vx = (dx / n) * S.speed; vy = (dy / n) * S.speed; vz = (dz / n) * S.speed;
+      }
+      const s = { id: this.nextId++, kind: K.spit, x: fx, y: fy, z: fz, vx, vy, vz, life: 4, tgt: tg.id };
+      this.spits.push(s);
+      if (this.squad) this.spitOut.push([s.id, SPIT_IDS.indexOf(s.kind), Math.round(fx), Math.round(fy), Math.round(fz), Math.round(vx), Math.round(vy), Math.round(vz), tg.id]);
       if (b.kind === 'printer') Sound.printer(3); else if (b.kind === 'drone') Sound.blip(); else Sound.thud();
     },
+    // Everyone moves every spit; each player's own screen decides whether it hit them.
     stepSpit(s, dt) {
-      const S = SPITS[s.kind], me = World.me, hy = EYE - 30 + (me.jumpY || 0);
+      const S = SPITS[s.kind], me = World.me, hy = EYE - 30 + (me.jumpY || 0), mine = this.canBeHit();
       if (S.home) {
-        const sp = Math.hypot(s.vx, s.vy, s.vz), dx = me.x - s.x, dy = hy - s.y, dz = me.y - s.z, n = Math.hypot(dx, dy, dz) || 1, k = Math.min(1, S.home * dt);
-        s.vx += ((dx / n) * sp - s.vx) * k; s.vy += ((dy / n) * sp - s.vy) * k; s.vz += ((dz / n) * sp - s.vz) * k;
+        const t = s.tgt === this.myId() ? { x: me.x, z: me.y } : this.squad && this.squad.mates.get(s.tgt);
+        if (t && Number.isFinite(t.x)) {
+          const tx = t.rx != null ? t.rx : t.x, tz = t.rz != null ? t.rz : t.z, sp = Math.hypot(s.vx, s.vy, s.vz), dx = tx - s.x, dy = hy - s.y, dz = tz - s.z, n = Math.hypot(dx, dy, dz) || 1, k = Math.min(1, S.home * dt);
+          s.vx += ((dx / n) * sp - s.vx) * k; s.vy += ((dy / n) * sp - s.vy) * k; s.vz += ((dz / n) * sp - s.vz) * k;
+        }
       }
+      if (S.lob) s.vy -= SPIT_G * dt;
       s.x += s.vx * dt; s.y += s.vy * dt; s.z += s.vz * dt;
       if ((s.life -= dt) <= 0) return;
-      if (Math.hypot(s.x - me.x, s.z - me.y) < BODY_R + S.r + 6 && Math.abs(s.y - hy) < 70) { s.life = 0; this.hurt(S.hurt); this.burst(s, [S.color], 6, 0.3); return; }
+      const L = HUNT_LEVELS[this.level];
+      if (S.lob) {
+        if (s.y <= 12 || this.inWall(s.x, s.z, s.y)) {
+          s.life = 0;
+          this.burst({ x: s.x, y: 20, z: s.z }, ['#8a4a2a', '#c8321e', '#f2d36b'], 18, 0.9);
+          Sound.boom();
+          const d = Math.hypot(me.x - s.x, me.y - s.z);
+          if (mine && d < S.blast) this.hurt(S.hurt * L.hurt * (1 - (d / S.blast) * 0.5), s.x, s.z);
+        }
+        return;
+      }
+      if (mine && Math.hypot(s.x - me.x, s.z - me.y) < BODY_R + S.r + 6 && Math.abs(s.y - hy) < 70) { s.life = 0; this.hurt(S.hurt * L.hurt, s.x - s.vx * 0.2, s.z - s.vz * 0.2); this.burst(s, [S.color], 6, 0.3); return; }
+      // Splatting on a teammate: their screen counts the damage, yours just shows it.
+      if (this.squad) for (const m of this.squad.mates.values()) if (m.st === 'hunt' && !m.dn && m.rx != null && Math.hypot(s.x - m.rx, s.z - m.rz) < BODY_R + S.r + 6 && Math.abs(s.y - (EYE - 30)) < 70) { s.life = 0; this.burst(s, [S.color], 6, 0.3); return; }
       if (s.y < 0 || this.inWall(s.x, s.z, s.y)) { s.life = 0; this.burst(s, [S.color], 5, 0.3); }
     },
     inWall(x, z, y) { return World.solidsNear(x, z, 2).some(p => p.h > y && pointInPoly(x, z, p.pts)); },
-    // Where a bug's body is: the height of its middle, and how far it reaches out (w) and up and down (h) from there.
-    body(b) {
-      const g = Math.max(0.3, b.grow), r = BUG_KINDS[b.kind].r * g;
-      if (b.kind === 'crawler') return { y: r * 0.55, w: r * 1.3, h: r * 0.7 };
-      if (b.kind === 'printer') return { y: 40 * g, w: r * 0.95, h: 40 * g };
-      if (b.kind === 'drone') return { y: b.y, w: r * 1.15, h: 18 };
-      return { y: 185 * g, w: 105 * g, h: 185 * g };
-    },
+    canBeHit() { return this.on && !this.down && !this.ended && this.safeT <= 0 && G.screen === 'walk'; },
 
-    // ---- The blaster ----
+    // ---- What's in your hands ----
     fire() {
-      if (this.over || this.reload > 0 || this.cool > 0) return;
-      if (this.ammo <= 0) { this.startReload(); return; }
-      this.ammo--; this.cool = FIRE_GAP; this.kick = 1;
+      if (this.down || this.ended || this.reload > 0 || this.cool > 0) return;
+      const W = WEAPONS[this.weapon];
+      if (this.weapon === 'blaster') { if (this.ammo <= 0) { this.startReload(); return; } this.ammo--; }
+      else if (this.wammo <= 0) { this.setWeapon('blaster'); return; } else this.wammo--;
+      this.cool = W.gap / this.fireMul(); this.kick = this.weapon === 'driver' ? 1.6 : 1;
       const cam = World.camera, d = cam.getWorldDirection(this.V);
-      this.assist(d);
-      const o = cam.position, fire = !!(World.lastPlayer && World.lastPlayer.fire);
-      this.shots.push({ x: o.x + d.x * 26, y: o.y + d.y * 26 - 5, z: o.z + d.z * 26, vx: d.x * SHOT_SPEED, vy: d.y * SHOT_SPEED + 40, vz: d.z * SHOT_SPEED, life: 2.4, banks: 0, fire });
-      Sound.blast();
-      if (!this.ammo) this.startReload();
+      if (W.pellets === 1 && !W.lob) this.assist(d, W);
+      const o = cam.position, onFire = !!(World.lastPlayer && World.lastPlayer.fire), dmg = (W.dmg + this.perk('heavy')) * (onFire ? 2 : 1), pull = ++this.pulls;
+      for (let i = 0; i < W.pellets; i++) {
+        let dx = d.x, dy = d.y + (W.lob || 0), dz = d.z;
+        if (W.spread) { dx += (Math.random() - 0.5) * 2 * W.spread; dy += (Math.random() - 0.5) * 1.2 * W.spread; dz += (Math.random() - 0.5) * 2 * W.spread; }
+        const n = Math.hypot(dx, dy, dz) || 1;
+        this.shots.push({ x: o.x + d.x * 26, y: o.y + d.y * 26 - 5, z: o.z + d.z * 26, vx: (dx / n) * W.speed, vy: (dy / n) * W.speed + (W.drop ? 40 : 0), vz: (dz / n) * W.speed, g: SHOT_G * W.drop, life: W.pierce ? 1.1 : 2.4, banks: 0, dmg, pierce: !!W.pierce, blast: W.blast || 0, hit: W.pierce ? new Set() : null, pull, color: this.weapon === 'putter' ? '#e3e7ec' : this.shotColor, mine: true });
+      }
+      this.stats.fired++;
+      if (this.weapon === 'driver') Sound.boom(); else if (this.weapon === 'putter') Sound.ding(); else if (this.weapon === 'wedge') Sound.whoosh(); else Sound.blast();
+      if (this.weapon === 'blaster' && !this.ammo) this.startReload();
+      if (this.weapon !== 'blaster' && !this.wammo) { this.note(`Out of balls for the ${W.name}. Back to the blaster.`); this.setWeapon('blaster'); }
     },
     startReload() {
-      if (this.reload > 0 || this.ammo === MAG || this.over) return;
-      this.reload = RELOAD_T;
+      if (this.weapon !== 'blaster' || this.reload > 0 || this.ammo >= this.magSize() || this.down) return;
+      this.reload = this.reloadTime();
       Sound.reload();
     },
+    setWeapon(w) {
+      this.weapon = w;
+      this.wammo = w === 'blaster' ? 0 : WEAPONS[w].ammo;
+      this.cool = 0.15;
+      if (w !== 'blaster') this.reload = 0;
+      this.tintGun();
+    },
     // Shots lean toward a bug just off the crosshair, more so on a touch screen, and allow for the drop on the way.
-    assist(d) {
+    assist(d, W) {
       const cone = World.touch ? 0.12 : 0.04, o = World.camera.position;
       let best = null, bestA = cone;
       for (const b of this.bugs) {
-        if (b.dead || b.grow < 1) continue;
+        if (b.dead || b.ghost || b.grow < 1) continue;
         const tx = b.x - o.x, ty = this.body(b).y - o.y, tz = b.z - o.z, n = Math.hypot(tx, ty, tz);
         if (n > 1800) continue;
         const ang = Math.acos(clamp((tx * d.x + ty * d.y + tz * d.z) / n, -1, 1));
-        if (ang < bestA) { const t = n / SHOT_SPEED, ly = ty + (SHOT_G / 2) * t * t - 40 * t, m = Math.hypot(tx, ly, tz); bestA = ang; best = [tx / m, ly / m, tz / m]; }
+        if (ang < bestA) { const t = n / W.speed, ly = ty + ((SHOT_G * W.drop) / 2) * t * t - (W.drop ? 40 : 0) * t, m = Math.hypot(tx, ly, tz); bestA = ang; best = [tx / m, ly / m, tz / m]; }
       }
       if (best) d.set(best[0], best[1], best[2]);
     },
     stepShot(s, dt) {
-      const n = Math.max(1, Math.ceil((Math.hypot(s.vx, s.vy, s.vz) * dt) / 30)), h = dt / n;
+      const n = Math.max(1, Math.ceil((Math.hypot(s.vx, s.vy, s.vz) * dt) / 30)), h = dt / n, maxBanks = 4 + this.perk('trick');
       for (let k = 0; k < n && s.life > 0; k++) {
-        s.vy -= SHOT_G * h;
+        s.vy -= s.g * h;
         let nx = s.x + s.vx * h, nz = s.z + s.vz * h;
         // Walls and anything taller than the ball send it back: a squash after a bounce is a bank shot.
         const w = this.wallHit(s.x, s.z, nx, nz, s.y);
         if (w) {
+          if (s.blast) { this.explode(s, w.x, s.y, w.z); return; }
           const dot = s.vx * w.nx + s.vz * w.nz;
           s.vx = (s.vx - 2 * dot * w.nx) * 0.82; s.vz = (s.vz - 2 * dot * w.nz) * 0.82;
           nx = w.x + w.nx * 2; nz = w.z + w.nz * 2;
-          if (++s.banks > 4) s.life = 0;
-          Sound.bounce(500);
+          if (++s.banks > maxBanks) s.life = 0;
+          if (s.mine) Sound.bounce(500);
         }
         s.x = nx; s.z = nz; s.y += s.vy * h;
-        if (s.y < SHOT_R) { s.y = SHOT_R; s.vy = Math.abs(s.vy) * 0.5; s.vx *= 0.72; s.vz *= 0.72; if (Math.abs(s.vy) < 80) s.life = Math.min(s.life, 0.35); }
+        if (s.y < SHOT_R) {
+          if (s.blast) { this.explode(s, s.x, SHOT_R, s.z); return; }
+          s.y = SHOT_R; s.vy = Math.abs(s.vy) * 0.5; s.vx *= 0.72; s.vz *= 0.72;
+          if (Math.abs(s.vy) < 80) s.life = Math.min(s.life, 0.35);
+        }
         const top = bldOf(s.x, s.z) ? WALL_H - SHOT_R : 5000;
         if (s.y > top) { s.y = top; s.vy = -Math.abs(s.vy) * 0.6; }
+        // Teammates' balls are only there to look at: their own screens do the hitting.
+        if (!s.mine) continue;
         for (const b of this.bugs) {
-          if (b.dead || b.grow < 0.5) continue;
+          if (b.dead || b.ghost || b.grow < 0.5 || (s.hit && s.hit.has(b.id))) continue;
           const B = this.body(b), rr = B.w + SHOT_R;
-          if (Math.abs(s.x - b.x) > rr || Math.abs(s.z - b.z) > rr || Math.abs(s.y - B.y) > B.h + SHOT_R) continue;
-          if (Math.hypot(s.x - b.x, s.z - b.z) < rr) { this.hit(b, s); s.life = 0; break; }
+          if (Math.abs(s.x - b.x) > rr || Math.abs(s.z - b.z) > rr || Math.abs(s.y - B.y) > B.h + SHOT_R || Math.hypot(s.x - b.x, s.z - b.z) > rr) continue;
+          if (s.blast) { this.explode(s, s.x, s.y, s.z); return; }
+          // A firewall turns away a straight shot at its front. Bank shots, putts and anything from behind get through.
+          if (BUG_KINDS[b.kind].shield && !s.banks && !s.pierce) {
+            const sp = Math.hypot(s.vx, s.vz) || 1;
+            if ((s.vx * Math.cos(b.a) + s.vz * Math.sin(b.a)) / sp < -0.3) {
+              s.vx = -s.vx * 0.5; s.vz = -s.vz * 0.5; s.x += s.vx * h * 3; s.z += s.vz * h * 3; s.life = Math.min(s.life, 0.5); s.blocked = true;
+              Sound.prop('metal', 0.5);
+              this.burst({ x: s.x, y: s.y, z: s.z }, ['#ffd447', '#c9562f'], 4, 0.3);
+              if (!this.blockedTold) { this.blockedTold = true; this.note('Blocked! Bank a shot in off a wall, or hit it from behind.'); }
+              break;
+            }
+          }
+          this.hitBug(b, s.dmg, s.banks, s);
+          if (s.pierce) { s.hit.add(b.id); continue; }
+          s.life = 0; break;
         }
         if (s.life > 0) for (const p of this.spits) {
-          if (p.life > 0 && Math.hypot(s.x - p.x, s.y - p.y, s.z - p.z) < SHOT_R + SPITS[p.kind].r + 6) { p.life = 0; s.life = 0; this.score += 25; this.pop(p, '+25'); this.burst(p, [SPITS[p.kind].color], 6, 0.3); break; }
+          if (p.life > 0 && Math.hypot(s.x - p.x, s.y - p.y, s.z - p.z) < SHOT_R + SPITS[p.kind].r + 6) { s.life = 0; this.spitDown(p); break; }
         }
       }
       s.life -= dt;
@@ -10761,56 +11298,253 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       }
       return best;
     },
-    hit(b, s) {
-      b.hp -= s && s.fire ? 2 : 1;
+    // A sand wedge ball bursts: everything close takes the hit, shields or not.
+    explode(s, x, y, z) {
+      s.life = 0;
+      this.burst({ x, y: Math.max(20, y), z }, ['#e8d3a0', '#d9b26a', '#fff1c8'], 26, 1.1);
+      Sound.boom();
+      if (!s.mine) return;
+      for (const b of this.bugs) {
+        if (b.dead || b.ghost || b.grow < 0.5) continue;
+        const B = this.body(b), d = Math.hypot(b.x - x, B.y - y, b.z - z);
+        if (d < s.blast + B.w) this.hitBug(b, s.dmg, s.banks, s);
+      }
+    },
+    // Your ball found a bug. Alone (or as a squad's host) it comes straight off the bug's health; otherwise the host is
+    // told, and your screen shows the squash right away.
+    hitBug(b, dmg, banks, s) {
+      if (s && !this.pullHit.has(s.pull)) { this.pullHit.add(s.pull); this.stats.hits++; }
       b.flash = 0.12;
       const c = $('walkCross');
       c.classList.remove('hit'); void c.offsetWidth; c.classList.add('hit');
-      if (b.hp <= 0) this.kill(b, s ? s.banks : 0);
+      if (this.isHost()) { this.damage(b, dmg, banks, this.myId()); return; }
+      this.hitsOut.push([b.id, dmg, banks ? 1 : 0]);
+      b.hp -= dmg;
+      if (b.hp <= 0) this.ghost(b, banks);
       else Sound.prop('rubber', 0.6);
     },
-    kill(b, banks = 0) {
+    damage(b, dmg, banks, by) {
       if (b.dead) return;
-      b.dead = true;
-      this.squashed++;
-      const K = BUG_KINDS[b.kind];
-      this.combo = this.comboT > 0 ? this.combo + 1 : 1; this.comboT = 2.5;
-      this.multi++; this.multiT = 0.9;
-      const pts = Math.round((K.pts * (banks ? 2 : 1) * (1 + 0.25 * Math.min(8, this.combo - 1))) / 10) * 10;
-      this.score += pts;
-      this.pop({ x: b.x, y: this.body(b).y, z: b.z }, banks ? `Bank shot! +${pts}` : `+${pts}`);
-      this.burst({ x: b.x, y: this.body(b).y, z: b.z }, K.bits, b.kind === 'boss' ? 90 : b.kind === 'crawler' ? 14 : 22, b.kind === 'boss' ? 1.6 : 1);
-      Sound.squish();
-      if (b.kind === 'boss') { this.call('Deprecated!'); Sound.cheer(); }
+      b.hp -= dmg; b.flash = 0.12;
+      if (b.hp <= 0) this.kill(b, banks, by);
+      else if (by === this.myId()) Sound.prop('rubber', 0.6);
     },
-    hurt(n) {
-      if (this.over) return;
+    // Points for a squash: more for a bank shot, a combo, a golden ball and a harder workload.
+    pointsFor(kind, banks, combo, golden, trick) {
+      const K = BUG_KINDS[kind], L = HUNT_LEVELS[this.level];
+      return Math.round((K.pts * L.pts * (banks ? (trick ? 3 : 2) : 1) * (golden ? 2 : 1) * (1 + 0.25 * Math.min(8, combo - 1))) / 10) * 10;
+    },
+    // A squash, decided by you alone or by a squad's host.
+    kill(b, banks = 0, by = this.myId()) {
+      if (b.dead) return;
+      b.dead = true; this.byId.delete(b.id);
+      const K = BUG_KINDS[b.kind], mine = by === this.myId();
+      let pts;
+      if (mine) {
+        this.combo = this.comboT > 0 ? this.combo + 1 : 1; this.comboT = 2.5;
+        pts = this.pointsFor(b.kind, banks, this.combo, this.buffs.golden > 0, this.perk('trick'));
+      } else {
+        const m = this.squad && this.squad.mates.get(by), st = this.comboOf(by);
+        st.combo = G.clock - st.at < 2.5 ? st.combo + 1 : 1; st.at = G.clock;
+        pts = this.pointsFor(b.kind, banks, st.combo, m && m.gb, m && m.tr);
+      }
+      this.addScore(by, pts, 1);
+      this.kills.push([b.id, by, pts, (banks ? 1 : 0) | (K.boss ? 2 : 0), G.clock]);
+      this.killSeen.add(b.id);
+      if (mine) this.squashedBy(b, pts, banks); else this.squashedByMate(b, by, pts);
+      if (K.split) for (const s of [-1, 1]) this.addBug('crawler', b.x + Math.cos(b.a + s * 1.57) * 34, b.z + Math.sin(b.a + s * 1.57) * 34, { grow: 0.5 });
+      this.dropFrom(b, by);
+    },
+    comboOf(id) { const m = this.combos || (this.combos = new Map()); if (!m.has(id)) m.set(id, { combo: 0, at: -9 }); return m.get(id); },
+    addScore(by, pts, kills = 0) {
+      if (by === this.myId()) { this.score += pts; this.squashed += kills; }
+      if (this.squad && this.isHost()) { const e = this.book.get(by) || { score: 0, kills: 0 }; e.score += pts; e.kills += kills; this.book.set(by, e); }
+    },
+    // The squash on your own screen: the pop, the bits and the noise. Multi-kills and stats count here too.
+    squashedBy(b, pts, banks) {
+      const K = BUG_KINDS[b.kind], at = { x: b.x, y: this.body(b).y, z: b.z };
+      this.multi++; this.multiT = 0.9;
+      this.stats.kinds[b.kind] = (this.stats.kinds[b.kind] || 0) + 1;
+      if (banks) this.stats.banks++;
+      this.pop(at, banks ? `Bank shot! +${pts}` : `+${pts}`);
+      this.burst(at, K.bits, K.boss ? 90 : b.kind === 'crawler' || b.kind === 'swarm' ? 12 : 22, K.boss ? 1.6 : 1);
+      Sound.squish();
+      if (K.boss) { this.call(b.kind === 'legacy' ? 'Deprecated!' : 'Untangled!'); Sound.cheer(); }
+      else if (K.split) this.note('Merge conflict! It split in two.');
+    },
+    squashedByMate(b, by, pts, at) {
+      const K = BUG_KINDS[b.kind], m = this.squad && this.squad.mates.get(by), p = at || { x: b.x, y: this.body(b).y, z: b.z };
+      this.burst(p, K.bits, K.boss ? 90 : 14, K.boss ? 1.6 : 1);
+      this.pop(p, `+${pts}`, m ? COLORS[m.c] : null);
+      if (K.boss) { this.call(b.kind === 'legacy' ? 'Deprecated!' : 'Untangled!'); Sound.cheer(); }
+    },
+    // A squash you predicted ahead of the host's say-so. If the host disagrees, the bug comes back.
+    ghost(b, banks) {
+      b.ghost = true; this.ghosts.set(b.id, G.clock);
+      this.combo = this.comboT > 0 ? this.combo + 1 : 1; this.comboT = 2.5;
+      this.squashedBy(b, this.pointsFor(b.kind, banks, this.combo, this.buffs.golden > 0, this.perk('trick')), banks);
+    },
+    spitDown(p) {
+      p.life = 0;
+      this.pop(p, '+25');
+      this.burst(p, [SPITS[p.kind].color], 6, 0.3);
+      if (this.isHost()) this.addScore(this.myId(), 25);
+      if (this.squad) Net.send({ k: 'hxd', s: this.session, id: p.id });
+    },
+
+    // ---- Pick-ups ----
+    dropFrom(b, by) {
+      const K = BUG_KINDS[b.kind], luck = by === this.myId() ? this.perk('lucky') : (this.squad && this.squad.mates.get(by) || {}).lk || 0;
+      const n = K.boss ? 3 : Math.random() < K.drop * (1 + 0.6 * luck) ? 1 : 0;
+      for (let i = 0; i < n; i++) {
+        const type = K.boss && i === 0 ? pick(['driver', 'bucket', 'wedge', 'putter']) : this.rollPickup(), a = Math.random() * TAU, r = K.boss ? 70 + i * 50 : 0;
+        this.addPickup(type, b.x + Math.cos(a) * r, b.z + Math.sin(a) * r);
+      }
+    },
+    rollPickup() {
+      let r = Math.random() * PICKUP_IDS.reduce((s, k) => s + PICKUPS[k].w, 0);
+      for (const k of PICKUP_IDS) { r -= PICKUPS[k].w; if (r <= 0) return k; }
+      return 'donut';
+    },
+    addPickup(type, x, z, id) {
+      const p = { id: id || this.nextId++, type, x, z, t: Math.random() * 3, life: 25 };
+      this.pickups.push(p);
+      return p;
+    },
+    stepPickups(dt) {
+      const host = this.isHost();
+      for (const p of this.pickups) {
+        p.t += dt;
+        if (host && (p.life -= dt) <= 0) p.taken = true;
+        if (p.claimed && G.clock - p.claimed > 1.5) p.claimed = 0;
+      }
+      this.pickups = this.pickups.filter(p => { if (!p.taken) return true; if (p.mesh) World.scene.remove(p.mesh); return false; });
+    },
+    // Walking over a pick-up takes it. In a squad the host makes sure only one of you gets it.
+    collect() {
+      const me = World.me, reach = this.perk('magnet') ? 210 : 70;
+      for (const p of this.pickups) {
+        if (p.taken || p.claimed || Math.hypot(p.x - me.x, p.z - me.y) > reach) continue;
+        if (this.isHost()) { p.taken = true; this.grant(p.type); }
+        else { p.claimed = G.clock; Net.send({ k: 'hq', s: this.session, id: p.id }); }
+      }
+    },
+    grant(type) {
+      const P = PICKUPS[type];
+      if (!P) return;
+      this.stats.grabbed++;
+      Sound.soft();
+      if (WEAPONS[type]) this.setWeapon(type);
+      else if (type === 'coffee') this.buffs.coffee = 12;
+      else if (type === 'donut') this.morale = Math.min(100, this.morale + 35);
+      else if (type === 'golden') this.buffs.golden = 15;
+      else { this.ammo = this.magSize(); this.reload = 0; if (this.weapon !== 'blaster') this.wammo = WEAPONS[this.weapon].ammo; }
+      this.note(`${P.name}: ${P.note}`);
+    },
+
+    // ---- Perks and buffs ----
+    perk(id) { return this.perks[id] || 0; },
+    magSize() { return 24 + 8 * this.perk('hopper'); },
+    reloadTime() { return RELOAD_T * Math.pow(0.67, this.perk('hands')); },
+    fireMul() { return (1 + 0.2 * this.perk('espresso')) * (this.buffs.coffee > 0 ? 1.35 : 1); },
+    speedMul() { return (1 + 0.15 * this.perk('legs')) * (this.buffs.coffee > 0 ? 1.4 : 1); },
+    offerPerks() {
+      const pool = PERKS.filter(p => this.perk(p.id) < p.max && (!p.squad || this.mode === 'squad'));
+      for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+      this.offer = pool.slice(0, 3);
+      if (!this.offer.length) { this.offer = null; return; }
+      const box = $('huntPerkList');
+      box.textContent = '';
+      this.offer.forEach((p, i) => {
+        const b = el('button', 'hunt-perk');
+        b.type = 'button';
+        b.append(el('kbd', '', String(i + 1)), el('b', '', p.name), el('small', '', p.text));
+        if (this.perk(p.id)) b.append(el('em', '', `Level ${this.perk(p.id) + 1}`));
+        b.addEventListener('click', () => this.pickPerk(i));
+        box.append(b);
+      });
+      $('huntPerks').hidden = false;
+    },
+    pickPerk(i, auto) {
+      const p = this.offer && this.offer[i];
+      if (!p) return;
+      this.perks[p.id] = this.perk(p.id) + 1;
+      this.offer = null;
+      $('huntPerks').hidden = true;
+      if (p.id === 'hopper' && this.weapon === 'blaster' && !this.reload) this.ammo = this.magSize();
+      this.note(auto ? `Perk picked for you: ${p.name}.` : `${p.name}: ${p.text}`);
+      Sound.ding();
+    },
+
+    // ---- Morale ----
+    hurt(n, fx, fz) {
+      if (!this.canBeHit()) return;
+      n *= Math.pow(0.75, this.perk('skin'));
       this.morale = Math.max(0, this.morale - n); this.calm = 0;
+      // The screen goes red on the side the hit came from.
+      const me = World.me, rel = Number.isFinite(fx) ? Math.atan2(Math.sin(Math.atan2(fz - me.y, fx - me.x) - me.a), Math.cos(Math.atan2(fz - me.y, fx - me.x) - me.a)) : 0;
       const v = $('huntHurt');
-      v.classList.remove('on'); void v.offsetWidth; v.classList.add('on');
+      v.className = 'hunt-hurt';
+      void v.offsetWidth;
+      v.className = 'hunt-hurt on ' + (Math.abs(rel) > 2.3 ? 'back' : rel > 0.6 ? 'right' : rel < -0.6 ? 'left' : 'front');
       Sound.hurt();
       if (!reduceMotion) this.shake = 0.22;
-      if (this.morale <= 0) this.sickDay();
+      if (this.morale <= 0) this.goDown();
     },
-    // Out of morale: a sick day, unless you take a mulligan.
-    sickDay() {
-      this.over = true; this.trigger = false;
-      const isBest = this.score > this.best;
-      if (isBest) { this.best = this.score; store.set('huntBest', this.best); }
-      Sound.sad();
-      $('huntOverText').textContent = `You made it to wave ${this.wave} and squashed ${this.squashed} ${this.squashed === 1 ? 'bug' : 'bugs'} for ${this.score.toLocaleString()} points.${isBest && this.score ? ' A new best!' : ` Your best is ${this.best.toLocaleString()}.`}`;
-      $('huntMull').hidden = !this.mulligan;
-      $('huntOver').hidden = false;
+    // Out of morale. Alone, that's a sick day. In a squad you're out until a teammate brings you back.
+    goDown() {
+      this.down = true; this.trigger = false; this.reviving = null;
       if (document.pointerLockElement) document.exitPointerLock();
+      Sound.sad();
+      if (this.mode === 'solo') { this.endHunt('solo'); return; }
+      $('huntDownText').textContent = this.mulligan ? 'A teammate can bring you back by standing next to you for a few seconds. Or take your one mulligan.' : 'A teammate can bring you back by standing next to you for a few seconds.';
+      $('huntDownMull').hidden = !this.mulligan;
+      $('huntDown').hidden = false;
     },
     mull() {
-      if (!this.mulligan || !this.over) return;
-      this.mulligan = false; this.over = false; this.morale = 60; this.ammo = MAG; this.reload = 0;
-      $('huntOver').hidden = true;
-      // Everything close by gets shoved back a bit.
-      for (const b of this.bugs) { const dx = b.x - World.me.x, dz = b.z - World.me.y, d = Math.hypot(dx, dz) || 1; if (d < 500) { b.x += (dx / d) * (500 - d); b.z += (dz / d) * (500 - d); } }
-      this.spits = [];
+      if (!this.mulligan || !this.down) return;
+      this.mulligan = false; this.down = false; this.morale = 60; this.ammo = this.magSize(); this.reload = 0; this.safeT = 2;
+      if (this.mode === 'solo') {
+        this.ended = false;
+        // Everything close by gets shoved back a bit.
+        for (const b of this.bugs) { const dx = b.x - World.me.x, dz = b.z - World.me.y, d = Math.hypot(dx, dz) || 1; if (d < 500) { b.x += (dx / d) * (500 - d); b.z += (dz / d) * (500 - d); } }
+        this.spits = [];
+      }
+      $('huntOver').hidden = $('huntDown').hidden = true;
       toast('Mulligan', 'One free do-over, as tradition allows.', 'hi');
+    },
+    revived(by) {
+      if (!this.down || this.ended) return;
+      this.down = false; this.morale = 50; this.safeT = 2;
+      $('huntDown').hidden = true;
+      toast('Back on your feet', `${by} covered your shift.`, 'hi');
+      Sound.cheer();
+    },
+    // Standing next to a teammate who's out sick brings them back.
+    reviveTick(dt) {
+      const me = World.me;
+      let who = null;
+      for (const m of this.squad.mates.values()) if (m.st === 'hunt' && m.s === this.session && m.dn && m.rx != null && Math.hypot(m.rx - me.x, m.rz - me.y) < 130) { who = m; break; }
+      if (!who) { this.reviving = null; return; }
+      if (!this.reviving || this.reviving.id !== who.id) this.reviving = { id: who.id, name: who.name, t: 0 };
+      this.reviving.t += dt * (this.perk('team') ? 2 : 1);
+      if (this.reviving.t >= 3) {
+        Net.send({ k: 'hv', s: this.session, to: who.id, n: ONLINE.me.name });
+        this.stats.revives++;
+        who.dn = false;
+        this.reviving = null;
+        toast(`${who.name} is back`, 'You covered their shift.', 'hi');
+        Sound.cheer();
+      }
+    },
+    // The host ends the hunt when everyone in it is out sick.
+    teamCheck() {
+      if (this.ended) return;
+      const mates = [...this.squad.mates.values()].filter(m => m.st === 'hunt' && m.s === this.session && Date.now() - m.seen < 6000);
+      if (!this.down || mates.some(m => !m.dn)) return;
+      this.sendSnap();
+      for (const d of [0, 400, 1200]) setTimeout(() => { if (this.squad) Net.send({ k: 'he', s: this.session, w: this.wave }); }, d);
+      this.endHunt('team');
     },
 
     // ---- Golf pays for backup ----
@@ -10822,30 +11556,35 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       this.paid = G.hole;
       const diff = s - HOLES[G.holeIdx].par, kind = s === 1 || diff <= -2 ? 'eagle' : diff === -1 ? 'birdie' : diff === 0 ? 'drop' : null;
       if (!kind) { ping({ from: 'Your caddie', initials: 'C', color: '#35a06a', text: 'No backup for a bogey. Par or better calls in help.', tag: 'bug hunt' }); return; }
-      this.queue.push(kind);
-      ping({ from: 'Your caddie', initials: 'C', color: '#35a06a', text: { drop: 'Par! A supply drop is ready for when you’re back on your feet.', birdie: 'Birdie! The birds are ready when you are.', eagle: 'Eagle! Something big is circling overhead.' }[kind], tag: 'bug hunt' });
+      const me = World.me, name = this.squad ? ONLINE.me.name : 'You';
+      this.stats.backup++;
+      this.queue.push([kind, me.x, me.y, me.a, this.myId(), name]);
+      if (this.squad) Net.send({ k: 'hz', s: this.session, kind, x: Math.round(me.x), z: Math.round(me.y), a: Math.round(me.a * 100) / 100, n: name });
+      ping({ from: 'Your caddie', initials: 'C', color: '#35a06a', text: { drop: 'Par! A supply drop is on its way.', birdie: 'Birdie! The birds are on their way.', eagle: 'Eagle! Something big is circling overhead.' }[kind], tag: 'bug hunt' });
     },
-    callIn(kind) {
-      const me = World.me;
-      const top = bldOf(me.x, me.y) ? 180 : 900;
+    // x, z, a: where the player who earned it was standing, and which way they faced.
+    callIn(kind, x, z, a, by, name) {
+      const top = bldOf(x, z) ? 180 : 900, who = by === this.myId() ? '' : ` from ${name}`;
       if (kind === 'drop') {
-        // In front of you, if there's room, or else right where you are.
-        const ax = me.x + Math.cos(me.a) * 380, az = me.y + Math.sin(me.a) * 380, ok = bldOf(ax, az) === bldOf(me.x, me.y) && this.free(ax, az, 45);
-        this.strike = { kind, t: 0, top, x: ok ? ax : me.x, z: ok ? az : me.y };
-        toast('Supply drop!', 'Par pays: snacks and a fresh sleeve of balls.', 'hi'); Sound.whoosh();
+        // In front of them, if there's room, or else right where they are.
+        const ax = x + Math.cos(a) * 380, az = z + Math.sin(a) * 380, ok = bldOf(ax, az) === bldOf(x, z) && this.free(ax, az, 45);
+        this.strike = { kind, t: 0, top, by, x: ok ? ax : x, z: ok ? az : z };
+        toast('Supply drop!', `Par pays${who}: snacks and a fresh sleeve of balls for everyone.`, 'hi'); Sound.whoosh();
       } else if (kind === 'birdie') {
-        const targets = this.bugs.filter(b => !b.dead).sort((a, b) => Math.hypot(a.x - me.x, a.z - me.y) - Math.hypot(b.x - me.x, b.z - me.y)).slice(0, 6);
-        this.strike = { kind, t: 0, top, birds: this.birds.map((g, i) => ({ g, target: targets[i] || null, x: me.x + Math.cos(me.a + i - 2.5) * 300, y: top === 900 ? 950 : 380, z: me.y + Math.sin(me.a + i - 2.5) * 300, done: !targets[i] })) };
-        toast('Birdie strike!', 'The birds have your back.', 'hi'); Sound.cheer();
+        const targets = this.bugs.filter(b => !b.dead && !b.ghost).sort((p, q) => Math.hypot(p.x - x, p.z - z) - Math.hypot(q.x - x, q.z - z)).slice(0, 6);
+        this.strike = { kind, t: 0, top, by, birds: this.birds.map((g, i) => ({ g, target: targets[i] || null, x: x + Math.cos(a + i - 2.5) * 300, y: top === 900 ? 950 : 380, z: z + Math.sin(a + i - 2.5) * 300, done: !targets[i] })) };
+        toast('Birdie strike!', `The birds have your back${who}.`, 'hi'); Sound.cheer();
       } else {
-        const a = Math.random() * TAU;
-        this.strike = { kind, t: 0, dur: 2.4, x0: me.x - Math.cos(a) * 2600, z0: me.y - Math.sin(a) * 2600, x1: me.x + Math.cos(a) * 2600, z1: me.y + Math.sin(a) * 2600, a };
-        toast('Eagle strike!', 'Nothing gets past an eagle.', 'hi'); Sound.boom();
+        const ang = Math.random() * TAU;
+        this.strike = { kind, t: 0, dur: 2.4, by, cx: x, cz: z, x0: x - Math.cos(ang) * 2600, z0: z - Math.sin(ang) * 2600, x1: x + Math.cos(ang) * 2600, z1: z + Math.sin(ang) * 2600, a: ang };
+        toast('Eagle strike!', `Nothing gets past an eagle${who}.`, 'hi'); Sound.boom();
       }
     },
+    // The strikes play out on every screen; only whoever runs the hunt takes bugs off the board.
     stepStrike(dt) {
       const k = this.strike;
       if (!k) return;
+      const auth = this.isHost();
       k.t += dt;
       if (k.kind === 'drop') {
         const f = Math.min(1, k.t / (k.top > 500 ? 1.6 : 1.1));
@@ -10854,7 +11593,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         this.crate.children.forEach((c, i) => { if (i) c.visible = f < 1; });
         if (f >= 1 && !k.landed) {
           k.landed = true;
-          this.morale = Math.min(100, this.morale + 40); this.ammo = MAG; this.reload = 0;
+          if (!this.down) { this.morale = Math.min(100, this.morale + 40); this.ammo = this.magSize(); this.reload = 0; }
           Sound.thud();
           this.burst({ x: k.x, y: 30, z: k.z }, ['#b98a52', '#ffd447', '#ffffff'], 18, 0.8);
         }
@@ -10867,7 +11606,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
           busy = true;
           const t = b.target, tx = t.x, ty = this.body(t).y, tz = t.z, dx = tx - b.x, dy = ty - b.y, dz = tz - b.z, d = Math.hypot(dx, dy, dz) || 1, step = 1500 * dt;
           if (t.dead || d < step + 20) {
-            if (!t.dead) { if (t.kind === 'boss') { t.hp -= 10; t.flash = 0.2; if (t.hp <= 0) this.kill(t); } else this.kill(t); }
+            if (!t.dead && auth) { if (BUG_KINDS[t.kind].boss) { this.damage(t, 10, 0, k.by); } else this.kill(t, 0, k.by); }
             b.done = true;
           } else { b.x += (dx / d) * step; b.y += (dy / d) * step; b.z += (dz / d) * step; }
           b.g.position.set(b.x, b.y, b.z); b.g.rotation.y = -Math.atan2(dz, dx);
@@ -10879,19 +11618,19 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         g.visible = f < 1;
         g.position.set(x, 300 + Math.sin(f * Math.PI) * 60, z); g.rotation.y = -k.a;
         for (const w of g.userData.wings) w.rotation.x = Math.sin(k.t * 12) * 0.6;
-        // Everything the eagle passes goes; the boss only loses half.
-        for (const b of this.bugs) {
+        // Everything the eagle passes goes; a boss only loses half.
+        if (auth) for (const b of this.bugs) {
           if (b.dead || b.eagled) continue;
           const along = (b.x - k.x0) * Math.cos(k.a) + (b.z - k.z0) * Math.sin(k.a);
-          if (along > f * 5200 || Math.hypot(b.x - World.me.x, b.z - World.me.y) > 2600) continue;
+          if (along > f * 5200 || Math.hypot(b.x - k.cx, b.z - k.cz) > 2600) continue;
           b.eagled = true;
-          if (b.kind === 'boss') { b.hp = Math.ceil(b.hp / 2); b.flash = 0.3; } else this.kill(b);
+          if (BUG_KINDS[b.kind].boss) { b.hp = Math.ceil(b.hp / 2); b.flash = 0.3; } else this.kill(b, 0, k.by);
         }
         if (f >= 1) { g.visible = false; this.strike = null; }
       }
     },
 
-    // ---- Effects and screen ----
+    // ---- Things on screen ----
     burst(at, colors, n, speed = 1) {
       for (let i = 0; i < n && this.bits.length < 420; i++) {
         const a = Math.random() * TAU, v = (120 + Math.random() * 260) * speed;
@@ -10905,14 +11644,69 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       clearTimeout(this.callTimer);
       this.callTimer = setTimeout(() => c.classList.remove('on'), 1100);
     },
+    // A line under the crosshair: what you just picked up, or what just happened.
+    note(text) {
+      const n = $('huntNote');
+      n.textContent = text;
+      n.classList.remove('on'); void n.offsetWidth; n.classList.add('on');
+      clearTimeout(this.noteTimer);
+      this.noteTimer = setTimeout(() => n.classList.remove('on'), 2600);
+    },
     // A score floating up from where a bug was squashed.
-    pop(at, text) {
+    pop(at, text, color) {
+      if (!this.built || G.screen !== 'walk') return;
       const v = this.V.set(at.x, (at.y || 0) + 40, at.z).project(World.camera);
       if (v.z > 1 || Math.abs(v.x) > 1.1 || Math.abs(v.y) > 1.1) return;
       const s = el('span', '', text);
       s.style.left = `${((v.x + 1) / 2) * cw}px`; s.style.top = `${((1 - v.y) / 2) * ch}px`;
+      if (color) s.style.color = color;
       $('huntPops').append(s);
       setTimeout(() => s.remove(), 900);
+    },
+    // The big card in the middle of the screen at the start of a wave.
+    titleCard(big, mid, small) {
+      const t = $('huntTitle');
+      $('huntTitleBig').textContent = big; $('huntTitleMid').textContent = mid || ''; $('huntTitleSmall').textContent = small || '';
+      t.hidden = false;
+      t.classList.remove('on'); void t.offsetWidth; t.classList.add('on');
+      clearTimeout(this.titleTimer);
+      this.titleTimer = setTimeout(() => { t.hidden = true; }, 2900);
+    },
+    // The first time a kind of bug shows up in a hunt, a card says what it is and how to beat it.
+    meet(kind) {
+      if (this.seen.has(kind)) return;
+      this.seen.add(kind);
+      const K = BUG_KINDS[kind];
+      if (!K.tip) return;
+      this.introQ.push(kind);
+      if (this.introQ.length === 1) this.showIntro();
+    },
+    showIntro() {
+      const kind = this.introQ[0];
+      if (!kind) return;
+      const K = BUG_KINDS[kind];
+      $('huntIntroName').textContent = K.name; $('huntIntroTip').textContent = K.tip;
+      $('huntIntroTag').textContent = K.boss ? 'Boss' : 'New bug';
+      $('huntIntro').classList.toggle('boss', !!K.boss);
+      $('huntIntro').hidden = false;
+      clearTimeout(this.introTimer);
+      this.introTimer = setTimeout(() => { $('huntIntro').hidden = true; this.introQ.shift(); if (this.introQ.length) setTimeout(() => this.showIntro(), 300); }, 4200);
+    },
+    onWave(n) {
+      const boss = this.toSpawn.find(k => BUG_KINDS[k].boss) || (n % 5 === 0 ? (Math.floor(n / 5) % 2 === 1 ? 'legacy' : 'spaghetti') : null);
+      const left = this.toSpawn.length;
+      this.titleCard(`Wave ${n}`, WAVE_NAMES[(n - 1) % WAVE_NAMES.length], boss ? `${BUG_KINDS[boss].name} is booting up.` : left ? `${left} bugs incoming.` : 'Here they come.');
+      if (boss) Sound.rumble(); else Sound.whistle();
+      // A perk left unpicked gets picked for you.
+      if (this.offer) this.pickPerk(Math.floor(Math.random() * this.offer.length), true);
+      $('huntPerks').hidden = true;
+      // Surviving the first boss is a secret.
+      if (n === 6) Secrets.find('bughunt', 0.5, true);
+    },
+    onCleared(bonus) {
+      this.titleCard('Wave cleared', `+${bonus.toLocaleString()}`, 'Pick a perk. Sink par or better on any hole for backup.');
+      Sound.cheer();
+      if (!this.down) this.offerPerks();
     },
     // Puts one part of a bug in place: an offset from the bug's middle, turned the way the bug faces.
     put(im, i, b, lx, ly, lz, sx, sy, sz, rot = 0, tilt = 0) {
@@ -10923,47 +11717,81 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     },
     draw(dt) {
       if (!this.built) return;
-      const m = this.m, n = { shell: 0, eyes: 0, legs: 0, printer: 0, paper: 0, led: 0, feet: 0, card: 0, header: 0, prop: 0 };
-      let boss = null;
+      const m = this.m, n = { shell: 0, eyes: 0, legs: 0, brick: 0, printer: 0, paper: 0, led: 0, feet: 0, card: 0, header: 0, prop: 0 };
+      let legacy = null, spaghetti = null;
       for (const b of this.bugs) {
-        const K = BUG_KINDS[b.kind], g = b.grow, r = K.r * g, step = Math.sin(b.t * 16 + b.seed);
-        if (b.kind === 'crawler') {
+        if (b.dead || b.ghost) continue;
+        const K = BUG_KINDS[b.kind], g = b.grow, r = K.r * g, step = Math.sin(b.t * 16 + b.seed), fl = b.flash > 0;
+        if (b.kind === 'crawler' || b.kind === 'firewall') {
           const i = n.shell++;
           this.put(m.shell, i, b, 0, r * 0.55, 0, r * 1.35, r * 0.6, r);
-          m.shell.setColorAt(i, this.C.set(b.flash > 0 ? '#ffffff' : '#262b35'));
+          m.shell.setColorAt(i, this.C.set(fl ? '#ffffff' : b.kind === 'firewall' ? '#4a2a1c' : '#262b35'));
           for (const side of [-1, 1]) this.put(m.eyes, n.eyes++, b, r * 1.15, r * 0.75, side * r * 0.38, r * 0.2, r * 0.2, r * 0.2);
           for (const side of [-1, 1]) for (const k of [-1, 0, 1]) this.put(m.legs, n.legs++, b, k * r * 0.6, r * 0.2, side * r * 0.85, r * 0.14, r * 0.12, r * 0.95, Math.sin(b.t * 20 + k * 2 + side) * 0.4);
+          // The firewall's shield of bricks, held up in front.
+          if (b.kind === 'firewall') this.put(m.brick, n.brick++, b, r * 1.45, r * 0.95, 0, 7, r * 1.9, r * 2.5);
+        } else if (b.kind === 'merge') {
+          // Two halves that don't agree: one red, one green.
+          for (const side of [-1, 1]) {
+            const i = n.shell++;
+            this.put(m.shell, i, b, 0, r * 0.6, side * r * 0.42, r * 1.05, r * 0.8, r * 0.72);
+            m.shell.setColorAt(i, this.C.set(fl ? '#ffffff' : side < 0 ? '#e8453a' : '#35d07f'));
+            this.put(m.eyes, n.eyes++, b, r * 0.95, r * 0.95, side * r * 0.4, r * 0.18, r * 0.18, r * 0.18);
+            for (const k of [-1, 1]) this.put(m.legs, n.legs++, b, k * r * 0.5, r * 0.2, side * r * 0.95, r * 0.14, r * 0.12, r * 0.7, Math.sin(b.t * 18 + k + side) * 0.4);
+          }
         } else if (b.kind === 'printer') {
           const i = n.printer++, bob = Math.abs(step) * 4;
           this.put(m.printer, i, b, 0, 34 * g + bob + r * 0.6, 0, r * 1.3, r * 1.2, r * 1.5);
-          m.printer.setColorAt(i, this.C.set(b.flash > 0 ? '#ffffff' : '#d8d2c3'));
+          m.printer.setColorAt(i, this.C.set(fl ? '#ffffff' : '#d8d2c3'));
           this.put(m.paper, n.paper++, b, -r * 0.2, 34 * g + bob + r * 1.3, 0, r * 0.9, r * 0.5, r * 1.1, 0, 0.5);
           this.put(m.led, n.led++, b, r * 0.66, 34 * g + bob + r * 0.85, 0, 2, r * 0.18, r * 0.5);
           for (const side of [-1, 1]) this.put(m.feet, n.feet++, b, side * step * 10, 17 * g, side * r * 0.45, r * 0.5, 34 * g, r * 0.35);
         } else if (b.kind === 'drone') {
           const i = n.card++;
           this.put(m.card, i, b, 0, 0, 0, r * 1.5, 3, r * 2, 0, Math.sin(b.t * 2) * 0.2);
-          m.card.setColorAt(i, this.C.set(b.flash > 0 ? '#ffd447' : '#f7f7f2'));
+          m.card.setColorAt(i, this.C.set(fl ? '#ffd447' : '#f7f7f2'));
           this.put(m.header, n.header++, b, r * 0.55, 2.5, 0, r * 0.4, 2, r * 2);
           for (const q of [0, Math.PI / 2]) this.put(m.prop, n.prop++, b, 0, 14, 0, r * 2.2, 1.5, r * 0.22, b.t * 30 + q);
-        } else boss = b;
+        } else if (b.kind === 'swarm') {
+          // An envelope with a red flap, flapping its way toward you.
+          const i = n.card++, flap = Math.sin(b.t * 22 + b.seed) * 0.7;
+          this.put(m.card, i, b, 0, 0, 0, r * 1.7, r * 0.35, r * 1.2);
+          m.card.setColorAt(i, this.C.set(fl ? '#ffd447' : '#ffffff'));
+          this.put(m.header, n.header++, b, r * 0.2, r * 0.22, 0, r * 0.9, 1.5, r * 1.2, 0, -0.25);
+          for (const side of [-1, 1]) this.put(m.prop, n.prop++, b, 0, r * 0.1, side * r * 0.95, r * 0.9, 1, r * 0.7, 0, side * flap);
+        } else if (b.kind === 'legacy') legacy = b;
+        else spaghetti = b;
       }
       for (const k in n) { m[k].count = n[k]; m[k].instanceMatrix.needsUpdate = true; if (m[k].instanceColor) m[k].instanceColor.needsUpdate = true; }
-      // The boss.
-      this.boss.visible = !!boss;
-      if (boss) {
-        const B = this.boss, g = boss.grow;
-        B.position.set(boss.x, 0, boss.z); B.rotation.y = -boss.a; B.scale.setScalar(Math.max(0.01, g));
-        this.bossLegs.forEach((l, i) => { l.position.x = Math.sin(boss.t * 3 + i * Math.PI) * 22; });
-        this.bossLights.forEach((l, i) => { l.visible = Math.sin(boss.t * 9 + i * 1.7) > -0.3; });
-        B.children[0].material.emissive.setRGB(boss.flash > 0 ? 0.9 : 0.2, boss.flash > 0 ? 0.9 : 0.19, boss.flash > 0 ? 0.9 : 0.16);
+      // The bosses.
+      this.legacy.visible = !!legacy;
+      if (legacy) {
+        const B = this.legacy, b = legacy;
+        B.position.set(b.x, 0, b.z); B.rotation.y = -b.a; B.scale.setScalar(Math.max(0.01, b.grow));
+        this.legacyLegs.forEach((l, i) => { l.position.x = Math.sin(b.t * 3 + i * Math.PI) * 22; });
+        this.legacyLights.forEach((l, i) => { l.visible = Math.sin(b.t * 9 + i * 1.7) > -0.3; });
+        const f = b.flash > 0;
+        this.legacyBody.material.emissive.setRGB(f ? 0.9 : 0.2, f ? 0.9 : 0.19, f ? 0.9 : 0.16);
+      }
+      this.spaghetti.visible = !!spaghetti;
+      if (spaghetti) {
+        const B = this.spaghetti, b = spaghetti;
+        B.position.set(b.x, Math.abs(Math.sin(b.t * 3)) * 14, b.z); B.rotation.y = -b.a; B.scale.setScalar(Math.max(0.01, b.grow));
+        if (!b.net) this.spagRoll.rotation.z = -b.roll; else this.spagRoll.rotation.z -= dt * 1.5;
+        this.spagRoll.children[0].material.emissive.setRGB(b.flash > 0 ? 0.9 : 0.24, b.flash > 0 ? 0.9 : 0.2, b.flash > 0 ? 0.9 : 0.1);
       }
       // Shots, spit and bits.
       let i = 0;
-      for (const s of this.shots) this.P.set(s.x, s.y, s.z), this.Q.identity(), m.shots.setMatrixAt(i++, this.M.compose(this.P, this.Q, this.S.setScalar(SHOT_R)));
-      m.shots.count = i; m.shots.instanceMatrix.needsUpdate = true;
+      for (const s of this.shots) {
+        if (i >= 160) break;
+        this.P.set(s.x, s.y, s.z); this.Q.identity();
+        m.shots.setMatrixAt(i, this.M.compose(this.P, this.Q, this.S.setScalar(SHOT_R)));
+        m.shots.setColorAt(i++, this.C.set(s.color || '#ffffff'));
+      }
+      m.shots.count = i; m.shots.instanceMatrix.needsUpdate = true; if (m.shots.instanceColor) m.shots.instanceColor.needsUpdate = true;
       i = 0;
       for (const s of this.spits) {
+        if (i >= 64) break;
         const S = SPITS[s.kind];
         this.Q.setFromEuler(this.E.set(G.clock * 6, G.clock * 4, 0)); m.spits.setMatrixAt(i, this.M.compose(this.P.set(s.x, s.y, s.z), this.Q, this.S.set(S.r, s.kind === 'invite' ? S.r * 0.4 : S.r, S.r)));
         m.spits.setColorAt(i++, this.C.set(S.color));
@@ -10976,18 +11804,75 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         m.bits.setColorAt(i++, this.C.set(p.color));
       }
       m.bits.count = i; m.bits.instanceMatrix.needsUpdate = true; if (m.bits.instanceColor) m.bits.instanceColor.needsUpdate = true;
-      // The blaster: kicks when it fires, bobs as you walk, and dips while it reloads.
-      const show = this.on && !this.over && G.screen === 'walk', vm = this.vm;
+      this.drawPickups();
+      // The gun: kicks when it fires, bobs as you walk, and dips while it reloads. It's scaled to the screen, so it never
+      // fills a phone.
+      const show = this.on && !this.down && !this.ended && G.screen === 'walk', vm = this.vm;
       vm.visible = show;
       if (show) {
         this.kick = Math.max(0, this.kick - dt * 9);
         const cam = World.camera, tv = Math.tan((cam.fov * Math.PI) / 360), hw = 46 * tv * cam.aspect, hh = 46 * tv, tall = cam.aspect < 0.9;
         const sc = clamp(hw / 50, 0.5, 1) * 0.6, bob = reduceMotion ? 0 : Math.sin(World.me.bob) * 1.5;
-        const rl = this.reload > 0 ? Math.sin((1 - this.reload / RELOAD_T) * Math.PI) : 0;
+        const rl = this.reload > 0 ? Math.sin((1 - this.reload / this.reloadTime()) * Math.PI) : 0;
         vm.scale.setScalar(sc);
         vm.position.set(hw * (tall ? 0.22 : 0.48) + bob * 0.4 * sc, -hh * (tall ? 0.66 : 0.55) + (Math.abs(bob) * 0.5 - rl * 10) * sc, -46 + this.kick * 6 * sc);
         vm.rotation.set(this.kick * 0.16 - rl * 0.8, 0.12, rl * 0.35);
         this.flashMesh.visible = this.kick > 0.55;
+      }
+    },
+    drawPickups() {
+      const cam = World.camera;
+      for (const p of this.pickups) {
+        if (p.taken) continue;
+        if (!p.mesh) p.mesh = this.pickupMesh(p.type);
+        const u = p.mesh.userData, blink = this.isHost() && p.life < 5 && Math.sin(p.t * 14) < 0;
+        p.mesh.visible = !p.claimed && !blink;
+        p.mesh.position.set(p.x, 0, p.z);
+        u.item.rotation.y = p.t * 2; u.item.position.y = 46 + Math.sin(p.t * 3) * 6;
+        u.label.quaternion.copy(cam.quaternion);
+      }
+    },
+    // Teammates, smoothed between updates, with their name and morale above them. Their balls fly for show.
+    drawMates(dt) {
+      const cam = World.camera, now = Date.now(), k = Math.min(1, dt * 10), t = performance.now() / 1000;
+      for (const m of this.squad.mates.values()) {
+        const show = m.x != null && now - m.seen < 8000 && World.on;
+        if (!show) { if (m.av) { m.av.g.visible = false; m.av.tag.hidden = true; } continue; }
+        if (m.av && m.av.label !== m.name + '|' + m.c) this.dropAvatar(m);
+        if (!m.av) m.av = this.avatarMesh(m);
+        const lead = Math.min(0.3, t - (m.t || t)), px = m.x + (m.vx || 0) * lead, pz = m.z + (m.vz || 0) * lead;
+        if (m.rx == null) { m.rx = px; m.rz = pz; }
+        m.rx += (px - m.rx) * k; m.rz += (pz - m.rz) * k;
+        const A = m.av, down = m.dn && m.st === 'hunt';
+        A.g.visible = true;
+        A.g.position.set(m.rx, m.pt ? 0 : m.j || 0, m.rz);
+        A.g.rotation.y = -m.a;
+        A.body.rotation.z = down ? -Math.PI / 2.2 : 0; A.body.position.y = down ? 14 : 0;
+        A.gun.visible = m.st === 'hunt' && !down;
+        // The name tag sits over their head on screen, the same size near or far.
+        const v = this.V2.set(m.rx, down ? 60 : 168 + (m.j || 0), m.rz).project(cam), on = v.z < 1 && Math.abs(v.x) < 1.05 && Math.abs(v.y) < 1.05 && G.screen === 'walk';
+        A.tag.hidden = !on;
+        if (on) {
+          A.tag.style.transform = `translate(${((v.x + 1) / 2) * cw}px, ${((1 - v.y) / 2) * ch}px) translate(-50%, -100%)`;
+          A.tag.classList.toggle('down', down);
+          A.fill.style.width = `${down ? 100 : Math.max(0, m.m || 0)}%`;
+          A.fill.style.background = down ? '#ff5a4e' : m.m > 50 ? '#35d07f' : m.m > 25 ? '#ffb020' : '#ff5a4e';
+          const status = down ? 'Out sick' : m.pt ? 'On the green' : '';
+          if (A.status !== status) { A.status = status; A.tag.firstChild.textContent = status ? `${m.name} · ${status}` : m.name; }
+        }
+        // Their shots, roughly as they fire them.
+        if (this.on && m.f && !down && m.st === 'hunt' && G.screen === 'walk') {
+          const W = WEAPONS[m.w] || WEAPONS.blaster;
+          m.fireT = (m.fireT || 0) - dt;
+          if (m.fireT <= 0 && this.shots.length < 150) {
+            m.fireT = W.gap;
+            const ca = Math.cos(m.a), sa = Math.sin(m.a), cp = Math.cos(m.p || 0), sp = Math.sin(m.p || 0);
+            for (let i = 0; i < Math.min(3, W.pellets); i++) {
+              const j = W.spread ? (Math.random() - 0.5) * W.spread * 2 : 0;
+              this.shots.push({ x: m.rx + ca * 30, y: EYE - 20 + (m.j || 0), z: m.rz + sa * 30, vx: (ca * cp - sa * j) * W.speed, vy: sp * W.speed + 40, vz: (sa * cp + ca * j) * W.speed, g: SHOT_G * W.drop, life: 0.9, banks: 0, color: COLORS[m.c], mine: false });
+            }
+          }
+        }
       }
     },
     ui() {
@@ -10998,7 +11883,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       // Bugs close by that you can't see show as arrows at the side of the screen they're on.
       const cam = World.camera, me = World.me, half = Math.atan(Math.tan((cam.fov * Math.PI) / 360) * cam.aspect) * 0.92, side = [0, 0], near = [false, false];
       for (const b of this.bugs) {
-        if (b.dead || b.grow < 1 || this.over) continue;
+        if (b.dead || b.ghost || b.grow < 1 || this.down) continue;
         const dx = b.x - me.x, dz = b.z - me.y, d = Math.hypot(dx, dz);
         if (d > 1200) continue;
         const rel = Math.atan2(dz, dx) - me.a, r = Math.atan2(Math.sin(rel), Math.cos(rel));
@@ -11006,23 +11891,563 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
         side[r > 0 ? 1 : 0]++;
         if (d < 300) near[r > 0 ? 1 : 0] = true;
       }
-      const left = this.bugs.length + this.toSpawn.length, boss = this.bugs.find(b => b.kind === 'boss');
-      const key = `${this.wave}|${left}|${this.score}|${Math.ceil(this.morale)}|${this.ammo}|${this.reload > 0}|${boss ? boss.hp : -1}|${this.cleared}|${this.over}|${side}|${near}`;
+      this.bars();
+      this.reviveUi();
+      const left = this.bugs.filter(b => !b.dead && !b.ghost).length + this.toSpawn.length, boss = this.bugs.find(b => !b.dead && BUG_KINDS[b.kind].boss);
+      const W = WEAPONS[this.weapon], ammo = this.weapon === 'blaster' ? (this.reload > 0 ? 'Reloading' : `${this.ammo}/${this.magSize()}`) : String(this.wammo);
+      const buffs = Object.keys(this.buffs).filter(k => this.buffs[k] > 0).map(k => `${PICKUPS[k].name} ${Math.ceil(this.buffs[k])}s`).join(' · ');
+      const key = `${this.wave}|${left}|${this.score}|${Math.ceil(this.morale)}|${ammo}|${this.weapon}|${boss ? boss.hp + boss.kind : -1}|${this.cleared}|${Math.ceil(this.breakT)}|${this.down}|${side}|${near}|${buffs}|${this.mates()}`;
       if (key === this.uiKey) return;
       this.uiKey = key;
-      hud.classList.toggle('over', this.over);
+      hud.classList.toggle('over', this.down || this.ended);
       ['huntEdgeL', 'huntEdgeR'].forEach((id, i) => { const e = $(id); e.hidden = !side[i]; e.lastChild.textContent = side[i]; e.classList.toggle('near', near[i]); });
       $('huntWave').textContent = `Wave ${this.wave}`;
-      $('huntLeft').textContent = this.cleared ? 'Cleared' : `${left} ${left === 1 ? 'bug' : 'bugs'} left`;
+      $('huntLeft').textContent = this.cleared ? `Next wave in ${Math.max(0, Math.ceil(this.breakT))}` : `${left} ${left === 1 ? 'bug' : 'bugs'} left`;
       $('huntScore').textContent = this.score.toLocaleString();
       const mo = $('huntMorale');
       mo.style.width = `${this.morale}%`;
       mo.style.background = this.morale > 50 ? '#35d07f' : this.morale > 25 ? '#ffb020' : '#ff5a4e';
-      const ammo = this.reload > 0 ? 'Reloading' : `${this.ammo}/${MAG}`;
+      $('huntMoraleNum').textContent = Math.ceil(this.morale);
+      $('huntBuffs').textContent = buffs;
+      $('huntBuffs').hidden = !buffs;
       $('huntAmmo').textContent = ammo;
+      $('huntGun').textContent = W.name;
       $('huntFireAmmo').textContent = ammo;
+      $('huntFireGun').textContent = this.weapon === 'blaster' ? '' : W.name;
+      $('huntReload').hidden = this.weapon !== 'blaster';
       $('huntBoss').hidden = !boss;
-      if (boss) $('huntBossBar').style.width = `${Math.max(0, (boss.hp / BUG_KINDS.boss.hp) * 100)}%`;
+      if (boss) { $('huntBossName').textContent = BUG_KINDS[boss.kind].name; $('huntBossBar').style.width = `${Math.max(0, (boss.hp / (boss.max || BUG_KINDS[boss.kind].hp)) * 100)}%`; }
+      this.squadUi();
+    },
+    // A health bar over every bug that's been hit but is still standing.
+    bars() {
+      const box = $('huntBars'), pool = this.barPool || (this.barPool = []), cam = World.camera;
+      let n = 0;
+      for (const b of this.bugs) {
+        if (n >= 10) break;
+        const K = BUG_KINDS[b.kind];
+        if (b.dead || b.ghost || K.boss || b.hp >= (b.max || K.hp) || b.hp <= 0) continue;
+        const B = this.body(b), v = this.V2.set(b.x, B.y + B.h + 16, b.z).project(cam);
+        if (v.z > 1 || Math.abs(v.x) > 1 || Math.abs(v.y) > 1) continue;
+        let e = pool[n];
+        if (!e) { e = el('i'); e.append(el('b')); box.append(e); pool.push(e); }
+        e.hidden = false;
+        e.style.transform = `translate(${((v.x + 1) / 2) * cw}px, ${((1 - v.y) / 2) * ch}px)`;
+        e.firstChild.style.width = `${Math.max(0, (b.hp / (b.max || K.hp)) * 100)}%`;
+        n++;
+      }
+      for (let i = n; i < pool.length; i++) pool[i].hidden = true;
+    },
+    reviveUi() {
+      const r = this.reviving, box = $('huntRevive');
+      box.hidden = !r;
+      if (!r) return;
+      $('huntReviveName').textContent = `Bringing ${r.name} back`;
+      $('huntReviveBar').style.width = `${Math.min(100, (r.t / 3) * 100)}%`;
+    },
+    mates() { return this.squad ? [...this.squad.mates.values()].map(m => `${m.name}${m.dn ? '!' : ''}${m.pt ? '~' : ''}${Math.ceil((m.m || 0) / 10)}${m.st}`).join(',') : ''; },
+    squadUi() {
+      const box = $('huntSquad');
+      box.hidden = !this.squad;
+      if (!this.squad) return;
+      box.textContent = '';
+      for (const m of this.squad.mates.values()) {
+        if (m.st !== 'hunt' || m.s !== this.session) continue;
+        const row = el('div', 'hunt-mate' + (m.dn ? ' down' : ''));
+        row.append(dotEl(COLORS[m.c]), el('b', '', m.name), el('small', '', m.dn ? 'Out sick' : m.pt ? 'On the green' : `${(m.score || 0).toLocaleString()}`));
+        const bar = el('i'), fill = el('b');
+        fill.style.width = `${m.dn ? 0 : m.m || 0}%`;
+        bar.append(fill); row.append(bar);
+        box.append(row);
+      }
+      if (!box.childElementCount) box.hidden = true;
+    },
+
+    // ---- The end of a hunt: the incident report ----
+    endHunt(why) {
+      this.trigger = false;
+      if (why === 'team') this.ended = true;
+      if (why === 'solo') this.down = true;
+      if (document.pointerLockElement) document.exitPointerLock();
+      $('huntPerks').hidden = $('huntDown').hidden = true;
+      // Your best, for each workload, is kept.
+      const bests = this.bests(), b = bests[this.level] || { score: 0, wave: 0 }, best = this.score > b.score;
+      if (!this.saved) {
+        this.saved = true;
+        if (best) b.score = this.score;
+        b.wave = Math.max(b.wave, this.wave);
+        bests[this.level] = b;
+        store.set('huntBests', bests);
+      }
+      const L = HUNT_LEVELS[this.level], team = why === 'team', names = this.squad ? [...this.squad.mates.values()].filter(m => m.s === this.session).map(m => m.name) : [];
+      $('huntOverEyebrow').textContent = `Incident report · ${L.name}`;
+      $('huntOverTitle').textContent = team ? 'Team sick day' : 'Sick day';
+      $('huntOverText').textContent = team ? `The whole squad went down on wave ${this.wave}.` : `You made it to wave ${this.wave}.${best && this.score ? ' A new best!' : ` Your best on ${L.name} is ${b.score.toLocaleString()}.`}`;
+      const S = this.stats, kinds = Object.keys(S.kinds).sort((p, q) => S.kinds[q] - S.kinds[p]).map(k => `${S.kinds[k]} ${BUG_KINDS[k].name.toLowerCase()}${S.kinds[k] === 1 ? '' : 's'}`).slice(0, 3).join(', ');
+      const rows = [
+        ['Score', this.score.toLocaleString() + (best && this.score ? ' · new best' : '')],
+        ['Bugs squashed', `${this.squashed}${kinds ? ` (${kinds})` : ''}`],
+        ['Accuracy', S.fired ? `${Math.round((S.hits / S.fired) * 100)}%` : '–'],
+        ['Bank shots', String(S.banks)],
+        ['Best multi-kill', S.best >= 2 ? MULTI_WORDS[Math.min(5, S.best)].replace('!', '') : '–'],
+        ['Backup called', String(S.backup)],
+        ['Pick-ups', String(S.grabbed)],
+        ['Perks', Object.keys(this.perks).map(id => { const p = PERKS.find(q => q.id === id); return `${p.name}${this.perks[id] > 1 ? ' ×' + this.perks[id] : ''}`; }).join(', ') || '–'],
+      ];
+      if (this.squad) rows.push(['Teammates revived', String(S.revives)]);
+      const dl = $('huntStats');
+      dl.textContent = '';
+      for (const [k, v] of rows) { const d = el('div'); d.append(el('dt', '', k), el('dd', '', v)); dl.append(d); }
+      // The squad, best score first.
+      const tb = $('huntTeam');
+      tb.textContent = '';
+      tb.hidden = !team;
+      if (team) {
+        // The host keeps the count; everyone else has it from the host's snapshots.
+        const count = m => (this.isHost() ? this.book.get(m.id) : null) || { score: m.score || 0, kills: m.kills || 0 };
+        const all = [{ name: `${ONLINE.me.name} (you)`, c: ONLINE.me.color, score: this.score, kills: this.squashed }, ...[...this.squad.mates.values()].filter(m => m.s === this.session).map(m => ({ name: m.name, c: m.c, ...count(m) }))].sort((p, q) => q.score - p.score);
+        all.forEach((p, i) => { const r = el('div', 'hunt-row'); r.append(dotEl(COLORS[p.c]), el('b', '', p.name + (i === 0 && all.length > 1 ? ' · MVP' : '')), el('span', '', `${p.kills} squashed`), el('span', '', p.score.toLocaleString())); tb.append(r); });
+      }
+      $('huntMull').hidden = !(why === 'solo' && this.mulligan);
+      const host = this.isHost();
+      $('huntAgain').hidden = !host;
+      $('huntWaitNote').hidden = host;
+      $('huntWaitNote').textContent = `${this.hostName()} can start another hunt.`;
+      this.shareText = `Bug hunt in Nine-to-Five Links, ${L.name}: wave ${this.wave}, ${this.score.toLocaleString()} points${names.length ? ` with ${listNames(names)}` : ''}. ${PUBLIC_URL}`;
+      $('huntOver').hidden = false;
+      World.syncUi();
+    },
+    bests() {
+      const b = store.get('huntBests', null);
+      if (b && typeof b === 'object') return b;
+      const old = store.get('huntBest', 0);
+      return old ? { manager: { score: old, wave: 0 } } : {};
+    },
+
+    // ---- The Bug hunt card: how it works, the workload, and solo or squad ----
+    openPanel(tab) {
+      if (!World.on || World.playing || this.on) return;
+      if (tab) this.tab = tab;
+      this.panelOpen = true;
+      World.keys.clear();
+      if (document.pointerLockElement) document.exitPointerLock();
+      this.renderPanel();
+      $('huntPanel').hidden = false;
+      World.syncUi();
+    },
+    closePanel() {
+      if (!this.panelOpen) return;
+      this.panelOpen = false;
+      $('huntPanel').hidden = true;
+      if (World.on) World.syncUi();
+    },
+    renderPanel() {
+      const squadTab = this.tab === 'squad', S = this.squad;
+      $('huntTabSolo').setAttribute('aria-selected', String(!squadTab));
+      $('huntTabSquad').setAttribute('aria-selected', String(squadTab));
+      $('huntSoloPane').hidden = squadTab;
+      $('huntSquadPane').hidden = !squadTab;
+      // The workload: yours alone, or the squad host's.
+      const lockLevel = !!(S && !this.isHost());
+      document.querySelectorAll('input[name="huntLevel"]').forEach(i => { i.checked = i.value === this.level; i.disabled = lockLevel; });
+      $('huntLevelNote').textContent = lockLevel ? `${this.hostName()} picks the workload for the squad.` : HUNT_LEVELS[this.level].note;
+      $('huntHowFire').textContent = World.touch ? 'Hold Fire and slide your thumb on it to aim; your left thumb walks.' : 'Click or hold to fire (or F). R reloads, Space jumps, WASD walks.';
+      const bests = this.bests(), b = bests[this.level];
+      $('huntBestNote').textContent = b && b.score ? `Your best on ${HUNT_LEVELS[this.level].name}: ${b.score.toLocaleString()} points${b.wave ? `, wave ${b.wave}` : ''}.` : 'No best score yet. Make one.';
+      $('huntSoloGo').disabled = !!S;
+      $('huntSoloInSquad').hidden = !S;
+      this.renderLobby();
+    },
+    renderLobby() {
+      if (!this.panelOpen) return;
+      const S = this.squad;
+      $('huntSquadElsewhere').hidden = onlineAllowed;
+      $('huntSquadForm').hidden = !onlineAllowed || !!S;
+      $('huntLobby').hidden = !S;
+      if (!S) { if (!$('huntName').value) $('huntName').value = store.get('onlineName', ''); return; }
+      const n = Net.connected, waited = Date.now() - S.joinedAt > 9000;
+      $('huntLobbyDot').className = 'live-dot' + (n ? ' on' : waited ? ' bad' : '');
+      $('huntLobbyStatus').textContent = n ? `Squad ${S.code}. Connected through ${n} of ${Net.total} relay servers.` : waited ? 'Can’t reach the relay servers from this network.' : 'Connecting to the relay servers…';
+      $('huntLink').value = this.squadLink();
+      const list = $('huntMembers');
+      list.textContent = '';
+      const me = el('li');
+      me.append(dotEl(COLORS[ONLINE.me.color]), el('b', '', `${ONLINE.me.name} (you)`), el('small', '', this.isHost() ? 'Host' : this.on ? 'Hunting' : 'In the lobby'));
+      list.append(me);
+      for (const m of S.mates.values()) {
+        const li = el('li');
+        li.append(dotEl(COLORS[m.c]), el('b', '', m.name), el('small', '', `${m.id === S.host ? 'Host · ' : ''}${m.st === 'hunt' ? 'Hunting' : 'In the lobby'}`));
+        list.append(li);
+      }
+      const running = [...S.mates.values()].some(m => m.st === 'hunt' && m.s && m.s !== S.left && m.id === S.host);
+      $('huntSquadGo').hidden = !this.isHost();
+      $('huntSquadGo').textContent = S.mates.size ? `Start the hunt for ${S.mates.size + 1}` : 'Start the hunt';
+      $('huntRejoin').hidden = this.isHost() || !running;
+      $('huntSquadWait').hidden = this.isHost() || running;
+      $('huntSquadWait').textContent = S.host ? `Waiting for ${this.hostName()} to start the hunt.` : 'Looking for the squad…';
+      $('huntSquadFull').hidden = !S.full;
+    },
+    // From the course pass: into 3D, straight to the Bug hunt card.
+    fromSetup() {
+      Sound.unlock();
+      const go = World.start();
+      Promise.resolve(go).then(() => { if (World.on) this.openPanel('solo'); });
+    },
+    // An invite link: into 3D and into the squad.
+    fromLink() {
+      const code = onlineAllowed ? normRoom(urlParams.get('hunt')) : '';
+      if (!code) return;
+      Promise.resolve(World.start()).then(() => {
+        if (!World.on) return;
+        this.tab = 'squad';
+        $('huntCode').value = code;
+        const name = cleanName(store.get('onlineName', ''));
+        if (name) this.squadJoin(code, name, false);
+        this.openPanel('squad');
+        if (!name) setTimeout(() => $('huntName').focus(), 0);
+      });
+    },
+    // The first time you walk into 3D, someone from IT mentions the bugs.
+    welcome() {
+      if (!this.fresh || this.welcomed) return;
+      this.welcomed = true;
+      setTimeout(() => {
+        if (!World.on || this.on || this.panelOpen) return;
+        ping({ from: 'IT helpdesk', initials: 'IT', color: '#e8453a', text: `Production bugs are loose on the campus! Press Bug hunt${World.touch ? '' : ' (or B)'} to fight back. Bring your squad.`, tag: 'urgent' });
+        Sound.blip();
+      }, 2600);
+    },
+
+    // ---- Squads ----
+    // Up to four of you, each in your own 3D campus, hunting the same bugs. One of you, the host, runs the waves and
+    // sends everyone a snapshot of them several times a second; everyone sends where they are and what they hit. If
+    // the host drops out, whoever has the smallest id takes over from the last snapshot.
+    myId() { return this.squad ? ONLINE.me.id : 'me'; },
+    isHost() { return !this.squad || this.squad.host === ONLINE.me.id; },
+    hostName() {
+      const S = this.squad;
+      if (!S || this.isHost()) return 'You';
+      const h = S.mates.get(S.host);
+      return h ? h.name : 'The host';
+    },
+    squadLink() {
+      const base = location.href.split('#')[0].split('?')[0], q = new URLSearchParams();
+      q.set('hunt', this.squad ? this.squad.code : '');
+      const relay = urlParams.get('relay');
+      if (relay) q.set('relay', relay);
+      return `${base}?${q.toString()}`;
+    },
+    squadCreate(name) { this.squadJoin(`${pick(SQUAD_WORDS)}-${100 + Math.floor(Math.random() * 900)}`, name, true); },
+    squadJoin(code, name, create) {
+      if (!onlineAllowed || !World.on) return;
+      code = normRoom(code);
+      name = cleanName(name);
+      if (!code || !name) return;
+      this.squadLeave(true);
+      if (!this.built) this.build();
+      const saved = store.get('onlineColor', null);
+      ONLINE.me = { id: randId(), name, dept: clamp(store.get('dept', -1) | 0, -1, DEPTS.length - 1), color: Number.isInteger(saved) ? clamp(saved, 0, COLORS.length - 1) : Math.floor(Math.random() * COLORS.length) };
+      this.squad = { code, host: create ? ONLINE.me.id : null, term: create ? 1 : 0, mates: new Map(), joinedAt: Date.now(), sendT: 0, left: '', full: false, lobbyT: 0 };
+      // Where you are goes out on a timer of its own, so a slow frame doesn't look like you've left.
+      const S = this.squad;
+      S.beat = setInterval(() => { if (this.squad !== S) return; if ((S.sendT -= 0.14) <= 0) { S.sendT = this.on ? 0.01 : 0.6; this.presence(); } }, 140);
+      store.set('onlineName', name);
+      Net.start(code, { message: m => this.onNet(m), status: () => this.renderLobby() }, HUNT_PREFIX);
+      try { history.replaceState(null, '', this.squadLink()); } catch (e) { /* ignore */ }
+      this.presence();
+      this.renderPanel();
+    },
+    squadLeave(quiet) {
+      const S = this.squad;
+      if (!S) return;
+      clearInterval(S.beat);
+      if (this.on && this.mode === 'squad') this.stop(true);
+      try { Net.send({ k: 'hbye' }); } catch (e) { /* ignore */ }
+      Net.stop();
+      for (const m of S.mates.values()) this.dropAvatar(m);
+      this.squad = null;
+      try {
+        const relay = urlParams.get('relay');
+        history.replaceState(null, '', location.href.split('#')[0].split('?')[0] + (relay ? `?relay=${encodeURIComponent(relay)}` : ''));
+      } catch (e) { /* ignore */ }
+      if (!quiet && this.panelOpen) this.renderPanel();
+    },
+    // The host starts a hunt for everyone in the squad, all standing together where the host is.
+    squadStart() {
+      const S = this.squad;
+      if (!S || !this.isHost()) return;
+      this.start({ squad: true });
+      const me = World.me, go = () => { if (this.squad === S && this.on) Net.send({ k: 'hgo', s: this.session, tm: S.term, lv: this.level, x: Math.round(me.x), z: Math.round(me.y), a: Math.round(me.a * 100) / 100 }); };
+      go(); setTimeout(go, 600); setTimeout(go, 1600);
+    },
+    netTick(dt) {
+      const S = this.squad, now = Date.now();
+      if (!S.upAt && Net.connected) S.upAt = now;
+      for (const m of [...S.mates.values()]) if (now - m.seen > 12000) this.dropMate(m.id, true);
+      this.elect(now);
+      if (this.panelOpen && (S.lobbyT -= dt) <= 0) { S.lobbyT = 0.5; this.renderLobby(); }
+    },
+    // A host that's gone quiet hands over to whoever has the smallest id; everyone works out the same answer. Nobody
+    // stands for host until they've been connected and listening for a few seconds.
+    elect(now) {
+      const S = this.squad, me = ONLINE.me.id;
+      if (S.host === me) return;
+      // A host whose tab is hidden has stopped running the hunt, so that counts as gone too.
+      const h = S.host && S.mates.get(S.host);
+      if (h && now - h.seen < 8000 && !h.hid) return;
+      if (!S.upAt || now - S.upAt < 4500) return;
+      const ids = [me, ...[...S.mates.values()].filter(m => now - m.seen < 8000 && !m.hid).map(m => m.id)].sort();
+      if (ids[0] !== me) return;
+      S.host = me; S.term++;
+      if (this.on) this.adoptHunt();
+      this.presence();
+      this.renderLobby();
+    },
+    // Taking over a hunt mid-wave: the bugs you can see become the real ones.
+    adoptHunt() {
+      if (this.ended) return;
+      for (const b of this.bugs) if (b.ghost) this.kill(b, 0, this.myId());
+      for (const b of this.bugs) { b.tx = b.ty = b.st = undefined; b.net = false; b.lx = b.x; b.lz = b.z; b.checkT = 1; b.bite = 0.5; b.shoot = 1 + Math.random() * 2; b.brood = BUG_KINDS[b.kind].brood || 0; b.roll = b.roll || 0; }
+      this.nextId = Math.max(this.nextId, ...this.bugs.map(b => b.id + 1), ...this.pickups.map(p => p.id + 1), ...this.spits.map(s => (s.id || 0) + 1)) + 1000;
+      this.book = new Map([[this.myId(), { score: this.score, kills: this.squashed }], ...[...this.squad.mates.values()].map(m => [m.id, { score: m.score || 0, kills: m.kills || 0 }])]);
+      this.byId = new Map(this.bugs.map(b => [b.id, b]));
+      if (!this.wave) this.nextWave();
+      toast('You’re running the hunt', 'The host dropped out, so the bugs answer to you now.', 'hi');
+    },
+    presence() {
+      const S = this.squad, me = World.me;
+      Net.send({
+        k: 'hl', n: ONLINE.me.name, c: ONLINE.me.color, st: this.on ? 'hunt' : 'lobby', s: this.on ? this.session : '',
+        x: Math.round(me.x), z: Math.round(me.y), a: Math.round(me.a * 100) / 100, p: Math.round(me.pitch * 100) / 100, j: Math.round(me.jumpY || 0),
+        m: Math.round(this.morale), dn: this.on && this.down ? 1 : 0, f: this.on && this.trigger && !this.down ? 1 : 0, w: WEAPON_IDS.indexOf(this.weapon), pt: G.screen !== 'walk' ? 1 : 0,
+        h: this.isHost() ? 1 : 0, tm: S.term, lv: this.level, gb: this.buffs.golden > 0 ? 1 : 0, tr: this.perk('trick'), lk: this.perk('lucky'), hid: document.hidden ? 1 : 0,
+      });
+    },
+    // Everything from other players is untrusted: each message is clamped into shape or dropped.
+    onNet(m) {
+      const S = this.squad;
+      if (!S || !m || typeof m.k !== 'string') return;
+      const id = m.id;
+      if (m.k === 'hl') this.onPresence(id, m);
+      else if (m.k === 'hbye') this.dropMate(id);
+      else if (m.k === 'hgo') this.onGo(id, m);
+      else if (m.k === 'hs') this.onSnap(id, m);
+      else if (!this.on || m.s !== this.session) return;
+      else if (m.k === 'hh') { if (this.isHost()) this.onHits(id, m); }
+      else if (m.k === 'hx') { if (id === S.host && !this.isHost()) this.onSpits(m); }
+      else if (m.k === 'hxd') this.onSpitGone(id, m);
+      else if (m.k === 'hb') { if (m.to === ONLINE.me.id && id === S.host) this.hurt(clamp(+m.n || 0, 0, 60), +m.x, +m.z); }
+      else if (m.k === 'hq') { if (this.isHost()) this.onClaim(id, m); }
+      else if (m.k === 'hg') { if (id === S.host) this.onGrant(m); }
+      else if (m.k === 'hz') this.onStrike(id, m);
+      else if (m.k === 'hv') this.onRevive(id, m);
+      else if (m.k === 'he') { if (id === S.host && !this.ended) this.endHunt('team'); }
+    },
+    claimHost(id, term) {
+      const S = this.squad, me = ONLINE.me.id;
+      if (!Number.isInteger(term) || term < S.term || (term === S.term && S.host && S.host !== id && S.host < id)) return;
+      if (S.host === id && S.term === term) return;
+      const wasMe = S.host === me;
+      S.host = id; S.term = term; S.lobbyT = 0;
+      if (wasMe && id !== me && this.on) toast('Hand-over', `${this.hostName()} is running the hunt now.`, '');
+    },
+    onPresence(id, m) {
+      const S = this.squad, n = cleanName(m.n);
+      if (!n) return;
+      let mate = S.mates.get(id);
+      if (!mate) {
+        if (S.mates.size >= SQUAD_MAX - 1) { S.full = true; return; }
+        mate = { id, name: n, c: 0, seen: 0, x: null, z: null, rx: null, rz: null, vx: 0, vz: 0, score: 0, kills: 0, st: 'lobby', s: '' };
+        S.mates.set(id, mate);
+        ping({ from: n, initials: n[0], color: COLORS[Number.isInteger(m.c) ? clamp(m.c, 0, COLORS.length - 1) : 0], text: this.on ? 'joined the hunt.' : 'joined the squad.', tag: 'bug hunt' });
+        Sound.blip();
+        S.lobbyT = 0;
+      }
+      const num = (v, lo, hi, d) => (Number.isFinite(v) ? clamp(v, lo, hi) : d);
+      mate.name = n; mate.c = Number.isInteger(m.c) ? clamp(m.c, 0, COLORS.length - 1) : 0; mate.seen = Date.now();
+      mate.st = m.st === 'hunt' ? 'hunt' : 'lobby'; mate.s = typeof m.s === 'string' ? m.s.slice(0, 24) : '';
+      const x = num(m.x, -20000, 40000, null), z = num(m.z, -20000, 40000, null), t = performance.now() / 1000;
+      if (x != null && z != null) {
+        if (mate.x != null && mate.t) { const d = t - mate.t; if (d > 0.03 && d < 1.5) { mate.vx = (x - mate.x) / d; mate.vz = (z - mate.z) / d; } }
+        if (mate.rx == null || Math.hypot(x - mate.rx, z - mate.rz) > 700) { mate.rx = x; mate.rz = z; mate.vx = mate.vz = 0; }
+        mate.x = x; mate.z = z; mate.t = t;
+      }
+      mate.a = num(m.a, -1000, 1000, 0); mate.p = num(m.p, -2, 2, 0); mate.j = num(m.j, 0, 500, 0);
+      mate.m = num(m.m, 0, 100, 100); mate.dn = !!m.dn; mate.f = !!m.f; mate.w = WEAPON_IDS[num(m.w, 0, WEAPON_IDS.length - 1, 0) | 0]; mate.pt = !!m.pt;
+      mate.gb = !!m.gb; mate.tr = num(m.tr, 0, 1, 0) | 0; mate.lk = num(m.lk, 0, 2, 0) | 0; mate.hid = !!m.hid;
+      if (m.h) this.claimHost(id, num(m.tm, 0, 1e6, 0) | 0);
+      if (id === S.host && !this.on && HUNT_LEVELS[m.lv] && this.level !== m.lv) { this.level = m.lv; if (this.panelOpen) this.renderPanel(); }
+    },
+    onGo(id, m) {
+      const S = this.squad;
+      this.claimHost(id, Number.isInteger(m.tm) ? m.tm : -1);
+      if (id !== S.host) return;
+      const s = typeof m.s === 'string' ? m.s.slice(0, 24) : '';
+      if (!s || s === S.left || (this.on && this.session === s)) return;
+      if (HUNT_LEVELS[m.lv]) this.level = m.lv;
+      this.start({ squad: true, session: s, x: +m.x, z: +m.z, a: +m.a });
+    },
+    // The host's view of the hunt, several times a second.
+    sendSnap() {
+      const S = this.squad, r = Math.round;
+      this.kills = this.kills.filter(k => G.clock - k[4] < 1.2);
+      const msg = {
+        k: 'hs', s: this.session, tm: S.term, lv: this.level, w: this.wave, cl: this.cleared ? 1 : 0, bt: r(this.breakT * 10), en: this.ended ? 1 : 0,
+        tq: this.toSpawn.map(k => KIND_IDS.indexOf(k)).join('').slice(0, 150),
+        b: this.bugs.filter(b => !b.dead).slice(0, 40).map(b => [b.id, KIND_IDS.indexOf(b.kind), r(b.x), r(b.z), r(b.y || 0), Math.max(0, Math.ceil(b.hp)), b.max, r(b.a * 100), r(b.grow * 10)]),
+        pk: this.pickups.filter(p => !p.taken).slice(0, 14).map(p => [p.id, PICKUP_IDS.indexOf(p.type), r(p.x), r(p.z)]),
+        sc: [...this.book.entries()].slice(0, SQUAD_MAX).map(([id, v]) => [id, v.score, v.kills]),
+        kl: this.kills.slice(-12).map(k => [k[0], k[1], k[2], k[3]]),
+      };
+      if (!msg.sc.some(e => e[0] === this.myId())) msg.sc.unshift([this.myId(), this.score, this.squashed]);
+      while (JSON.stringify(msg).length > 3900 && msg.b.length) msg.b.pop();
+      Net.send(msg);
+    },
+    onSnap(id, m) {
+      const S = this.squad, me = ONLINE.me.id, num = (v, lo, hi, d) => (Number.isFinite(v) ? clamp(v, lo, hi) : d);
+      this.claimHost(id, Number.isInteger(m.tm) ? m.tm : -1);
+      if (id !== S.host || id === me) return;
+      const s = typeof m.s === 'string' ? m.s.slice(0, 24) : '';
+      if (!s) return;
+      // A hunt already going: join it (unless you just left it).
+      if (!this.on || this.session !== s) {
+        if (m.en || s === S.left) return;
+        if (HUNT_LEVELS[m.lv]) this.level = m.lv;
+        const h = S.mates.get(id);
+        this.start({ squad: true, session: s, x: h ? h.x : undefined, z: h ? h.z : undefined, a: h ? h.a : undefined });
+        if (!this.on) return;
+      }
+      if (HUNT_LEVELS[m.lv]) this.level = m.lv;
+      this.toSpawn = String(m.tq || '').split('').map(c => KIND_IDS[+c]).filter(Boolean);
+      const w = num(m.w, 0, 9999, 0) | 0, cl = !!m.cl;
+      if (w !== this.wave) { this.wave = w; if (w) this.onWave(w); }
+      this.breakT = num(m.bt, 0, 999, 0) / 10;
+      if (cl && !this.cleared) { this.cleared = true; this.onCleared(Math.round(500 * w * HUNT_LEVELS[this.level].pts)); }
+      else this.cleared = cl;
+      // Squashes by everyone else: show them where the bug was.
+      for (const k of Array.isArray(m.kl) ? m.kl.slice(0, 20) : []) {
+        if (!Array.isArray(k) || !Number.isInteger(k[0]) || this.killSeen.has(k[0])) continue;
+        this.killSeen.add(k[0]);
+        const b = this.byId.get(k[0]) || this.gone.get(k[0]), by = typeof k[1] === 'string' ? k[1] : '', pts = num(k[2], 0, 1e6, 0) | 0;
+        if (!b || b.ghost) continue;
+        // Yours that you didn't see coming (a strike you called in), or someone else's.
+        if (by === me) this.squashedBy(b, pts, k[3] & 1);
+        else this.squashedByMate(b, by, pts, { x: b.x, y: this.body(b).y, z: b.z });
+      }
+      // The bugs: new ones appear, known ones move toward where the host says, and missing ones are gone.
+      const t = performance.now() / 1000, here = new Set();
+      for (const e of Array.isArray(m.b) ? m.b.slice(0, 60) : []) {
+        if (!Array.isArray(e)) continue;
+        const [bid, ki, x, z, y, hp, max, a, g] = e, kind = KIND_IDS[ki];
+        if (!Number.isInteger(bid) || !kind || ![x, z, y, hp, a, g].every(Number.isFinite)) continue;
+        here.add(bid);
+        let b = this.byId.get(bid);
+        if (!b) {
+          if (this.killSeen.has(bid)) continue;
+          b = { id: bid, kind, x, z, y, a: a / 100, hp, max: num(max, 1, 9999, hp), grow: clamp(g / 10, 0, 1), t: 0, seed: Math.random() * 9, flash: 0, net: true, tx: x, tz: z, ty: y, ta: a / 100, vx: 0, vz: 0, st: t, roll: 0 };
+          this.bugs.push(b); this.byId.set(bid, b); this.meet(kind);
+          continue;
+        }
+        if (b.ghost) { if (G.clock - (this.ghosts.get(bid) || 0) < 1.2) continue; b.ghost = false; }
+        const d = t - (b.st || t);
+        if (d > 0.03 && d < 1.5) { b.vx = (x - b.tx) / d; b.vz = (z - b.tz) / d; }
+        if (Math.hypot(x - b.x, z - b.z) > 600) { b.x = x; b.z = z; b.vx = b.vz = 0; }
+        if (hp < b.hp) b.flash = 0.12;
+        b.tx = x; b.tz = z; b.ty = y; b.ta = a / 100; b.st = t; b.hp = hp; b.max = num(max, 1, 9999, b.max); b.grow = clamp(g / 10, 0, 1);
+      }
+      for (const b of this.bugs) {
+        if (here.has(b.id) || b.dead) continue;
+        b.dead = true; this.byId.delete(b.id);
+        this.gone.set(b.id, { kind: b.kind, x: b.x, y: b.y, z: b.z, grow: 1 });
+        if (!b.ghost && !this.killSeen.has(b.id)) this.burst({ x: b.x, y: this.body(b).y, z: b.z }, BUG_KINDS[b.kind].bits, 10, 0.8);
+      }
+      if (this.gone.size > 200) this.gone.clear();
+      // Pick-ups.
+      const pk = new Set();
+      for (const e of Array.isArray(m.pk) ? m.pk.slice(0, 20) : []) {
+        if (!Array.isArray(e)) continue;
+        const [pid, ti, x, z] = e, type = PICKUP_IDS[ti];
+        if (!Number.isInteger(pid) || !type || !Number.isFinite(x) || !Number.isFinite(z)) continue;
+        pk.add(pid);
+        if (!this.pickups.some(p => p.id === pid)) this.addPickup(type, x, z, pid);
+      }
+      for (const p of this.pickups) if (!pk.has(p.id)) p.taken = true;
+      // Scores, as the host counts them.
+      for (const e of Array.isArray(m.sc) ? m.sc.slice(0, SQUAD_MAX) : []) {
+        if (!Array.isArray(e) || typeof e[0] !== 'string') continue;
+        const sc = num(e[1], 0, 1e9, 0) | 0, kl = num(e[2], 0, 1e6, 0) | 0;
+        if (e[0] === me) { this.score = sc; this.squashed = kl; }
+        else { const mt = S.mates.get(e[0]); if (mt) { mt.score = sc; mt.kills = kl; } }
+      }
+      if (m.en && !this.ended) this.endHunt('team');
+    },
+    // Between snapshots, bugs glide toward where the host last saw them, a little ahead along the way they were going.
+    follow(dt) {
+      const t = performance.now() / 1000, k = Math.min(1, dt * 10);
+      for (const b of this.bugs) {
+        if (b.dead) continue;
+        b.t += dt; b.flash = Math.max(0, b.flash - dt);
+        if (b.tx == null) continue;
+        const lead = Math.min(0.25, t - (b.st || t)), px = b.tx + (b.vx || 0) * lead, pz = b.tz + (b.vz || 0) * lead;
+        b.x += (px - b.x) * k; b.z += (pz - b.z) * k;
+        if (b.ty != null) b.y += (b.ty - b.y) * k;
+        if (b.ta != null) b.a += Math.atan2(Math.sin(b.ta - b.a), Math.cos(b.ta - b.a)) * k;
+      }
+    },
+    onHits(id, m) {
+      if (!this.squad.mates.has(id)) return;
+      for (const e of Array.isArray(m.l) ? m.l.slice(0, 40) : []) {
+        if (!Array.isArray(e)) continue;
+        const b = this.byId.get(e[0]);
+        if (!b || b.dead || !Number.isFinite(e[1])) continue;
+        this.damage(b, clamp(e[1], 0, 16), e[2] ? 1 : 0, id);
+      }
+    },
+    onSpits(m) {
+      for (const e of Array.isArray(m.l) ? m.l.slice(0, 24) : []) {
+        if (!Array.isArray(e) || e.length < 9) continue;
+        const [sid, ki, x, y, z, vx, vy, vz, tgt] = e, kind = SPIT_IDS[ki];
+        if (!Number.isInteger(sid) || !kind || ![x, y, z, vx, vy, vz].every(Number.isFinite) || this.spits.some(s => s.id === sid)) continue;
+        this.spits.push({ id: sid, kind, x, y, z, vx: clamp(vx, -3000, 3000), vy: clamp(vy, -3000, 3000), vz: clamp(vz, -3000, 3000), life: 4, tgt: typeof tgt === 'string' ? tgt : '' });
+        if (kind === 'paper') Sound.printer(3); else if (kind === 'invite') Sound.blip();
+      }
+    },
+    onSpitGone(id, m) {
+      const s = this.spits.find(p => p.id === m.id);
+      if (s) { s.life = 0; this.burst(s, [SPITS[s.kind].color], 6, 0.3); }
+      if (this.isHost()) this.addScore(id, 25);
+    },
+    onClaim(id, m) {
+      const p = this.pickups.find(q => q.id === m.id);
+      if (!p || p.taken || !this.squad.mates.has(id)) return;
+      p.taken = true;
+      Net.send({ k: 'hg', s: this.session, id: p.id, to: id, t: PICKUP_IDS.indexOf(p.type) });
+    },
+    onGrant(m) {
+      const p = this.pickups.find(q => q.id === m.id);
+      if (p) p.taken = true;
+      if (m.to === ONLINE.me.id) this.grant(PICKUP_IDS[m.t]);
+    },
+    onStrike(id, m) {
+      const mate = this.squad.mates.get(id);
+      if (!mate || !['drop', 'birdie', 'eagle'].includes(m.kind) || ![m.x, m.z].every(Number.isFinite)) return;
+      this.queue.push([m.kind, +m.x, +m.z, Number.isFinite(m.a) ? +m.a : 0, id, mate.name]);
+    },
+    onRevive(id, m) {
+      const mate = this.squad.mates.get(id);
+      if (!mate) return;
+      if (m.to === ONLINE.me.id) this.revived(mate.name);
+      else { const t = this.squad.mates.get(m.to); if (t) t.dn = false; }
+    },
+    dropMate(id, quiet) {
+      const S = this.squad, m = S && S.mates.get(id);
+      if (!m) return;
+      this.dropAvatar(m);
+      S.mates.delete(id);
+      S.full = false;
+      if (!quiet || this.on) ping({ from: m.name, initials: m.name[0], color: COLORS[m.c], text: 'left the squad.', tag: 'bug hunt' });
+      if (id === S.host && S.upAt) S.upAt = Math.min(S.upAt, Date.now() - 4500);
+      if (this.panelOpen) this.renderLobby();
     },
   };
 
@@ -11189,11 +12614,54 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
   fireBtn.addEventListener('pointercancel', fireUp);
   fireBtn.addEventListener('contextmenu', e => e.preventDefault());
   $('huntReload').addEventListener('click', () => Hunt.startReload());
-  $('huntBtn').addEventListener('click', () => Hunt.start());
-  $('huntEnd').addEventListener('click', () => Hunt.stop());
-  $('huntAgain').addEventListener('click', () => { Hunt.stop(); Hunt.start(); });
-  $('huntQuit').addEventListener('click', () => Hunt.stop());
+  $('huntBtn').addEventListener('click', () => { Sound.unlock(); Hunt.openPanel(); });
+  $('huntPromo').addEventListener('click', () => Hunt.fromSetup());
+  // Leaving a hunt: in a squad you stay in its lobby, unless you were running the hunt for everyone else.
+  const leaveHunt = () => Hunt.stop(Hunt.mode === 'squad');
+  $('huntEnd').addEventListener('click', leaveHunt);
+  $('huntDownLeave').addEventListener('click', leaveHunt);
+  $('huntQuit').addEventListener('click', leaveHunt);
+  $('huntAgain').addEventListener('click', () => { if (Hunt.mode === 'squad' && Hunt.squad) { Hunt.squadStart(); return; } Hunt.stop(); Hunt.start(); });
   $('huntMull').addEventListener('click', () => Hunt.mull());
+  $('huntDownMull').addEventListener('click', () => Hunt.mull());
+  $('huntShare').addEventListener('click', () => {
+    const text = Hunt.shareText || '', ask = () => window.prompt('Copy your result:', text);
+    try { navigator.clipboard.writeText(text).then(() => toast('Copied', 'Paste it in the team chat.', 'hi'), ask); } catch (e) { ask(); }
+  });
+  // The Bug hunt card: the workload, and solo or squad.
+  $('huntPanelClose').addEventListener('click', () => Hunt.closePanel());
+  $('huntTabSolo').addEventListener('click', () => { Hunt.tab = 'solo'; Hunt.renderPanel(); });
+  $('huntTabSquad').addEventListener('click', () => { Hunt.tab = 'squad'; Hunt.renderPanel(); });
+  document.querySelectorAll('input[name="huntLevel"]').forEach(i => i.addEventListener('change', () => {
+    if (Hunt.squad && !Hunt.isHost()) return;
+    Hunt.level = i.value;
+    store.set('huntLevel', i.value);
+    Hunt.renderPanel();
+    if (Hunt.squad) Hunt.presence();
+  }));
+  $('huntSoloGo').addEventListener('click', () => Hunt.start());
+  const squadName = () => {
+    const name = cleanName($('huntName').value);
+    $('huntNameError').hidden = !!name;
+    if (!name) $('huntName').focus();
+    return name;
+  };
+  $('huntCreate').addEventListener('click', () => { const n = squadName(); if (n) Hunt.squadCreate(n); });
+  $('huntJoin').addEventListener('click', () => {
+    const n = squadName(), code = normRoom($('huntCode').value);
+    if (!n) return;
+    if (!code) { $('huntCode').focus(); return; }
+    Hunt.squadJoin(code, n, false);
+  });
+  $('huntCode').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('huntJoin').click(); } });
+  $('huntName').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); ($('huntCode').value.trim() ? $('huntJoin') : $('huntCreate')).click(); } });
+  $('huntCopy').addEventListener('click', () => {
+    const l = $('huntLink');
+    try { navigator.clipboard.writeText(l.value).then(() => toast('Link copied', 'Send it to your squad.', 'hi'), () => l.select()); } catch (e) { l.select(); }
+  });
+  $('huntSquadGo').addEventListener('click', () => Hunt.squadStart());
+  $('huntRejoin').addEventListener('click', () => { if (Hunt.squad) { Hunt.squad.left = ''; Hunt.renderLobby(); } });
+  $('huntLeave').addEventListener('click', () => { Hunt.squadLeave(); Hunt.renderPanel(); });
   document.addEventListener('pointerlockchange', () => app.classList.toggle('locked', document.pointerLockElement === stage3d));
 
   // ---------------------------------------------------------------------------
@@ -12062,10 +13530,10 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
       if (handlers) handlers.message(m);
     }
     return {
-      start(code, h) {
+      start(code, h, prefix = TOPIC_PREFIX) {
         this.stop();
         handlers = h;
-        const topic = TOPIC_PREFIX + code, base = 'n2f' + randId().slice(0, 10);
+        const topic = prefix + code, base = 'n2f' + randId().slice(0, 10);
         links = relayList().map((cfg, i) => mqttLink(cfg, topic, base + i, receive, () => { if (handlers) handlers.status(); }));
       },
       send(obj) {
@@ -12926,6 +14394,7 @@ textarea#shareText, textarea#dailyShare { width: 100%; margin: 8px 0 12px; resiz
     let ok = false;
     try { if (data && data.game) ok = restore(data.game); } catch (e) { ok = false; }
     if (!ok) showSetup();
+    if (!ok) { try { Hunt.fromLink(); } catch (e) { /* a mangled link just leaves you on the course pass */ } }
     requestAnimationFrame(loop);
   }
   // A challenge link pasted into a tab that already has the game open only changes the hash.

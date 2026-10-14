@@ -9,6 +9,7 @@ Office mini golf for the whole team: five buildings of nine holes each, round th
 - **Online room.** Play together from anywhere. Choose *Online room*, join, and send your coworkers the invite link. Everyone plays the same hole at the same time on their own device and sees each other's balls roll live. The next hole starts once everyone has finished, or you can go on ahead. People who arrive late can jump in on the group's current hole.
 - **Same screen.** Up to six players take turns on one device, which works well on a meeting-room TV.
 - **On your own.** Pick *Today's pins* or a shared group code, play a round, and paste your score into the team chat. Everyone on the same course gets the same layout.
+- **Bug hunt squad.** A first-person shooter on the 3D campus: golf balls versus production bugs, for up to four people from anywhere. Press *Bug hunt*, choose Squad and send the link. See [Bug hunt](#bug-hunt).
 
 Everyone can pick a department. When at least two departments are playing, the results rank them in a **Department cup** by average score against par.
 
@@ -209,13 +210,16 @@ Press **Play in 3D** on the setup card to play on the campus in first person. Yo
 
 ## Bug hunt
 
-Production bugs have got loose on the campus. In Play in 3D, press **Bug hunt** and squash them with a golf ball blaster, wave after wave.
+Production bugs have got loose on the campus, and the only thing that stops them is a golf ball blaster. Press **Bug hunt** on the course pass, or the red **Bug hunt** button (or B) while you walk around in 3D. Pick a workload (Intern, Manager or Crunch time), then hunt on your own or with a squad.
 
-- **What's coming:** crawling bugs that bite, walking printers that spit paper jams, meeting invites that hover and follow you, and on every fifth wave, Legacy Code itself, a mainframe on legs.
-- **The blaster** fires whichever ball you wear from the Locker. Balls bounce off walls, and a squash off a bounce is a bank shot worth double. Squash two at once for a birdie, three for an eagle, and on up to a condor. Quick squashes in a row build a combo, and while you're on fire from golf, every ball hits twice as hard.
-- **Golf calls in backup.** Play any hole whenever you like; the bugs wait while you putt. Par brings a supply drop with morale and a full hopper, a birdie sends a flock of birds after the nearest bugs, and an eagle or a hole in one brings an eagle over that clears the floor and halves the boss.
-- **Morale** drops when you're bitten or hit, and comes back if you stay out of trouble for a few seconds. Run out and you take a sick day, unless you use your one mulligan. Your best score is kept.
-- **On a computer:** click or hold to fire (F works too), R reloads and Space jumps. **On a phone:** hold **Fire** and slide your thumb on it to aim, and tap **Reload** to reload. Red arrows at the edge of the screen point to bugs you can't see.
+- **What's coming:** crawling bugs that bite, walking printers that spit paper jams, meeting invites that hover and send invites that follow you, reply-all swarms, merge conflicts that split in two when you squash them, and firewalls that turn away straight shots. The first time each turns up, a card says how to beat it. Every fifth wave brings a boss: Legacy Code, a mainframe on legs, then Spaghetti Code, which lobs meatballs and spawns more bugs.
+- **The blaster** fires whichever ball you wear from the Locker. Balls bounce off walls, and a squash off a bounce is a bank shot worth double (and the only way through a firewall's front). Squash two at once for a birdie, three for an eagle, and on up to a condor. Quick squashes build a combo, and while you're on fire from golf, every ball hits twice as hard.
+- **Pick-ups:** bugs drop clubs (a driver that sprays seven balls, a range bucket that fires fast, a sand wedge whose balls burst where they land, and a putter that goes straight through everything), plus coffee for speed, donuts for morale, golden balls for double points and sleeves of balls.
+- **Perks:** clear a wave and pick one of three: a bigger hopper, quick hands, espresso, heavy balls, trick shots that pay triple, thick skin, second wind, lunch-break legs, a magnet, a lucky ball or, in a squad, team player.
+- **Golf calls in backup.** Play any hole whenever you like. Par brings a supply drop, a birdie sends a flock of birds after the nearest bugs, and an eagle or a hole in one brings an eagle over that clears the floor and halves the boss. On your own, the bugs wait while you putt; in a squad they don't, but they leave whoever's putting alone.
+- **Morale** drops when you're bitten or hit, from whichever side the screen flashes red, and comes back if you stay out of trouble. Run out and you take a sick day, unless you use your one mulligan. Each hunt ends with an incident report, and your best score for each workload is kept.
+- **Squads:** on the Bug hunt card, choose Squad, start a squad and send the invite link (or share the code). Up to four of you, each in your own browser anywhere, fight the same bugs and see each other on the campus. When a teammate is out sick, stand next to them for a few seconds to bring them back. If the whole squad goes down, it's a team sick day, and the report names an MVP. Squads use the same public relays as online rooms, so they only work on the public site, and if whoever started the hunt leaves, someone else takes it over.
+- **On a computer:** click or hold to fire (F works too), R reloads and Space jumps. **On a phone:** hold **Fire** and slide your thumb on it to aim. Red arrows at the edge of the screen point to bugs you can't see.
 - The balls go straight through coworkers. Nobody in the office gets hurt.
 
 ## The Workshop: build your own holes
